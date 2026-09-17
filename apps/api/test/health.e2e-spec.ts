@@ -20,9 +20,10 @@ describe('Health (e2e)', () => {
     await app.close();
   });
 
-  it('GET /health retorna 200 com status ok', async () => {
+  it('GET /health retorna 200 com status ok e confirma conexão com o banco', async () => {
     const response = await request(app.getHttpServer()).get('/health').expect(200);
     expect(response.body.status).toBe('ok');
+    expect(response.body.database).toBe('up');
     expect(typeof response.body.timestamp).toBe('string');
   });
 });

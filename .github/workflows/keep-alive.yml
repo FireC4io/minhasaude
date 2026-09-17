@@ -1,0 +1,23 @@
+name: Keep-alive (Supabase + Render)
+
+on:
+  schedule:
+    # 1x/dia - consulta o Postgres via /health para evitar a pausa do projeto
+    # Supabase free tier por inatividade (ver ADR-0007). Também acorda o Render
+    # free tier, embora este volte a "dormir" após 15 min sem tráfego real.
+    - cron: "17 12 * * *"
+  workflow_dispatch: {}
+
+jobs:
+  ping-health:
+    runs-on: ubuntu-latest
+    steps:
+      - name: GET /health
+        run: |
+          status=$(curl -s -o /dev/stdout -w "\n%{http_code}" https://minhasaude-api.onrender.com/health)
+          echo "$status"
+          code=$(echo "$status" | tail -n1)
+          if [ "$code" != "200" ]; then
+            echo "Health check falhou com status $code"
+            exit 1
+          fi

@@ -35,6 +35,14 @@ pnpm test               # turbo run test em todos os workspaces
 
 Cada workspace individual roda via `pnpm --filter <nome> <script>`, ex.: `pnpm --filter @minhasaude/api dev`. Setup detalhado da API (env, migrations, seed) em [`apps/api/README.md`](apps/api/README.md).
 
+## Deploy
+
+- **API**: https://minhasaude-api.onrender.com (Render free tier — "dorme" após 15 min sem tráfego, primeiro request depois disso leva 30-60s pra acordar; ver [ADR-0007](docs/adr/0007-hosting-orcamento-zero-render-supabase-r2.md))
+- **Swagger**: https://minhasaude-api.onrender.com/docs
+- **Banco**: Postgres no Supabase (São Paulo), acessado via connection pooler (o host direto só resolve por IPv6, que o Render não suporta em saída)
+- **Arquivos**: bucket `minhasaude-exams` no Cloudflare R2
+- Deploy automático a cada push em `main`. Cron diário (`.github/workflows/keep-alive.yml`) consulta `/health` (que faz `SELECT 1` no Postgres) para evitar a pausa do projeto Supabase free tier por inatividade.
+
 ## Status
 
 Fase 1 (Fundação) em andamento — ver [`docs/backlog-fase1.md`](docs/backlog-fase1.md) e [`docs/roadmap.md`](docs/roadmap.md).
