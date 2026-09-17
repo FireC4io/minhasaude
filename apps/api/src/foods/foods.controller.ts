@@ -1,8 +1,10 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Throttle } from '@nestjs/throttler';
 import { FoodsService } from './foods.service';
 import { CreateFoodDto } from './dto/create-food.dto';
 import { UpdateFoodDto } from './dto/update-food.dto';
+import { SearchFoodsQueryDto } from './dto/search-foods-query.dto';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import type { JwtPayload } from '../auth/types/jwt-payload.interface';
 
@@ -15,6 +17,17 @@ export class FoodsController {
   @ApiOperation({ summary: 'Cadastra um alimento personalizado (visível só pra quem cadastrou)' })
   create(@CurrentUser() user: JwtPayload, @Body() dto: CreateFoodDto) {
     return this.foodsService.create(user.sub, dto);
+  }
+
+  // Rota estática precisa vir antes de ':id' pro Nest não tentar casar
+  // "search" como um :id.
+  @Get('search')
+  @Throttle({ default: { limit: 20, ttl: 60_000 } })
+  @ApiOperation({
+    summary: 'Busca alimentos (trigram/unaccent local, com fallback pro Open Food Facts sob demanda)',
+  })
+  search(@CurrentUser() user: JwtPayload, @Query() query: SearchFoodsQueryDto) {
+    return this.foodsService.search(user.sub, query);
   }
 
   @Get(':id')

@@ -71,14 +71,16 @@
 ### 14. Busca de alimentos + integração sob demanda com Open Food Facts
 **Contexto**: depende do schema da issue 13. Ver ADR-0004 — sem bulk import do OFF, só cache sob demanda.
 
-- [ ] `GET /v1/foods/search?q=&page=` — trigram + `unaccent` sobre `foods.name`, ranqueado por similaridade
-- [ ] Fallback: se a busca local não retornar resultado relevante, consultar a API pública do Open Food Facts
-- [ ] Cache do resultado do OFF na primeira vez que for usado (`source = 'off'`, `external_id` = código do produto)
-- [ ] `GET /v1/foods/:id`
-- [ ] Rate limiting técnico geral no endpoint de busca (evitar abuso/scraping via nosso proxy do OFF)
-- [ ] Testes: busca com erro de digitação/acento encontra o item certo; item do OFF já cacheado não gera nova chamada externa
+- [x] `GET /v1/foods/search?q=&page=&limit=` — trigram (`word_similarity`/`<%`) + `unaccent` sobre `foods.name`, ranqueado por similaridade. Precisou de uma função `immutable_unaccent()` (wrapper IMMUTABLE do `unaccent()`, que sozinho não pode ser usado em índice) e um índice GIN funcional sobre `immutable_unaccent(lower(name))` — confirmado via `EXPLAIN` que o índice é de fato usado
+- [x] Fallback: busca local vazia consulta a API pública do Open Food Facts (`cgi/search.pl`, única com full-text search — a v2/v3 só filtra por tag estruturada, confirmado testando ao vivo contra a API real)
+- [x] Cache do resultado do OFF na primeira vez que for usado (`source = 'off'`, `external_id`/`barcode` = código do produto) — índice único parcial `(source, external_id) WHERE external_id IS NOT NULL` evita duplicar cache em buscas concorrentes; produto do OFF sem kcal/proteína/gordura/carboidrato medido é ignorado, mesma política de nunca fabricar dado da issue #13
+- [x] `GET /v1/foods/:id` (já entregue na issue #13)
+- [x] Rate limiting técnico geral no endpoint de busca — 20/min via `@Throttle`, mais restrito que o default global (60/min) porque cada busca sem cache dispara uma chamada de saída pro OFF
+- [x] Testes: 5 unitários novos de `search`/cache (17 no total do `FoodsService`) + 4 e2e (acha "Arroz, integral, cozido" buscando "arros"; acha "Açúcar" buscando "acucar" sem acento; não vaza alimento custom de outro usuário na busca; rejeita `q` com menos de 2 caracteres) + verificação manual ao vivo contra a API real do OFF (busca "nutella" cacheou 4 produtos reais; segunda busca voltou só do cache local, sem nova chamada externa)
 
-**Critério de aceite**: buscar "arros" (sem acento, com erro) encontra "Arroz, integral, cozido" da TACO; buscar um produto de marca que só existe no OFF retorna resultado e fica cacheado localmente na consulta seguinte.
+**Critério de aceite**: buscar "arros" (sem acento, com erro) encontra "Arroz, integral, cozido" da TACO — confirmado; buscar um produto de marca que só existe no OFF retorna resultado e fica cacheado localmente na consulta seguinte — confirmado ao vivo.
+
+**Achado importante desta issue** (não fazia parte do escopo, mas bloqueava produção): `packages/shared` nunca tinha sido de fato compilado — o script `build` era um `echo` placeholder desde a Fase 1, então `node dist/main.js` (como a API roda em produção) não conseguia resolver `@minhasaude/shared` em runtime. Passou despercebido nas issues #10-#13 porque testes rodam via `ts-jest`/`ts-node`, que resolvem `.ts` direto. Corrigido: `packages/shared` agora tem `tsconfig.build.json` (exclui specs) e `pnpm --filter shared build` gera `dist/` de verdade; `package.json` do pacote aponta `main`/`types` pra lá. **Verificar se o build command configurado no Render já builda `@minhasaude/shared` antes da API** — se o comando for só `pnpm --filter api build`, o deploy vai quebrar; precisa incluir o shared (ex. `pnpm --filter @minhasaude/shared build && pnpm --filter @minhasaude/api build`, ou usar `turbo run build --filter=@minhasaude/api` que já respeita a ordem de dependência). Não consigo checar/corrigir isso sem a `RENDER_API_KEY`.
 
 ---
 
