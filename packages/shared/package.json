@@ -7,10 +7,26 @@
   "types": "./src/index.ts",
   "scripts": {
     "build": "echo \"[shared] build placeholder\" && exit 0",
-    "lint": "echo \"[shared] lint placeholder\" && exit 0",
-    "test": "echo \"[shared] test placeholder\" && exit 0"
+    "lint": "eslint \"src/**/*.ts\"",
+    "test": "jest"
+  },
+  "jest": {
+    "rootDir": "src",
+    "testRegex": ".*\\.spec\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
+    "coverageDirectory": "../coverage"
   },
   "devDependencies": {
+    "@minhasaude/config": "workspace:^",
+    "@types/jest": "^30.0.0",
+    "eslint": "^10.10.0",
+    "jest": "^30.5.1",
+    "ts-jest": "^29.4.12",
     "typescript": "^5.7.0"
   }
 }
