@@ -41,7 +41,8 @@ Cada workspace individual roda via `pnpm --filter <nome> <script>`, ex.: `pnpm -
 - **Swagger**: https://minhasaude-api.onrender.com/docs
 - **Banco**: Postgres no Supabase (São Paulo), acessado via connection pooler (o host direto só resolve por IPv6, que o Render não suporta em saída)
 - **Arquivos**: bucket `minhasaude-exams` no Cloudflare R2
-- Deploy automático a cada push em `main`. Cron diário (`.github/workflows/keep-alive.yml`) consulta `/health` (que faz `SELECT 1` no Postgres) para evitar a pausa do projeto Supabase free tier por inatividade.
+- Cron diário (`.github/workflows/keep-alive.yml`) consulta `/health` (que faz `SELECT 1` no Postgres) para evitar a pausa do projeto Supabase free tier por inatividade.
+- ⚠️ **Auto-deploy do Render ainda não está automático de verdade**: o serviço foi criado via API e conseguiu clonar o repo por ele ser público, mas sem o GitHub App do Render instalado/autorizado no repositório, o webhook de push não dispara. Até isso ser conectado manualmente (Render Dashboard → serviço → Settings → Build & Deploy → conectar o repo GitHub), cada novo push em `main` exige um deploy manual: `curl -X POST -H "Authorization: Bearer $RENDER_API_KEY" https://api.render.com/v1/services/srv-dam2ng6k1f9s73e8ok1g/deploys` (ou pelo botão "Manual Deploy" no dashboard).
 
 ## Status
 
