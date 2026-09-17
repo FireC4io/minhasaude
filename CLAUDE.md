@@ -47,6 +47,13 @@ turbo run lint test build             # pipeline completo (usado no CI)
 - Import em massa do Open Food Facts (busca é sob demanda — ver ADR-0004).
 - Funcionalidades sociais, gráficos avançados, leitor de código de barras, registro de treinos — reservado para Fase 6 (`docs/roadmap.md`).
 
+## Active Context (última sessão: 2026-09-17)
+- **Fase 1**: Issues #1-#7 concluídas e verificadas ao vivo (repo, skeleton NestJS, Postgres+TypeORM, auth JWT com rotação, CI, deploy Render+Supabase+R2, LGPD funcional). Faltam **#8** (observabilidade — Pino/BetterStack já parcialmente feito na Issue 2, falta BetterStack de verdade) e **#9** (baseline de segurança — throttler global já existe, faltam helmet, CORS restrito, `pnpm audit`/Dependabot no CI).
+- **Produção real**: https://minhasaude-api.onrender.com, Postgres no Supabase (`sa-east-1`, via session pooler — o host direto é IPv6-only e o Render não tem saída IPv6), bucket R2 `minhasaude-exams`.
+- **Pendência conhecida**: auto-deploy do Render não dispara sozinho no push (GitHub App nunca foi autorizado no repo, só o login OAuth) — cada push precisa de `POST .../deploys` manual via API até isso ser conectado no dashboard. Ver README raiz.
+- **Gotcha de plataforma**: NestJS 12, `@nestjs/jwt` 12, `@nestjs/typeorm` 12 são todos ESM-only (`"type":"module"`) e quebram Jest — o projeto está fixado nas versões `11.x`/legacy de cada pacote Nest. Verificar isso antes de atualizar qualquer dependência `@nestjs/*`.
+- **Próximo passo natural**: Issue #8 ou #9 (nenhuma depende de conta externa nova).
+
 ## Referências
 - Plano completo: `docs/product-plan.md`
 - ADRs: `docs/adr/`
