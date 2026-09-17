@@ -6,6 +6,7 @@ import { Profile } from '../database/entities/profile.entity';
 import { RefreshToken } from '../database/entities/refresh-token.entity';
 import { AccountDeletionRequest } from '../database/entities/account-deletion-request.entity';
 import { ConsentsService } from '../consents/consents.service';
+import { BodyMeasurementsService } from '../body-measurements/body-measurements.service';
 import type { UpdateProfileDto } from './dto/update-profile.dto';
 
 const DELETION_GRACE_PERIOD_DAYS = 30;
@@ -19,6 +20,7 @@ export class UsersService {
     @InjectRepository(AccountDeletionRequest)
     private readonly deletionRequests: Repository<AccountDeletionRequest>,
     private readonly consentsService: ConsentsService,
+    private readonly bodyMeasurementsService: BodyMeasurementsService,
   ) {}
 
   private async getUserOrThrow(userId: string): Promise<User> {
@@ -48,12 +50,14 @@ export class UsersService {
     return this.profiles.save(profile);
   }
 
-  // GET /v1/me/export - snapshot funcional de todos os dados disponíveis na Fase 1.
-  // Expandir aqui conforme cada fase futura adicionar novos dados do usuário.
+  // GET /v1/me/export - snapshot funcional de todos os dados disponíveis até
+  // a fase atual. Expandir aqui conforme cada fase nova adicionar dados do
+  // usuário (ver CLAUDE.md).
   async exportData(userId: string) {
     const user = await this.getUserOrThrow(userId);
     const profile = await this.profiles.findOne({ where: { userId } });
     const consents = await this.consentsService.listHistory(userId);
+    const bodyMeasurements = await this.bodyMeasurementsService.listAll(userId);
     const { passwordHash: _passwordHash, ...safeUser } = user;
 
     return {
@@ -61,6 +65,7 @@ export class UsersService {
       account: safeUser,
       profile,
       consents,
+      bodyMeasurements,
     };
   }
 

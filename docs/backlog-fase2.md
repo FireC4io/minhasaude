@@ -24,11 +24,12 @@
 ### 11. Registro de medidas corporais (`body_measurements`)
 **Contexto**: input necessário para o cálculo de metas (peso, e opcionalmente % de gordura para Katch-McArdle) — também é a base do gráfico de peso da Fase 3. Ver `docs/database-schema.md` e a regra de **nunca normalizar `source` entre aparelhos** em `CLAUDE.md`.
 
-- [ ] Migration `body_measurements` (`user_id`, `measured_at`, `source`, `weight_kg`, `body_fat_percent` nullable, `muscle_mass_kg`/`lean_mass_kg` nullable, `raw_payload` jsonb nullable)
-- [ ] `POST /v1/body-measurements` — registro manual (`source = 'manual'` obrigatório no MVP; outros valores de `source` ficam reservados para quando a Fase 5 importar bioimpedância)
-- [ ] `GET /v1/body-measurements?source=&from=&to=` — paginado
-- [ ] Validação: `source` sempre obrigatório e explícito, nunca inferido
-- [ ] Testes: criação, listagem filtrada por `source`, e-2e do fluxo básico
+- [x] Migration `body_measurements` (`user_id`, `measured_at`, `source`, `weight_kg`, `body_fat_percent` nullable, `muscle_mass_kg`/`lean_mass_kg` nullable, `raw_payload` jsonb nullable) — FK `user_id → users` com `ON DELETE CASCADE`
+- [x] `POST /v1/body-measurements` — registro manual (`source = 'manual'` obrigatório no MVP via `@IsIn`; outros valores do enum ficam reservados para quando a Fase 5 importar bioimpedância) — exige consentimento `privacy_policy` (`RequireConsentGuard`, mesmo padrão do `PATCH /v1/me/profile`)
+- [x] `GET /v1/body-measurements?source=&from=&to=` — paginado (`{ data, meta: { total, page, limit } }`)
+- [x] Validação: `source` sempre obrigatório e explícito, nunca inferido
+- [x] Testes: criação, listagem filtrada por `source`/período, isolamento entre usuários, e2e do fluxo completo (7 casos) + unitários do service (7 casos)
+- [x] `GET /v1/me/export` passou a incluir `bodyMeasurements` (LGPD — export precisa refletir todo dado pessoal existente, ver `CLAUDE.md`)
 
 **Critério de aceite**: usuário registra peso manualmente e consegue listar o histórico filtrando por `source`; tentar comparar/agrupar `source`s diferentes não é feito silenciosamente em nenhum lugar do código (não há endpoint ou lógica que misture fontes sem filtro explícito).
 

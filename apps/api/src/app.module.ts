@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { LoggerModule } from 'nestjs-pino';
 import { AuthModule } from './auth/auth.module';
+import { BodyMeasurementsModule } from './body-measurements/body-measurements.module';
 import { ConfigurationModule } from './config/configuration.module';
 import { ConsentsModule } from './consents/consents.module';
 import { DatabaseModule } from './database/database.module';
@@ -14,6 +15,7 @@ import { UsersModule } from './users/users.module';
     AuthModule,
     ConsentsModule,
     UsersModule,
+    BodyMeasurementsModule,
     LoggerModule.forRoot({
       pinoHttp: {
         level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',

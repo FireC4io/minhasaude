@@ -6,6 +6,7 @@ import { RefreshToken } from '../database/entities/refresh-token.entity';
 import { AccountDeletionRequest } from '../database/entities/account-deletion-request.entity';
 import { Consent } from '../database/entities/consent.entity';
 import { ConsentsModule } from '../consents/consents.module';
+import { BodyMeasurementsModule } from '../body-measurements/body-measurements.module';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 
@@ -16,6 +17,7 @@ import { UsersService } from './users.service';
     // e Nest resolve as dependências do guard no contexto do módulo que o usa.
     TypeOrmModule.forFeature([User, Profile, RefreshToken, AccountDeletionRequest, Consent]),
     ConsentsModule,
+    BodyMeasurementsModule,
   ],
   controllers: [UsersController],
   providers: [UsersService],
