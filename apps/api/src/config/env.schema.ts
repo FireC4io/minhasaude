@@ -15,6 +15,11 @@ export const envSchema = z.object({
         .filter(Boolean),
     ),
   DATABASE_URL: z.string().min(1, 'DATABASE_URL é obrigatória'),
+  JWT_ACCESS_SECRET: z
+    .string()
+    .min(32, 'JWT_ACCESS_SECRET deve ter pelo menos 32 caracteres'),
+  JWT_ACCESS_EXPIRES_IN: z.string().default('15m'),
+  REFRESH_TOKEN_TTL_DAYS: z.coerce.number().int().positive().default(30),
 });
 
 export type Env = z.infer<typeof envSchema>;

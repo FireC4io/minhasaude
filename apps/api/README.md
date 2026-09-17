@@ -13,7 +13,17 @@ pnpm --filter @minhasaude/api start:dev
 ```
 
 - Swagger: `http://localhost:3000/docs`
-- Health check: `http://localhost:3000/health`
+- Health check: `http://localhost:3000/health` (público)
+
+### Autenticação
+
+Todas as rotas exigem `Authorization: Bearer <accessToken>` por padrão — rotas públicas usam o decorator `@Public()` (ver `src/auth/decorators/public.decorator.ts`).
+
+- `POST /v1/auth/register` (público) — `{ email, password }`
+- `POST /v1/auth/login` (público, rate limit 5/min) — retorna `{ accessToken, refreshToken, expiresInSeconds }`
+- `POST /v1/auth/refresh` (público) — rotação: o refresh token usado é revogado e um par novo é emitido
+- `POST /v1/auth/logout` (autenticado) — revoga o refresh token informado no corpo
+- `GET /v1/auth/me` (autenticado) — retorna o payload do access token
 
 ### Migrations
 
