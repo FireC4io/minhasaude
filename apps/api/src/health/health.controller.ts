@@ -8,6 +8,6 @@ export class HealthController {
   @Public()
   @Get()
   check(): { status: 'ok'; timestamp: string } {
-    return { status: 'ok', timestamp: new Date().toISOString() }
-  // erro proposital de sintaxe para validar o CI (Issue 5) - fecha o bloco errado
+    return { status: 'ok', timestamp: new Date().toISOString() };
+  }
 }
