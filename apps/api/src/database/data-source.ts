@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import { DataSource } from 'typeorm';
-import { User, RefreshToken, Profile } from './entities';
+import { User, RefreshToken, Profile, Consent, AccountDeletionRequest } from './entities';
 
 // Fonte de dados usada pela CLI do TypeORM (migration:generate/run/revert).
 // A NestJS app em si usa DatabaseModule (TypeOrmModule.forRootAsync), que lê
@@ -8,7 +8,7 @@ import { User, RefreshToken, Profile } from './entities';
 const AppDataSource = new DataSource({
   type: 'postgres',
   url: process.env.DATABASE_URL,
-  entities: [User, RefreshToken, Profile],
+  entities: [User, RefreshToken, Profile, Consent, AccountDeletionRequest],
   migrations: ['src/database/migrations/*.ts'],
   synchronize: false,
   logging: process.env.NODE_ENV !== 'production',

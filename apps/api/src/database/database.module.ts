@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User, RefreshToken, Profile } from './entities';
+import { User, RefreshToken, Profile, Consent, AccountDeletionRequest } from './entities';
 import type { Env } from '../config/env.schema';
 
 @Module({
@@ -12,7 +12,7 @@ import type { Env } from '../config/env.schema';
       useFactory: (config: ConfigService<Env, true>) => ({
         type: 'postgres' as const,
         url: config.get('DATABASE_URL', { infer: true }),
-        entities: [User, RefreshToken, Profile],
+        entities: [User, RefreshToken, Profile, Consent, AccountDeletionRequest],
         // Migrations aplicadas manualmente (migration:run) - nunca synchronize
         // em ambiente algum, ver CLAUDE.md.
         synchronize: false,

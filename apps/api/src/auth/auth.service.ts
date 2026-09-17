@@ -52,6 +52,10 @@ export class AuthService {
       throw new UnauthorizedException(GENERIC_CREDENTIALS_ERROR);
     }
 
+    if (user.status !== UserStatus.ACTIVE) {
+      throw new UnauthorizedException('Conta suspensa ou em processo de exclusão.');
+    }
+
     return this.issueTokens(user);
   }
 

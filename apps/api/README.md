@@ -25,6 +25,14 @@ Todas as rotas exigem `Authorization: Bearer <accessToken>` por padrão — rota
 - `POST /v1/auth/logout` (autenticado) — revoga o refresh token informado no corpo
 - `GET /v1/auth/me` (autenticado) — retorna o payload do access token
 
+### LGPD (consentimentos, perfil, export, exclusão)
+
+- `GET /v1/consents` / `POST /v1/consents` / `DELETE /v1/consents/:type` — gestão de consentimento (histórico completo por linha, nunca sobrescrito)
+- `GET /v1/me` — conta + perfil
+- `PATCH /v1/me/profile` — cria/atualiza perfil, **exige consentimento `privacy_policy` ativo** (403 sem ele)
+- `GET /v1/me/export` — exporta conta + perfil + histórico de consentimentos
+- `DELETE /v1/me` — inicia exclusão (status `pending_deletion`, revoga todos os refresh tokens, agenda purge em 30 dias); login passa a ser bloqueado imediatamente
+
 ### Migrations
 
 ```bash
