@@ -8,6 +8,8 @@ import {
   AccountDeletionRequest,
   BodyMeasurement,
   GoalTarget,
+  Food,
+  FoodPortion,
 } from './entities';
 
 // Fonte de dados usada pela CLI do TypeORM (migration:generate/run/revert).
@@ -16,7 +18,17 @@ import {
 const AppDataSource = new DataSource({
   type: 'postgres',
   url: process.env.DATABASE_URL,
-  entities: [User, RefreshToken, Profile, Consent, AccountDeletionRequest, BodyMeasurement, GoalTarget],
+  entities: [
+    User,
+    RefreshToken,
+    Profile,
+    Consent,
+    AccountDeletionRequest,
+    BodyMeasurement,
+    GoalTarget,
+    Food,
+    FoodPortion,
+  ],
   migrations: ['src/database/migrations/*.ts'],
   synchronize: false,
   logging: process.env.NODE_ENV !== 'production',

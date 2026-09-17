@@ -5,6 +5,7 @@ import { BodyMeasurementsModule } from './body-measurements/body-measurements.mo
 import { ConfigurationModule } from './config/configuration.module';
 import { ConsentsModule } from './consents/consents.module';
 import { DatabaseModule } from './database/database.module';
+import { FoodsModule } from './foods/foods.module';
 import { GoalsModule } from './goals/goals.module';
 import { HealthModule } from './health/health.module';
 import { UsersModule } from './users/users.module';
@@ -18,6 +19,7 @@ import { UsersModule } from './users/users.module';
     UsersModule,
     BodyMeasurementsModule,
     GoalsModule,
+    FoodsModule,
     LoggerModule.forRoot({
       pinoHttp: {
         level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',

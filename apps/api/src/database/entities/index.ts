@@ -6,3 +6,5 @@ export * from './consent.entity';
 export * from './account-deletion-request.entity';
 export * from './body-measurement.entity';
 export * from './goal-target.entity';
+export * from './food.entity';
+export * from './food-portion.entity';

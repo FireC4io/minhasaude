@@ -9,6 +9,7 @@ cp .env.example .env
 docker compose up -d          # Postgres local (raiz do monorepo)
 pnpm --filter @minhasaude/api migration:run
 pnpm --filter @minhasaude/api seed     # cria usuário de teste (ver saída do comando para a senha)
+pnpm --filter @minhasaude/api seed:taco  # importa a tabela TACO (~580 alimentos) - idempotente, seguro rodar de novo
 pnpm --filter @minhasaude/api start:dev
 ```
 
@@ -32,6 +33,15 @@ Todas as rotas exigem `Authorization: Bearer <accessToken>` por padrão — rota
 - `PATCH /v1/me/profile` — cria/atualiza perfil, **exige consentimento `privacy_policy` ativo** (403 sem ele)
 - `GET /v1/me/export` — exporta conta + perfil + histórico de consentimentos
 - `DELETE /v1/me` — inicia exclusão (status `pending_deletion`, revoga todos os refresh tokens, agenda purge em 30 dias); login passa a ser bloqueado imediatamente
+
+### Alimentos (`foods`)
+
+- `GET /v1/foods/:id` (autenticado) — TACO/Open Food Facts são públicos pra qualquer usuário; alimento `source=custom` só é visível pro próprio dono (404 pra qualquer outro)
+- `POST /v1/foods` — cadastra alimento personalizado (`source`/`ownerUserId` sempre definidos pelo servidor, nunca aceitos do cliente)
+- `PATCH /v1/foods/:id` / `DELETE /v1/foods/:id` — só o dono edita/remove; inclusive alimentos do sistema (TACO/OFF) retornam 404 pra qualquer tentativa de edição
+- Busca (`GET /v1/foods/search`) e integração com Open Food Facts ainda não implementadas (ver `docs/backlog-fase2.md`, issue #14)
+
+Créditos de dados: tabela nutricional baseada na **TACO — Tabela Brasileira de Composição de Alimentos** (NEPA/Unicamp, 4ª edição). Esse crédito precisa continuar visível na tela de "Sobre" do app mobile quando ela for implementada (Fase 3) — ver `CLAUDE.md`.
 
 ### Migrations
 

@@ -55,14 +55,16 @@
 ### 13. Catálogo de alimentos — schema + import TACO
 **Contexto**: base de dados de alimentos brasileira, fonte primária e sempre disponível offline (sem depender de API externa). Ver ADR-0004.
 
-- [ ] Migration `foods` (`source`, `external_id` nullable, `owner_user_id` nullable, `name`, `brand` nullable, `barcode` nullable indexado, macros por 100g, `fiber_g_per_100g` nullable, `search_vector`)
-- [ ] Migration `food_portions` (`food_id`, `label`, `grams`)
-- [ ] Extensões Postgres: `pg_trgm` + `unaccent`, índice GIN em `name`
-- [ ] Script de seed: importar TACO (Unicamp) para `foods` com `source = 'taco'` — rodar uma vez, documentar como reexecutar
-- [ ] Atribuição: nota de crédito à TACO/Unicamp já prevista para a tela de "Sobre" do mobile (não bloqueia esta issue, só não pode ser esquecida — ver `CLAUDE.md`)
-- [ ] `POST /v1/foods`, `PATCH /v1/foods/:id`, `DELETE /v1/foods/:id` — só para alimentos `owner_user_id = usuário atual` (cadastro personalizado, sem busca compartilhada entre usuários no MVP — ver `product-plan.md` seção 2)
+- [x] Migration `foods` (`source`, `external_id` nullable, `owner_user_id` nullable, `name`, `brand` nullable, `barcode` nullable indexado, macros por 100g, `fiber_g_per_100g` nullable, `search_vector`) — `search_vector` é coluna gerada (`STORED`, `to_tsvector('portuguese', name)`); `unaccent()` não entra na expressão porque não é `IMMUTABLE` (Postgres recusaria a coluna gerada) — fuzzy/acento fica com o índice trigram, resolvido na prática na issue #14
+- [x] Migration `food_portions` (`food_id`, `label`, `grams`)
+- [x] Extensões Postgres: `pg_trgm` + `unaccent` habilitadas; índice GIN em `search_vector` e índice GIN trigram (`gin_trgm_ops`) em `name` — ambos via SQL bruto na migration (TypeORM não modela operator class declarativamente)
+- [x] Script de seed (`pnpm --filter @minhasaude/api seed:taco`): CSV oficial da TACO 4ª edição (NEPA/Unicamp) reaproveitado de um repositório MIT (`ThiagoCarreiraVallim/fatia`, via GitHub code search) salvo em `src/database/seeds/data/taco.csv`; idempotente por `(source=taco, external_id)`. **582 de 597 itens importados** — 15 ignorados por terem proteína/carboidrato/kcal marcados `NA` (não medido) na fonte original (ex. óleos puros, leite integral/desnatado): nunca fabricamos `0` para dado que a TACO não mediu, só pulamos o item e logamos quais foram
+- [x] Atribuição: nota de crédito à TACO/NEPA/Unicamp adicionada em `apps/api/README.md`; lembrete explícito de manter na tela de "Sobre" do mobile quando ela existir (Fase 3) — ver `CLAUDE.md`
+- [x] `POST /v1/foods`, `PATCH /v1/foods/:id`, `DELETE /v1/foods/:id` — `source`/`owner_user_id` sempre definidos pelo servidor (nunca aceitos do DTO); editar/remover alimento de outro dono **ou do sistema** (TACO/OFF) retorna 404, não 403 (evita revelar existência do recurso a quem não pode mexer nele)
+- [x] `GET /v1/foods/:id` também implementado (não estava no checklist original, mas é pré-requisito pra "só ele o vê" ser testável) — TACO/OFF públicos, custom só pro dono
+- [x] Testes: 12 unitários do service + 4 e2e (forjar `source` no DTO rejeitado por whitelist, dono vê/edita/remove, outro usuário recebe 404 em tudo, alimento inexistente 404)
 
-**Critério de aceite**: seed roda do zero num banco limpo e popula `foods` com os ~600 itens da TACO; usuário consegue cadastrar um alimento próprio e só ele o vê.
+**Critério de aceite**: seed roda do zero num banco limpo e popula `foods` com os ~600 itens da TACO (582 confirmados, testado do zero e reexecutado pra confirmar idempotência); usuário consegue cadastrar um alimento próprio e só ele o vê (confirmado via e2e com dois usuários).
 
 ---
 

@@ -9,6 +9,8 @@ import {
   AccountDeletionRequest,
   BodyMeasurement,
   GoalTarget,
+  Food,
+  FoodPortion,
 } from './entities';
 import type { Env } from '../config/env.schema';
 
@@ -20,7 +22,17 @@ import type { Env } from '../config/env.schema';
       useFactory: (config: ConfigService<Env, true>) => ({
         type: 'postgres' as const,
         url: config.get('DATABASE_URL', { infer: true }),
-        entities: [User, RefreshToken, Profile, Consent, AccountDeletionRequest, BodyMeasurement, GoalTarget],
+        entities: [
+          User,
+          RefreshToken,
+          Profile,
+          Consent,
+          AccountDeletionRequest,
+          BodyMeasurement,
+          GoalTarget,
+          Food,
+          FoodPortion,
+        ],
         // Migrations aplicadas manualmente (migration:run) - nunca synchronize
         // em ambiente algum, ver CLAUDE.md.
         synchronize: false,
