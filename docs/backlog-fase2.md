@@ -38,13 +38,15 @@
 ### 12. Módulo de metas (`goals`)
 **Contexto**: primeiro endpoint que usa o catálogo de calculadoras (issue 10) e o perfil + peso atual (issue 11) para virar TMB/TDEE/macros de verdade. Ver `docs/api-contract.md` (módulo `goals`).
 
-- [ ] Migration `goal_targets` (`profile_snapshot` jsonb, `calculation_method`, `bmr_kcal`, `tdee_kcal`, `target_kcal`, macros, `is_manual_override`, `active_from`) — nunca sobrescrever, sempre criar novo registro
-- [ ] `GET /v1/goals/current` — meta ativa
-- [ ] `POST /v1/goals/recalculate` — usa perfil atual + medida corporal mais recente; aceita `method` opcional (default Mifflin-St Jeor, ou Katch-McArdle se houver `body_fat_percent` recente)
-- [ ] `PATCH /v1/goals/current` — ajuste manual de macros/calorias (`is_manual_override = true`)
-- [ ] `GET /v1/goals/history` — paginado
-- [ ] Erro claro (400) se faltar dado obrigatório no perfil (ex. sem `birth_date`/`sex`/`height_cm`) — nunca calcular com dado ausente ou chutado
-- [ ] Testes unitários do serviço (mockando o catálogo de calculadoras) + e2e do fluxo recalcular → ler → ajustar manualmente → histórico
+- [x] Migration `goal_targets` (`profile_snapshot` jsonb, `calculation_method`, `bmr_kcal`, `tdee_kcal`, `target_kcal`, macros, `is_manual_override`, `active_from`) — nunca sobrescrever, sempre criar novo registro (linha nova a cada recálculo ou ajuste manual)
+- [x] `GET /v1/goals/current` — meta ativa (404 com mensagem apontando pra `POST /v1/goals/recalculate` se ainda não existir)
+- [x] `POST /v1/goals/recalculate` — usa perfil atual + medida corporal mais recente; aceita `method` opcional (default `mifflin_st_jeor`, ou `katch_mcardle` automaticamente se a medida mais recente tiver `body_fat_percent`); 400 claro se perfil incompleto ou se faltar medida corporal
+- [x] `PATCH /v1/goals/current` — ajuste manual de macros/calorias (`is_manual_override = true`), preserva `bmr_kcal`/`tdee_kcal` calculados; 400 se nenhum campo for informado
+- [x] `GET /v1/goals/history` — paginado (DTO de paginação extraído pra `common/dto/pagination-query.dto.ts`, reusado também por `body-measurements`)
+- [x] Erro claro (400) se faltar dado obrigatório no perfil (ex. sem `birth_date`/`sex`/`height_cm`/`activity_level`/`goal`) — nunca calcula com dado ausente ou chutado
+- [x] Testes: 15 unitários do serviço (perfil incompleto, sem medida corporal, seleção de método, wiring TMB→TDEE→target→macros, ajuste manual, paginação) + 6 e2e (fluxo completo recalcular → ler → ajustar → histórico → export)
+- [x] `GET /v1/me/export` passou a incluir `goals` (mesmo padrão da issue 11)
+- [x] `applyGoalAdjustment` novo em `packages/shared/src/calculators/` — déficit de 500kcal/dia pra `lose` (CDC) e superávit de 300kcal/dia pra `gain` (Iraki et al. 2019), aplicado sobre o TDEE antes de `distributeMacros` (renomeado `tdeeKcal`→`kcalBudget` pra refletir que recebe o orçamento pós-ajuste, não o TDEE bruto)
 
 **Critério de aceite**: `POST /v1/goals/recalculate` com um perfil completo retorna TMB/TDEE/macros consistentes com a calculadora testada na issue 10; `PATCH` manual não é sobrescrito por um recálculo posterior sem ação explícita do usuário.
 

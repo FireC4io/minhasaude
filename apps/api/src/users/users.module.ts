@@ -7,6 +7,7 @@ import { AccountDeletionRequest } from '../database/entities/account-deletion-re
 import { Consent } from '../database/entities/consent.entity';
 import { ConsentsModule } from '../consents/consents.module';
 import { BodyMeasurementsModule } from '../body-measurements/body-measurements.module';
+import { GoalsModule } from '../goals/goals.module';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 
@@ -18,6 +19,7 @@ import { UsersService } from './users.service';
     TypeOrmModule.forFeature([User, Profile, RefreshToken, AccountDeletionRequest, Consent]),
     ConsentsModule,
     BodyMeasurementsModule,
+    GoalsModule,
   ],
   controllers: [UsersController],
   providers: [UsersService],

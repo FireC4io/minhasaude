@@ -29,6 +29,7 @@
     "coverageDirectory": "../coverage"
   },
   "dependencies": {
+    "@minhasaude/shared": "workspace:*",
     "@nestjs/common": "^11.2.5",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.2.5",

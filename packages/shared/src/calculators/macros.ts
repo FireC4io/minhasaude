@@ -1,7 +1,10 @@
 import type { Goal } from './types';
 
 export interface DistributeMacrosInputs {
-  tdeeKcal: number;
+  // Orçamento calórico a distribuir - normalmente o target_kcal (já com o
+  // ajuste de déficit/superávit do objetivo aplicado via applyGoalAdjustment),
+  // não o TDEE bruto.
+  kcalBudget: number;
   weightKg: number;
   goal: Goal;
 }
@@ -28,21 +31,21 @@ const PROTEIN_G_PER_KG: Record<Goal, number> = {
   gain: 1.8,
 };
 
-// Gordura como % fixo do TDEE - dentro da AMDR (Dietary Reference Intakes)
-// de 20-35% das calorias totais.
-const FAT_PERCENT_OF_TDEE = 0.275;
+// Gordura como % fixo do orçamento calórico - dentro da AMDR (Dietary
+// Reference Intakes) de 20-35% das calorias totais.
+const FAT_PERCENT_OF_BUDGET = 0.275;
 
 // Piso de carboidrato: garante que proteína+gordura nunca consumam mais que
-// 85% do TDEE, mesmo em combinações extremas de peso alto + meta muito
-// agressiva de déficit calórico - sem isso, carboidrato pode virar negativo.
+// 85% do orçamento calórico, mesmo em combinações extremas de peso alto +
+// meta muito agressiva de déficit - sem isso, carboidrato pode virar negativo.
 const MAX_PROTEIN_PLUS_FAT_SHARE = 0.85;
 
-export function distributeMacros({ tdeeKcal, weightKg, goal }: DistributeMacrosInputs): MacroDistribution {
+export function distributeMacros({ kcalBudget, weightKg, goal }: DistributeMacrosInputs): MacroDistribution {
   const proteinG = PROTEIN_G_PER_KG[goal] * weightKg;
   let proteinKcal = proteinG * KCAL_PER_G_PROTEIN;
-  let fatKcal = tdeeKcal * FAT_PERCENT_OF_TDEE;
+  let fatKcal = kcalBudget * FAT_PERCENT_OF_BUDGET;
 
-  const proteinPlusFatCap = tdeeKcal * MAX_PROTEIN_PLUS_FAT_SHARE;
+  const proteinPlusFatCap = kcalBudget * MAX_PROTEIN_PLUS_FAT_SHARE;
   const proteinPlusFatKcal = proteinKcal + fatKcal;
   if (proteinPlusFatKcal > proteinPlusFatCap) {
     const scale = proteinPlusFatCap / proteinPlusFatKcal;
@@ -50,7 +53,7 @@ export function distributeMacros({ tdeeKcal, weightKg, goal }: DistributeMacrosI
     fatKcal *= scale;
   }
 
-  const carbKcal = tdeeKcal - proteinKcal - fatKcal;
+  const carbKcal = kcalBudget - proteinKcal - fatKcal;
 
   return {
     proteinG: proteinKcal / KCAL_PER_G_PROTEIN,

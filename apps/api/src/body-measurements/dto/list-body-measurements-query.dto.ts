@@ -1,9 +1,9 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import { IsDateString, IsEnum, IsInt, IsOptional, Max, Min } from 'class-validator';
+import { IsDateString, IsEnum, IsOptional } from 'class-validator';
 import { BodyMeasurementSource } from '../../database/entities/body-measurement.entity';
+import { PaginationQueryDto } from '../../common/dto/pagination-query.dto';
 
-export class ListBodyMeasurementsQueryDto {
+export class ListBodyMeasurementsQueryDto extends PaginationQueryDto {
   @ApiPropertyOptional({ enum: BodyMeasurementSource })
   @IsOptional()
   @IsEnum(BodyMeasurementSource)
@@ -18,19 +18,4 @@ export class ListBodyMeasurementsQueryDto {
   @IsOptional()
   @IsDateString()
   to?: string;
-
-  @ApiPropertyOptional({ default: 1 })
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  page: number = 1;
-
-  @ApiPropertyOptional({ default: 20 })
-  @IsOptional()
-  @Type(() => Number)
-  @IsInt()
-  @Min(1)
-  @Max(100)
-  limit: number = 20;
 }

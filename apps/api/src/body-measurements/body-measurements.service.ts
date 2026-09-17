@@ -4,11 +4,7 @@ import { Between, FindOptionsWhere, LessThanOrEqual, MoreThanOrEqual, Repository
 import { BodyMeasurement } from '../database/entities/body-measurement.entity';
 import type { CreateBodyMeasurementDto } from './dto/create-body-measurement.dto';
 import type { ListBodyMeasurementsQueryDto } from './dto/list-body-measurements-query.dto';
-
-export interface PaginatedResult<T> {
-  data: T[];
-  meta: { total: number; page: number; limit: number };
-}
+import type { PaginatedResult } from '../common/types/paginated-result.interface';
 
 @Injectable()
 export class BodyMeasurementsService {
@@ -62,5 +58,11 @@ export class BodyMeasurementsService {
   // Usado por GET /v1/me/export - histórico completo, não só a página atual.
   async listAll(userId: string): Promise<BodyMeasurement[]> {
     return this.measurements.find({ where: { userId }, order: { measuredAt: 'DESC' } });
+  }
+
+  // Usado por GoalsService - peso (e % de gordura, se houver) mais recente
+  // como input do cálculo de TMB/TDEE.
+  async findLatest(userId: string): Promise<BodyMeasurement | null> {
+    return this.measurements.findOne({ where: { userId }, order: { measuredAt: 'DESC' } });
   }
 }

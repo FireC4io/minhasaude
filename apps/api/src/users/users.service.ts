@@ -7,6 +7,7 @@ import { RefreshToken } from '../database/entities/refresh-token.entity';
 import { AccountDeletionRequest } from '../database/entities/account-deletion-request.entity';
 import { ConsentsService } from '../consents/consents.service';
 import { BodyMeasurementsService } from '../body-measurements/body-measurements.service';
+import { GoalsService } from '../goals/goals.service';
 import type { UpdateProfileDto } from './dto/update-profile.dto';
 
 const DELETION_GRACE_PERIOD_DAYS = 30;
@@ -21,6 +22,7 @@ export class UsersService {
     private readonly deletionRequests: Repository<AccountDeletionRequest>,
     private readonly consentsService: ConsentsService,
     private readonly bodyMeasurementsService: BodyMeasurementsService,
+    private readonly goalsService: GoalsService,
   ) {}
 
   private async getUserOrThrow(userId: string): Promise<User> {
@@ -58,6 +60,7 @@ export class UsersService {
     const profile = await this.profiles.findOne({ where: { userId } });
     const consents = await this.consentsService.listHistory(userId);
     const bodyMeasurements = await this.bodyMeasurementsService.listAll(userId);
+    const goals = await this.goalsService.listAll(userId);
     const { passwordHash: _passwordHash, ...safeUser } = user;
 
     return {
@@ -66,6 +69,7 @@ export class UsersService {
       profile,
       consents,
       bodyMeasurements,
+      goals,
     };
   }
 

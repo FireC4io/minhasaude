@@ -2,6 +2,7 @@ import { mifflinStJeor } from './mifflin-st-jeor';
 import { katchMcArdle } from './katch-mcardle';
 import { calculateTdee, ACTIVITY_MULTIPLIERS } from './tdee';
 import { distributeMacros } from './macros';
+import { applyGoalAdjustment } from './target-kcal';
 import type { ActivityLevel, Goal } from './types';
 
 // Coeficientes conferidos contra Mifflin MD, St Jeor ST, et al. "A new
@@ -50,11 +51,25 @@ describe('calculateTdee', () => {
   });
 });
 
+describe('applyGoalAdjustment', () => {
+  it('aplica déficit de 500kcal/dia para lose (faixa conservadora do CDC)', () => {
+    expect(applyGoalAdjustment(2500, 'lose')).toBe(2000);
+  });
+
+  it('não ajusta o TDEE para maintain', () => {
+    expect(applyGoalAdjustment(2500, 'maintain')).toBe(2500);
+  });
+
+  it('aplica superávit de 300kcal/dia para gain (dentro da faixa 200-500kcal da literatura)', () => {
+    expect(applyGoalAdjustment(2500, 'gain')).toBe(2800);
+  });
+});
+
 describe('distributeMacros', () => {
   it.each<Goal>(['lose', 'maintain', 'gain'])(
     'soma das calorias de proteína+gordura+carbo bate com o TDEE para goal=%s',
     (goal) => {
-      const result = distributeMacros({ tdeeKcal: 2500, weightKg: 70, goal });
+      const result = distributeMacros({ kcalBudget: 2500, weightKg: 70, goal });
       const totalKcal = result.proteinKcal + result.fatKcal + result.carbKcal;
       expect(totalKcal).toBeCloseTo(2500, 1);
       expect(result.proteinG).toBeGreaterThan(0);
@@ -64,8 +79,8 @@ describe('distributeMacros', () => {
   );
 
   it('usa mais proteína por kg no objetivo de emagrecimento do que na manutenção', () => {
-    const losing = distributeMacros({ tdeeKcal: 2500, weightKg: 70, goal: 'lose' });
-    const maintaining = distributeMacros({ tdeeKcal: 2500, weightKg: 70, goal: 'maintain' });
+    const losing = distributeMacros({ kcalBudget: 2500, weightKg: 70, goal: 'lose' });
+    const maintaining = distributeMacros({ kcalBudget: 2500, weightKg: 70, goal: 'maintain' });
     expect(losing.proteinG).toBeGreaterThan(maintaining.proteinG);
   });
 
@@ -74,7 +89,7 @@ describe('distributeMacros', () => {
     // isoladas excederiam o teto de 85% do TDEE reservado a proteína+gordura,
     // então o resultado precisa escalar essas duas pra caber, garantindo pelo
     // menos 15% do TDEE em carboidrato.
-    const result = distributeMacros({ tdeeKcal: 1200, weightKg: 120, goal: 'lose' });
+    const result = distributeMacros({ kcalBudget: 1200, weightKg: 120, goal: 'lose' });
     const totalKcal = result.proteinKcal + result.fatKcal + result.carbKcal;
     expect(result.carbKcal).toBeGreaterThanOrEqual(1200 * 0.15 - 0.01);
     expect(result.carbG).toBeGreaterThan(0);
