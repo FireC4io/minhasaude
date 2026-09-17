@@ -1,0 +1,95 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: lint, test, build (workspaces afetados)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Necessário para o turbo comparar contra HEAD^1 / base do PR
+          # (--filter=...[<ref>]) e rodar só nos workspaces afetados.
+          fetch-depth: 2
+
+      - uses: pnpm/action-setup@v4
+        # Sem "version": lê o campo "packageManager" do package.json raiz.
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Cache Turborepo
+        uses: actions/cache@v4
+        with:
+          path: .turbo
+          key: turbo-${{ runner.os }}-${{ github.sha }}
+          restore-keys: |
+            turbo-${{ runner.os }}-
+
+      - name: Instalar dependências
+        run: pnpm install --frozen-lockfile
+
+      - name: Determinar ref de comparação (workspaces afetados)
+        id: turbo-filter
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "ref=${{ github.event.pull_request.base.sha }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "ref=HEAD^1" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Lint, test e build (apenas workspaces afetados)
+        run: pnpm exec turbo run lint test build --filter="...[${{ steps.turbo-filter.outputs.ref }}]"
+
+  e2e:
+    name: e2e (@minhasaude/api)
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: minhasaude
+          POSTGRES_PASSWORD: minhasaude
+          POSTGRES_DB: minhasaude
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U minhasaude -d minhasaude"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      NODE_ENV: test
+      DATABASE_URL: postgresql://minhasaude:minhasaude@localhost:5432/minhasaude
+      # Segredo só para a vida do job de CI, contra um Postgres efêmero - nunca usado em produção.
+      JWT_ACCESS_SECRET: ci-test-only-secret-nunca-usado-em-producao-000000
+      CORS_ORIGINS: ""
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Instalar dependências
+        run: pnpm install --frozen-lockfile
+
+      - name: Rodar migrations
+        run: pnpm --filter @minhasaude/api migration:run
+
+      - name: Rodar testes e2e
+        run: pnpm --filter @minhasaude/api test:e2e
