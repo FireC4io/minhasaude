@@ -14,7 +14,7 @@ export const envSchema = z.object({
         .map((origin) => origin.trim())
         .filter(Boolean),
     ),
-  DATABASE_URL: z.string().optional(),
+  DATABASE_URL: z.string().min(1, 'DATABASE_URL é obrigatória'),
 });
 
 export type Env = z.infer<typeof envSchema>;
