@@ -1,0 +1,12 @@
+{
+  "name": "@minhasaude/mobile",
+  "version": "0.0.0",
+  "private": true,
+  "description": "App mobile Expo/React Native do Minha Saúde. Scaffold real chega na Fase 3 (docs/roadmap.md).",
+  "scripts": {
+    "build": "echo \"[mobile] build placeholder - Fase 3\" && exit 0",
+    "lint": "echo \"[mobile] lint placeholder - Fase 3\" && exit 0",
+    "test": "echo \"[mobile] test placeholder - Fase 3\" && exit 0",
+    "dev": "echo \"[mobile] dev placeholder - Fase 3\" && exit 0"
+  }
+}

@@ -1,0 +1,36 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# build outputs
+dist/
+build/
+.turbo/
+coverage/
+
+# env
+.env
+.env.*
+!.env.example
+
+# expo / eas
+.expo/
+.expo-shared/
+eas-build-*/
+
+# logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# os
+.DS_Store
+Thumbs.db
+
+# editor
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# generated (graphify knowledge graph output - regenerate via /graphify, not committed)
+graphify-out/

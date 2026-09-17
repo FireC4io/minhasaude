@@ -1,0 +1,16 @@
+{
+  "name": "@minhasaude/shared",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Tipos, enums, schemas Zod e catálogo de calculadoras compartilhados entre api e mobile.",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "build": "echo \"[shared] build placeholder\" && exit 0",
+    "lint": "echo \"[shared] lint placeholder\" && exit 0",
+    "test": "echo \"[shared] test placeholder\" && exit 0"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  }
+}

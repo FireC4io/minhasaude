@@ -1,0 +1,12 @@
+{
+  "name": "@minhasaude/api",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Backend NestJS do Minha Saúde. Skeleton real chega na Issue 2 (docs/backlog-fase1.md).",
+  "scripts": {
+    "build": "echo \"[api] build placeholder - Issue 2\" && exit 0",
+    "lint": "echo \"[api] lint placeholder - Issue 2\" && exit 0",
+    "test": "echo \"[api] test placeholder - Issue 2\" && exit 0",
+    "dev": "echo \"[api] dev placeholder - Issue 2\" && exit 0"
+  }
+}
