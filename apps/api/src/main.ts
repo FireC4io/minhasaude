@@ -4,6 +4,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Logger } from 'nestjs-pino';
+import helmet from 'helmet';
 import { AppModule } from './app.module';
 import type { Env } from './config/env.schema';
 
@@ -13,6 +14,8 @@ async function bootstrap() {
   app.useLogger(app.get(Logger));
 
   const config = app.get(ConfigService<Env, true>);
+
+  app.use(helmet());
 
   app.setGlobalPrefix('v1', { exclude: ['health'] });
 

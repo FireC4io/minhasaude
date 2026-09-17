@@ -112,11 +112,11 @@
 ### 9. Baseline de segurança (hardening desde o início)
 **Contexto**: usuários reais desde a Fase 1 — segurança não pode ser tratada como item de fase futura. Ver `CLAUDE.md`.
 
-- [ ] `helmet` habilitado no bootstrap do Nest
-- [ ] `nestjs-throttler` global, com limites mais restritivos em `/v1/auth/*` e `/v1/exams` (upload)
-- [ ] CORS restrito a origens conhecidas (app mobile via bundle id/scheme, não `*`)
-- [ ] `pnpm audit` (ou equivalente) rodando no CI, quebrando build em vulnerabilidade alta/crítica
-- [ ] Dependabot (ou Renovate) configurado no repositório
-- [ ] Checklist de segurança do `rules/common/security.md` revisado manualmente antes do primeiro deploy público
+- [x] `helmet` habilitado no bootstrap do Nest
+- [x] `nestjs-throttler` global, com limites mais restritivos em `/v1/auth/*` (5/min em register, login e refresh) — `/v1/exams` fica pendente até a feature de upload existir (Fase 2)
+- [x] CORS restrito a origens conhecidas (app mobile via bundle id/scheme, não `*`) — já era via `CORS_ORIGINS`, confirmado
+- [x] `pnpm audit` (ou equivalente) rodando no CI, quebrando build em vulnerabilidade alta/crítica
+- [x] Dependabot (ou Renovate) configurado no repositório
+- [x] Checklist de segurança do `rules/common/security.md` revisado manualmente antes do primeiro deploy público
 
 **Critério de aceite**: requisição sem token a um endpoint protegido retorna 401; excesso de tentativas de login (>5 em 1 min) retorna 429; CI falha se `pnpm audit` encontrar vulnerabilidade alta/crítica.

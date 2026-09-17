@@ -15,6 +15,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Public()
+  @Throttle({ default: { limit: 5, ttl: 60_000 } })
   @Post('register')
   @ApiOperation({ summary: 'Cria uma conta nova' })
   register(@Body() dto: RegisterDto) {
@@ -31,6 +32,7 @@ export class AuthController {
   }
 
   @Public()
+  @Throttle({ default: { limit: 5, ttl: 60_000 } })
   @HttpCode(HttpStatus.OK)
   @Post('refresh')
   @ApiOperation({ summary: 'Rotaciona o refresh token e emite um novo par de tokens' })

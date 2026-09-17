@@ -52,6 +52,25 @@ jobs:
       - name: Lint, test e build (apenas workspaces afetados)
         run: pnpm exec turbo run lint test build --filter="...[${{ steps.turbo-filter.outputs.ref }}]"
 
+  audit:
+    name: pnpm audit (vulnerabilidades alta/crítica)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Instalar dependências
+        run: pnpm install --frozen-lockfile
+
+      - name: Auditar dependências (quebra em high/critical)
+        run: pnpm audit --audit-level=high
+
   e2e:
     name: e2e (@minhasaude/api)
     runs-on: ubuntu-latest
