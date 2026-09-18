@@ -8,6 +8,7 @@
 
 export * from './bodyMeasurementsControllerListParams';
 export * from './bodyMeasurementsControllerListSource';
+export * from './calculationMethod';
 export * from './copyDiaryDto';
 export * from './createBodyMeasurementDto';
 export * from './createBodyMeasurementDtoSource';
@@ -18,6 +19,7 @@ export * from './createFoodDto';
 export * from './diaryControllerGetByDateParams';
 export * from './foodsControllerSearchParams';
 export * from './goalsControllerHistoryParams';
+export * from './goalTargetResponseDto';
 export * from './grantConsentDto';
 export * from './grantConsentDtoConsentType';
 export * from './loginDto';

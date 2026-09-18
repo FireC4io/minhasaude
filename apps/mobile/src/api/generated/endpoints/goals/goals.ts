@@ -25,6 +25,7 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  GoalTargetResponseDto,
   GoalsControllerHistoryParams,
   RecalculateGoalDto,
   UpdateGoalDto
@@ -59,7 +60,7 @@ export const goalsControllerGetCurrent = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<GoalTargetResponseDto>(
       {url: `/v1/goals/current`, method: 'GET', signal
     },
       );
@@ -218,7 +219,7 @@ export const goalsControllerRecalculate = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<GoalTargetResponseDto>(
       {url: `/v1/goals/recalculate`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: recalculateGoalDto, signal

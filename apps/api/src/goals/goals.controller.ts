@@ -1,8 +1,9 @@
 import { Body, Controller, Get, Patch, Post, Query } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { GoalsService } from './goals.service';
 import { RecalculateGoalDto } from './dto/recalculate-goal.dto';
 import { UpdateGoalDto } from './dto/update-goal.dto';
+import { GoalTargetResponseDto } from './dto/goal-target-response.dto';
 import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import type { JwtPayload } from '../auth/types/jwt-payload.interface';
@@ -14,12 +15,14 @@ export class GoalsController {
 
   @Get('current')
   @ApiOperation({ summary: 'Meta ativa (TMB, TDEE, macros)' })
+  @ApiOkResponse({ type: GoalTargetResponseDto })
   getCurrent(@CurrentUser() user: JwtPayload) {
     return this.goalsService.getCurrent(user.sub);
   }
 
   @Post('recalculate')
   @ApiOperation({ summary: 'Recalcula a meta a partir do perfil e da medida corporal mais recente' })
+  @ApiOkResponse({ type: GoalTargetResponseDto })
   recalculate(@CurrentUser() user: JwtPayload, @Body() dto: RecalculateGoalDto) {
     return this.goalsService.recalculate(user.sub, dto);
   }
