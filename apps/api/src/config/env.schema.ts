@@ -20,6 +20,8 @@ export const envSchema = z.object({
     .min(32, 'JWT_ACCESS_SECRET deve ter pelo menos 32 caracteres'),
   JWT_ACCESS_EXPIRES_IN: z.string().default('15m'),
   REFRESH_TOKEN_TTL_DAYS: z.coerce.number().int().positive().default(30),
+  // Opcional: sem ela, a API loga normalmente em stdout sem encaminhar pro BetterStack.
+  BETTERSTACK_SOURCE_TOKEN: z.string().optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;

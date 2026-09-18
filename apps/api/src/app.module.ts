@@ -3,6 +3,7 @@ import { LoggerModule } from 'nestjs-pino';
 import { AuthModule } from './auth/auth.module';
 import { BodyMeasurementsModule } from './body-measurements/body-measurements.module';
 import { ConfigurationModule } from './config/configuration.module';
+import { buildPinoTransport } from './config/pino-transport';
 import { ConsentsModule } from './consents/consents.module';
 import { DatabaseModule } from './database/database.module';
 import { DiaryModule } from './diary/diary.module';
@@ -25,10 +26,7 @@ import { UsersModule } from './users/users.module';
     LoggerModule.forRoot({
       pinoHttp: {
         level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
-        transport:
-          process.env.NODE_ENV === 'production'
-            ? undefined
-            : { target: 'pino-pretty', options: { singleLine: true } },
+        transport: buildPinoTransport(),
         // Nunca logar dados sensíveis (senha, tokens, dados de exame) - ver CLAUDE.md.
         redact: {
           paths: [
