@@ -1,14 +1,14 @@
 # ADR-0003: Tipos compartilhados via REST + OpenAPI codegen (não tRPC)
 
 ## Status
-Recomendado (aguardando confirmação)
+Aceito (confirmado no planejamento da Fase 3, 2026-09-18)
 
 ## Contexto
 App e API precisam compartilhar tipos e validações (DTOs de perfil, diário, exames) sem duplicar definição manualmente.
 
 ## Decisão
 - Backend expõe **OpenAPI/Swagger** (já é prática sua) como fonte da verdade do contrato HTTP.
-- Gerar um **client TypeScript tipado para o mobile** a partir do OpenAPI spec (ex.: `orval` ou `openapi-typescript` + `openapi-fetch`) em tempo de build/CI.
+- Gerar um **client TypeScript tipado para o mobile** a partir do OpenAPI spec com **`orval`**, no modo que gera hooks do **TanStack Query** diretamente (fetch + tipos + cache de servidor em um único passo de codegen, sem precisar decidir uma lib de data-fetching à parte). Alternativa descartada: `openapi-typescript` + `openapi-fetch` — mais leve e explícito, mas exige escrever os hooks de fetch/cache à mão; descartado porque adiciona trabalho manual sem ganho relevante para o escopo do app.
 - `packages/shared` guarda o que não é gerado automaticamente: enums de domínio (unidades, tipos de refeição, categorias de marcador), constantes (faixas padrão), e schemas **Zod** usados tanto para validação de formulário no app quanto (via adapter) na API.
 
 ## Justificativa

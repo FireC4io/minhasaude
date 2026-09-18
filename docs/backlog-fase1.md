@@ -101,11 +101,11 @@
 ### 8. Logging estruturado e observabilidade
 **Contexto**: reaproveitar sua experiência com Pino + BetterStack, com cuidado de não logar dados sensíveis.
 
-- [ ] Pino configurado com redact de campos sensíveis (senha, token, dados de exame)
-- [ ] Integração com BetterStack
-- [ ] Exception filter global que loga erro com contexto sem vazar stack trace pro cliente em produção
+- [x] Pino configurado com redact de campos sensíveis (senha, token, dados de exame)
+- [x] Integração com BetterStack (`apps/api/src/config/pino-transport.ts`, source `minhasaude-api`, confirmado em produção 2026-09-18)
+- [ ] Exception filter global que loga erro com contexto sem vazar stack trace pro cliente em produção — **pendente**: o comportamento default do NestJS já não vaza stack trace pro cliente em erros não tratados, então não é um buraco de segurança aberto, mas falta o filtro custom pra registrar contexto rico no log (não é mais que "Internal server error" hoje)
 
-**Critério de aceite**: erro forçado em endpoint de teste aparece no BetterStack com contexto, e a resposta HTTP não expõe stack trace.
+**Critério de aceite**: erro forçado em endpoint de teste aparece no BetterStack com contexto, e a resposta HTTP não expõe stack trace. (Parcial: BetterStack recebe os logs; contexto rico de erro ainda depende do exception filter pendente acima.)
 
 ---
 
