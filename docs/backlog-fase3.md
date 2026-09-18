@@ -4,11 +4,11 @@
 
 **Decisões de stack confirmadas nesta fase**: `orval` (gera client OpenAPI + hooks TanStack Query em um passo) e `NativeWind` (Tailwind para RN/Expo). Ver ADRs acima.
 
-**Ordem de dependência entre issues**: 16 → 17 → 18 → 19; 20 depende de 17 e pode rodar em paralelo com 18/19.
+**Ordem de dependência entre issues**: 17 → 18 → 19 → 20; 21 depende de 18 e pode rodar em paralelo com 19/20.
 
 ---
 
-### 16. Setup do app mobile (Expo + Expo Router + EAS + NativeWind)
+### 17. Setup do app mobile (Expo + Expo Router + EAS + NativeWind)
 **Contexto**: scaffold real do `apps/mobile` (hoje é só placeholder — ver `apps/mobile/package.json`). Antes de escrever qualquer tela, seguir o passo de pesquisa do workflow do projeto: buscar um template Expo Router + monorepo pnpm já testado (`gh search repos`/`gh search code`) para partir de uma base validada em vez de montar o Metro config + monorepo integration do zero.
 
 - [ ] `pnpm create expo-app` dentro de `apps/mobile` (ou adaptar de um template de referência encontrado na pesquisa), TypeScript, Expo Router habilitado
@@ -23,15 +23,15 @@
 
 ---
 
-### 17. Client HTTP gerado (orval) + autenticação
-**Contexto**: primeira coisa que qualquer tela do app precisa — sem isso, nenhuma outra issue desta fase é testável de ponta a ponta. Depende do setup da issue #16. Endpoints já prontos: `POST /v1/auth/register`, `POST /v1/auth/login`, `POST /v1/auth/refresh`, `POST /v1/auth/logout` (ver `docs/api-contract.md`).
+### 18. Client HTTP gerado (orval) + autenticação
+**Contexto**: primeira coisa que qualquer tela do app precisa — sem isso, nenhuma outra issue desta fase é testável de ponta a ponta. Depende do setup da issue #17. Endpoints já prontos: `POST /v1/auth/register`, `POST /v1/auth/login`, `POST /v1/auth/refresh`, `POST /v1/auth/logout` (ver `docs/api-contract.md`).
 
 - [ ] `orval` configurado para gerar client + hooks TanStack Query a partir do OpenAPI spec da API (`/docs-json` em dev, URL configurável por env pra apontar pra produção)
 - [ ] Script `pnpm --filter mobile generate:api` documentado (regenerar o client quando o contrato mudar) — decidir e documentar se roda manual ou vira parte do CI
 - [ ] Armazenamento seguro do refresh token (`expo-secure-store`, nunca `AsyncStorage` puro pra token — dado sensível de autenticação)
 - [ ] Interceptor/wrapper do client: refresh automático do access token expirado (usa `POST /v1/auth/refresh`) antes de forçar logout
 - [ ] Tela de login + tela de registro (Expo Router), com validação via schema Zod compartilhado quando fizer sentido
-- [ ] Guarda de rota: usuário não autenticado não acessa telas internas (redirect pro login); usuário autenticado sem perfil completo é direcionado pro onboarding (issue #18) em vez do app principal
+- [ ] Guarda de rota: usuário não autenticado não acessa telas internas (redirect pro login); usuário autenticado sem perfil completo é direcionado pro onboarding (issue #19) em vez do app principal
 - [ ] Logout limpa o token do secure storage e o cache do TanStack Query
 - [ ] Testes: pelo menos o fluxo de login feliz e o de credencial inválida, mais o refresh automático simulado (mock do client gerado)
 
@@ -39,8 +39,8 @@
 
 ---
 
-### 18. Onboarding (perfil + primeiro cálculo de meta)
-**Contexto**: primeira experiência de um usuário novo depois do registro. Depende da issue #17 (client + auth). Endpoints já prontos: `PATCH /v1/me/profile`, `POST /v1/consents`, `POST /v1/goals/recalculate`, `GET /v1/goals/current` (ver `docs/api-contract.md`). **Atenção LGPD**: `PATCH /v1/me/profile` e `POST /v1/body-measurements` exigem consentimento ativo — o onboarding precisa coletar o aceite via `POST /v1/consents` antes de tentar essas chamadas, e mostrar a tela de forma clara (não um checkbox pré-marcado).
+### 19. Onboarding (perfil + primeiro cálculo de meta)
+**Contexto**: primeira experiência de um usuário novo depois do registro. Depende da issue #18 (client + auth). Endpoints já prontos: `PATCH /v1/me/profile`, `POST /v1/consents`, `POST /v1/goals/recalculate`, `GET /v1/goals/current` (ver `docs/api-contract.md`). **Atenção LGPD**: `PATCH /v1/me/profile` e `POST /v1/body-measurements` exigem consentimento ativo — o onboarding precisa coletar o aceite via `POST /v1/consents` antes de tentar essas chamadas, e mostrar a tela de forma clara (não um checkbox pré-marcado).
 
 - [ ] Tela(s) de consentimento LGPD (política de privacidade) — aceite explícito antes de qualquer dado de saúde ser enviado
 - [ ] Formulário de perfil (peso, altura, idade, sexo, nível de atividade, objetivo) com validação via schema Zod compartilhado — reaproveita os enums de `packages/shared`
@@ -53,8 +53,8 @@
 
 ---
 
-### 19. Diário alimentar + resumo diário
-**Contexto**: núcleo de uso diário do app — depende da issue #17. Endpoints já prontos: `GET /v1/foods/search`, `POST /v1/diary`, `GET /v1/diary?date=`, `PATCH /v1/diary/:id`, `DELETE /v1/diary/:id`, `POST /v1/diary/copy` (ver `docs/api-contract.md`). O resumo (`consumed`/`target`/`remaining`) já vem pronto na resposta de `GET /v1/diary` — não recalcular no client.
+### 20. Diário alimentar + resumo diário
+**Contexto**: núcleo de uso diário do app — depende da issue #18. Endpoints já prontos: `GET /v1/foods/search`, `POST /v1/diary`, `GET /v1/diary?date=`, `PATCH /v1/diary/:id`, `DELETE /v1/diary/:id`, `POST /v1/diary/copy` (ver `docs/api-contract.md`). O resumo (`consumed`/`target`/`remaining`) já vem pronto na resposta de `GET /v1/diary` — não recalcular no client.
 
 - [ ] Busca de alimento (TACO + Open Food Facts via `/v1/foods/search`) com estado de loading/vazio tratado explicitamente
 - [ ] Registro de entrada no diário (quantidade, unidade, porção quando disponível, tipo de refeição)
@@ -68,8 +68,8 @@
 
 ---
 
-### 20. Registro de peso + gráfico de evolução
-**Contexto**: "exceção de baixo custo, alto valor demonstrativo" apontada em `docs/product-plan.md` — único gráfico do MVP (o resto fica pra Fase 6). Depende da issue #17. Endpoints já prontos: `POST /v1/body-measurements`, `GET /v1/body-measurements?source=&from=&to=` (ver `docs/api-contract.md`). **Atenção**: `body_measurements.source` nunca é normalizado entre aparelhos (regra do `CLAUDE.md`) — o MVP mobile só registra `source: 'manual'`; não construir nenhuma comparação implícita entre fontes.
+### 21. Registro de peso + gráfico de evolução
+**Contexto**: "exceção de baixo custo, alto valor demonstrativo" apontada em `docs/product-plan.md` — único gráfico do MVP (o resto fica pra Fase 6). Depende da issue #18. Endpoints já prontos: `POST /v1/body-measurements`, `GET /v1/body-measurements?source=&from=&to=` (ver `docs/api-contract.md`). **Atenção**: `body_measurements.source` nunca é normalizado entre aparelhos (regra do `CLAUDE.md`) — o MVP mobile só registra `source: 'manual'`; não construir nenhuma comparação implícita entre fontes.
 
 - [ ] Tela de registro rápido de peso (reaproveita o mesmo formulário/validação do onboarding quando possível)
 - [ ] Listagem do histórico de peso (`GET /v1/body-measurements?source=manual`)
