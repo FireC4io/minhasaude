@@ -10,7 +10,7 @@
   "devDependencies": {
     "eslint": "^10.10.0",
     "prettier": "^3.4.0",
-    "typescript": "^5.7.0"
+    "typescript": "^7.0.2"
   },
   "dependencies": {
     "@eslint/js": "^10.0.1",
