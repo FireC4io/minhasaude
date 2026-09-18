@@ -20,10 +20,32 @@ App mobile (Expo + Expo Router + NativeWind) do Minha Saúde. Ver `docs/backlog-
 
 ## Estrutura
 
-- `src/app/` — telas e rotas (Expo Router, file-based)
+- `src/app/(auth)/` — telas de login/registro (Expo Router, sem tab bar)
+- `src/app/(app)/` — telas internas, atrás do guard de autenticação (tab bar via `AppTabs`)
+- `src/app/_layout.tsx` — guard de rota: `Stack.Protected` decide entre `(app)` e `(auth)` a partir de `useAuth().isAuthenticated`
+- `src/features/auth/` — `AuthProvider`/`useAuth` (login, registro, logout, sessão persistida)
+- `src/api/generated/` — client + hooks do TanStack Query gerados pelo orval (**nunca editar à mão**, ver `pnpm generate:api` abaixo)
+- `src/api/http-client.ts` — instância do axios usada pelo client gerado: anexa o access token, renova automaticamente num 401 e repete a chamada original
+- `src/api/token-storage.ts` — tokens guardados via `expo-secure-store` (nunca `AsyncStorage` puro — dado sensível de autenticação)
 - `src/components/` — componentes compartilhados
 - `src/global.css` — tokens da identidade "Gota Vital" (paleta clara/escura) + diretivas do Tailwind
 - `tailwind.config.js` — mapeia as cores da identidade (`areia`, `grafite`, `mamao`, `couve`, `jabuticaba`, `maracuja`) para classes do NativeWind
+
+## Client HTTP (orval)
+
+O client + os hooks em `src/api/generated/` são gerados a partir do contrato OpenAPI da API — nunca editados à mão. Pra regenerar depois de qualquer mudança no contrato (ver `orval.config.ts`):
+
+```bash
+pnpm --filter mobile generate:api
+```
+
+Por padrão busca o spec em `http://localhost:3000/docs-json` (API local rodando via `pnpm --filter api start:dev`, com Postgres do `docker compose up -d` na raiz). Pra gerar contra produção:
+
+```bash
+API_OPENAPI_URL=https://minhasaude-api.onrender.com/docs-json pnpm --filter mobile generate:api
+```
+
+Copie `.env.example` para `.env.local` para configurar `EXPO_PUBLIC_API_URL` (URL que o app chama em runtime — padrão é produção; aponte pra API local durante o desenvolvimento).
 
 ## Pacotes do monorepo
 
@@ -46,3 +68,4 @@ pnpm --filter mobile exec eas build --profile development --platform android
 | `pnpm --filter mobile lint` | ESLint (`@minhasaude/config` + regras do Expo) |
 | `pnpm --filter mobile test` | Jest (`jest-expo`) |
 | `pnpm --filter mobile build` | `expo export` — bundle de produção em `dist/`, usado pelo pipeline do Turborepo |
+| `pnpm --filter mobile generate:api` | Regenera `src/api/generated/` a partir do contrato OpenAPI (orval) |

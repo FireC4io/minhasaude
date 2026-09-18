@@ -9,6 +9,7 @@ import { User, UserStatus } from '../database/entities/user.entity';
 import { RefreshToken } from '../database/entities/refresh-token.entity';
 import type { Env } from '../config/env.schema';
 import type { RegisterDto } from './dto/register.dto';
+import type { RegisterResponseDto } from './dto/register-response.dto';
 import type { LoginDto } from './dto/login.dto';
 import type { TokensDto } from './dto/tokens.dto';
 import type { JwtPayload } from './types/jwt-payload.interface';
@@ -25,7 +26,7 @@ export class AuthService {
     private readonly config: ConfigService<Env, true>,
   ) {}
 
-  async register(dto: RegisterDto): Promise<Pick<User, 'id' | 'email' | 'status'>> {
+  async register(dto: RegisterDto): Promise<RegisterResponseDto> {
     const existing = await this.users.findOne({ where: { email: dto.email } });
     if (existing) {
       throw new ConflictException('Já existe uma conta com este email');

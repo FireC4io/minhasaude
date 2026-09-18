@@ -9,6 +9,8 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { WebBadge } from '@/components/web-badge';
 import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+import { useAuth } from '@/features/auth/auth-context';
+import { PrimaryButton } from '@/features/auth/primary-button';
 
 // Perfil de exemplo só para provar que o Metro resolve @minhasaude/shared e
 // que uma className do NativeWind aplica estilo real. Sem UI de dados reais
@@ -47,6 +49,15 @@ function getDevMenuHint() {
   );
 }
 
+function LogoutButton() {
+  const { logout } = useAuth();
+  return (
+    <View className="w-full">
+      <PrimaryButton label="Sair" onPress={() => void logout()} />
+    </View>
+  );
+}
+
 export default function HomeScreen() {
   return (
     <ThemedView style={styles.container}>
@@ -63,6 +74,7 @@ export default function HomeScreen() {
         </ThemedText>
 
         <SetupProofCard />
+        <LogoutButton />
 
         <ThemedView type="backgroundElement" style={styles.stepContainer}>
           <HintRow

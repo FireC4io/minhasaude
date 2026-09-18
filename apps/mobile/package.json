@@ -13,12 +13,14 @@
     "build": "expo export",
     "lint": "eslint \"src/**/*.{ts,tsx}\"",
     "test": "jest",
-    "generate:api": "echo \"[mobile] generate:api chega na issue #18 (orval)\" && exit 0",
+    "generate:api": "orval --config orval.config.ts",
     "reset-project": "node ./scripts/reset-project.js"
   },
   "dependencies": {
     "@expo/ui": "~57.0.19",
     "@minhasaude/shared": "workspace:^",
+    "@tanstack/react-query": "^5.103.1",
+    "axios": "^1.20.0",
     "expo": "~57.0.24",
     "expo-constants": "~57.0.19",
     "expo-device": "~57.0.2",
@@ -27,6 +29,7 @@
     "expo-image": "~57.0.5",
     "expo-linking": "~57.0.10",
     "expo-router": "~57.0.22",
+    "expo-secure-store": "~57.0.4",
     "expo-splash-screen": "~57.0.9",
     "expo-status-bar": "~57.0.1",
     "expo-symbols": "~57.0.3",
@@ -48,11 +51,13 @@
     "@testing-library/react-native": "^14.0.1",
     "@types/jest": "^30.0.0",
     "@types/react": "~19.2.2",
+    "axios-mock-adapter": "^2.1.0",
     "babel-preset-expo": "~57.0.12",
     "eslint": "^9.39.5",
     "eslint-config-expo": "~57.0.2",
     "jest": "^30.5.1",
     "jest-expo": "~57.0.5",
+    "orval": "^8.33.0",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "tailwindcss": "^3.4.17",
     "typescript": "~6.0.3"
@@ -60,6 +65,9 @@
   "jest": {
     "preset": "jest-expo",
     "rootDir": "src",
-    "testRegex": ".*\\.spec\\.(ts|tsx)$"
+    "testRegex": ".*\\.spec\\.(ts|tsx)$",
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/$1"
+    }
   }
 }
