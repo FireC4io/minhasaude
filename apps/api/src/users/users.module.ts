@@ -8,6 +8,7 @@ import { Consent } from '../database/entities/consent.entity';
 import { ConsentsModule } from '../consents/consents.module';
 import { BodyMeasurementsModule } from '../body-measurements/body-measurements.module';
 import { GoalsModule } from '../goals/goals.module';
+import { DiaryModule } from '../diary/diary.module';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 
@@ -20,6 +21,7 @@ import { UsersService } from './users.service';
     ConsentsModule,
     BodyMeasurementsModule,
     GoalsModule,
+    DiaryModule,
   ],
   controllers: [UsersController],
   providers: [UsersService],

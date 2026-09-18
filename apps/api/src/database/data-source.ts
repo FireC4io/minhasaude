@@ -10,6 +10,7 @@ import {
   GoalTarget,
   Food,
   FoodPortion,
+  DiaryEntry,
 } from './entities';
 
 // Fonte de dados usada pela CLI do TypeORM (migration:generate/run/revert).
@@ -28,6 +29,7 @@ const AppDataSource = new DataSource({
     GoalTarget,
     Food,
     FoodPortion,
+    DiaryEntry,
   ],
   migrations: ['src/database/migrations/*.ts'],
   synchronize: false,

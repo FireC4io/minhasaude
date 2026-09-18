@@ -11,6 +11,7 @@ import {
   GoalTarget,
   Food,
   FoodPortion,
+  DiaryEntry,
 } from './entities';
 import type { Env } from '../config/env.schema';
 
@@ -32,6 +33,7 @@ import type { Env } from '../config/env.schema';
           GoalTarget,
           Food,
           FoodPortion,
+          DiaryEntry,
         ],
         // Migrations aplicadas manualmente (migration:run) - nunca synchronize
         // em ambiente algum, ver CLAUDE.md.

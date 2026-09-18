@@ -89,14 +89,15 @@
 ### 15. Diário alimentar (`diary`)
 **Contexto**: depende do catálogo de alimentos (issue 13/14) e do módulo de metas (issue 12) para o resumo vs. meta. Ver `docs/api-contract.md` (módulo `diary`) e a simplificação de escopo em `product-plan.md` (cópia de dia inteiro no MVP, não de refeição individual).
 
-- [ ] Migration `diary_entries` (`food_id`, `entry_date`, `meal_type`, `quantity`, `unit`, `portion_id` nullable, snapshots de macros no momento do registro)
-- [ ] `POST /v1/diary` — grava os snapshots de macros a partir do `food_id` no momento da criação (nunca recalcula retroativamente se o alimento for editado depois)
-- [ ] `GET /v1/diary?date=YYYY-MM-DD` — entradas agrupadas por refeição + resumo (kcal/macros vs. meta ativa da issue 12)
-- [ ] `PATCH /v1/diary/:id`, `DELETE /v1/diary/:id`
-- [ ] `POST /v1/diary/copy` — duplica todas as entradas de `from_date` para `to_date` (dia inteiro, não refeição individual — MVP)
-- [ ] Testes: normalização de porções (grams vs. `food_portions`) e o resumo diário batendo com a soma dos snapshots, não com os dados atuais do alimento
+- [x] Migration `diary_entries` (`food_id`, `entry_date`, `meal_type`, `quantity`, `unit`, `portion_id` nullable, snapshots de macros no momento do registro) — `food_id` sem `onDelete` (bloqueia apagar alimento com histórico de diário); teve que editar a migration gerada à mão pra remover DROP INDEX indevido nos índices de busca da issue #14 (não modelados na entidade, TypeORM tentou "corrigir drift")
+- [x] `POST /v1/diary` — snapshot calculado a partir do `food_id` (via `FoodsService.findById`, respeitando a mesma visibilidade custom/dono) no momento da criação; nunca recalcula retroativamente
+- [x] `GET /v1/diary?date=YYYY-MM-DD` — entradas agrupadas por refeição + resumo `{ consumed, target, remaining }` (target/remaining `null` se o usuário ainda não calculou meta - estado válido, não erro)
+- [x] `PATCH /v1/diary/:id`, `DELETE /v1/diary/:id` — só o dono; trocar `unit` pra `grams` sempre limpa `portionId`; só resnapshota se algo que afeta o cálculo mudou
+- [x] `POST /v1/diary/copy` — duplica `from_date` → `to_date`, resnapshotando a partir do alimento atual (é uma entrada nova, não uma correção retroativa da origem)
+- [x] `GET /v1/me/export` passou a incluir `diaryEntries` (mesmo padrão das issues 11/12)
+- [x] Testes: 13 unitários (cálculo por grams/porção, rejeição de porção de outro alimento, `unit→grams` limpa portionId, resumo não recalcula do alimento atual) + 6 e2e (snapshot congela após editar o alimento, copy resnapshota do estado atual, isolamento entre usuários, remoção, export)
 
-**Critério de aceite**: registrar um alimento, editar o alimento original depois, e conferir que a entrada já registrada no diário mantém os valores antigos (snapshot); `POST /v1/diary/copy` duplica um dia inteiro corretamente; resumo diário reflete a meta ativa do usuário.
+**Critério de aceite**: confirmado — snapshot mantém valores antigos após editar o alimento original; `copy` duplica o dia inteiro; resumo reflete a meta ativa quando existe.
 
 ---
 
