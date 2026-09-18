@@ -48,13 +48,13 @@ turbo run lint test build             # pipeline completo (usado no CI)
 - Funcionalidades sociais, gráficos avançados, leitor de código de barras, registro de treinos — reservado para Fase 6 (`docs/roadmap.md`).
 
 ## Active Context (última sessão: 2026-09-18)
-- **Fase 1**: completa exceto **#8** (observabilidade/BetterStack — Pino já configurado com redact desde a Issue 2, só falta a conta externa de verdade).
+- **Fase 1: completa** (issues #1-#8). Issue #8 (observabilidade) fechada: source `minhasaude-api` criado no BetterStack, `@logtail/pino` plugado no `LoggerModule` (`apps/api/src/config/pino-transport.ts`) — em produção os logs vão pro stdout (Render) e em paralelo pro BetterStack via `BETTERSTACK_SOURCE_TOKEN` (env var só na Render, opcional em dev/CI). Redact do pino-http continua valendo antes de qualquer transport.
 - **Fase 2 completa** (issues #10-#15, backlog e detalhes técnicos em `docs/backlog-fase2.md`): catálogo de calculadoras (`packages/shared/src/calculators/` — TMB, TDEE, macros, ajuste por objetivo), `body-measurements`, `goals` (TMB/TDEE/macros de verdade, histórico imutável), catálogo de alimentos + import TACO (582 itens, `pnpm --filter api seed:taco`), busca (trigram/unaccent + fallback Open Food Facts com cache), e `diary` (diário alimentar com snapshot imutável de macros, cópia de dia, resumo vs. meta). Todo módulo novo: consentimento LGPD quando toca dado de saúde, incluído em `GET /v1/me/export`, testado com unitários + e2e.
 - **Achado crítico corrigido em produção (2026-09-18)**: `packages/shared` nunca tinha sido compilado de verdade (`build` era um `echo` placeholder desde a Fase 1) — `node dist/main.js` (como produção roda) não resolvia `@minhasaude/shared` em runtime. Corrigido: `tsconfig.build.json` + `main`/`types` apontando pra `dist/`, e o `buildCommand` do serviço no Render atualizado via API pra `pnpm exec turbo run build --filter=@minhasaude/api` (builda o shared antes, via `dependsOn` do `turbo.json`). Validado: deploy manual ficou `live`, `/health` e `/docs` responderam 200.
 - **Auto-deploy no push: resolvido e confirmado** (2026-09-18) — GitHub App do Render instalado (antes só havia login OAuth, sem o app de verdade, por isso o webhook nunca disparava). Testado com o push real do commit da issue #15: deploy disparou sozinho, ficou `live`, sem precisar do `POST .../deploys` manual. Fase 2 (issues #10-#15) está publicada em produção de verdade.
 - **Gotcha de plataforma**: NestJS 12, `@nestjs/jwt` 12, `@nestjs/typeorm` 12 são ESM-only e quebram Jest — projeto fixado em `11.x`/legacy de cada pacote Nest. Verificar antes de atualizar qualquer `@nestjs/*`.
 - **Produção real**: https://minhasaude-api.onrender.com, Postgres no Supabase (`sa-east-1`, session pooler), bucket R2 `minhasaude-exams`.
-- **Próximo passo natural**: Issue #8 (observabilidade, precisa de conta BetterStack) ou iniciar o planejamento da Fase 3 (app mobile) — ver `docs/roadmap.md`.
+- **Próximo passo natural**: iniciar o planejamento da Fase 3 (app mobile) — ver `docs/roadmap.md`.
 
 ## Referências
 - Plano completo: `docs/product-plan.md`
