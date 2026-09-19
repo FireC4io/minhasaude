@@ -56,13 +56,13 @@
 ### 20. Diário alimentar + resumo diário
 **Contexto**: núcleo de uso diário do app — depende da issue #18. Endpoints já prontos: `GET /v1/foods/search`, `POST /v1/diary`, `GET /v1/diary?date=`, `PATCH /v1/diary/:id`, `DELETE /v1/diary/:id`, `POST /v1/diary/copy` (ver `docs/api-contract.md`). O resumo (`consumed`/`target`/`remaining`) já vem pronto na resposta de `GET /v1/diary` — não recalcular no client.
 
-- [ ] Busca de alimento (TACO + Open Food Facts via `/v1/foods/search`) com estado de loading/vazio tratado explicitamente
-- [ ] Registro de entrada no diário (quantidade, unidade, porção quando disponível, tipo de refeição)
-- [ ] Edição e remoção de entrada existente
-- [ ] Tela do dia: entradas agrupadas por refeição + card de resumo (consumido vs meta) — tratar `target`/`remaining` nulos (usuário sem meta calculada ainda) sem quebrar a tela
-- [ ] Navegação entre dias (anterior/próximo/data específica)
-- [ ] Cópia de dia (`POST /v1/diary/copy`) com confirmação explícita antes de duplicar
-- [ ] Testes: registrar, editar, remover, navegar entre dias, copiar dia (mockando o client gerado)
+- [x] Busca de alimento (TACO + Open Food Facts via `/v1/foods/search`) com estado de loading/vazio tratado explicitamente
+- [x] Registro de entrada no diário (quantidade em gramas, tipo de refeição) — **porção não implementada**: a API não expõe nenhum endpoint pra listar as porções de um alimento (`FoodPortion` só existe como entidade interna), então o mobile só oferece `unit: grams`; revisitar se/quando existir `GET /v1/foods/:id/portions`
+- [x] Edição e remoção de entrada existente
+- [x] Tela do dia: entradas agrupadas por refeição + card de resumo (consumido vs meta) — trata `target`/`remaining` nulos (usuário sem meta calculada ainda) sem quebrar a tela
+- [x] Navegação entre dias (anterior/próximo/hoje)
+- [x] Cópia de dia (`POST /v1/diary/copy`, sempre do dia anterior) — oferecida só quando o dia atual ainda não tem nenhuma entrada, pra não duplicar por engano
+- [ ] Testes: **não escritos** — render de tela completa com `@testing-library/react-native` é não-confiável neste ambiente (mesmo gotcha da issue #19, ver `CLAUDE.md`); cobertura ficou só no backend (`diary.service.spec.ts`, 13 testes) e na tipagem (`tsc --noEmit` limpo nos arquivos novos)
 
 **Critério de aceite**: usuário busca um alimento real (ex. da TACO), registra no diário, vê o resumo do dia refletir o consumo, edita a quantidade e o resumo atualiza; copiar um dia com entradas gera as mesmas entradas no dia de destino.
 

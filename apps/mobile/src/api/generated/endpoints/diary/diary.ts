@@ -27,7 +27,9 @@ import type {
 import type {
   CopyDiaryDto,
   CreateDiaryEntryDto,
+  DailySummaryResponseDto,
   DiaryControllerGetByDateParams,
+  DiaryEntryResponseDto,
   UpdateDiaryEntryDto
 } from '../../models';
 
@@ -60,7 +62,7 @@ export const diaryControllerCreate = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<DiaryEntryResponseDto>(
       {url: `/v1/diary`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createDiaryEntryDto, signal
@@ -127,7 +129,7 @@ export const diaryControllerGetByDate = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<DailySummaryResponseDto>(
       {url: `/v1/diary`, method: 'GET',
         params, signal
     },
@@ -220,7 +222,7 @@ export const diaryControllerCopy = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<DiaryEntryResponseDto[]>(
       {url: `/v1/diary/copy`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: copyDiaryDto, signal
@@ -288,7 +290,7 @@ export const diaryControllerUpdate = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<DiaryEntryResponseDto>(
       {url: `/v1/diary/${id}`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: updateDiaryEntryDto, signal

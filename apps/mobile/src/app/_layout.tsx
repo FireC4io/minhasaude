@@ -39,6 +39,7 @@ function RootNavigator() {
     <Stack>
       <Stack.Protected guard={isAuthenticated && hasActiveGoal}>
         <Stack.Screen name="(app)" options={{ headerShown: false }} />
+        <Stack.Screen name="diary-entry" options={{ presentation: 'modal', headerShown: false }} />
       </Stack.Protected>
       <Stack.Protected guard={isAuthenticated && !hasActiveGoal}>
         <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />

@@ -2,6 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DiaryEntry, MealType, DiaryQuantityUnit } from '../database/entities/diary-entry.entity';
+import { Food } from '../database/entities/food.entity';
 import { FoodPortion } from '../database/entities/food-portion.entity';
 import { FoodsService } from '../foods/foods.service';
 import { GoalsService } from '../goals/goals.service';
@@ -48,7 +49,7 @@ export class DiaryService {
     quantity: number,
     unit: DiaryQuantityUnit,
     portionId: string | null,
-  ): Promise<MacroTotals & { grams: number }> {
+  ): Promise<MacroTotals & { grams: number; food: Food }> {
     const food = await this.foodsService.findById(foodId, userId);
 
     let grams: number;
@@ -72,6 +73,7 @@ export class DiaryService {
       fatG: round2(Number(food.fatGPer100g) * multiplier),
       carbG: round2(Number(food.carbGPer100g) * multiplier),
       grams,
+      food,
     };
   }
 
@@ -92,6 +94,7 @@ export class DiaryService {
       fatGSnapshot: snap.fatG.toString(),
       carbGSnapshot: snap.carbG.toString(),
     });
+    entry.food = snap.food;
     return this.entries.save(entry);
   }
 
@@ -114,6 +117,7 @@ export class DiaryService {
       entry.proteinGSnapshot = snap.proteinG.toString();
       entry.fatGSnapshot = snap.fatG.toString();
       entry.carbGSnapshot = snap.carbG.toString();
+      entry.food = snap.food;
     }
 
     entry.foodId = foodId;
@@ -132,7 +136,7 @@ export class DiaryService {
   }
 
   private async findOwnedOrThrow(id: string, userId: string): Promise<DiaryEntry> {
-    const entry = await this.entries.findOne({ where: { id } });
+    const entry = await this.entries.findOne({ where: { id }, relations: { food: true } });
     if (!entry || entry.userId !== userId) {
       throw new NotFoundException('Entrada de diário não encontrada.');
     }
@@ -142,6 +146,7 @@ export class DiaryService {
   async getByDate(userId: string, date: string): Promise<DailySummary> {
     const dayEntries = await this.entries.find({
       where: { userId, entryDate: date },
+      relations: { food: true },
       order: { createdAt: 'ASC' },
     });
 
@@ -223,6 +228,7 @@ export class DiaryService {
         fatGSnapshot: snap.fatG.toString(),
         carbGSnapshot: snap.carbG.toString(),
       });
+      entry.food = snap.food;
       created.push(await this.entries.save(entry));
     }
     return created;

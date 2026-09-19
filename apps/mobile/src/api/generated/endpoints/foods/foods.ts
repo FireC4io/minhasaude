@@ -26,7 +26,9 @@ import type {
 
 import type {
   CreateFoodDto,
+  FoodResponseDto,
   FoodsControllerSearchParams,
+  PaginatedFoodResponseDto,
   UpdateFoodDto
 } from '../../models';
 
@@ -59,7 +61,7 @@ export const foodsControllerCreate = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<FoodResponseDto>(
       {url: `/v1/foods`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createFoodDto, signal
@@ -126,7 +128,7 @@ export const foodsControllerSearch = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<PaginatedFoodResponseDto>(
       {url: `/v1/foods/search`, method: 'GET',
         params, signal
     },
@@ -219,7 +221,7 @@ export const foodsControllerFindById = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<FoodResponseDto>(
       {url: `/v1/foods/${id}`, method: 'GET', signal
     },
       );
@@ -312,7 +314,7 @@ export const foodsControllerUpdate = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<FoodResponseDto>(
       {url: `/v1/foods/${id}`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: updateFoodDto, signal

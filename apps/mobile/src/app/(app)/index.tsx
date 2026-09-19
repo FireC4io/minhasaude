@@ -1,131 +1,126 @@
-import { mifflinStJeor } from '@minhasaude/shared';
-import * as Device from 'expo-device';
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import { useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'expo-router';
+import { useState } from 'react';
+import { ActivityIndicator, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+import {
+  getDiaryControllerGetByDateQueryKey,
+  useDiaryControllerCopy,
+  useDiaryControllerGetByDate,
+  useDiaryControllerRemove,
+} from '@/api/generated/endpoints/diary/diary';
+import type { DiaryEntryResponseDto, MealType } from '@/api/generated/models';
 import { useAuth } from '@/features/auth/auth-context';
-import { PrimaryButton } from '@/features/auth/primary-button';
+import { addDaysToIsoDate, formatIsoDateLabel, todayIsoDate } from '@/features/diary/date-utils';
+import { MacroSummary } from '@/features/diary/macro-summary';
+import { MealSection } from '@/features/diary/meal-section';
+import { MEAL_TYPE_ORDER } from '@/features/diary/meal-type-labels';
 
-// Perfil de exemplo só para provar que o Metro resolve @minhasaude/shared e
-// que uma className do NativeWind aplica estilo real. Sem UI de dados reais
-// ainda — isso chega no onboarding (issue #19).
-const EXAMPLE_PROFILE = { sex: 'female' as const, weightKg: 68, heightCm: 165, ageYears: 30 };
-const exampleTmb = Math.round(mifflinStJeor.compute(EXAMPLE_PROFILE));
-
-function SetupProofCard() {
-  return (
-    <View className="w-full gap-1 rounded-2xl bg-mamao px-4 py-3">
-      <Text className="font-semibold text-areia">Setup da issue #17 ✓</Text>
-      <Text className="text-areia">
-        @minhasaude/shared resolvido pelo Metro — TMB de exemplo ({mifflinStJeor.code}):{' '}
-        {exampleTmb} kcal/dia
-      </Text>
-    </View>
-  );
-}
-
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
-  return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
-
-function LogoutButton() {
+export default function DiaryScreen() {
+  const router = useRouter();
+  const queryClient = useQueryClient();
   const { logout } = useAuth();
+  const [currentDate, setCurrentDate] = useState(todayIsoDate());
+
+  const dayQuery = useDiaryControllerGetByDate({ date: currentDate });
+  const copyDay = useDiaryControllerCopy();
+  const removeEntry = useDiaryControllerRemove();
+
+  function invalidateDay() {
+    return queryClient.invalidateQueries({
+      queryKey: getDiaryControllerGetByDateQueryKey({ date: currentDate }),
+    });
+  }
+
+  function goToEntry(mealType: MealType) {
+    router.push({ pathname: '/diary-entry', params: { date: currentDate, mealType } });
+  }
+
+  function editEntry(entry: DiaryEntryResponseDto) {
+    router.push({
+      pathname: '/diary-entry',
+      params: {
+        id: entry.id,
+        date: currentDate,
+        foodName: entry.food.name,
+        quantity: entry.quantity,
+      },
+    });
+  }
+
+  async function deleteEntry(entry: DiaryEntryResponseDto) {
+    await removeEntry.mutateAsync({ id: entry.id });
+    await invalidateDay();
+  }
+
+  async function copyPreviousDay() {
+    await copyDay.mutateAsync({
+      data: { fromDate: addDaysToIsoDate(currentDate, -1), toDate: currentDate },
+    });
+    await invalidateDay();
+  }
+
+  const summary = dayQuery.data;
+  const hasEntries = summary
+    ? MEAL_TYPE_ORDER.some((mealType) => summary.meals[mealType].length > 0)
+    : false;
+
   return (
-    <View className="w-full">
-      <PrimaryButton label="Sair" onPress={() => void logout()} />
-    </View>
+    <SafeAreaView className="flex-1 bg-areia">
+      <View className="flex-row items-center justify-between px-6 pt-2">
+        <Text className="text-2xl font-semibold text-grafite">Diário</Text>
+        <Pressable onPress={() => void logout()} hitSlop={8}>
+          <Text className="text-sm text-grafite">Sair</Text>
+        </Pressable>
+      </View>
+
+      <View className="flex-row items-center justify-between px-6 py-3">
+        <Pressable onPress={() => setCurrentDate((date) => addDaysToIsoDate(date, -1))} hitSlop={12}>
+          <Text className="text-2xl text-grafite">‹</Text>
+        </Pressable>
+        <Pressable onPress={() => setCurrentDate(todayIsoDate())}>
+          <Text className="text-lg font-semibold capitalize text-grafite">
+            {formatIsoDateLabel(currentDate)}
+          </Text>
+        </Pressable>
+        <Pressable onPress={() => setCurrentDate((date) => addDaysToIsoDate(date, 1))} hitSlop={12}>
+          <Text className="text-2xl text-grafite">›</Text>
+        </Pressable>
+      </View>
+
+      {dayQuery.isPending ? (
+        <ActivityIndicator className="mt-8" />
+      ) : dayQuery.isError || !summary ? (
+        <Text className="px-6 text-sm text-jabuticaba">Não foi possível carregar o diário.</Text>
+      ) : (
+        <ScrollView className="flex-1 px-6" contentContainerClassName="gap-5 pb-8">
+          <MacroSummary
+            consumed={summary.summary.consumed}
+            target={summary.summary.target}
+            remaining={summary.summary.remaining}
+          />
+
+          {!hasEntries ? (
+            <Pressable onPress={() => void copyPreviousDay()} disabled={copyDay.isPending}>
+              <Text className="text-sm font-semibold text-mamao">
+                {copyDay.isPending ? 'Copiando…' : 'Copiar refeições de ontem'}
+              </Text>
+            </Pressable>
+          ) : null}
+
+          {MEAL_TYPE_ORDER.map((mealType) => (
+            <MealSection
+              key={mealType}
+              mealType={mealType}
+              entries={summary.meals[mealType]}
+              onEntryPress={editEntry}
+              onEntryDelete={(entry) => void deleteEntry(entry)}
+              onAddPress={() => goToEntry(mealType)}
+            />
+          ))}
+        </ScrollView>
+      )}
+    </SafeAreaView>
   );
 }
-
-export default function HomeScreen() {
-  return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
-
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
-
-        <SetupProofCard />
-        <LogoutButton />
-
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
-
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
-  },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
-  },
-  heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
-  },
-  title: {
-    textAlign: 'center',
-  },
-  code: {
-    textTransform: 'uppercase',
-  },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
-  },
-});
