@@ -47,7 +47,11 @@ export function TabButton({ children, isFocused, ...props }: TabTriggerSlotProps
 
 export function CustomTabList(props: TabListProps) {
   return (
-    <View {...props} style={styles.tabListContainer}>
+    // `box-none`: o container ocupa a largura toda mas só a pílula central é
+    // visível. Sem isso, a faixa transparente de 76px vira um escudo sobre o
+    // topo de todas as telas na web e engole cliques — o botão "Sair" e as
+    // setas de navegação entre dias do diário ficavam inalcançáveis.
+    <View {...props} pointerEvents="box-none" style={styles.tabListContainer}>
       <ThemedView type="backgroundElement" style={styles.innerContainer}>
         <ThemedText type="smallBold" style={styles.brandText}>
           Minha Saúde
