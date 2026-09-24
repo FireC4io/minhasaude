@@ -7,6 +7,7 @@ import { CopyDiaryDto } from './dto/copy-diary.dto';
 import { GetDiaryQueryDto } from './dto/get-diary-query.dto';
 import { DiaryEntryResponseDto } from './dto/diary-entry-response.dto';
 import { DailySummaryResponseDto } from './dto/daily-summary-response.dto';
+import { toDto, toDtoList } from '../common/serialization/to-dto';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import type { JwtPayload } from '../auth/types/jwt-payload.interface';
 
@@ -18,29 +19,29 @@ export class DiaryController {
   @Post()
   @ApiOperation({ summary: 'Adiciona uma entrada ao diário alimentar' })
   @ApiCreatedResponse({ type: DiaryEntryResponseDto })
-  create(@CurrentUser() user: JwtPayload, @Body() dto: CreateDiaryEntryDto) {
-    return this.diaryService.create(user.sub, dto);
+  async create(@CurrentUser() user: JwtPayload, @Body() dto: CreateDiaryEntryDto) {
+    return toDto(DiaryEntryResponseDto, await this.diaryService.create(user.sub, dto));
   }
 
   @Get()
   @ApiOperation({ summary: 'Entradas do dia agrupadas por refeição + resumo (consumido/meta/restante)' })
   @ApiOkResponse({ type: DailySummaryResponseDto })
-  getByDate(@CurrentUser() user: JwtPayload, @Query() query: GetDiaryQueryDto) {
-    return this.diaryService.getByDate(user.sub, query.date);
+  async getByDate(@CurrentUser() user: JwtPayload, @Query() query: GetDiaryQueryDto) {
+    return toDto(DailySummaryResponseDto, await this.diaryService.getByDate(user.sub, query.date));
   }
 
   @Post('copy')
   @ApiOperation({ summary: 'Duplica todas as entradas de um dia pra outro' })
   @ApiOkResponse({ type: [DiaryEntryResponseDto] })
-  copy(@CurrentUser() user: JwtPayload, @Body() dto: CopyDiaryDto) {
-    return this.diaryService.copy(user.sub, dto);
+  async copy(@CurrentUser() user: JwtPayload, @Body() dto: CopyDiaryDto) {
+    return toDtoList(DiaryEntryResponseDto, await this.diaryService.copy(user.sub, dto));
   }
 
   @Patch(':id')
   @ApiOperation({ summary: 'Atualiza uma entrada do diário' })
   @ApiOkResponse({ type: DiaryEntryResponseDto })
-  update(@CurrentUser() user: JwtPayload, @Param('id') id: string, @Body() dto: UpdateDiaryEntryDto) {
-    return this.diaryService.update(id, user.sub, dto);
+  async update(@CurrentUser() user: JwtPayload, @Param('id') id: string, @Body() dto: UpdateDiaryEntryDto) {
+    return toDto(DiaryEntryResponseDto, await this.diaryService.update(id, user.sub, dto));
   }
 
   @Delete(':id')

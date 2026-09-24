@@ -6,6 +6,8 @@
  * OpenAPI spec version: 0.1.0
  */
 
+export * from './accountResponseDto';
+export * from './activityLevel';
 export * from './bodyMeasurementResponseDto';
 export * from './bodyMeasurementResponseDtoSource';
 export * from './bodyMeasurementsControllerListParams';
@@ -26,6 +28,8 @@ export * from './diaryMealsResponseDto';
 export * from './diaryQuantityUnit';
 export * from './foodResponseDto';
 export * from './foodsControllerSearchParams';
+export * from './foodSource';
+export * from './goal';
 export * from './goalsControllerHistoryParams';
 export * from './goalTargetResponseDto';
 export * from './grantConsentDto';
@@ -33,14 +37,18 @@ export * from './grantConsentDtoConsentType';
 export * from './loginDto';
 export * from './macroTotalsDto';
 export * from './mealType';
+export * from './meResponseDto';
 export * from './paginatedBodyMeasurementResponseDto';
 export * from './paginatedFoodResponseDto';
+export * from './paginatedGoalTargetResponseDto';
 export * from './paginationMetaDto';
+export * from './profileResponseDto';
 export * from './recalculateGoalDto';
 export * from './recalculateGoalDtoMethod';
 export * from './refreshDto';
 export * from './registerDto';
 export * from './registerResponseDto';
+export * from './sex';
 export * from './tokensDto';
 export * from './updateDiaryEntryDto';
 export * from './updateDiaryEntryDtoMealType';

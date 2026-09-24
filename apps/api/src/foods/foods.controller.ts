@@ -7,6 +7,7 @@ import { UpdateFoodDto } from './dto/update-food.dto';
 import { SearchFoodsQueryDto } from './dto/search-foods-query.dto';
 import { FoodResponseDto } from './dto/food-response.dto';
 import { PaginatedFoodResponseDto } from './dto/paginated-food-response.dto';
+import { toDto } from '../common/serialization/to-dto';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import type { JwtPayload } from '../auth/types/jwt-payload.interface';
 
@@ -18,8 +19,8 @@ export class FoodsController {
   @Post()
   @ApiOperation({ summary: 'Cadastra um alimento personalizado (visível só pra quem cadastrou)' })
   @ApiCreatedResponse({ type: FoodResponseDto })
-  create(@CurrentUser() user: JwtPayload, @Body() dto: CreateFoodDto) {
-    return this.foodsService.create(user.sub, dto);
+  async create(@CurrentUser() user: JwtPayload, @Body() dto: CreateFoodDto) {
+    return toDto(FoodResponseDto, await this.foodsService.create(user.sub, dto));
   }
 
   // Rota estática precisa vir antes de ':id' pro Nest não tentar casar
@@ -30,22 +31,22 @@ export class FoodsController {
     summary: 'Busca alimentos (trigram/unaccent local, com fallback pro Open Food Facts sob demanda)',
   })
   @ApiOkResponse({ type: PaginatedFoodResponseDto })
-  search(@CurrentUser() user: JwtPayload, @Query() query: SearchFoodsQueryDto) {
-    return this.foodsService.search(user.sub, query);
+  async search(@CurrentUser() user: JwtPayload, @Query() query: SearchFoodsQueryDto) {
+    return toDto(PaginatedFoodResponseDto, await this.foodsService.search(user.sub, query));
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Detalhe de um alimento (TACO/OFF públicos, custom só pro dono)' })
   @ApiOkResponse({ type: FoodResponseDto })
-  findById(@CurrentUser() user: JwtPayload, @Param('id') id: string) {
-    return this.foodsService.findById(id, user.sub);
+  async findById(@CurrentUser() user: JwtPayload, @Param('id') id: string) {
+    return toDto(FoodResponseDto, await this.foodsService.findById(id, user.sub));
   }
 
   @Patch(':id')
   @ApiOperation({ summary: 'Atualiza um alimento personalizado - só o dono pode editar' })
   @ApiOkResponse({ type: FoodResponseDto })
-  update(@CurrentUser() user: JwtPayload, @Param('id') id: string, @Body() dto: UpdateFoodDto) {
-    return this.foodsService.update(id, user.sub, dto);
+  async update(@CurrentUser() user: JwtPayload, @Param('id') id: string, @Body() dto: UpdateFoodDto) {
+    return toDto(FoodResponseDto, await this.foodsService.update(id, user.sub, dto));
   }
 
   @Delete(':id')

@@ -21,6 +21,9 @@
   "jest": {
     "rootDir": "src",
     "testRegex": ".*\\.spec\\.ts$",
+    "setupFiles": [
+      "reflect-metadata"
+    ],
     "transform": {
       "^.+\\.ts$": "ts-jest"
     },

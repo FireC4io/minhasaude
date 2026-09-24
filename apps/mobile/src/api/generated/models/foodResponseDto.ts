@@ -5,10 +5,12 @@
  * API do app de nutrição e acompanhamento de saúde.
  * OpenAPI spec version: 0.1.0
  */
+import type { FoodSource } from './foodSource';
 
 export interface FoodResponseDto {
   id: string;
   name: string;
+  source: FoodSource;
   /** @nullable */
   brand?: string | null;
   kcalPer100g: string;

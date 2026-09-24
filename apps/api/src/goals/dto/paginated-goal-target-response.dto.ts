@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
-import { FoodResponseDto } from './food-response.dto';
+import { GoalTargetResponseDto } from './goal-target-response.dto';
 
 class PaginationMetaDto {
   @ApiProperty()
@@ -16,11 +16,11 @@ class PaginationMetaDto {
   limit!: number;
 }
 
-export class PaginatedFoodResponseDto {
-  @ApiProperty({ type: [FoodResponseDto] })
+export class PaginatedGoalTargetResponseDto {
+  @ApiProperty({ type: [GoalTargetResponseDto] })
   @Expose()
-  @Type(() => FoodResponseDto)
-  data!: FoodResponseDto[];
+  @Type(() => GoalTargetResponseDto)
+  data!: GoalTargetResponseDto[];
 
   @ApiProperty({ type: PaginationMetaDto })
   @Expose()

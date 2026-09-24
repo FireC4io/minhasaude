@@ -27,6 +27,7 @@ import type {
 import type {
   GoalTargetResponseDto,
   GoalsControllerHistoryParams,
+  PaginatedGoalTargetResponseDto,
   RecalculateGoalDto,
   UpdateGoalDto
 } from '../../models';
@@ -152,7 +153,7 @@ export const goalsControllerUpdateManual = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<GoalTargetResponseDto>(
       {url: `/v1/goals/current`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: updateGoalDto, signal
@@ -286,7 +287,7 @@ export const goalsControllerHistory = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<PaginatedGoalTargetResponseDto>(
       {url: `/v1/goals/history`, method: 'GET',
         params, signal
     },

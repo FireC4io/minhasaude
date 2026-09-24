@@ -25,6 +25,8 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  MeResponseDto,
+  ProfileResponseDto,
   UpdateProfileDto
 } from '../../models';
 
@@ -57,7 +59,7 @@ export const usersControllerGetMe = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<MeResponseDto>(
       {url: `/v1/me`, method: 'GET', signal
     },
       );
@@ -214,7 +216,7 @@ export const usersControllerUpdateProfile = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<ProfileResponseDto>(
       {url: `/v1/me/profile`, method: 'PATCH',
       headers: {'Content-Type': 'application/json', },
       data: updateProfileDto, signal
