@@ -27,9 +27,9 @@
   "devDependencies": {
     "@minhasaude/config": "workspace:^",
     "@types/jest": "^30.0.0",
-    "eslint": "^10.10.0",
-    "jest": "^30.5.1",
+    "eslint": "^10.11.0",
+    "jest": "^30.5.2",
     "ts-jest": "^29.4.12",
-    "typescript": "^5.7.0"
+    "typescript": "^7.0.2"
   }
 }
