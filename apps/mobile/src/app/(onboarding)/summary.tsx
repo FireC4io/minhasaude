@@ -48,7 +48,7 @@ export default function SummaryScreen() {
 
         {result ? (
           <View className="gap-4">
-            <View className="gap-2 rounded-2xl border border-grafite bg-white p-4">
+            <View className="gap-2 rounded-2xl border border-grafite bg-superficie p-4">
               <Text className="text-base text-grafite">
                 Taxa metabólica basal estimada: {Math.round(Number(result.bmrKcal))} kcal/dia
               </Text>

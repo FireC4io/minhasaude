@@ -18,7 +18,7 @@ export function DiaryEntryRow({ entry, onPress, onDelete }: DiaryEntryRowProps) 
   return (
     <Pressable
       onPress={onPress}
-      className="flex-row items-center justify-between rounded-xl border border-grafite bg-white px-3 py-2">
+      className="flex-row items-center justify-between rounded-xl border border-grafite bg-superficie px-3 py-2">
       <View className="flex-1 gap-0.5 pr-2">
         <Text className="text-base text-grafite" numberOfLines={1}>
           {entry.food.name}

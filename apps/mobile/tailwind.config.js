@@ -6,6 +6,7 @@ module.exports = {
     extend: {
       colors: {
         areia: 'var(--color-areia)',
+        superficie: 'var(--color-superficie)',
         grafite: 'var(--color-grafite)',
         mamao: 'var(--color-mamao)',
         couve: 'var(--color-couve)',

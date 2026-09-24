@@ -24,7 +24,7 @@ function MacroColumn({ label, valueG, targetG }: { label: string; valueG: number
 
 export function MacroSummary({ consumed, target, remaining }: MacroSummaryProps) {
   return (
-    <View className="gap-3 rounded-2xl border border-grafite bg-white p-4">
+    <View className="gap-3 rounded-2xl border border-grafite bg-superficie p-4">
       <View className="gap-1">
         <Text className="text-lg font-semibold text-grafite">
           {round(consumed.kcal)} kcal{target ? ` de ${round(target.kcal)}` : ' consumidas'}

@@ -23,7 +23,7 @@ export function WeightHistoryList({ measurements }: WeightHistoryListProps) {
     <View className="gap-2">
       <Text className="text-lg font-semibold text-grafite">Histórico</Text>
 
-      <View className="overflow-hidden rounded-2xl border border-grafite/20 bg-white">
+      <View className="overflow-hidden rounded-2xl border border-grafite/20 bg-superficie">
         {measurements.map((measurement, index) => (
           <View
             key={measurement.id}

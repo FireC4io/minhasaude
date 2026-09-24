@@ -8,6 +8,7 @@
  */
 :root {
   --color-areia: #fbf0e4; /* fundo */
+  --color-superficie: #ffffff; /* card sobre o fundo — nunca usar bg-white direto */
   --color-grafite: #2b3a34; /* texto principal */
   --color-mamao: #ff6f4d; /* acento — ações, metas */
   --color-couve: #3e8e5b; /* nutrição, progresso positivo */
@@ -26,6 +27,7 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --color-areia: #1e1712;
+    --color-superficie: #2a211b;
     --color-grafite: #f5eae0;
     --color-mamao: #ff8264;
     --color-couve: #63bf87;

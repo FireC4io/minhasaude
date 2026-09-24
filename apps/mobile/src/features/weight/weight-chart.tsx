@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Text, useColorScheme, View } from 'react-native';
+import { Text, useColorScheme, useWindowDimensions, View } from 'react-native';
 import Svg, { Circle, Line, Polyline } from 'react-native-svg';
 
 import { GotaVitalColors } from '@/constants/gota-vital-colors';
@@ -7,6 +7,9 @@ import { buildWeightChart, type WeightMeasurementLike } from './chart-geometry';
 
 const CHART_HEIGHT = 180;
 const PADDING = 16;
+// Margem que o gráfico não ocupa: padding lateral da tela (24 de cada lado)
+// mais o padding do card (16 de cada lado).
+const MARGEM_HORIZONTAL = 80;
 
 interface WeightChartProps {
   measurements: readonly WeightMeasurementLike[];
@@ -21,7 +24,14 @@ interface WeightChartProps {
 export function WeightChart({ measurements }: WeightChartProps) {
   const scheme = useColorScheme() === 'dark' ? 'dark' : 'light';
   const colors = GotaVitalColors[scheme];
-  const [width, setWidth] = useState(0);
+  const { width: larguraDaJanela } = useWindowDimensions();
+  const [larguraMedida, setLarguraMedida] = useState<number | null>(null);
+
+  // No react-native-web o onLayout não dispara de forma confiável neste
+  // componente (verificado no navegador: o elemento media 1838px e o estado
+  // seguia 0, então o SVG nunca era montado). A largura da janela dá um valor
+  // utilizável já no primeiro render; o onLayout só refina quando chega.
+  const width = larguraMedida ?? Math.max(larguraDaJanela - MARGEM_HORIZONTAL, 1);
 
   const chart = buildWeightChart(measurements, {
     width,
@@ -31,7 +41,7 @@ export function WeightChart({ measurements }: WeightChartProps) {
 
   if (chart.points.length === 0) {
     return (
-      <View className="items-center justify-center rounded-2xl border border-grafite/20 bg-white p-6">
+      <View className="items-center justify-center rounded-2xl border border-grafite/20 bg-superficie p-6">
         <Text className="text-center text-base text-grafite">
           Nenhum peso registrado ainda. Registre o primeiro acima para começar a acompanhar sua
           evolução.
@@ -42,15 +52,14 @@ export function WeightChart({ measurements }: WeightChartProps) {
 
   return (
     <View
-      className="gap-2 rounded-2xl border border-grafite/20 bg-white p-4"
-      onLayout={(event) => setWidth(event.nativeEvent.layout.width - 32)}>
+      className="gap-2 rounded-2xl border border-grafite/20 bg-superficie p-4"
+      onLayout={(event) => setLarguraMedida(event.nativeEvent.layout.width - 32)}>
       <View className="flex-row justify-between">
         <Text className="text-sm text-grafite">{chart.max.toFixed(1)} kg</Text>
         <Text className="text-sm text-grafite">{chart.min.toFixed(1)} kg</Text>
       </View>
 
-      {width > 0 ? (
-        <Svg width={width} height={CHART_HEIGHT}>
+      <Svg width={width} height={CHART_HEIGHT}>
           <Line
             x1={PADDING}
             y1={CHART_HEIGHT - PADDING}
@@ -79,11 +88,7 @@ export function WeightChart({ measurements }: WeightChartProps) {
               fill={colors.couve}
             />
           ))}
-        </Svg>
-      ) : (
-        // Primeiro render ainda não tem largura medida pelo onLayout.
-        <View style={{ height: CHART_HEIGHT }} />
-      )}
+      </Svg>
 
       {chart.points.length === 1 ? (
         <Text className="text-center text-sm text-grafite">

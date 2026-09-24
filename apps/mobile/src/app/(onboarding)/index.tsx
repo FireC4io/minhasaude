@@ -35,7 +35,7 @@ export default function ConsentScreen() {
           </Text>
         </View>
 
-        <View className="gap-3 rounded-2xl border border-grafite bg-white p-4">
+        <View className="gap-3 rounded-2xl border border-grafite bg-superficie p-4">
           <Text className="text-base text-grafite">
             • Usamos esses dados só para calcular sua taxa metabólica, gasto calórico e metas de
             macronutrientes — nunca para diagnóstico ou recomendação médica.
