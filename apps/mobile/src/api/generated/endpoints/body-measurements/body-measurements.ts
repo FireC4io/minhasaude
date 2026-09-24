@@ -25,8 +25,10 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  BodyMeasurementResponseDto,
   BodyMeasurementsControllerListParams,
-  CreateBodyMeasurementDto
+  CreateBodyMeasurementDto,
+  PaginatedBodyMeasurementResponseDto
 } from '../../models';
 
 import { customInstance } from '../../../http-client';
@@ -58,7 +60,7 @@ export const bodyMeasurementsControllerCreate = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<BodyMeasurementResponseDto>(
       {url: `/v1/body-measurements`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: createBodyMeasurementDto, signal
@@ -125,7 +127,7 @@ export const bodyMeasurementsControllerList = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<PaginatedBodyMeasurementResponseDto>(
       {url: `/v1/body-measurements`, method: 'GET',
         params, signal
     },

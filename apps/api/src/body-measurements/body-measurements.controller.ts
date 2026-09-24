@@ -1,8 +1,10 @@
 import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { BodyMeasurementsService } from './body-measurements.service';
+import { BodyMeasurementResponseDto } from './dto/body-measurement-response.dto';
 import { CreateBodyMeasurementDto } from './dto/create-body-measurement.dto';
 import { ListBodyMeasurementsQueryDto } from './dto/list-body-measurements-query.dto';
+import { PaginatedBodyMeasurementResponseDto } from './dto/paginated-body-measurement-response.dto';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import type { JwtPayload } from '../auth/types/jwt-payload.interface';
 import { RequireConsent } from '../consents/decorators/require-consent.decorator';
@@ -18,12 +20,14 @@ export class BodyMeasurementsController {
   @UseGuards(RequireConsentGuard)
   @RequireConsent(ConsentType.PRIVACY_POLICY)
   @ApiOperation({ summary: 'Registra uma medida corporal manual - exige consentimento com a política de privacidade' })
+  @ApiCreatedResponse({ type: BodyMeasurementResponseDto })
   create(@CurrentUser() user: JwtPayload, @Body() dto: CreateBodyMeasurementDto) {
     return this.bodyMeasurementsService.create(user.sub, dto);
   }
 
   @Get()
   @ApiOperation({ summary: 'Lista medidas corporais do usuário, filtrável por fonte e período' })
+  @ApiOkResponse({ type: PaginatedBodyMeasurementResponseDto })
   list(@CurrentUser() user: JwtPayload, @Query() query: ListBodyMeasurementsQueryDto) {
     return this.bodyMeasurementsService.list(user.sub, query);
   }

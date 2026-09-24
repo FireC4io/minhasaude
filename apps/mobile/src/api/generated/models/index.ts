@@ -6,6 +6,8 @@
  * OpenAPI spec version: 0.1.0
  */
 
+export * from './bodyMeasurementResponseDto';
+export * from './bodyMeasurementResponseDtoSource';
 export * from './bodyMeasurementsControllerListParams';
 export * from './bodyMeasurementsControllerListSource';
 export * from './calculationMethod';
@@ -31,6 +33,7 @@ export * from './grantConsentDtoConsentType';
 export * from './loginDto';
 export * from './macroTotalsDto';
 export * from './mealType';
+export * from './paginatedBodyMeasurementResponseDto';
 export * from './paginatedFoodResponseDto';
 export * from './paginationMetaDto';
 export * from './recalculateGoalDto';

@@ -71,11 +71,15 @@
 ### 21. Registro de peso + gráfico de evolução
 **Contexto**: "exceção de baixo custo, alto valor demonstrativo" apontada em `docs/product-plan.md` — único gráfico do MVP (o resto fica pra Fase 6). Depende da issue #18. Endpoints já prontos: `POST /v1/body-measurements`, `GET /v1/body-measurements?source=&from=&to=` (ver `docs/api-contract.md`). **Atenção**: `body_measurements.source` nunca é normalizado entre aparelhos (regra do `CLAUDE.md`) — o MVP mobile só registra `source: 'manual'`; não construir nenhuma comparação implícita entre fontes.
 
-- [ ] Tela de registro rápido de peso (reaproveita o mesmo formulário/validação do onboarding quando possível)
-- [ ] Listagem do histórico de peso (`GET /v1/body-measurements?source=manual`)
-- [ ] Gráfico de linha simples (peso × tempo) a partir do histórico — biblioteca de gráfico leve compatível com Expo (avaliar `react-native-gifted-charts` ou equivalente na hora de implementar; decisão de baixo risco, não travou o planejamento)
-- [ ] Estado vazio tratado (usuário com uma medição só, ou nenhuma) — gráfico não quebra com 0 ou 1 ponto
-- [ ] Testes: registrar peso e ver o ponto novo aparecer no histórico/gráfico (mockando o client gerado)
+- [x] Tela de registro rápido de peso em `(app)/weight.tsx` — reaproveita `weightEntrySchema` do shared e `AuthTextField`/`PrimaryButton`, os mesmos do onboarding
+- [x] Listagem do histórico de peso (`GET /v1/body-measurements?source=manual`) — a query fixa `source: 'manual'`, então a tela nunca mistura fontes
+- [x] Gráfico de linha simples (peso × tempo) — **`react-native-svg` 15.15.4 + componente próprio**, não `react-native-gifted-charts`: a gifted-charts exige `react-native-linear-gradient` (módulo nativo bare, fora do ecossistema Expo) e a validação hoje roda via Expo web. A versão do svg é a que o próprio SDK 57 fixa em `bundledNativeModules.json`. Eixo x é escalado por **tempo decorrido**, não por índice, pra não mentir sobre o ritmo da evolução
+- [x] Estado vazio tratado — 0 pontos mostra texto convidando ao primeiro registro; 1 ponto centraliza e avisa que falta outro pra formar a linha; pesos idênticos e medições no mesmo instante não dividem por zero
+- [ ] Testes: **não escritos como teste de render** (mesmo gotcha das issues #19/#20). A lógica real foi extraída pra `features/weight/chart-geometry.ts` e coberta por 11 testes unitários de verdade (ordenação, escala por tempo, eixo y invertido, divisão por zero, peso não numérico, formato da polyline). Validação de ponta a ponta foi feita pela API local: 3 pesos em datas diferentes → `GET /v1/body-measurements?source=manual` devolvendo o histórico correto
+
+**Ajustes na API** (necessários pro client vir tipado, mesmo padrão das issues #18-#20): `BodyMeasurementResponseDto` + `PaginatedBodyMeasurementResponseDto` e `@ApiCreatedResponse`/`@ApiOkResponse` no `BodyMeasurementsController` — antes ambos os endpoints retornavam `void` no client gerado. `weightKg` é declarado como `string` porque coluna `numeric` do Postgres volta como string pelo TypeORM; os campos nullable levam `{ type: String, nullable: true }` explícito (gotcha do orval descoberto na #20).
+
+**Limpeza adjacente**: a aba "Explore" e a tela `(app)/explore.tsx` eram sobra do template do Expo e foram removidas; a barra de abas agora é Diário + Peso, e a marca no header web deixou de ser "Expo Starter". O ícone da aba Peso ainda reaproveita o PNG do template — falta o set de ícones da identidade "Gota Vital" (mesma pendência das fontes).
 
 **Critério de aceite**: usuário registra 3+ pesos em datas diferentes e vê uma linha de evolução real no gráfico, sem nenhuma comparação entre `source`s diferentes em nenhum lugar da tela.
 
