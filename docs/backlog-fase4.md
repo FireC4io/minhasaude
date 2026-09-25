@@ -25,11 +25,12 @@
 ### 30. Componentes base acessíveis por construção
 **Contexto**: hoje `PrimaryButton`, `AuthTextField` e `SelectChips` não expõem nenhuma prop de acessibilidade, e são reaproveitados em quase toda tela. Corrigir na raiz propaga para o app inteiro e faz as telas de exame (Fase 5) nascerem prontas.
 
-- [ ] `PrimaryButton`: `accessibilityRole="button"`, `accessibilityState={{ disabled, busy }}`, rótulo derivado do `label`, e `accessibilityHint` opcional para ações cujo resultado não é óbvio
-- [ ] `AuthTextField`: associar rótulo visível ao campo, `accessibilityLabel` quando o rótulo não bastar, e anunciar erro de validação (não só pintar de vermelho)
-- [ ] `SelectChips`: `accessibilityRole="radio"` por chip, `accessibilityState={{ selected }}`, e o grupo com rótulo próprio
-- [ ] Alvo de toque mínimo de 48 dp em todos os três — hoje chips estão em ~36 dp e botões em ~44 dp. Usar `hitSlop` onde aumentar o padding quebrar o layout
-- [ ] **Teste de render de verdade** com `@testing-library/react-native`, verificando que o leitor de tela enxerga papel, rótulo e estado de cada componente. Atenção: no RTL 14 o `render` é assíncrono — `await render(<X />)` e depois `screen.getByRole(...)`. O diagnóstico antigo de que teste de render era "não-confiável neste ambiente" estava errado e foi corrigido em 2026-09-25 (ver `CLAUDE.md`)
+- [x] `PrimaryButton`: `accessibilityRole="button"`, `accessibilityState={{ disabled, busy }}`, `accessibilityLabel` sempre presente (durante o loading o texto some da tela e sobraria um botão anônimo), e `accessibilityHint` opcional
+- [x] `AuthTextField`: `accessibilityLabel` no input (o rótulo é um `Text` irmão, que o leitor de tela não associa sozinho); erro vira `accessibilityRole="alert"` + `accessibilityLiveRegion="polite"` e também entra no `accessibilityHint` do campo
+- [x] `SelectChips`: `accessibilityRole="radio"` por chip com `{ selected, checked }` (iOS lê `selected`, Android lê `checked`); grupo com `radiogroup` + rótulo, **sem** `accessible` — se fosse acessível viraria uma única parada de foco e os chips deixariam de ser focáveis um a um
+- [x] Alvo de toque mínimo de 48 dp via `MIN_TOUCH_TARGET` em `src/constants/accessibility.ts`, aplicado como `minHeight` e não como `hitSlop` — aumentar o alvo de verdade ajuda a *enxergar* onde tocar, e em linha com quebra o `hitSlop` ainda arriscaria sobrepor o vizinho
+- [x] **Teste de render de verdade** — 18 testes novos (`primary-button.spec.tsx` 7, `auth-text-field.spec.tsx` 5, `select-chips.spec.tsx` 6), os primeiros testes de tela do projeto. Usam `await render(...)` + `screen.getByRole(...)`. Matchers do v14: `toBeDisabled`/`toBeBusy`/`toBeChecked`/`toHaveProp`/`toHaveStyle` (o antigo `toHaveAccessibilityState` não existe mais)
+- [x] **Brinde**: `tsc --noEmit` do mobile saiu de **179 erros para 0** — faltava `"types": ["jest"]` no tsconfig, então todo arquivo `.spec` acusava `describe`/`expect` inexistentes e o typecheck não servia como gate
 
 **Critério de aceite**: um leitor de tela anuncia papel, rótulo e estado de cada um dos três componentes; nenhum alvo de toque abaixo de 48 dp.
 

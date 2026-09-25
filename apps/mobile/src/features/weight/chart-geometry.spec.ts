@@ -20,9 +20,9 @@ describe('buildWeightChart', () => {
     const chart = buildWeightChart([measurement('2026-09-01T12:00:00.000Z', '80.0')], SIZE);
 
     expect(chart.points).toHaveLength(1);
-    expect(chart.points[0].x).toBeCloseTo(150);
-    expect(chart.points[0].y).toBeCloseTo(50);
-    expect(chart.points[0].weightKg).toBe(80);
+    expect(chart.points[0]!.x).toBeCloseTo(150);
+    expect(chart.points[0]!.y).toBeCloseTo(50);
+    expect(chart.points[0]!.weightKg).toBe(80);
   });
 
   it('ordena por data crescente mesmo recebendo a lista da API em ordem decrescente', () => {
@@ -47,8 +47,8 @@ describe('buildWeightChart', () => {
       SIZE,
     );
 
-    expect(chart.points[0].x).toBeCloseTo(10);
-    expect(chart.points[1].x).toBeCloseTo(290);
+    expect(chart.points[0]!.x).toBeCloseTo(10);
+    expect(chart.points[1]!.x).toBeCloseTo(290);
   });
 
   it('distribui o eixo x pelo tempo decorrido, não pela posição na lista', () => {
@@ -64,7 +64,7 @@ describe('buildWeightChart', () => {
     );
 
     const inner = SIZE.width - SIZE.padding * 2;
-    expect(chart.points[1].x).toBeCloseTo(SIZE.padding + inner * 0.1);
+    expect(chart.points[1]!.x).toBeCloseTo(SIZE.padding + inner * 0.1);
   });
 
   it('inverte o eixo y: peso maior fica mais alto na tela', () => {
@@ -76,7 +76,10 @@ describe('buildWeightChart', () => {
       SIZE,
     );
 
-    const [maior, menor] = chart.points;
+    const [maior, menor] = chart.points as [
+      (typeof chart.points)[number],
+      (typeof chart.points)[number],
+    ];
     expect(maior.weightKg).toBe(80);
     expect(maior.y).toBeLessThan(menor.y);
     expect(maior.y).toBeCloseTo(10);

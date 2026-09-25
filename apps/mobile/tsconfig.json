@@ -2,6 +2,10 @@
   "extends": ["../../packages/config/tsconfig.base.json", "expo/tsconfig.base"],
   "compilerOptions": {
     "strict": true,
+    // Sem isto os arquivos .spec não enxergam describe/it/expect/jest e o
+    // `tsc --noEmit` do mobile acumula centenas de erros falsos — o que fazia
+    // o typecheck deixar de servir como gate (eram 179 erros, todos em spec).
+    "types": ["jest"],
     "paths": {
       "@/*": ["./src/*"],
       "@/assets/*": ["./assets/*"]

@@ -1,5 +1,7 @@
 import { Pressable, Text, View } from 'react-native';
 
+import { MIN_TOUCH_TARGET } from '@/constants/accessibility';
+
 interface SelectChipsProps<TValue extends string> {
   label: string;
   options: readonly TValue[];
@@ -20,13 +22,25 @@ export function SelectChips<TValue extends string>({
   return (
     <View className="gap-2">
       <Text className="text-sm font-medium text-grafite">{label}</Text>
-      <View className="flex-row flex-wrap gap-2">
+
+      {/* `radiogroup` sem `accessible`: o grupo dá o contexto, mas cada chip
+          continua sendo focável individualmente pelo leitor de tela. */}
+      <View
+        testID="select-chips-group"
+        accessibilityRole="radiogroup"
+        accessibilityLabel={label}
+        className="flex-row flex-wrap gap-2">
         {options.map((option) => {
           const selected = option === value;
           return (
             <Pressable
               key={option}
               onPress={() => onChange(option)}
+              accessibilityRole="radio"
+              accessibilityLabel={optionLabels[option]}
+              // `selected` é o que o iOS lê; `checked` é o que o Android lê.
+              accessibilityState={{ selected, checked: selected }}
+              style={{ minHeight: MIN_TOUCH_TARGET, justifyContent: 'center' }}
               className={
                 selected
                   ? 'rounded-full bg-mamao px-4 py-2'
@@ -37,7 +51,15 @@ export function SelectChips<TValue extends string>({
           );
         })}
       </View>
-      {error ? <Text className="text-sm text-jabuticaba">{error}</Text> : null}
+
+      {error ? (
+        <Text
+          accessibilityRole="alert"
+          accessibilityLiveRegion="polite"
+          className="text-sm text-jabuticaba">
+          {error}
+        </Text>
+      ) : null}
     </View>
   );
 }
