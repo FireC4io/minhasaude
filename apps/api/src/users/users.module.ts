@@ -11,6 +11,8 @@ import { GoalsModule } from '../goals/goals.module';
 import { DiaryModule } from '../diary/diary.module';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
+import { AccountPurgeService } from './account-purge.service';
+import { AccountPurgeScheduler } from './account-purge.scheduler';
 
 @Module({
   imports: [
@@ -24,6 +26,6 @@ import { UsersService } from './users.service';
     DiaryModule,
   ],
   controllers: [UsersController],
-  providers: [UsersService],
+  providers: [UsersService, AccountPurgeService, AccountPurgeScheduler],
 })
 export class UsersModule {}

@@ -92,7 +92,12 @@
 - [ ] Endpoint `POST /v1/consents` e `GET /v1/consents`
 - [ ] Middleware/interceptor que bloqueia ações sensíveis sem consentimento ativo
 - [ ] `GET /v1/me/export` **funcional**: gera JSON (ou CSV) com todos os dados do usuário disponíveis até a Fase 1 (perfil, consentimentos) — expandir a cada fase nova que adicionar dados
-- [ ] `DELETE /v1/me` **funcional**: marca `account_deletion_requests`, anonimiza/expira dados conforme prazo definido (documentar prazo escolhido na política de privacidade)
+- [x] `DELETE /v1/me` **funcional** (concluído em 2026-09-25): marca `account_deletion_requests`, revoga os refresh tokens e agenda `scheduledPurgeAt` para 30 dias. O purge **é executado de verdade** por `AccountPurgeService.purgeDueAccounts()` (`apps/api/src/users/account-purge.service.ts`), disparado diariamente às 3h por `AccountPurgeScheduler` (`@nestjs/schedule` 5.x — a 12.x é ESM-only e quebraria o Jest, mesmo motivo do pin dos outros `@nestjs/*`).
+  - Apagar a linha de `users` leva junto `profiles`, `refresh_tokens`, `body_measurements`, `goal_targets`, `diary_entries` e os `foods` do usuário — as 6 tabelas têm `ON DELETE CASCADE` (confirmado no banco, não presumido).
+  - **`consents` e `account_deletion_requests` não têm FK pra `users`**, então não entram no cascade. Decisão: o consent é **anonimizado**, não apagado — limpa `ip_address` e `user_agent` (IP é dado pessoal) e mantém o registro como prova de que o consentimento existiu, coerente com o log append-only. O pedido de exclusão sobrevive com `completed_at` preenchido, como prova de que a exclusão foi executada.
+  - Passos idempotentes de propósito, em vez de transação: se a execução morrer no meio, a próxima retoma sem efeito colateral. Um pedido que falha não é marcado como concluído e é retentado; falha em um não aborta os demais.
+  - **Prazo de 30 dias ainda precisa ser documentado no texto da política de privacidade** (item da Fase 4).
+  - Cobertura: 9 testes unitários (`account-purge.service.spec.ts`) e 6 e2e contra banco real (`test/account-purge.e2e-spec.ts`) que verificam as 6 tabelas zeradas, o consent anonimizado e a idempotência.
 
 **Critério de aceite**: tentar uma ação que exige consentimento sem tê-lo dado retorna 403 com mensagem clara; export e delete funcionam de ponta a ponta para os dados existentes na Fase 1 (não apenas retornam "em processamento").
 

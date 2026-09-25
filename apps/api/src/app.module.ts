@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ScheduleModule } from '@nestjs/schedule';
 import { LoggerModule } from 'nestjs-pino';
 import { AuthModule } from './auth/auth.module';
 import { BodyMeasurementsModule } from './body-measurements/body-measurements.module';
@@ -14,6 +15,7 @@ import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     ConfigurationModule,
     DatabaseModule,
     AuthModule,
