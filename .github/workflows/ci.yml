@@ -117,5 +117,11 @@ jobs:
       - name: Rodar migrations
         run: pnpm --filter @minhasaude/api migration:run
 
+      # Os testes de busca (trigram/unaccent) verificam nomes reais da TACO
+      # ("Arroz, integral, cozido", "Açúcar...") em vez de criar fixture, então
+      # precisam do catálogo semeado. O banco do CI é efêmero e nasce vazio.
+      - name: Semear catálogo TACO (exigido pelos e2e de busca)
+        run: pnpm --filter @minhasaude/api seed:taco
+
       - name: Rodar testes e2e
         run: pnpm --filter @minhasaude/api test:e2e
