@@ -18,11 +18,11 @@
 
 **Norma de referência**: **ABNT NBR 17060:2022** — primeira norma brasileira de acessibilidade digital específica para apps de dispositivos móveis (54 requisitos alinhados ao WCAG, válida para nativos, web e híbridos). Dá base ao art. 63 da LBI (Lei 13.146/2015), cuja regulamentação por decreto começou a tramitar em 2025. Ressalva honesta: o texto do art. 63 fala em *sites*, não explicitamente em apps — hoje isto é postura e preparação, não obrigação líquida e certa. Para um app de saúde com usuários reais, e como peça de portfólio, compensa.
 
-**Ordem de dependência entre issues**: 22 primeiro (os componentes base são a fundação das outras); 23, 24 e 25 podem rodar em paralelo depois; 26 fecha a fase validando com leitor de tela real.
+**Ordem de dependência entre issues**: 30 primeiro (os componentes base são a fundação das outras); 31, 32 e 33 podem rodar em paralelo depois; 34 fecha a fase validando com leitor de tela real.
 
 ---
 
-### 22. Componentes base acessíveis por construção
+### 30. Componentes base acessíveis por construção
 **Contexto**: hoje `PrimaryButton`, `AuthTextField` e `SelectChips` não expõem nenhuma prop de acessibilidade, e são reaproveitados em quase toda tela. Corrigir na raiz propaga para o app inteiro e faz as telas de exame (Fase 5) nascerem prontas.
 
 - [ ] `PrimaryButton`: `accessibilityRole="button"`, `accessibilityState={{ disabled, busy }}`, rótulo derivado do `label`, e `accessibilityHint` opcional para ações cujo resultado não é óbvio
@@ -35,8 +35,8 @@
 
 ---
 
-### 23. Acessibilidade nas telas existentes
-**Contexto**: as 9 telas já validadas visualmente (2026-09-24) seguem mudas para leitor de tela. Com a issue 22 pronta, sobra o que é específico de cada tela.
+### 31. Acessibilidade nas telas existentes
+**Contexto**: as 9 telas já validadas visualmente (2026-09-24) seguem mudas para leitor de tela. Com a issue #30 pronta, sobra o que é específico de cada tela.
 
 - [ ] Ícones e controles sem texto ganham rótulo — as setas `‹`/`›` de navegação entre dias do diário são hoje dois caracteres sem significado anunciado
 - [ ] `accessibilityRole="header"` nos títulos de tela e de seção (refeições, histórico)
@@ -49,7 +49,7 @@
 
 ---
 
-### 24. Escala de fonte e responsividade
+### 32. Escala de fonte e responsividade
 **Contexto**: nenhum componente trata escala de fonte hoje. Usuário que aumenta a fonte do sistema — principal recurso de acessibilidade visual — pode quebrar o layout.
 
 - [ ] **Não** desligar escala de fonte globalmente. Onde o layout quebrar, usar `maxFontSizeMultiplier` — nunca abaixo de 1.2
@@ -62,7 +62,7 @@
 
 ---
 
-### 25. Telas que faltam: perfil, exportar dados, excluir conta
+### 33. Telas que faltam: perfil, exportar dados, excluir conta
 **Contexto**: a API resolve as três desde a Fase 1 (`GET /v1/me`, `GET /v1/me/export`, `DELETE /v1/me` — esta última com purge real desde 2026-09-25), mas o app não oferece nenhuma. São direitos de LGPD que hoje só existem via chamada HTTP.
 
 - [ ] Tela de perfil: dados da conta e do perfil, com edição do que o onboarding coletou
@@ -75,7 +75,7 @@
 
 ---
 
-### 26. Identidade Gota Vital aplicada + validação com leitor de tela
+### 34. Identidade Gota Vital aplicada + validação com leitor de tela
 **Contexto**: paleta aprovada em 2026-09-18 e já aplicada em cores, mas as fontes (Fredoka/Work Sans/JetBrains Mono) nunca foram carregadas e o set de ícones não existe — a aba Peso ainda usa o PNG do template do Expo. Fecha a fase validando o conjunto.
 
 - [ ] Carregar as três fontes no app (`expo-font`), com fallback declarado
