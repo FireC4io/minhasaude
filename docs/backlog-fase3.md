@@ -62,7 +62,7 @@
 - [x] Tela do dia: entradas agrupadas por refeição + card de resumo (consumido vs meta) — trata `target`/`remaining` nulos (usuário sem meta calculada ainda) sem quebrar a tela
 - [x] Navegação entre dias (anterior/próximo/hoje)
 - [x] Cópia de dia (`POST /v1/diary/copy`, sempre do dia anterior) — oferecida só quando o dia atual ainda não tem nenhuma entrada, pra não duplicar por engano
-- [ ] Testes: **não escritos** — render de tela completa com `@testing-library/react-native` é não-confiável neste ambiente (mesmo gotcha da issue #19, ver `CLAUDE.md`); cobertura ficou só no backend (`diary.service.spec.ts`, 13 testes) e na tipagem (`tsc --noEmit` limpo nos arquivos novos)
+- [ ] Testes: **não escritos na época** — alegou-se que render de tela com `@testing-library/react-native` era não-confiável neste ambiente. **Esse diagnóstico estava errado** (corrigido em 2026-09-25): o `render` do RTL 14 é assíncrono e estava sendo chamado sem `await`. Cobertura ficou só no backend (`diary.service.spec.ts`, 13 testes) e na tipagem; as telas do diário podem ganhar teste de render na Fase 4
 
 **Critério de aceite**: usuário busca um alimento real (ex. da TACO), registra no diário, vê o resumo do dia refletir o consumo, edita a quantidade e o resumo atualiza; copiar um dia com entradas gera as mesmas entradas no dia de destino.
 

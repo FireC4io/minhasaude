@@ -29,7 +29,7 @@
 - [ ] `AuthTextField`: associar rótulo visível ao campo, `accessibilityLabel` quando o rótulo não bastar, e anunciar erro de validação (não só pintar de vermelho)
 - [ ] `SelectChips`: `accessibilityRole="radio"` por chip, `accessibilityState={{ selected }}`, e o grupo com rótulo próprio
 - [ ] Alvo de toque mínimo de 48 dp em todos os três — hoje chips estão em ~36 dp e botões em ~44 dp. Usar `hitSlop` onde aumentar o padding quebrar o layout
-- [ ] Teste unitário da lógica de props (função pura que monta as props de acessibilidade), já que teste de render é não-confiável neste ambiente — ver gotcha no `CLAUDE.md`
+- [ ] **Teste de render de verdade** com `@testing-library/react-native`, verificando que o leitor de tela enxerga papel, rótulo e estado de cada componente. Atenção: no RTL 14 o `render` é assíncrono — `await render(<X />)` e depois `screen.getByRole(...)`. O diagnóstico antigo de que teste de render era "não-confiável neste ambiente" estava errado e foi corrigido em 2026-09-25 (ver `CLAUDE.md`)
 
 **Critério de aceite**: um leitor de tela anuncia papel, rótulo e estado de cada um dos três componentes; nenhum alvo de toque abaixo de 48 dp.
 
