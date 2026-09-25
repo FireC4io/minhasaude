@@ -107,6 +107,13 @@ jobs:
       - name: Instalar dependências
         run: pnpm install --frozen-lockfile
 
+      # Sem isto TODA suíte e2e falha com "Cannot find module '@minhasaude/shared'":
+      # o pacote aponta `main`/`types` pra `dist/`, que não é versionado. O job de
+      # lint/test/build não sofria porque o turbo já builda o shared via dependsOn,
+      # e o pipeline local também não — por isso a quebra passou despercebida.
+      - name: Buildar @minhasaude/shared (os e2e importam o dist/)
+        run: pnpm --filter @minhasaude/shared build
+
       - name: Rodar migrations
         run: pnpm --filter @minhasaude/api migration:run
 
