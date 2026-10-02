@@ -1,5 +1,7 @@
-import { Pressable, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import type { DiaryEntryResponseDto, MealType } from '@/api/generated/models';
+import { TextButton } from '@/components/ui/text-button';
+import { describeMealHeader } from './accessibility-labels';
 import { DiaryEntryRow } from './diary-entry-row';
 import { MEAL_TYPE_LABELS } from './meal-type-labels';
 
@@ -16,12 +18,19 @@ function round(value: number): number {
 }
 
 export function MealSection({ mealType, entries, onEntryPress, onEntryDelete, onAddPress }: MealSectionProps) {
+  const label = MEAL_TYPE_LABELS[mealType];
   const kcalTotal = entries.reduce((sum, entry) => sum + Number(entry.kcalSnapshot), 0);
 
   return (
     <View className="gap-2">
-      <View className="flex-row items-center justify-between">
-        <Text className="text-base font-semibold text-grafite">{MEAL_TYPE_LABELS[mealType]}</Text>
+      {/* Cabeçalho lido como uma parada só: dá pra pular de refeição em
+          refeição pelo rotor de cabeçalhos e já ouvir o total. */}
+      <View
+        accessible
+        accessibilityRole="header"
+        accessibilityLabel={describeMealHeader(label, entries.length, kcalTotal)}
+        className="flex-row items-center justify-between">
+        <Text className="text-base font-semibold text-grafite">{label}</Text>
         {entries.length > 0 ? <Text className="text-sm text-grafite">{round(kcalTotal)} kcal</Text> : null}
       </View>
 
@@ -36,9 +45,13 @@ export function MealSection({ mealType, entries, onEntryPress, onEntryDelete, on
         ))}
       </View>
 
-      <Pressable onPress={onAddPress} className="self-start">
-        <Text className="font-semibold text-mamao">+ Adicionar alimento</Text>
-      </Pressable>
+      <TextButton
+        label="+ Adicionar alimento"
+        accessibilityLabel={`Adicionar alimento ao ${label.toLowerCase()}`}
+        onPress={onAddPress}
+        className="self-start"
+        textClassName="font-semibold text-mamao"
+      />
     </View>
   );
 }

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { KeyboardAvoidingView, Platform, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { FormError } from '@/components/ui/form-error';
 import { useAuth } from '@/features/auth/auth-context';
 import { AuthTextField } from '@/features/auth/auth-text-field';
 import { PrimaryButton } from '@/features/auth/primary-button';
@@ -37,7 +38,7 @@ export default function LoginScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         className="flex-1 justify-center gap-6 px-6">
         <View className="gap-1">
-          <Text className="text-3xl font-semibold text-grafite">Bem-vindo de volta</Text>
+          <Text accessibilityRole="header" className="text-3xl font-semibold text-grafite">Bem-vindo de volta</Text>
           <Text className="text-base text-grafite">Entre pra continuar seu acompanhamento.</Text>
         </View>
 
@@ -58,7 +59,7 @@ export default function LoginScreen() {
             autoComplete="password"
             textContentType="password"
           />
-          {error ? <Text className="text-sm text-jabuticaba">{error}</Text> : null}
+          <FormError message={error} />
           <PrimaryButton
             label="Entrar"
             onPress={handleSubmit}

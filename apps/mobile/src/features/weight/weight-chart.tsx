@@ -3,6 +3,7 @@ import { Text, useColorScheme, useWindowDimensions, View } from 'react-native';
 import Svg, { Circle, Line, Polyline } from 'react-native-svg';
 
 import { GotaVitalColors } from '@/constants/gota-vital-colors';
+import { describeWeightTrend } from './accessibility-labels';
 import { buildWeightChart, type WeightMeasurementLike } from './chart-geometry';
 
 const CHART_HEIGHT = 180;
@@ -51,7 +52,12 @@ export function WeightChart({ measurements }: WeightChartProps) {
   }
 
   return (
+    // O SVG é invisível para leitor de tela: o card inteiro vira uma imagem
+    // com a tendência descrita em texto.
     <View
+      accessible
+      accessibilityRole="image"
+      accessibilityLabel={describeWeightTrend(measurements) ?? undefined}
       className="gap-2 rounded-2xl border border-grafite/20 bg-superficie p-4"
       onLayout={(event) => setLarguraMedida(event.nativeEvent.layout.width - 32)}>
       <View className="flex-row justify-between">

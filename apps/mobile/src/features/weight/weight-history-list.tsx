@@ -1,6 +1,7 @@
 import { Text, View } from 'react-native';
 
 import type { BodyMeasurementResponseDto } from '@/api/generated/models';
+import { describeWeightEntry } from './accessibility-labels';
 
 interface WeightHistoryListProps {
   measurements: readonly BodyMeasurementResponseDto[];
@@ -21,12 +22,18 @@ export function WeightHistoryList({ measurements }: WeightHistoryListProps) {
 
   return (
     <View className="gap-2">
-      <Text className="text-lg font-semibold text-grafite">Histórico</Text>
+      <Text accessibilityRole="header" className="text-lg font-semibold text-grafite">
+        Histórico
+      </Text>
 
       <View className="overflow-hidden rounded-2xl border border-grafite/20 bg-superficie">
         {measurements.map((measurement, index) => (
           <View
             key={measurement.id}
+            // Data e peso numa frase só, com o mês por extenso — o texto
+            // visual abrevia ("12 de set.") e o "kg" seria soletrado.
+            accessible
+            accessibilityLabel={describeWeightEntry(measurement)}
             className={`flex-row items-center justify-between px-4 py-3 ${
               index > 0 ? 'border-t border-grafite/10' : ''
             }`}>

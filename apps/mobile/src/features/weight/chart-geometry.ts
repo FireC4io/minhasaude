@@ -1,8 +1,8 @@
 /**
  * Geometria do gráfico de evolução de peso.
  *
- * Fica separada do componente de propósito: é a única lógica real da tela e
- * teste de render é não-confiável neste ambiente (ver CLAUDE.md).
+ * Fica separada do componente de propósito: é lógica pura, testável sem montar
+ * o SVG.
  */
 
 /** Só o que a geometria precisa da medição — casa com BodyMeasurementResponseDto. */

@@ -9,6 +9,7 @@ import {
   useBodyMeasurementsControllerCreate,
   useBodyMeasurementsControllerList,
 } from '@/api/generated/endpoints/body-measurements/body-measurements';
+import { FormError } from '@/components/ui/form-error';
 import { AuthTextField } from '@/features/auth/auth-text-field';
 import { PrimaryButton } from '@/features/auth/primary-button';
 import { WeightChart } from '@/features/weight/weight-chart';
@@ -61,7 +62,7 @@ export default function WeightScreen() {
         className="flex-1">
         <ScrollView contentContainerClassName="gap-6 px-6 py-8">
           <View className="gap-1">
-            <Text className="text-3xl font-semibold text-grafite">Peso</Text>
+            <Text accessibilityRole="header" className="text-3xl font-semibold text-grafite">Peso</Text>
             <Text className="text-base text-grafite">
               Registre seu peso quando quiser e acompanhe a evolução ao longo do tempo.
             </Text>
@@ -76,7 +77,7 @@ export default function WeightScreen() {
               placeholder="70.5"
               keyboardType="decimal-pad"
             />
-            {error ? <Text className="text-sm text-jabuticaba">{error}</Text> : null}
+            <FormError message={error} />
             <PrimaryButton
               label="Registrar peso"
               onPress={handleSubmit}

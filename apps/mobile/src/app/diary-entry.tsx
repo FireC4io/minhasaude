@@ -2,7 +2,6 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
-  ActivityIndicator,
   FlatList,
   KeyboardAvoidingView,
   Platform,
@@ -20,8 +19,14 @@ import {
 } from '@/api/generated/endpoints/diary/diary';
 import { useFoodsControllerSearch } from '@/api/generated/endpoints/foods/foods';
 import { DiaryQuantityUnit, type FoodResponseDto, type MealType } from '@/api/generated/models';
+import { FormError } from '@/components/ui/form-error';
+import { LoadingIndicator } from '@/components/ui/loading-indicator';
+import { TextButton } from '@/components/ui/text-button';
+import { MIN_TOUCH_TARGET } from '@/constants/accessibility';
+import { useAnnounce } from '@/features/accessibility/use-announce';
 import { AuthTextField } from '@/features/auth/auth-text-field';
 import { PrimaryButton } from '@/features/auth/primary-button';
+import { describeSearchStatus } from '@/features/diary/accessibility-labels';
 import { MEAL_TYPE_LABELS } from '@/features/diary/meal-type-labels';
 
 export default function DiaryEntryScreen() {
@@ -101,6 +106,9 @@ export default function DiaryEntryScreen() {
   }
 
   const isSaving = createEntry.isPending || updateEntry.isPending;
+  const results = searchQuery.data?.data ?? [];
+  const searchStatus = describeSearchStatus(searchTerm, searchQuery.isFetching, results.length);
+  useAnnounce(searchStatus);
   const showSearch = !isEditing && !selectedFood;
 
   return (
@@ -108,7 +116,7 @@ export default function DiaryEntryScreen() {
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         className="flex-1 gap-4 px-6 pt-4">
-        <Text className="text-2xl font-semibold text-grafite">
+        <Text accessibilityRole="header" className="text-2xl font-semibold text-grafite">
           {isEditing ? params.foodName : mealType ? MEAL_TYPE_LABELS[mealType] : 'Alimento'}
         </Text>
 
@@ -121,33 +129,47 @@ export default function DiaryEntryScreen() {
               onChangeText={setSearchTerm}
               placeholder="ex: arroz branco"
             />
-            {searchQuery.isFetching ? <ActivityIndicator /> : null}
+            {searchQuery.isFetching ? <LoadingIndicator label="Buscando alimentos" /> : null}
+            {/* Visível e com liveRegion: quem usa leitor de tela fica sabendo
+                que a busca terminou, e quantos resultados vieram. */}
+            {searchStatus ? (
+              <Text accessibilityLiveRegion="polite" className="text-sm text-grafite">
+                {searchStatus}
+              </Text>
+            ) : null}
             <FlatList
-              data={searchQuery.data?.data ?? []}
+              data={results}
               keyExtractor={(food) => food.id}
               renderItem={({ item }) => (
                 <Pressable
                   onPress={() => setSelectedFood(item)}
+                  accessibilityRole="button"
+                  accessibilityLabel={item.brand ? `${item.name}, ${item.brand}` : item.name}
+                  accessibilityHint="Escolhe este alimento"
+                  style={{ minHeight: MIN_TOUCH_TARGET, justifyContent: 'center' }}
                   className="border-b border-grafite py-3">
                   <Text className="text-base text-grafite">{item.name}</Text>
                   {item.brand ? <Text className="text-xs text-grafite">{item.brand}</Text> : null}
                 </Pressable>
               )}
-              ListEmptyComponent={
-                searchTerm.trim().length >= 2 && !searchQuery.isFetching ? (
-                  <Text className="text-sm text-grafite">Nenhum alimento encontrado.</Text>
-                ) : null
-              }
             />
           </View>
         ) : (
           <View className="gap-4">
             {!isEditing && selectedFood ? (
               <View className="gap-1">
-                <Text className="text-base font-semibold text-grafite">{selectedFood.name}</Text>
-                <Pressable onPress={() => setSelectedFood(null)}>
-                  <Text className="text-sm text-mamao">Trocar alimento</Text>
-                </Pressable>
+                <Text
+                  accessibilityLabel={`Alimento escolhido: ${selectedFood.name}`}
+                  className="text-base font-semibold text-grafite">
+                  {selectedFood.name}
+                </Text>
+                <TextButton
+                  label="Trocar alimento"
+                  onPress={() => setSelectedFood(null)}
+                  hint="Volta para a busca"
+                  className="self-start"
+                  textClassName="text-sm text-mamao"
+                />
               </View>
             ) : null}
 
@@ -160,14 +182,19 @@ export default function DiaryEntryScreen() {
               keyboardType="decimal-pad"
             />
 
-            {error ? <Text className="text-sm text-jabuticaba">{error}</Text> : null}
+            <FormError message={error} />
 
             <PrimaryButton label="Salvar" onPress={() => void handleSave()} isLoading={isSaving} />
 
             {isEditing ? (
-              <Pressable onPress={() => void handleDelete()} disabled={removeEntry.isPending}>
-                <Text className="text-center text-sm text-jabuticaba">Remover entrada</Text>
-              </Pressable>
+              <TextButton
+                label="Remover entrada"
+                accessibilityLabel={`Remover ${params.foodName ?? 'entrada'} do diário`}
+                onPress={() => void handleDelete()}
+                busy={removeEntry.isPending}
+                className="items-center"
+                textClassName="text-center text-sm text-jabuticaba"
+              />
             ) : null}
           </View>
         )}

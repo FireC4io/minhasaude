@@ -1,7 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, Text, View } from 'react-native';
+import { AccessibilityInfo, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import {
@@ -11,6 +11,9 @@ import {
   useDiaryControllerRemove,
 } from '@/api/generated/endpoints/diary/diary';
 import type { DiaryEntryResponseDto, MealType } from '@/api/generated/models';
+import { FormError } from '@/components/ui/form-error';
+import { LoadingIndicator } from '@/components/ui/loading-indicator';
+import { TextButton } from '@/components/ui/text-button';
 import { useAuth } from '@/features/auth/auth-context';
 import { addDaysToIsoDate, formatIsoDateLabel, todayIsoDate } from '@/features/diary/date-utils';
 import { MacroSummary } from '@/features/diary/macro-summary';
@@ -31,6 +34,14 @@ export default function DiaryScreen() {
     return queryClient.invalidateQueries({
       queryKey: getDiaryControllerGetByDateQueryKey({ date: currentDate }),
     });
+  }
+
+  // Quem navega pelas setas continua com o foco na seta: sem o anúncio, o
+  // leitor não diz para qual dia foi. Aqui não há liveRegion, então não
+  // duplica no Android.
+  function showDate(date: string) {
+    setCurrentDate(date);
+    AccessibilityInfo.announceForAccessibility(formatIsoDateLabel(date));
   }
 
   function goToEntry(mealType: MealType) {
@@ -61,6 +72,8 @@ export default function DiaryScreen() {
     await invalidateDay();
   }
 
+  const dateLabel = formatIsoDateLabel(currentDate);
+  const isToday = currentDate === todayIsoDate();
   const summary = dayQuery.data;
   const hasEntries = summary
     ? MEAL_TYPE_ORDER.some((mealType) => summary.meals[mealType].length > 0)
@@ -69,30 +82,51 @@ export default function DiaryScreen() {
   return (
     <SafeAreaView className="flex-1 bg-areia">
       <View className="flex-row items-center justify-between px-6 pt-2">
-        <Text className="text-2xl font-semibold text-grafite">Diário</Text>
-        <Pressable onPress={() => void logout()} hitSlop={8}>
-          <Text className="text-sm text-grafite">Sair</Text>
-        </Pressable>
+        <Text accessibilityRole="header" className="text-2xl font-semibold text-grafite">
+          Diário
+        </Text>
+        <TextButton
+          label="Sair"
+          onPress={() => void logout()}
+          hint="Encerra a sessão neste aparelho"
+          className="items-end"
+          textClassName="text-sm text-grafite"
+        />
       </View>
 
-      <View className="flex-row items-center justify-between px-6 py-3">
-        <Pressable onPress={() => setCurrentDate((date) => addDaysToIsoDate(date, -1))} hitSlop={12}>
-          <Text className="text-2xl text-grafite">‹</Text>
-        </Pressable>
-        <Pressable onPress={() => setCurrentDate(todayIsoDate())}>
-          <Text className="text-lg font-semibold capitalize text-grafite">
-            {formatIsoDateLabel(currentDate)}
-          </Text>
-        </Pressable>
-        <Pressable onPress={() => setCurrentDate((date) => addDaysToIsoDate(date, 1))} hitSlop={12}>
-          <Text className="text-2xl text-grafite">›</Text>
-        </Pressable>
+      <View className="flex-row items-center justify-between px-6 py-1">
+        {/* As setas eram só "‹" e "›" — o leitor anunciava um caractere sem
+            significado, ou nada. */}
+        <TextButton
+          label="‹"
+          accessibilityLabel="Dia anterior"
+          onPress={() => showDate(addDaysToIsoDate(currentDate, -1))}
+          className="items-center"
+          textClassName="text-2xl text-grafite"
+        />
+        <TextButton
+          label={dateLabel}
+          accessibilityLabel={`Dia exibido: ${dateLabel}`}
+          hint={isToday ? undefined : 'Volta para hoje'}
+          onPress={() => showDate(todayIsoDate())}
+          className="items-center"
+          textClassName="text-lg font-semibold capitalize text-grafite"
+        />
+        <TextButton
+          label="›"
+          accessibilityLabel="Próximo dia"
+          onPress={() => showDate(addDaysToIsoDate(currentDate, 1))}
+          className="items-center"
+          textClassName="text-2xl text-grafite"
+        />
       </View>
 
       {dayQuery.isPending ? (
-        <ActivityIndicator className="mt-8" />
+        <LoadingIndicator label="Carregando o diário" className="mt-8" />
       ) : dayQuery.isError || !summary ? (
-        <Text className="px-6 text-sm text-jabuticaba">Não foi possível carregar o diário.</Text>
+        <View className="px-6">
+          <FormError message="Não foi possível carregar o diário." />
+        </View>
       ) : (
         <ScrollView className="flex-1 px-6" contentContainerClassName="gap-5 pb-8">
           <MacroSummary
@@ -102,11 +136,12 @@ export default function DiaryScreen() {
           />
 
           {!hasEntries ? (
-            <Pressable onPress={() => void copyPreviousDay()} disabled={copyDay.isPending}>
-              <Text className="text-sm font-semibold text-mamao">
-                {copyDay.isPending ? 'Copiando…' : 'Copiar refeições de ontem'}
-              </Text>
-            </Pressable>
+            <TextButton
+              label={copyDay.isPending ? 'Copiando…' : 'Copiar refeições do dia anterior'}
+              onPress={() => void copyPreviousDay()}
+              busy={copyDay.isPending}
+              className="self-start"
+            />
           ) : null}
 
           {MEAL_TYPE_ORDER.map((mealType) => (

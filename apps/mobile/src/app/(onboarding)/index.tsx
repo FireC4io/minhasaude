@@ -5,6 +5,7 @@ import { ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useConsentsControllerGrant } from '@/api/generated/endpoints/consents/consents';
+import { FormError } from '@/components/ui/form-error';
 import { PrimaryButton } from '@/features/auth/primary-button';
 
 export default function ConsentScreen() {
@@ -28,7 +29,7 @@ export default function ConsentScreen() {
     <SafeAreaView className="flex-1 bg-areia">
       <ScrollView contentContainerClassName="gap-6 px-6 py-8" className="flex-1">
         <View className="gap-1">
-          <Text className="text-3xl font-semibold text-grafite">Antes de começar</Text>
+          <Text accessibilityRole="header" className="text-3xl font-semibold text-grafite">Antes de começar</Text>
           <Text className="text-base text-grafite">
             Pra calcular suas metas e organizar seu diário alimentar, precisamos guardar dados
             pessoais sensíveis: peso, altura, idade, sexo e nível de atividade.
@@ -53,7 +54,7 @@ export default function ConsentScreen() {
           </Text>
         </View>
 
-        {error ? <Text className="text-sm text-jabuticaba">{error}</Text> : null}
+        <FormError message={error} />
 
         <PrimaryButton
           label="Aceito, quero continuar"

@@ -1,5 +1,6 @@
 import { Text, View } from 'react-native';
 import type { MacroTotalsDto } from '@/api/generated/models';
+import { describeMacroSummary } from './accessibility-labels';
 
 interface MacroSummaryProps {
   consumed: MacroTotalsDto;
@@ -24,13 +25,18 @@ function MacroColumn({ label, valueG, targetG }: { label: string; valueG: number
 
 export function MacroSummary({ consumed, target, remaining }: MacroSummaryProps) {
   return (
-    <View className="gap-3 rounded-2xl border border-grafite bg-superficie p-4">
+    // Uma parada só, com frase completa: sem isto o leitor lia oito textos
+    // soltos ("Proteína", "50g / 120g"...) e "g" era soletrado.
+    <View
+      accessible
+      accessibilityLabel={describeMacroSummary(consumed, target, remaining)}
+      className="gap-3 rounded-2xl border border-grafite bg-superficie p-4">
       <View className="gap-1">
         <Text className="text-lg font-semibold text-grafite">
           {round(consumed.kcal)} kcal{target ? ` de ${round(target.kcal)}` : ' consumidas'}
         </Text>
         {remaining ? (
-          <Text className="text-sm text-grafite">{round(remaining.kcal)} kcal restantes hoje</Text>
+          <Text className="text-sm text-grafite">{round(remaining.kcal)} kcal restantes</Text>
         ) : (
           <Text className="text-sm italic text-grafite">
             Calcule sua meta para ver quanto ainda falta.

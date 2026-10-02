@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { Text, View } from 'react-native';
+import { AccessibilityInfo, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import {
@@ -8,7 +8,9 @@ import {
   useGoalsControllerRecalculate,
 } from '@/api/generated/endpoints/goals/goals';
 import type { GoalTargetResponseDto } from '@/api/generated/models';
+import { FormError } from '@/components/ui/form-error';
 import { PrimaryButton } from '@/features/auth/primary-button';
+import { describeGoal } from '@/features/onboarding/accessibility-labels';
 
 export default function SummaryScreen() {
   const queryClient = useQueryClient();
@@ -21,6 +23,11 @@ export default function SummaryScreen() {
     try {
       const goal = await recalculate.mutateAsync({ data: {} });
       setResult(goal);
+      // O botão "Calcular" some quando o resultado aparece, e o foco do leitor
+      // de tela fica sem destino. O anúncio diz o que mudou na tela.
+      AccessibilityInfo.announceForAccessibility(
+        `Meta calculada: ${Math.round(Number(goal.targetKcal))} quilocalorias por dia.`,
+      );
     } catch {
       setError('Não foi possível calcular sua meta agora. Tente de novo.');
     }
@@ -40,7 +47,7 @@ export default function SummaryScreen() {
     <SafeAreaView className="flex-1 bg-areia">
       <View className="flex-1 justify-center gap-6 px-6">
         <View className="gap-1">
-          <Text className="text-3xl font-semibold text-grafite">Sua meta</Text>
+          <Text accessibilityRole="header" className="text-3xl font-semibold text-grafite">Sua meta</Text>
           <Text className="text-base text-grafite">
             Calculamos a partir do seu perfil e do peso registrado.
           </Text>
@@ -48,7 +55,10 @@ export default function SummaryScreen() {
 
         {result ? (
           <View className="gap-4">
-            <View className="gap-2 rounded-2xl border border-grafite bg-superficie p-4">
+            <View
+              accessible
+              accessibilityLabel={describeGoal(result)}
+              className="gap-2 rounded-2xl border border-grafite bg-superficie p-4">
               <Text className="text-base text-grafite">
                 Taxa metabólica basal estimada: {Math.round(Number(result.bmrKcal))} kcal/dia
               </Text>
@@ -71,7 +81,7 @@ export default function SummaryScreen() {
           </View>
         ) : (
           <>
-            {error ? <Text className="text-sm text-jabuticaba">{error}</Text> : null}
+            <FormError message={error} />
             <PrimaryButton
               label="Calcular minha meta"
               onPress={handleCalculate}

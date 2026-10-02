@@ -6,6 +6,7 @@ import { KeyboardAvoidingView, Platform, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useUsersControllerUpdateProfile } from '@/api/generated/endpoints/me/me';
+import { FormError } from '@/components/ui/form-error';
 import { AuthTextField } from '@/features/auth/auth-text-field';
 import { PrimaryButton } from '@/features/auth/primary-button';
 import { ACTIVITY_LEVEL_LABELS, GOAL_LABELS, SEX_LABELS } from '@/features/onboarding/enum-labels';
@@ -56,7 +57,7 @@ export default function ProfileScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         className="flex-1 gap-6 px-6 pt-8">
         <View className="gap-1">
-          <Text className="text-3xl font-semibold text-grafite">Seu perfil</Text>
+          <Text accessibilityRole="header" className="text-3xl font-semibold text-grafite">Seu perfil</Text>
           <Text className="text-base text-grafite">
             Usamos isso pra calcular sua meta calórica e de macronutrientes.
           </Text>
@@ -95,7 +96,7 @@ export default function ProfileScreen() {
           />
           <SelectChips label="Objetivo" options={GOALS} optionLabels={GOAL_LABELS} value={goal} onChange={setGoal} />
 
-          {error ? <Text className="text-sm text-jabuticaba">{error}</Text> : null}
+          <FormError message={error} />
 
           <PrimaryButton label="Continuar" onPress={handleSubmit} isLoading={updateProfile.isPending} />
         </View>

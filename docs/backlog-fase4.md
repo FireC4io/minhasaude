@@ -39,12 +39,16 @@
 ### 31. Acessibilidade nas telas existentes
 **Contexto**: as 9 telas já validadas visualmente (2026-09-24) seguem mudas para leitor de tela. Com a issue #30 pronta, sobra o que é específico de cada tela.
 
-- [ ] Ícones e controles sem texto ganham rótulo — as setas `‹`/`›` de navegação entre dias do diário são hoje dois caracteres sem significado anunciado
-- [ ] `accessibilityRole="header"` nos títulos de tela e de seção (refeições, histórico)
-- [ ] Gráfico de peso com `accessibilityLabel` descrevendo a tendência em texto — um SVG é invisível para leitor de tela
-- [ ] Listas do diário e do histórico com rótulo que junte as informações da linha ("Banana, prata, crua, 130 gramas, 128 quilocalorias") em vez de ler célula por célula
-- [ ] Estados de carregamento e erro anunciados (`accessibilityLiveRegion` no Android, `AccessibilityInfo.announceForAccessibility` quando fizer sentido)
-- [ ] Ordem de foco conferida em cada tela
+- [x] Ícones e controles sem texto ganham rótulo — `‹`/`›` viram "Dia anterior"/"Próximo dia", e a troca de dia é anunciada (o foco fica na seta e o leitor não diria para qual dia foi). Ações em texto soltas ("Sair", "+ Adicionar alimento", "Remover", "Trocar alimento", "Remover entrada", "Copiar refeições") viraram o componente `TextButton` (`src/components/ui/text-button.tsx`): papel `button`, nome falado, estado e alvo de 48 dp nas duas dimensões. Cada "Remover" diz qual alimento remove, e cada "+ Adicionar" diz em qual refeição
+- [x] `accessibilityRole="header"` nos títulos das 9 telas, nas seções de refeição e no "Histórico"
+- [x] Gráfico de peso como `role="image"` com a tendência descrita em texto (`describeWeightTrend`: período, primeiro e último valor, variação e extremos). Redação neutra — "redução"/"aumento", sem julgar (RDC 657/2022)
+- [x] Linhas lidas como uma frase: entrada do diário ("Banana, prata, crua, 130 gramas, 128 quilocalorias"), cabeçalho de refeição com total, card de macros, card de meta do onboarding e linhas do histórico de peso. Unidades por extenso e vírgula decimal (`src/features/accessibility/spoken-format.ts`), porque "g", "kcal/dia" e "set." são soletrados ou lidos errado. Plural pela norma culta: "1,5 quilo"
+- [x] Carregamento e erro anunciados: `FormError` (alerta + `liveRegion` no Android, `announceForAccessibility` só no iOS, para o TalkBack não falar duas vezes) substitui os 8 erros que eram só texto vermelho; `LoadingIndicator` diz o que está carregando; a busca de alimento anuncia quantos resultados vieram; o resumo da meta anuncia o valor calculado quando o botão "Calcular" some da tela
+- [ ] Ordem de foco conferida em cada tela — **conferida só por leitura de código** (a ordem do JSX segue a ordem visual em todas as telas). A linha do diário foi reestruturada: editar e remover viraram irmãos, porque um `Pressable` acessível engole os filhos e o "Remover" sumiria para o leitor. Falta conferir com TalkBack/VoiceOver de verdade — fica para a passada da issue #34
+
+**Achados de passagem, corrigidos**: o card de resumo dizia "kcal restantes **hoje**" mesmo ao ver outro dia, e o botão "Copiar refeições **de ontem**" copiava o dia anterior ao *exibido*, não ontem. Os dois textos foram corrigidos.
+
+**Testes**: 41 novos (49 → 90 no mobile) — funções de rótulo puras e render de `TextButton`, `FormError`, `MealSection`, `MacroSummary`, `WeightChart` e `WeightHistoryList`.
 
 **Critério de aceite**: dá para completar o fluxo de registrar um alimento e um peso usando só o leitor de tela, sem enxergar a tela.
 

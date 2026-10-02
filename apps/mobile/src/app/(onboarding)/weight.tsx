@@ -5,6 +5,7 @@ import { KeyboardAvoidingView, Platform, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useBodyMeasurementsControllerCreate } from '@/api/generated/endpoints/body-measurements/body-measurements';
+import { FormError } from '@/components/ui/form-error';
 import { AuthTextField } from '@/features/auth/auth-text-field';
 import { PrimaryButton } from '@/features/auth/primary-button';
 
@@ -44,7 +45,7 @@ export default function WeightScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         className="flex-1 gap-6 px-6 pt-8">
         <View className="gap-1">
-          <Text className="text-3xl font-semibold text-grafite">Seu peso atual</Text>
+          <Text accessibilityRole="header" className="text-3xl font-semibold text-grafite">Seu peso atual</Text>
           <Text className="text-base text-grafite">
             Última etapa antes de calcularmos sua meta. Você pode registrar novos pesos depois,
             a qualquer momento.
@@ -60,7 +61,7 @@ export default function WeightScreen() {
             placeholder="70.5"
             keyboardType="decimal-pad"
           />
-          {error ? <Text className="text-sm text-jabuticaba">{error}</Text> : null}
+          <FormError message={error} />
           <PrimaryButton label="Continuar" onPress={handleSubmit} isLoading={createMeasurement.isPending} />
         </View>
       </KeyboardAvoidingView>
