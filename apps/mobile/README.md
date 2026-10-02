@@ -1,6 +1,6 @@
-# Minha Saúde — mobile
+# Gota Vital — mobile
 
-App mobile (Expo + Expo Router + NativeWind) do Minha Saúde. Ver `docs/backlog-fase3.md` na raiz do monorepo para o backlog completo da Fase 3 e `docs/adr/0008-estilizacao-mobile-nativewind.md` para a decisão de estilização.
+App mobile (Expo + Expo Router + NativeWind) do Gota Vital. Ver `docs/backlog-fase3.md` na raiz do monorepo para o backlog completo da Fase 3 e `docs/adr/0008-estilizacao-mobile-nativewind.md` para a decisão de estilização.
 
 ## Setup local
 

@@ -64,9 +64,8 @@ Prazos omitidos de propósito — dependem da sua resposta sobre dedicação (pe
 - **Entregável**: usuário envia exame, revisa, e vê índices calculados com fonte/fórmula visível.
 
 ## Fase 6 — Publicação
-- Decidir o nome antes de investir em marca: a seção 1 do `product-plan.md` confirma "Minha Saúde",
-  a seção 4 do mesmo arquivo recomenda `NutriTrilha` ou `Mapa Vital` e alerta que o nome atual é
-  genérico demais. Contradição em aberto.
+- ~~Decidir o nome~~ — decidido em 2026-10-02: **Gota Vital**. Falta, antes de investir em marca:
+  checagem no INPI e nas lojas, e definir o bundle id.
 - Política de privacidade e termos (texto real, não lorem ipsum — LGPD + exigência das lojas),
   incluindo o prazo de 30 dias da exclusão de conta e o tratamento de dado de exame.
 - Contas Apple Developer (US$ 99/ano) e Google Play (US$ 25 único) criadas.

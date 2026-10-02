@@ -32,7 +32,7 @@ async function bootstrap() {
   });
 
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('Minha Saúde API')
+    .setTitle('Gota Vital API')
     .setDescription('API do app de nutrição e acompanhamento de saúde.')
     .setVersion('0.1.0')
     .addBearerAuth()

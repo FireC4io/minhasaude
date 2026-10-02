@@ -2,7 +2,7 @@
   "name": "@minhasaude/mobile",
   "version": "0.0.0",
   "private": true,
-  "description": "App mobile Expo/React Native do Minha Saúde (Fase 3).",
+  "description": "App mobile Expo/React Native do Gota Vital.",
   "main": "expo-router/entry",
   "scripts": {
     "start": "expo start",

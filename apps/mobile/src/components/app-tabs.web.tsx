@@ -54,7 +54,7 @@ export function CustomTabList(props: TabListProps) {
     <View {...props} pointerEvents="box-none" style={styles.tabListContainer}>
       <ThemedView type="backgroundElement" style={styles.innerContainer}>
         <ThemedText type="smallBold" style={styles.brandText}>
-          Minha Saúde
+          Gota Vital
         </ThemedText>
 
         {props.children}

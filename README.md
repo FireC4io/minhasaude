@@ -1,4 +1,4 @@
-# Minha Saúde
+# Gota Vital
 
 App mobile de nutrição e acompanhamento de saúde — diário alimentar (base TACO + Open Food Facts) e análise de exames de sangue/bioimpedância com IA. Projeto de portfólio com usuários reais desde a Fase 1.
 

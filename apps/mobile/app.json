@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "Minha Saúde",
-    "slug": "minha-saude",
+    "name": "Gota Vital",
+    "slug": "gota-vital",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "minhasaude",
+    "scheme": "gotavital",
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/expo.icon"
