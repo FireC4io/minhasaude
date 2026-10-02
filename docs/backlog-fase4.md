@@ -62,6 +62,8 @@
 
 ---
 
+**Referência de telas (2026-10-02)**: o dono do projeto gravou um vídeo percorrendo o MyFitnessPal e comentando o que quer. O registro tela a tela, com a classificação por fase e as decisões pendentes, está em `docs/referencia-mfp.md`; os itens F4-30 a F4-36 vêm dele.
+
 ## Achados de 2026-10-02 que alimentaram a ampliação
 
 Primeira passada no **emulador Android** (Android Studio, aparelho médio, API 37), com conta nova criada do zero. As telas capturadas estão no relatório visual.
@@ -192,8 +194,48 @@ Issues **#30** e **#31** acima.
 ## Bloco F — Telas que faltam e navegação
 
 ### F4-20. Arquitetura de navegação pensando nas Fases 5 e 6
-- [ ] Definir as abas finais já prevendo os exames: ex. Diário · Corpo (peso e, depois, bioimpedância) · Exames (Fase 5) · Perfil
+**Contexto**: referência do MyFitnessPal (`docs/referencia-mfp.md`): Hoje · Progresso · Mais, com botão "+" flutuante.
+- [ ] Abas: **Hoje · Progresso · Exames (Fase 5) · Perfil**, com botão "+" de registro rápido (alimento, água, peso) sempre visível
 - [ ] "Sair" deixa o cabeçalho do diário e vai para o Perfil
+
+### F4-30. Tela "Hoje" nova
+**Contexto**: maior mudança de interface da fase, a partir da referência do vídeo (seção 4 de `docs/referencia-mfp.md`).
+- [ ] Data tocável no topo que abre um calendário; faixa da semana (domingo a sábado) com o dia atual marcado e os dias com registro sinalizados
+- [ ] Card de calorias com progresso visual (consumido, meta, restante)
+- [ ] Card de macros com alternância entre restante, consumido e porcentagem, lembrando a escolha da pessoa
+- [ ] Seções na ordem: Diário → Água → Peso (último registro) → Notas do dia
+- [ ] Tudo funcionando com fonte em 200% e leitor de tela desde o início, não depois
+- [ ] ⚠️ Decidir se entra a "sequência de dias registrando" e com que tom (motivação sem culpa)
+
+### F4-31. Boas-vindas e onboarding em passos
+- [ ] Tela de boas-vindas com 2-3 painéis ilustrados (diário, peso, exames) antes do login
+- [ ] Perfil dividido em passos curtos com barra de progresso, um assunto por tela
+- [ ] Exemplo concreto em cada nível de atividade (ex.: "passa a maior parte do dia sentado — trabalho de escritório")
+- [ ] Ritmo semanal de perda/ganho, com a opção conservadora marcada e texto sem promessa de resultado (RDC 657/2022)
+
+### F4-32. Recuperar senha e entrar com Google
+**Contexto**: a API não tem recuperação de senha, e há usuários reais — quem esquece a senha perde a conta.
+- [ ] **Recuperar senha por e-mail**: token de uso único com validade curta, guardado com hash, que revoga as sessões abertas ao trocar a senha; resposta igual para e-mail existente ou não (não revela quem tem conta); rate limit próprio
+- [ ] Escolher serviço de envio de e-mail com nível gratuito, atrás de env var
+- [ ] ⚠️ **Entrar com Google** (OAuth): precisa de projeto no Google Cloud e tela de consentimento — confirmar com o dono do projeto antes de começar
+
+### F4-33. Aba Progresso (estrutura)
+- [ ] Peso com gráfico e período selecionável (absorve F4-17)
+- [ ] Médias semanais de calorias e macros, navegando entre semanas
+- [ ] Espaço reservado para os marcadores de exame da Fase 5 (glicose e outros)
+
+### F4-34. Histórico de alimentos recentes
+- [ ] Na busca, antes de digitar, mostrar os alimentos registrados recentemente com kcal e porção, e adicionar com um toque — é o que mais acelera o registro diário
+
+### F4-35. Água ⚠️ dado novo
+**Contexto**: além de interface, exige tabela nova na API, entrada no `GET /v1/me/export` e na exclusão de conta.
+- [ ] Registro com copos ilustrados (250, 500, 1.000 ml e valor livre), total do dia e meta ajustável pela pessoa — sem "recomendado" que pareça prescrição
+- [ ] Decidir se fica na Fase 4 ou abre a Fase 5
+
+### F4-36. Textos prontos para tradução
+**Contexto**: o dono do projeto quer o app em outros países e idiomas no futuro. Traduzir agora não; deixar pronto, sim.
+- [ ] Junto da revisão de textos (F4-12), tirar os textos de tela do código para um arquivo de traduções em pt-BR
+- [ ] Datas, números e unidades sempre pelo formatador de locale (já é o caso nas funções de fala)
 
 ### 33. Telas que faltam: perfil, exportar dados, excluir conta
 **Contexto**: a API resolve as três desde a Fase 1, mas o app não oferece nenhuma — e o consentimento já promete que existem (achado #6).
@@ -209,7 +251,8 @@ Issues **#30** e **#31** acima.
 - [ ] Créditos TACO/Unicamp e Open Food Facts (ODbL) — exigência de licença, hoje sem tela no app
 - [ ] Versão do app, link para a política de privacidade, contato
 
-### F4-22. Preferências
+### F4-22. Preferências e aba Perfil
+- [ ] A aba Perfil reúne: dados e metas, exportar e excluir conta (#33), privacidade, preferências, lembretes (Fase 6), sobre (F4-21) e ajuda
 - [ ] Tema (sistema, claro, escuro)
 - [ ] Ver o consentimento dado e a data
 

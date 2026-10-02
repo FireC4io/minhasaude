@@ -49,8 +49,10 @@ internet ruim. Backlog completo em `docs/backlog-fase4.md`, organizado em blocos
   linguagem simples.
 - **E. Formulários e fluxos** — teclado nunca esconde a ação, entradas no formato brasileiro,
   estados vazio/sucesso/erro completos, internet ruim e servidor dormindo tratados na UI.
-- **F. Telas que faltam** — perfil, exportar, excluir conta (LGPD), "Sobre" com créditos TACO/OFF,
-  preferências, e a navegação final já prevendo os exames.
+- **F. Telas que faltam e nova estrutura** — tela "Hoje" nova (calendário, semana, cards, água, peso,
+  notas), abas Hoje · Progresso · Exames · Perfil, boas-vindas e onboarding em passos, **recuperar
+  senha** (não existe hoje), login com Google, perfil/exportar/excluir (LGPD), "Sobre" com créditos
+  TACO/OFF, textos prontos para tradução. Referência: `docs/referencia-mfp.md`.
 - **G. Desempenho** — medido em perfil de celular básico.
 - **H. Fechamento** — TalkBack de ponta a ponta, VoiceOver se houver iPhone, e teste de
   usabilidade com 3 a 5 pessoas de perfis diferentes.
@@ -85,5 +87,9 @@ internet ruim. Backlog completo em `docs/backlog-fase4.md`, organizado em blocos
 ## Fase 7 — Evolução
 - Leitor de código de barras (scanner nativo → busca por EAN).
 - Gráficos de evolução mais completos (macros ao longo do tempo, exames).
-- Registro de treinos.
+- Registro de treinos, com exercícios ilustrados/animados.
+- Passos e exercícios automáticos via Health Connect (Android) e HealthKit (iOS), e smartwatch.
+- Receitas com cálculo por ingrediente.
+- Registro de refeição por voz com IA (mesmo portão de orçamento dos exames; sempre com revisão antes de salvar).
+- Tradução e lançamento em outros países (a base TACO e as regras ANVISA/LGPD são brasileiras).
 - Recursos sociais (se fizer sentido para o produto).
