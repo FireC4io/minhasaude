@@ -30,12 +30,11 @@ export function PrimaryButton({
       accessibilityLabel={label}
       accessibilityHint={hint}
       accessibilityState={{ disabled: Boolean(isDisabled), busy: Boolean(isLoading) }}
-      style={({ pressed }) => ({
-        minHeight: MIN_TOUCH_TARGET,
-        justifyContent: 'center',
-        opacity: isDisabled ? 0.5 : pressed ? 0.8 : 1,
-      })}
-      className="items-center rounded-2xl bg-mamao px-4 py-3">
+      // Objeto, não função — ver o comentário em `TextButton`.
+      style={{ minHeight: MIN_TOUCH_TARGET, justifyContent: 'center' }}
+      className={`items-center rounded-2xl bg-mamao px-4 py-3 ${
+        isDisabled ? 'opacity-50' : 'active:opacity-80'
+      }`}>
       {isLoading ? (
         <ActivityIndicator color="#FBF0E4" />
       ) : (

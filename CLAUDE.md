@@ -109,7 +109,7 @@ turbo run lint test build             # pipeline completo (usado no CI)
   - Anúncio no iOS via `useAnnounce`/`announceForAccessibility`; no Android, `accessibilityLiveRegion`. Usar os dois juntos faz o TalkBack falar duas vezes.
   - Nunca aninhar um botão dentro de outro `Pressable`: o pai acessível engole o filho para o leitor de tela.
   - Teste: o mock global de `AccessibilityInfo.announceForAccessibility` acumula chamadas entre testes — `jest.clearAllMocks()` no `beforeEach`.
-- **Validação visual da #31 NÃO feita**: o Chrome não estava conectado e o Docker Desktop estava desligado. Ordem de foco conferida só lendo o código; a passada real com TalkBack/VoiceOver é a #34.
+- **Validação da #31 no navegador FEITA (2026-10-02)**, detalhes em `docs/backlog-fase4.md`. Achou 2 bugs, corrigidos (ainda não commitados): (1) **o alvo de 48 dp nunca chegou ao app real** — `className` + `style` em função num `Pressable` faz o NativeWind descartar a função; **em `Pressable` com `className`, `style` é sempre objeto** e a opacidade de pressionado vai por `active:opacity-*`; (2) vírgula decimal recusada no peso/altura → `parseDecimal` (`src/features/forms/`). Leitor de tela real (TalkBack/VoiceOver) continua sendo a #34.
 - **Próximo passo natural**: #32 (escala de fonte) ou #33 (telas de perfil/exportar/excluir); as duas são independentes.
 
 ## Referências

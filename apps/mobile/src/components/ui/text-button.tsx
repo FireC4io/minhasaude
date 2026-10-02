@@ -43,13 +43,11 @@ export function TextButton({
       accessibilityLabel={accessibilityLabel ?? label}
       accessibilityHint={hint}
       accessibilityState={{ disabled: isDisabled, busy: Boolean(busy) }}
-      style={({ pressed }) => ({
-        minHeight: MIN_TOUCH_TARGET,
-        minWidth: MIN_TOUCH_TARGET,
-        justifyContent: 'center',
-        opacity: isDisabled ? 0.5 : pressed ? 0.7 : 1,
-      })}
-      className={className}>
+      // Objeto, não função: com `className` junto, o NativeWind põe os dois num
+      // array e o Pressable ignora a função — o alvo de toque sumia no app real.
+      // A opacidade de pressionado/desabilitado vai por classe pelo mesmo motivo.
+      style={{ minHeight: MIN_TOUCH_TARGET, minWidth: MIN_TOUCH_TARGET, justifyContent: 'center' }}
+      className={`${className ?? ''} ${isDisabled ? 'opacity-50' : 'active:opacity-70'}`}>
       <Text className={textClassName}>{label}</Text>
     </Pressable>
   );

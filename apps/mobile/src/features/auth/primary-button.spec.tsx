@@ -71,4 +71,15 @@ describe('PrimaryButton', () => {
       minHeight: MIN_TOUCH_TARGET,
     });
   });
+
+  // O NativeWind junta `className` e `style` num array, e o Pressable só chama
+  // `style` quando ele é uma função — dentro do array a função é ignorada e o
+  // alvo de toque some no app real. O Jest não roda o NativeWind, então o
+  // `toHaveStyle` acima passa mesmo assim; esta checagem é o que trava a regressão.
+  it('passa o estilo como objeto, nunca como função', () => {
+    // Sem hooks no componente, dá para olhar o elemento que ele devolve.
+    const element = PrimaryButton({ label: 'Entrar', onPress: jest.fn() });
+
+    expect(typeof element.props.style).toBe('object');
+  });
 });

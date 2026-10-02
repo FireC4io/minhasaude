@@ -28,6 +28,7 @@ import { AuthTextField } from '@/features/auth/auth-text-field';
 import { PrimaryButton } from '@/features/auth/primary-button';
 import { describeSearchStatus } from '@/features/diary/accessibility-labels';
 import { MEAL_TYPE_LABELS } from '@/features/diary/meal-type-labels';
+import { parseDecimal } from '@/features/forms/parse-decimal';
 
 export default function DiaryEntryScreen() {
   const router = useRouter();
@@ -63,7 +64,7 @@ export default function DiaryEntryScreen() {
 
   async function handleSave() {
     setError(null);
-    const quantityNumber = Number(quantity.replace(',', '.'));
+    const quantityNumber = parseDecimal(quantity);
     if (!Number.isFinite(quantityNumber) || quantityNumber <= 0) {
       setError('Informe uma quantidade válida em gramas.');
       return;

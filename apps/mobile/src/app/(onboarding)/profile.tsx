@@ -11,6 +11,7 @@ import { AuthTextField } from '@/features/auth/auth-text-field';
 import { PrimaryButton } from '@/features/auth/primary-button';
 import { ACTIVITY_LEVEL_LABELS, GOAL_LABELS, SEX_LABELS } from '@/features/onboarding/enum-labels';
 import { SelectChips } from '@/features/onboarding/select-chips';
+import { parseDecimal } from '@/features/forms/parse-decimal';
 
 export default function ProfileScreen() {
   const router = useRouter();
@@ -29,7 +30,7 @@ export default function ProfileScreen() {
     const parsed = profileFormSchema.safeParse({
       birthDate,
       sex,
-      heightCm: Number(heightCm),
+      heightCm: parseDecimal(heightCm),
       activityLevel,
       goal,
     });

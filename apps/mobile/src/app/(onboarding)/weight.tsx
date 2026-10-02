@@ -8,6 +8,7 @@ import { useBodyMeasurementsControllerCreate } from '@/api/generated/endpoints/b
 import { FormError } from '@/components/ui/form-error';
 import { AuthTextField } from '@/features/auth/auth-text-field';
 import { PrimaryButton } from '@/features/auth/primary-button';
+import { parseDecimal } from '@/features/forms/parse-decimal';
 
 export default function WeightScreen() {
   const router = useRouter();
@@ -19,7 +20,7 @@ export default function WeightScreen() {
   async function handleSubmit() {
     setError(null);
 
-    const parsed = weightEntrySchema.safeParse({ weightKg: Number(weightKg) });
+    const parsed = weightEntrySchema.safeParse({ weightKg: parseDecimal(weightKg) });
     if (!parsed.success) {
       setError('Informe um peso válido (entre 20 e 400 kg).');
       return;

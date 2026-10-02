@@ -14,6 +14,7 @@ import { AuthTextField } from '@/features/auth/auth-text-field';
 import { PrimaryButton } from '@/features/auth/primary-button';
 import { WeightChart } from '@/features/weight/weight-chart';
 import { WeightHistoryList } from '@/features/weight/weight-history-list';
+import { parseDecimal } from '@/features/forms/parse-decimal';
 
 // Só medidas registradas na mão: o app nunca mistura fontes no mesmo gráfico,
 // porque bioimpedância de aparelhos diferentes não é comparável (CLAUDE.md).
@@ -30,7 +31,7 @@ export default function WeightScreen() {
   async function handleSubmit() {
     setError(null);
 
-    const parsed = weightEntrySchema.safeParse({ weightKg: Number(weightKg) });
+    const parsed = weightEntrySchema.safeParse({ weightKg: parseDecimal(weightKg) });
     if (!parsed.success) {
       setError('Informe um peso válido (entre 20 e 400 kg).');
       return;

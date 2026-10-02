@@ -34,3 +34,11 @@ Thumbs.db
 
 # generated (graphify knowledge graph output - regenerate via /graphify, not committed)
 graphify-out/
+
+# Exames e documentos pessoais de saúde (dado sensível, LGPD) — o repo é público.
+# Imagens que forem documentação de verdade entram com exceção explícita (`!docs/caminho.png`).
+docs/**/*.pdf
+docs/**/*.jpg
+docs/**/*.jpeg
+docs/**/*.png
+docs/**/*.heic

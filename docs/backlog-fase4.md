@@ -50,6 +50,12 @@
 
 **Testes**: 41 novos (49 → 90 no mobile) — funções de rótulo puras e render de `TextButton`, `FormError`, `MealSection`, `MacroSummary`, `WeightChart` e `WeightHistoryList`.
 
+**Validação no navegador (2026-10-02)** — árvore de acessibilidade lida no Expo web (o RN web traduz `accessibilityRole`/`Label` para ARIA) e fluxos de alimento e peso feitos por teclado. Papéis, nomes falados, live regions e a descrição do gráfico chegaram certos. Ordem de Tab segue a ordem visual no diário. Dois bugs que nenhum teste pegava, corrigidos:
+- **O alvo de 48 dp não existia no app real.** `TextButton` e `PrimaryButton` passavam `className` junto de `style` em forma de função; o NativeWind junta os dois num array e o `Pressable` só chama `style` quando ele *é* a função — dentro do array ela é ignorada. Medido no DOM: "Sair" 23×20, setas 8×32, "+ Adicionar" 134×19, "Salvar" 43 de altura; também sumia a opacidade de pressionado/desabilitado. O `toHaveStyle` dos testes passava porque o Jest não roda o NativeWind. Agora `style` é objeto e a opacidade vai por classe (`active:opacity-70`/`opacity-50`); teste novo trava que o `style` seja objeto. **Regra: em `Pressable` com `className`, nunca `style={({ pressed }) => ...}`.** Efeito colateral bom: o "Hoje" do cabeçalho do diário, que ficava atrás da barra de abas, apareceu.
+- **Vírgula decimal recusada.** `Number('69,2')` é `NaN`, então "69,2" dava "Informe um peso válido" nas duas telas de peso (a altura do perfil tinha o mesmo `Number(...)`). Helper `parseDecimal` em `src/features/forms/` (5 testes) aplicado nas 4 telas.
+
+**Observado, não corrigido**: o modal de adicionar alimento deixa o diário de trás na árvore de acessibilidade no web (sem `aria-modal`); após registrar peso o foco cai no `body` sem anúncio de sucesso; recarregar direto em `/weight` cai no Diário; o histórico mostra "68.9 kg" com ponto enquanto a fala usa vírgula.
+
 **Critério de aceite**: dá para completar o fluxo de registrar um alimento e um peso usando só o leitor de tela, sem enxergar a tela.
 
 ---
