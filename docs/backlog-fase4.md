@@ -18,7 +18,9 @@
 
 **Norma de referência**: **ABNT NBR 17060:2022** — primeira norma brasileira de acessibilidade digital específica para apps de dispositivos móveis (54 requisitos alinhados ao WCAG, válida para nativos, web e híbridos). Dá base ao art. 63 da LBI (Lei 13.146/2015), cuja regulamentação por decreto começou a tramitar em 2025. Ressalva honesta: o texto do art. 63 fala em *sites*, não explicitamente em apps — hoje isto é postura e preparação, não obrigação líquida e certa. Para um app de saúde com usuários reais, e como peça de portfólio, compensa.
 
-**Ordem de dependência entre issues**: 30 primeiro (os componentes base são a fundação das outras); 31, 32 e 33 podem rodar em paralelo depois; 34 fecha a fase validando com leitor de tela real.
+**Fase ampliada em 2026-10-02 (decisão do usuário)**: o objetivo deixou de ser só "acessível" e passou a ser **um app bom e eficiente para todos os públicos** — pessoa idosa, com baixa visão, com pouca familiaridade com tecnologia, com celular básico e internet ruim. As issues #30 e #31 (concluídas) viraram o Bloco A; o resto foi reorganizado em blocos. Itens novos têm id provisório `F4-xx` até virarem issue no GitHub.
+
+**Ordem de dependência**: A (feito) → B (ambiente) → C (identidade, porque mexe na paleta que todo o resto usa) → D, E e F em paralelo → G (desempenho) → H fecha a fase.
 
 ---
 
@@ -60,39 +62,177 @@
 
 ---
 
-### 32. Escala de fonte e responsividade
-**Contexto**: nenhum componente trata escala de fonte hoje. Usuário que aumenta a fonte do sistema — principal recurso de acessibilidade visual — pode quebrar o layout.
+## Achados de 2026-10-02 que alimentaram a ampliação
 
-- [ ] **Não** desligar escala de fonte globalmente. Onde o layout quebrar, usar `maxFontSizeMultiplier` — nunca abaixo de 1.2
-- [ ] Conferir cada tela com a fonte do sistema no tamanho máximo; texto que estoura deve quebrar linha ou rolar, nunca ser cortado
-- [ ] Trocar `Dimensions.get` por `useWindowDimensions` — o primeiro lê uma vez e não reage a rotação nem a tela dividida
-- [ ] Revisar larguras fixas e `minWidth` que impeçam o conteúdo de caber em telas estreitas
-- [ ] Conferir o app em tela larga (tablet/web) — hoje o gráfico de peso estica para ~1800 px sem limite de largura
+Primeira passada no **emulador Android** (Android Studio, aparelho médio, API 37), com conta nova criada do zero. As telas capturadas estão no relatório visual.
 
-**Critério de aceite**: com a fonte do sistema no máximo, nenhuma tela corta texto nem esconde botão; girar o device recalcula o layout.
+| # | Achado | Onde | Vai para |
+|---|---|---|---|
+| 1 | **Contraste da cor de ação reprova no modo claro**: texto creme sobre botão mamão e "+ Adicionar" mamão sobre areia dão **2,45:1** (mínimo 4,5:1; nem como texto grande passa). Maracujá sobre areia: 2,62:1. No escuro está ok (7,27:1) | Botão primário e todo `TextButton` | F4-07 |
+| 2 | **Linha de macros se atropela com fonte em 200%**: "4g / 100g0g / 64g42g / 278g" | Card do diário | #32 |
+| 3 | **Teclado esconde o botão principal** e a tela não rola — no registro é preciso fechar o teclado para achar "Criar conta" | Login, registro, perfil, peso | F4-14 |
+| 4 | Data de nascimento é texto livre em **AAAA-MM-DD** | Onboarding | F4-15 |
+| 5 | Placeholder do peso é "70.5", com ponto | Peso (onboarding e app) | F4-15 |
+| 6 | O consentimento promete exportar/excluir "nas configurações do app", e essa tela não existe | Consentimento | #33 |
+| 7 | **Ícone do app e splash ainda são o logo do Expo** | Inicialização | F4-06 |
+| 8 | Barra de abas fica preta no modo escuro, fora da paleta; ícone da aba Peso é do template | Abas | F4-06 |
+| 9 | O gráfico mostra máximo e mínimo lado a lado no topo, sem eixo — lê-se como "início → fim" | Peso | F4-17 |
+| 10 | "Copiar refeições do dia anterior" aparece para conta criada hoje, que não tem dia anterior | Diário | F4-16 |
+| 11 | Na web, o modal deixa o diário de trás acessível ao leitor de tela; registrar peso não anuncia sucesso | Modal, peso | #34, F4-16 |
+
+Conferido e ok no Android: vírgula decimal aceita, cálculo da meta (Mifflin-St Jeor, 36 anos/170 cm/62,4 kg → 1.346 / 2.086 kcal), nomes falados das linhas, gráfico descrito em texto, conteúdo no modo escuro.
 
 ---
+
+## Bloco A — Fundação acessível ✅
+Issues **#30** e **#31** acima.
+
+---
+
+## Bloco B — Ambiente de validação real
+
+### F4-01. Emulador Android como ferramenta do dia a dia
+**Contexto**: até 2026-10-02 toda validação visual era no Expo web, que esconde problemas reais (teclado, fonte do sistema, TalkBack, tema do sistema). O emulador já funciona; falta deixar isso reproduzível.
+- [ ] Documentar no README do mobile: AVD num disco com espaço (o C: não comporta os 12 GB da partição de dados — AVD em `D:\Android\avd` via `ANDROID_AVD_HOME`), `adb reverse tcp:3000` e `tcp:8081` para o app falar com a API local sem mudar `.env`, e `npx expo start --android`
+- [ ] Script de captura de telas versionado (hoje é um helper solto da sessão), que gera os prints do relatório visual
+- [ ] Perfil de aparelho básico (tela pequena, 2 GB de RAM) além do aparelho médio
+
+### F4-02. Testes de fluxo ponta a ponta no emulador (Maestro)
+**Contexto**: os bugs mais sérios até aqui (alvo de 48 dp, gráfico que não desenhava, abas engolindo cliques) passaram por todos os testes unitários. Só aparecem com o app rodando.
+- [ ] Maestro (gratuito, fluxos em YAML) com os fluxos críticos: registrar → onboarding → adicionar alimento → registrar peso → sair
+- [ ] Os mesmos fluxos com fonte em 200% e em modo escuro
+- [ ] Rodar localmente antes de fechar cada issue; CI fica para depois (emulador em CI gasta minutos que o orçamento não cobre)
+
+---
+
+## Bloco C — Identidade Gota Vital e sistema de design
+
+### F4-05. Tipografia e escala tipográfica
+- [ ] Carregar Fredoka (títulos), Work Sans (texto) e JetBrains Mono (números) via `expo-font`, com fallback
+- [ ] Escala tipográfica com nomes (título, subtítulo, corpo, legenda, número) em vez de `text-sm`/`text-base` soltos
+- [ ] Números de nutrição e peso com algarismos tabulares, para as colunas alinharem
+
+### F4-06. Ícone, splash, ícones das abas e barra de abas
+- [ ] Ícone do app e splash com o símbolo Gota Vital (hoje: logo do Expo)
+- [ ] Set de ícones próprio para as abas
+- [ ] Barra de abas pintada com a paleta nos dois temas (hoje usa `constants/theme.ts` do template e fica preta no escuro)
+- [ ] Remover os resquícios do template (`animated-icon.tsx`, `themed-text.tsx`, `constants/theme.ts`)
+
+### F4-07. Paleta com contraste aprovado ⚠️ decisão de design
+**Contexto**: achado #1 — a cor de ação reprova no modo claro.
+- [ ] Criar uma variante da cor de ação para texto e para fundo de botão que passe 4,5:1, mantendo o mamão atual para áreas grandes e decorativas
+- [ ] Mesmo tratamento para o maracujá
+- [ ] Teste automatizado que calcula o contraste de cada par texto/fundo dos tokens, nos dois temas, e reprova abaixo de 4,5:1
+- [ ] **Precisa da aprovação do usuário**: altera a identidade aprovada em 2026-09-18
+
+### F4-08. Catálogo de componentes
+- [ ] Tela só de desenvolvimento com cada componente base em todos os estados (normal, pressionado, desabilitado, carregando, erro), nos dois temas — referência visual para revisar
+
+---
+
+## Bloco D — Inclusão ampla (para todos os públicos)
+
+### 32. Escala de fonte e responsividade
+**Contexto**: o achado #2 confirma a quebra.
+- [ ] **Não** desligar a escala de fonte globalmente. Onde o layout quebrar, usar `maxFontSizeMultiplier` — nunca abaixo de 1.2
+- [ ] Linha de macros do card do diário: empilhar em fonte grande em vez de dividir a linha em três
+- [ ] Conferir cada tela com a fonte do sistema em 200%; texto que estoura deve quebrar linha ou rolar, nunca ser cortado
+- [ ] Trocar `Dimensions.get` por `useWindowDimensions`
+- [ ] Revisar larguras fixas e `minWidth` que impeçam o conteúdo de caber em telas estreitas
+- [ ] Largura máxima de conteúdo em tela larga (tablet/web) — hoje o gráfico estica até ~1800 px
+
+**Critério de aceite**: com a fonte do sistema em 200%, nenhuma tela corta texto nem esconde botão; girar o aparelho recalcula o layout.
+
+### F4-10. Não depender só de cor
+- [ ] Estados (selecionado, erro, progresso) sempre com texto ou forma além da cor — pensando em daltonismo
+- [ ] Gráfico com marcadores e rótulos legíveis em escala de cinza
+
+### F4-11. Movimento reduzido
+- [ ] Respeitar a preferência "remover animações" do sistema (`AccessibilityInfo.isReduceMotionEnabled`) em toda animação
+
+### F4-12. Linguagem simples
+**Contexto**: o público inclui pessoas com pouca familiaridade com termos de nutrição.
+- [ ] Revisar textos: sem abreviação ("Carbo" → "Carboidratos"), siglas explicadas na primeira aparição (TMB), frases curtas
+- [ ] Explicação curta a partir do card de meta ("o que é taxa metabólica?") — informativa, nunca prescritiva (RDC 657/2022)
+- [ ] Mensagens de erro dizem o que fazer, não só o que deu errado
+
+---
+
+## Bloco E — Formulários e fluxos
+
+### F4-14. O teclado nunca esconde a ação
+- [ ] `KeyboardAvoidingView` + rolagem em toda tela com formulário (achado #3)
+- [ ] Botão "próximo" do teclado leva ao campo seguinte; no último campo, envia
+- [ ] Tipo de teclado certo em cada campo (decimal para peso e quantidade, e-mail para e-mail)
+
+### F4-15. Entradas no formato brasileiro
+- [ ] Data de nascimento com seletor de data ou máscara DD/MM/AAAA (achado #4)
+- [ ] Placeholders e exemplos com vírgula decimal (achado #5)
+
+### F4-16. Estados de tela completos
+- [ ] Estado vazio explicativo em cada lista (diário sem alimento, histórico sem peso)
+- [ ] "Copiar refeições do dia anterior" só quando o dia anterior tem registro (achado #10)
+- [ ] Sucesso anunciado e visível ao salvar (peso registrado, alimento adicionado)
+- [ ] Remover alimento com "desfazer" em vez de apagar direto
+- [ ] Modal de adicionar alimento com botão de fechar visível
+- [ ] Busca de alimento mostrando kcal por 100 g, para comparar opções
+
+### F4-17. Gráfico de peso legível
+- [ ] Eixo com o mínimo embaixo e o máximo em cima, datas no eixo x (achado #9)
+- [ ] Escolha de período (30 dias, 3 meses, tudo)
+
+### F4-18. Internet ruim e servidor dormindo
+**Contexto**: a API no Render free dorme e leva 30-60 s para acordar. Hoje isso aparece como carregamento sem fim ou erro genérico.
+- [ ] Mensagem específica quando a primeira chamada demora ("conectando ao servidor, pode levar até um minuto")
+- [ ] Retentativa automática com aviso, e botão de tentar de novo em todo erro de rede
+- [ ] Dados já carregados continuam visíveis sem internet (cache do React Query persistido)
+
+---
+
+## Bloco F — Telas que faltam e navegação
+
+### F4-20. Arquitetura de navegação pensando nas Fases 5 e 6
+- [ ] Definir as abas finais já prevendo os exames: ex. Diário · Corpo (peso e, depois, bioimpedância) · Exames (Fase 5) · Perfil
+- [ ] "Sair" deixa o cabeçalho do diário e vai para o Perfil
 
 ### 33. Telas que faltam: perfil, exportar dados, excluir conta
-**Contexto**: a API resolve as três desde a Fase 1 (`GET /v1/me`, `GET /v1/me/export`, `DELETE /v1/me` — esta última com purge real desde 2026-09-25), mas o app não oferece nenhuma. São direitos de LGPD que hoje só existem via chamada HTTP.
-
-- [ ] Tela de perfil: dados da conta e do perfil, com edição do que o onboarding coletou
+**Contexto**: a API resolve as três desde a Fase 1, mas o app não oferece nenhuma — e o consentimento já promete que existem (achado #6).
+- [ ] Tela de perfil: dados da conta e do perfil, com edição do que o onboarding coletou e recálculo da meta
 - [ ] Exportar dados: dispara `GET /v1/me/export` e entrega o arquivo ao usuário
 - [ ] Excluir conta: explica o prazo de 30 dias e o que será apagado, exige confirmação explícita, e deixa claro que o consentimento fica anonimizado como prova
-- [ ] Ambas as ações de LGPD alcançáveis em no máximo dois toques a partir do app
+- [ ] As duas ações de LGPD alcançáveis em no máximo dois toques a partir do Perfil
 - [ ] Texto informativo, nunca alarmista
 
-**Critério de aceite**: um usuário consegue exportar os próprios dados e pedir exclusão da conta sem sair do app.
+**Critério de aceite**: um usuário consegue exportar os próprios dados e pedir a exclusão da conta sem sair do app.
+
+### F4-21. Tela "Sobre" com os créditos obrigatórios
+- [ ] Créditos TACO/Unicamp e Open Food Facts (ODbL) — exigência de licença, hoje sem tela no app
+- [ ] Versão do app, link para a política de privacidade, contato
+
+### F4-22. Preferências
+- [ ] Tema (sistema, claro, escuro)
+- [ ] Ver o consentimento dado e a data
 
 ---
 
-### 34. Identidade Gota Vital aplicada + validação com leitor de tela
-**Contexto**: paleta aprovada em 2026-09-18 e já aplicada em cores, mas as fontes (Fredoka/Work Sans/JetBrains Mono) nunca foram carregadas e o set de ícones não existe — a aba Peso ainda usa o PNG do template do Expo. Fecha a fase validando o conjunto.
+## Bloco G — Desempenho e eficiência
 
-- [ ] Carregar as três fontes no app (`expo-font`), com fallback declarado
-- [ ] Set de ícones próprio para as abas, substituindo os PNGs do template
-- [ ] Barra de abas usando a paleta Gota Vital em vez do tema do template (`src/constants/theme.ts`)
-- [ ] Passar o app inteiro no **TalkBack** (Android) e no **VoiceOver** (iOS), anotando o que falhar
-- [ ] Conferir contraste dos pares texto/fundo nos dois temas — o bug de 2026-09-24 mostrou que dark mode quebra em silêncio
+### F4-25. App leve em celular básico
+- [ ] Medir no perfil de aparelho básico: tempo até a primeira tela, rolagem do diário, abertura do modal
+- [ ] Listas longas (busca, histórico) com `FlatList` virtualizada
+- [ ] Carregar só os pesos de fonte usados; conferir o tamanho do bundle
+- [ ] Menos requisições: dia e meta reaproveitados do cache em vez de buscados de novo a cada troca de aba
 
-**Critério de aceite**: app com a identidade aplicada de ponta a ponta e uma passada completa de leitor de tela registrada, com os achados corrigidos ou anotados.
+---
+
+## Bloco H — Fechamento
+
+### 34. Validação com leitor de tela e com pessoas
+**Contexto**: o TalkBack agora roda no emulador. O VoiceOver exige um iPhone físico ou um Mac (o ambiente de desenvolvimento é Windows); sem aparelho, fica registrado como pendência explícita.
+- [ ] Passar o app inteiro no **TalkBack** (emulador), anotando o que falhar — incluindo a ordem de foco que a #31 só conferiu lendo o código
+- [ ] **VoiceOver** num iPhone, se houver um disponível; se não, registrar como não validado
+- [ ] Modal: prender o foco dentro dele e esconder a tela de trás do leitor (achado #11)
+- [ ] Teste de usabilidade guiado com 3 a 5 pessoas de perfis diferentes (ex.: pessoa idosa, pessoa com baixa visão, pessoa que nunca usou app de dieta), com tarefas fixas: criar conta, registrar o almoço, registrar o peso
+- [ ] Relatório visual atualizado com as telas finais
+
+**Critério de aceite da fase**: as tarefas principais são concluídas sem ajuda por todos os perfis do teste, também com TalkBack e com fonte em 200%; nenhum par de cor abaixo de 4,5:1; e as telas de LGPD alcançáveis pelo próprio app.

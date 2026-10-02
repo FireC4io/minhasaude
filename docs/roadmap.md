@@ -37,20 +37,27 @@ Prazos omitidos de propósito — dependem da sua resposta sobre dedicação (pe
 > são a maior superfície de UI do projeto e construí-los sobre a base atual significaria refazer
 > acessibilidade duas vezes.
 
-## Fase 4 — Refundação da interface
-- Acessibilidade em todo elemento tocável: `accessibilityLabel`, `accessibilityRole`,
-  `accessibilityState` (auditoria de 2026-09-25: **39 elementos tocáveis, 0 com rótulo**).
-- Alvos de toque de no mínimo 48 dp (hoje: chips ~36 dp, botões ~44 dp).
-- Respeitar a escala de fonte do sistema, sem desligá-la; `maxFontSizeMultiplier` só onde o layout
-  quebra, nunca abaixo de 1.2.
-- Trocar `Dimensions.get` por `useWindowDimensions` (o primeiro é estático, não reage a rotação).
-- Componentes base acessíveis por construção, pra que as telas de exame nasçam prontas.
-- Telas que faltam: perfil, exportar dados, excluir conta (a API já faz as três).
-- Fontes e set de ícones da identidade Gota Vital.
+## Fase 4 — Refundação da interface (ampliada em 2026-10-02)
+Objetivo: **um app bom e eficiente para todos os públicos** — não só acessível, mas confortável
+para pessoa idosa, com baixa visão, com pouca familiaridade com tecnologia, com celular básico e
+internet ruim. Backlog completo em `docs/backlog-fase4.md`, organizado em blocos:
+- **A. Fundação acessível** ✅ — componentes base com papel/rótulo/estado e alvo de 48 dp (#30, #31).
+- **B. Ambiente de validação real** — emulador Android (já funcionando) e fluxos ponta a ponta com Maestro.
+- **C. Identidade Gota Vital** — fontes, ícone e splash próprios, barra de abas na paleta, e
+  **paleta com contraste aprovado** (a cor de ação reprova hoje no modo claro: 2,45:1).
+- **D. Inclusão ampla** — fonte em 200% sem quebra, não depender só de cor, movimento reduzido,
+  linguagem simples.
+- **E. Formulários e fluxos** — teclado nunca esconde a ação, entradas no formato brasileiro,
+  estados vazio/sucesso/erro completos, internet ruim e servidor dormindo tratados na UI.
+- **F. Telas que faltam** — perfil, exportar, excluir conta (LGPD), "Sobre" com créditos TACO/OFF,
+  preferências, e a navegação final já prevendo os exames.
+- **G. Desempenho** — medido em perfil de celular básico.
+- **H. Fechamento** — TalkBack de ponta a ponta, VoiceOver se houver iPhone, e teste de
+  usabilidade com 3 a 5 pessoas de perfis diferentes.
 - Referência: **ABNT NBR 17060:2022** (54 requisitos alinhados ao WCAG, específica para apps
   móveis; dá base ao art. 63 da LBI 13.146/2015).
-- **Entregável**: app navegável por leitor de tela (TalkBack e VoiceOver), com escala de fonte
-  grande sem quebra de layout, e as telas de LGPD acessíveis pelo próprio app.
+- **Entregável**: as tarefas principais concluídas sem ajuda por pessoas de perfis diferentes,
+  também com TalkBack e fonte em 200%; nenhum par de cor abaixo de 4,5:1; telas de LGPD no app.
 
 ## Fase 5 — Exames e métricas de saúde
 - Upload de exame (foto/PDF) → storage (R2) → fila (pg-boss) → extração via IA com visão.
