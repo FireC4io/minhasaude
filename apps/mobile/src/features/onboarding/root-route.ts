@@ -1,9 +1,8 @@
 /**
  * Decide qual grupo de rotas o app deve montar na raiz.
  *
- * Fica fora do componente de propósito: teste de render de tela é
- * não-confiável neste ambiente (ver CLAUDE.md), então a regra de navegação
- * mora numa função pura com teste unitário.
+ * Fica fora do componente para a regra de navegação ser testada como função
+ * pura, sem montar o roteador.
  */
 export type RootRoute = 'auth' | 'app' | 'onboarding' | 'loading' | 'goal-unavailable';
 
@@ -15,6 +14,8 @@ export interface GoalQueryState {
 
 export interface RootRouteInput {
   isAuthenticated: boolean;
+  /** Token salvo ainda sendo lido do armazenamento seguro. */
+  isRestoringSession?: boolean;
   goal: GoalQueryState;
 }
 
@@ -33,7 +34,17 @@ function httpStatusOf(error: unknown): number | null {
   return typeof status === 'number' ? status : null;
 }
 
-export function resolveRootRoute({ isAuthenticated, goal }: RootRouteInput): RootRoute {
+export function resolveRootRoute({
+  isAuthenticated,
+  isRestoringSession = false,
+  goal,
+}: RootRouteInput): RootRoute {
+  // Decidir antes de ler a sessão montaria o grupo de auth por um instante, e o
+  // redirecionamento descartaria a URL pedida (reload em /weight caía no Diário).
+  if (isRestoringSession) {
+    return 'loading';
+  }
+
   if (!isAuthenticated) {
     return 'auth';
   }

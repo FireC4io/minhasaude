@@ -2,6 +2,7 @@ import { Text, View } from 'react-native';
 
 import type { BodyMeasurementResponseDto } from '@/api/generated/models';
 import { describeWeightEntry } from './accessibility-labels';
+import { formatKg } from './format-weight';
 
 interface WeightHistoryListProps {
   measurements: readonly BodyMeasurementResponseDto[];
@@ -39,7 +40,7 @@ export function WeightHistoryList({ measurements }: WeightHistoryListProps) {
             }`}>
             <Text className="text-base text-grafite">{formatMeasuredAt(measurement.measuredAt)}</Text>
             <Text className="text-base font-semibold text-grafite">
-              {Number(measurement.weightKg).toFixed(1)} kg
+              {formatKg(measurement.weightKg)}
             </Text>
           </View>
         ))}

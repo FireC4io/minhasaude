@@ -5,6 +5,7 @@ import Svg, { Circle, Line, Polyline } from 'react-native-svg';
 import { GotaVitalColors } from '@/constants/gota-vital-colors';
 import { describeWeightTrend } from './accessibility-labels';
 import { buildWeightChart, type WeightMeasurementLike } from './chart-geometry';
+import { formatKg } from './format-weight';
 
 const CHART_HEIGHT = 180;
 const PADDING = 16;
@@ -61,8 +62,8 @@ export function WeightChart({ measurements }: WeightChartProps) {
       className="gap-2 rounded-2xl border border-grafite/20 bg-superficie p-4"
       onLayout={(event) => setLarguraMedida(event.nativeEvent.layout.width - 32)}>
       <View className="flex-row justify-between">
-        <Text className="text-sm text-grafite">{chart.max.toFixed(1)} kg</Text>
-        <Text className="text-sm text-grafite">{chart.min.toFixed(1)} kg</Text>
+        <Text className="text-sm text-grafite">{formatKg(chart.max)}</Text>
+        <Text className="text-sm text-grafite">{formatKg(chart.min)}</Text>
       </View>
 
       <Svg width={width} height={CHART_HEIGHT}>

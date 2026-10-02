@@ -9,6 +9,28 @@ function httpError(status: number) {
 }
 
 describe('resolveRootRoute', () => {
+  it('espera a sessão salva ser lida antes de decidir qualquer rota', () => {
+    // Sem isso, o primeiro render via "não autenticado", montava o grupo de
+    // auth e a URL pedida (ex.: /weight num reload) se perdia no redirecionamento.
+    const route = resolveRootRoute({
+      isAuthenticated: false,
+      isRestoringSession: true,
+      goal: goalQuery({ isPending: true }),
+    });
+
+    expect(route).toBe('loading');
+  });
+
+  it('decide normalmente depois que a sessão foi lida', () => {
+    const route = resolveRootRoute({
+      isAuthenticated: false,
+      isRestoringSession: false,
+      goal: goalQuery({ isPending: true }),
+    });
+
+    expect(route).toBe('auth');
+  });
+
   it('manda para auth quando não autenticado, mesmo com a query de meta pendente', () => {
     // Query desabilitada no React Query v5 fica com isPending true — não pode
     // ser confundida com "carregando".

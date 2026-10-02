@@ -27,12 +27,13 @@ export default function RootLayout() {
 }
 
 function RootNavigator() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading: isRestoringSession } = useAuth();
   // 404 = usuário autenticado ainda sem meta calculada -> onboarding. Qualquer
   // outra falha NÃO significa isso (ver resolveRootRoute).
   const goalQuery = useGoalsControllerGetCurrent({ query: { enabled: isAuthenticated, retry: false } });
   const route = resolveRootRoute({
     isAuthenticated,
+    isRestoringSession,
     goal: { isPending: goalQuery.isPending, isSuccess: goalQuery.isSuccess, error: goalQuery.error },
   });
 
