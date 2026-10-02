@@ -1,0 +1,9 @@
+# Exames e documentos pessoais de saúde (dado sensível, LGPD): nunca entram no grafo nem no vault.
+docs/*.pdf
+docs/*.jpg
+docs/*.jpeg
+docs/*.png
+docs/*.heic
+*.pdf
+*.jpeg
+*.jpg
