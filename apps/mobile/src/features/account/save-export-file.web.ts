@@ -1,5 +1,9 @@
 /** Na web, baixa o arquivo direto pelo navegador. */
-export async function saveExportFile(fileName: string, content: string): Promise<void> {
+export async function saveExportFile(
+  fileName: string,
+  content: string,
+  _dialogTitle?: string,
+): Promise<void> {
   const url = URL.createObjectURL(new Blob([content], { type: 'application/json' }));
   const link = document.createElement('a');
   link.href = url;

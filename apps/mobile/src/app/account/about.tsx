@@ -1,6 +1,7 @@
 import Constants from 'expo-constants';
 import * as Linking from 'expo-linking';
 import { ScrollView, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { AppText } from '@/components/ui/app-text';
 import { TextButton } from '@/components/ui/text-button';
@@ -12,6 +13,7 @@ const REPOSITORY_URL = 'https://github.com/FireC4io/minhasaude';
  * nesta tela (CLAUDE.md): TACO/Unicamp e Open Food Facts (ODbL).
  */
 export default function AboutScreen() {
+  const { t } = useTranslation();
   const version = Constants.expoConfig?.version ?? '—';
 
   return (
@@ -21,29 +23,26 @@ export default function AboutScreen() {
           Gota Vital
         </AppText>
         <AppText variant="caption" className="text-grafite-suave">
-          Versão {version}
+          {t('account.about.version', { version })}
         </AppText>
       </View>
 
       <AppText className="text-grafite">
-        Um diário de alimentação e saúde feito para ser simples para qualquer pessoa. As informações
-        do app são para acompanhamento e não substituem a orientação de um profissional de saúde.
+        {t('account.about.intro')}
       </AppText>
 
       <View className="gap-3 rounded-2xl bg-superficie p-4">
         <AppText variant="label" accessibilityRole="header" className="text-grafite-suave">
-          De onde vêm os dados dos alimentos
+          {t('account.about.sources')}
         </AppText>
         <AppText className="text-grafite">
-          Tabela Brasileira de Composição de Alimentos (TACO), do Núcleo de Estudos e Pesquisas em
-          Alimentação (NEPA) da Unicamp.
+          {t('account.about.taco')}
         </AppText>
         <AppText className="text-grafite">
-          Open Food Facts, base colaborativa de produtos, disponível sob a licença Open Database
-          License (ODbL). Dados © colaboradores do Open Food Facts.
+          {t('account.about.off')}
         </AppText>
         <TextButton
-          label="Conhecer o Open Food Facts"
+          label={t('account.about.offLink')}
           onPress={() => void Linking.openURL('https://br.openfoodfacts.org')}
           textClassName="text-mamao-forte"
           className="self-start"
@@ -52,14 +51,13 @@ export default function AboutScreen() {
 
       <View className="gap-3 rounded-2xl bg-superficie p-4">
         <AppText variant="label" accessibilityRole="header" className="text-grafite-suave">
-          Privacidade e contato
+          {t('account.about.privacyContact')}
         </AppText>
         <AppText className="text-grafite">
-          A política de privacidade completa está sendo finalizada e ficará disponível aqui antes da
-          publicação nas lojas.
+          {t('account.about.policyPending')}
         </AppText>
         <TextButton
-          label="Código e contato no GitHub"
+          label={t('account.about.github')}
           onPress={() => void Linking.openURL(REPOSITORY_URL)}
           textClassName="text-mamao-forte"
           className="self-start"

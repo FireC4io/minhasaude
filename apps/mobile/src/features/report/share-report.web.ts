@@ -3,7 +3,7 @@
  * para um iframe escondido e só ele é impresso — o navegador oferece
  * "Salvar como PDF".
  */
-export async function shareReport(html: string): Promise<void> {
+export async function shareReport(html: string, _dialogTitle?: string): Promise<void> {
   const frame = document.createElement('iframe');
   frame.style.position = 'fixed';
   frame.style.width = '0';

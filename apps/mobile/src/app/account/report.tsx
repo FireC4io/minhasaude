@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ScrollView, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { usersControllerGetProgressReport } from '@/api/generated/endpoints/me/me';
 import { AppText } from '@/components/ui/app-text';
@@ -10,18 +11,14 @@ import { buildProgressReport } from '@/features/report/progress-report';
 import { renderReportHtml } from '@/features/report/report-html';
 import { shareReport } from '@/features/report/share-report';
 
-const INCLUDED = [
-  'Seu peso: gráfico, primeiro e último registro e a diferença',
-  'Médias de cada semana comparadas com a sua meta',
-  'Todas as metas, com a data em que começaram',
-  'O diário completo, dia a dia e por refeição',
-];
+const INCLUDED = ['weight', 'weeks', 'goals', 'diary'] as const;
 
 /**
  * Relatório de progresso em PDF, feito para ler, imprimir ou mostrar a um
  * profissional. Diferente da exportação (JSON, para outros apps).
  */
 export default function ProgressReportScreen() {
+  const { t } = useTranslation();
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState<string | null>(null);
@@ -33,10 +30,10 @@ export default function ProgressReportScreen() {
     setIsGenerating(true);
     try {
       const data = await usersControllerGetProgressReport();
-      await shareReport(renderReportHtml(buildProgressReport(data)));
-      setDone('Relatório gerado. Escolha onde salvar ou com quem compartilhar.');
+      await shareReport(renderReportHtml(buildProgressReport(data)), t('account.report.shareTitle'));
+      setDone(t('account.report.done'));
     } catch {
-      setError('Não foi possível gerar o relatório agora. Confira sua internet e tente de novo.');
+      setError(t('account.report.error'));
     } finally {
       setIsGenerating(false);
     }
@@ -45,23 +42,22 @@ export default function ProgressReportScreen() {
   return (
     <ScrollView className="flex-1 bg-areia" contentContainerClassName="gap-6 px-6 py-6">
       <AppText className="text-grafite">
-        Um arquivo PDF com o seu progresso, para guardar, imprimir ou mostrar a quem acompanha você.
+        {t('account.report.intro')}
       </AppText>
 
       <View className="gap-2 rounded-2xl bg-superficie p-4">
         <AppText variant="label" className="text-grafite-suave">
-          O relatório mostra
+          {t('account.report.shows')}
         </AppText>
         {INCLUDED.map((item) => (
           <AppText key={item} className="text-grafite">
-            • {item}
+            • {t(`account.report.items.${item}`)}
           </AppText>
         ))}
       </View>
 
       <AppText variant="caption" className="text-grafite">
-        O relatório tem dados de saúde: guarde num lugar seguro e só compartilhe com quem você
-        confia.
+        {t('account.report.privacy')}
       </AppText>
 
       {done ? (
@@ -72,7 +68,7 @@ export default function ProgressReportScreen() {
       <FormError message={error} />
 
       <PrimaryButton
-        label={isGenerating ? 'Gerando o relatório' : 'Gerar relatório em PDF'}
+        label={isGenerating ? t('account.report.generating') : t('account.report.generate')}
         onPress={() => void handleGenerate()}
         isLoading={isGenerating}
       />

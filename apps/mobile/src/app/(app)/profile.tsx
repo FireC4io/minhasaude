@@ -2,6 +2,7 @@ import { useRouter, type Href } from 'expo-router';
 import type { ReactNode } from 'react';
 import { ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 
 import { useUsersControllerGetMe } from '@/api/generated/endpoints/me/me';
 import { AppText } from '@/components/ui/app-text';
@@ -10,6 +11,7 @@ import { TextButton } from '@/components/ui/text-button';
 import { useAuth } from '@/features/auth/auth-context';
 
 export default function ProfileScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
   const { logout } = useAuth();
   const meQuery = useUsersControllerGetMe();
@@ -28,54 +30,54 @@ export default function ProfileScreen() {
           ) : null}
         </View>
 
-        <Section title="Você">
+        <Section title={t('account.you')}>
           <ListRow
-            title="Seus dados e sua meta"
-            description="Altura, nascimento, atividade e objetivo"
+            title={t('account.dataAndGoal')}
+            description={t('account.dataAndGoalHint')}
             onPress={go('/account/edit')}
           />
         </Section>
 
-        <Section title="Seus dados, seus direitos">
+        <Section title={t('account.rights')}>
           <ListRow
-            title="Relatório de progresso"
-            description="Um PDF com peso, médias, metas e diário"
+            title={t('account.reportTitle')}
+            description={t('account.reportHint')}
             onPress={go('/account/report')}
           />
           <ListRow
-            title="Exportar meus dados"
-            description="Um arquivo com tudo o que o app guarda sobre você"
+            title={t('account.exportTitle')}
+            description={t('account.exportHint')}
             onPress={go('/account/export')}
           />
           <ListRow
-            title="Privacidade e consentimentos"
-            description="O que você autorizou e quando"
+            title={t('account.privacyTitle')}
+            description={t('account.privacyHint')}
             onPress={go('/account/privacy')}
           />
           <ListRow
-            title="Excluir minha conta"
-            description="Apaga todos os seus dados na hora"
+            title={t('account.deleteTitle')}
+            description={t('account.deleteHint')}
             tone="danger"
             onPress={go('/account/delete')}
           />
         </Section>
 
-        <Section title="App">
+        <Section title={t('account.app')}>
           <ListRow
-            title="Preferências"
-            description="Tema e por quanto tempo guardar a cópia no celular"
+            title={t('account.preferencesTitle')}
+            description={t('account.preferencesHint')}
             onPress={go('/account/preferences')}
           />
           <ListRow
-            title="Sobre o Gota Vital"
-            description="Versão, fontes dos dados e contato"
+            title={t('account.aboutTitle')}
+            description={t('account.aboutHint')}
             onPress={go('/account/about')}
           />
         </Section>
 
         <TextButton
-          label="Sair da conta"
-          hint="Encerra a sessão neste aparelho"
+          label={t('account.signOut')}
+          hint={t('account.signOutHint')}
           onPress={() => void logout()}
           textVariant="bodyStrong"
           textClassName="text-mamao-forte"

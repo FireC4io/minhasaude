@@ -1,4 +1,5 @@
 import { ScrollView, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { useConsentsControllerList } from '@/api/generated/endpoints/consents/consents';
 import { AppText } from '@/components/ui/app-text';
@@ -11,20 +12,20 @@ import {
 } from '@/features/account/consent-labels';
 
 export default function PrivacyScreen() {
+  const { t } = useTranslation();
   const consentsQuery = useConsentsControllerList();
   const consents = (consentsQuery.data ?? []) as unknown as ConsentStatusView[];
 
   return (
     <ScrollView className="flex-1 bg-areia" contentContainerClassName="gap-6 px-6 py-6">
       <AppText className="text-grafite">
-        Seus dados de saúde só são usados para o que você autorizou. Aqui está o que você aceitou e
-        quando.
+        {t('account.privacy.intro')}
       </AppText>
 
       {consentsQuery.isPending ? (
-        <LoadingIndicator label="Carregando seus consentimentos" />
+        <LoadingIndicator label={t('account.privacy.loading')} />
       ) : consentsQuery.isError ? (
-        <FormError message="Não foi possível carregar agora. Tente de novo em instantes." />
+        <FormError message={t('account.privacy.loadError')} />
       ) : (
         <View className="gap-3">
           {consents.map((consent) => {
@@ -39,12 +40,15 @@ export default function PrivacyScreen() {
                 </AppText>
                 <AppText variant="label" className="text-grafite">
                   {consent.granted
-                    ? `✓ Aceito em ${formatConsentDate(consent.grantedAt)}${
-                        consent.policyVersion ? ` (versão ${consent.policyVersion})` : ''
-                      }`
+                    ? consent.policyVersion
+                      ? t('account.privacy.acceptedVersion', {
+                          date: formatConsentDate(consent.grantedAt),
+                          version: consent.policyVersion,
+                        })
+                      : t('account.privacy.accepted', { date: formatConsentDate(consent.grantedAt) })
                     : consent.revokedAt
-                      ? `Retirado em ${formatConsentDate(consent.revokedAt)}`
-                      : 'Ainda não aceito'}
+                      ? t('account.privacy.revoked', { date: formatConsentDate(consent.revokedAt) })
+                      : t('account.privacy.notYet')}
                 </AppText>
               </View>
             );
@@ -53,8 +57,7 @@ export default function PrivacyScreen() {
       )}
 
       <AppText variant="caption" className="text-grafite-suave">
-        Para deixar de usar seus dados, você pode excluir a conta pelo Perfil. Cada direito previsto
-        na LGPD — acesso, correção, portabilidade e eliminação — tem um caminho no app.
+        {t('account.privacy.rights')}
       </AppText>
     </ScrollView>
   );

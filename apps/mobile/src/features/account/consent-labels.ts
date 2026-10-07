@@ -1,4 +1,5 @@
 import { appLocale } from '@/i18n/format';
+import { translatedLabels } from '@/i18n/labels';
 
 /** Formato devolvido por `GET /v1/consents` (o client gerado tipa como `void`). */
 export interface ConsentStatusView {
@@ -10,18 +11,18 @@ export interface ConsentStatusView {
 }
 
 export const CONSENT_LABELS: Record<ConsentStatusView['consentType'], { title: string; what: string }> = {
-  privacy_policy: {
-    title: 'Política de privacidade',
-    what: 'Permite guardar seu perfil, peso e diário para calcular e mostrar suas metas.',
-  },
-  terms_of_service: {
-    title: 'Termos de uso',
-    what: 'As regras de uso do aplicativo.',
-  },
-  exam_data_processing: {
-    title: 'Dados de exames',
-    what: 'Permite ler e guardar os exames que você enviar. Pedido só quando você usar exames.',
-  },
+  privacy_policy: translatedLabels({
+    title: 'account.privacy.privacyPolicyTitle',
+    what: 'account.privacy.privacyPolicyWhat',
+  }),
+  terms_of_service: translatedLabels({
+    title: 'account.privacy.termsTitle',
+    what: 'account.privacy.termsWhat',
+  }),
+  exam_data_processing: translatedLabels({
+    title: 'account.privacy.examsTitle',
+    what: 'account.privacy.examsWhat',
+  }),
 };
 
 export function formatConsentDate(iso: string | null): string {

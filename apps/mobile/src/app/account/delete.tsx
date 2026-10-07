@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { router } from 'expo-router';
 import { ScrollView, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { useUsersControllerRequestDeletion } from '@/api/generated/endpoints/me/me';
 import type { DeletionStatus } from '@/api/generated/models';
@@ -12,12 +13,7 @@ import { useAuth } from '@/features/auth/auth-context';
 import { PrimaryButton } from '@/features/auth/primary-button';
 import { TextButton } from '@/components/ui/text-button';
 
-const WHAT_IS_DELETED = [
-  'Sua conta e seu perfil',
-  'Todo o diário alimentar e os pesos registrados',
-  'Suas metas',
-  'Os alimentos que você cadastrou',
-];
+const WHAT_IS_DELETED = ['account', 'diary', 'goals', 'foods'] as const;
 
 /**
  * Direito de eliminação (LGPD, art. 18). Informativo, sem tom alarmista, e com
@@ -25,12 +21,13 @@ const WHAT_IS_DELETED = [
  * 2026-10-07), então a tela oferece guardar os dados antes.
  */
 export default function DeleteAccountScreen() {
+  const { t } = useTranslation();
   const { logout } = useAuth();
   const requestDeletion = useUsersControllerRequestDeletion();
   const [confirmed, setConfirmed] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<DeletionStatus | null>(null);
-  useAnnounce(result ? 'Conta excluída.' : null);
+  useAnnounce(result ? t('account.delete.doneAnnounce') : null);
 
   async function handleDelete() {
     setError(null);
@@ -38,7 +35,7 @@ export default function DeleteAccountScreen() {
       const response = await requestDeletion.mutateAsync();
       setResult(response.status);
     } catch {
-      setError('Não foi possível excluir agora. Confira sua internet e tente de novo.');
+      setError(t('account.delete.error'));
     }
   }
 
@@ -46,14 +43,12 @@ export default function DeleteAccountScreen() {
     return (
       <ScrollView className="flex-1 bg-areia" contentContainerClassName="gap-6 px-6 py-6">
         <AppText variant="subtitle" accessibilityRole="header" className="text-grafite">
-          Conta excluída
+          {t('account.delete.doneTitle')}
         </AppText>
         <AppText className="text-grafite">
-          {result === 'deleted'
-            ? 'Seus dados foram apagados. Obrigado por ter usado o Gota Vital.'
-            : 'Sua conta foi desativada. Terminamos de apagar os dados em até 1 dia.'}
+          {result === 'deleted' ? t('account.delete.doneDeleted') : t('account.delete.donePending')}
         </AppText>
-        <PrimaryButton label="Fechar" onPress={() => void logout()} />
+        <PrimaryButton label={t('common.close')} onPress={() => void logout()} />
       </ScrollView>
     );
   }
@@ -61,39 +56,37 @@ export default function DeleteAccountScreen() {
   return (
     <ScrollView className="flex-1 bg-areia" contentContainerClassName="gap-6 px-6 py-6">
       <AppText className="text-grafite">
-        Você pode excluir sua conta quando quiser. Os dados são apagados na hora e não dá para
-        recuperar depois. Se quiser guardar uma cópia, faça isso antes.
+        {t('account.delete.intro')}
       </AppText>
 
       <View className="gap-1">
         <TextButton
-          label="Baixar relatório de progresso (PDF)"
+          label={t('account.delete.downloadReport')}
           onPress={() => router.push('/account/report')}
         />
         <TextButton
-          label="Exportar todos os meus dados (arquivo)"
+          label={t('account.delete.downloadAll')}
           onPress={() => router.push('/account/export')}
         />
       </View>
 
       <View className="gap-2 rounded-2xl bg-superficie p-4">
         <AppText variant="label" className="text-grafite-suave">
-          Será apagado na hora
+          {t('account.delete.willDelete')}
         </AppText>
         {WHAT_IS_DELETED.map((item) => (
           <AppText key={item} className="text-grafite">
-            • {item}
+            • {t(`account.delete.items.${item}`)}
           </AppText>
         ))}
       </View>
 
       <AppText variant="caption" className="text-grafite">
-        Guardamos apenas o registro de que você deu consentimento, sem nada que identifique você,
-        como prova exigida pela lei.
+        {t('account.delete.kept')}
       </AppText>
 
       <CheckboxRow
-        label="Entendi que a exclusão é definitiva"
+        label={t('account.delete.confirm')}
         checked={confirmed}
         onChange={setConfirmed}
       />
@@ -101,10 +94,10 @@ export default function DeleteAccountScreen() {
       <FormError message={error} />
 
       <PrimaryButton
-        label="Excluir minha conta"
+        label={t('account.delete.button')}
         tone="danger"
         disabled={!confirmed}
-        hint={confirmed ? undefined : 'Marque a confirmação acima para liberar'}
+        hint={confirmed ? undefined : t('account.delete.buttonHint')}
         isLoading={requestDeletion.isPending}
         onPress={() => void handleDelete()}
       />

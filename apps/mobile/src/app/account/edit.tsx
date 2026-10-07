@@ -12,6 +12,7 @@ import {
   useUsersControllerGetMe,
   useUsersControllerUpdateProfile,
 } from '@/api/generated/endpoints/me/me';
+import { useTranslation } from 'react-i18next';
 import type { UpdateProfileDto } from '@/api/generated/models';
 import { AppText } from '@/components/ui/app-text';
 import { FormError } from '@/components/ui/form-error';
@@ -21,6 +22,7 @@ import { GoalCard } from '@/features/profile/goal-card';
 import { ProfileForm } from '@/features/profile/profile-form';
 
 export default function EditProfileScreen() {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const meQuery = useUsersControllerGetMe();
   const goalQuery = useGoalsControllerGetCurrent();
@@ -41,9 +43,9 @@ export default function EditProfileScreen() {
         queryClient.invalidateQueries({ queryKey: getUsersControllerGetMeQueryKey() }),
         queryClient.invalidateQueries({ queryKey: getGoalsControllerGetCurrentQueryKey() }),
       ]);
-      setSavedMessage('Dados salvos. Sua meta foi recalculada.');
+      setSavedMessage(t('account.edit.saved'));
     } catch {
-      setSubmitError('Não foi possível salvar agora. Confira sua internet e tente de novo.');
+      setSubmitError(t('account.edit.saveError'));
     }
   }
 
@@ -65,9 +67,9 @@ export default function EditProfileScreen() {
         ) : null}
 
         {meQuery.isPending ? (
-          <LoadingIndicator label="Carregando seus dados" />
+          <LoadingIndicator label={t('account.edit.loading')} />
         ) : meQuery.isError ? (
-          <FormError message="Não foi possível carregar seus dados. Tente de novo em instantes." />
+          <FormError message={t('account.edit.loadError')} />
         ) : (
           <ProfileForm
             initial={{
@@ -78,7 +80,7 @@ export default function EditProfileScreen() {
               goal: profile?.goal,
               weeklyPaceKg: profile?.weeklyPaceKg,
             }}
-            submitLabel="Salvar e recalcular a meta"
+            submitLabel={t('account.edit.submit')}
             isSubmitting={updateProfile.isPending || recalculate.isPending}
             submitError={submitError}
             onSubmit={(data) => void handleSubmit(data)}
