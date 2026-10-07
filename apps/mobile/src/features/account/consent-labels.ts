@@ -1,3 +1,5 @@
+import { appLocale } from '@/i18n/format';
+
 /** Formato devolvido por `GET /v1/consents` (o client gerado tipa como `void`). */
 export interface ConsentStatusView {
   consentType: 'terms_of_service' | 'privacy_policy' | 'exam_data_processing';
@@ -24,6 +26,6 @@ export const CONSENT_LABELS: Record<ConsentStatusView['consentType'], { title: s
 
 export function formatConsentDate(iso: string | null): string {
   return iso
-    ? new Date(iso).toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' })
+    ? new Date(iso).toLocaleDateString(appLocale(), { day: 'numeric', month: 'long', year: 'numeric' })
     : '';
 }

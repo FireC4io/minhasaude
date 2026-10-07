@@ -1,3 +1,5 @@
+import { appLocale } from '@/i18n/format';
+
 /**
  * Datas do diário no formato AAAA-MM-DD, sempre no fuso do aparelho.
  *
@@ -33,7 +35,7 @@ export function formatIsoDateLabel(date: string, now: Date = new Date()): string
   if (date === addDaysToIsoDate(today, -1)) return 'Ontem';
   if (date === addDaysToIsoDate(today, 1)) return 'Amanhã';
 
-  return localDateFromIso(date).toLocaleDateString('pt-BR', { day: 'numeric', month: 'long' });
+  return localDateFromIso(date).toLocaleDateString(appLocale(), { day: 'numeric', month: 'long' });
 }
 
 /** Domingo a sábado da semana que contém `date`. */

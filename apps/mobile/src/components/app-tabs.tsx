@@ -1,9 +1,11 @@
 import { NativeTabs } from 'expo-router/unstable-native-tabs';
 import { useColorScheme } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { GotaVitalColors } from '@/constants/gota-vital-colors';
 
 export default function AppTabs() {
+  const { t } = useTranslation();
   const colors = GotaVitalColors[useColorScheme() === 'dark' ? 'dark' : 'light'];
 
   // Selecionado em mamão forte, o resto em grafite suave: os dois passam 4,5:1
@@ -20,28 +22,28 @@ export default function AppTabs() {
         selected: { color: colors.mamaoForte },
       }}>
       <NativeTabs.Trigger name="index">
-        <NativeTabs.Trigger.Label>Hoje</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Label>{t('tabs.today')}</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
           src={require('@/assets/images/tabIcons/diary.png')}
           renderingMode="template"
         />
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="progress">
-        <NativeTabs.Trigger.Label>Progresso</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Label>{t('tabs.progress')}</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
           src={require('@/assets/images/tabIcons/progress.png')}
           renderingMode="template"
         />
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="exams">
-        <NativeTabs.Trigger.Label>Exames</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Label>{t('tabs.exams')}</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
           src={require('@/assets/images/tabIcons/exams.png')}
           renderingMode="template"
         />
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="profile">
-        <NativeTabs.Trigger.Label>Perfil</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Label>{t('tabs.profile')}</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
           src={require('@/assets/images/tabIcons/profile.png')}
           renderingMode="template"

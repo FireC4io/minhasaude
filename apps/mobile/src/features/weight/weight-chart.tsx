@@ -8,6 +8,7 @@ import { GotaVitalColors } from '@/constants/gota-vital-colors';
 import { describeWeightTrend } from './accessibility-labels';
 import { buildWeightChart, type WeightMeasurementLike } from './chart-geometry';
 import { formatKg } from './format-weight';
+import { appLocale } from '@/i18n/format';
 
 const CHART_HEIGHT = 180;
 const PADDING = 12;
@@ -24,7 +25,7 @@ interface WeightChartProps {
 }
 
 const shortDate = (iso: string): string =>
-  new Date(iso).toLocaleDateString('pt-BR', { day: 'numeric', month: 'short' });
+  new Date(iso).toLocaleDateString(appLocale(), { day: 'numeric', month: 'short' });
 
 /**
  * Linha de evolução do peso (F4-17): máximo em cima e mínimo embaixo no eixo

@@ -10,6 +10,7 @@ import { isoDateFromLocal, localDateFromIso, monthGrid, todayIsoDate } from '@/f
 import { useReduceMotion } from '@/features/accessibility/use-reduce-motion';
 
 import { spokenDay } from './week-strip';
+import { appLocale } from '@/i18n/format';
 
 interface CalendarModalProps {
   visible: boolean;
@@ -35,7 +36,7 @@ export function CalendarModal({ visible, selectedDate, onSelect, onClose }: Cale
   const reduceMotion = useReduceMotion();
   const today = todayIsoDate();
 
-  const rawMonthLabel = localDateFromIso(month).toLocaleDateString('pt-BR', {
+  const rawMonthLabel = localDateFromIso(month).toLocaleDateString(appLocale(), {
     month: 'long',
     year: 'numeric',
   });

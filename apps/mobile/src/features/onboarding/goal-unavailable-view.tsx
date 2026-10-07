@@ -1,5 +1,6 @@
 import { View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 
 import { PrimaryButton } from '@/features/auth/primary-button';
 import { AppText } from '@/components/ui/app-text';
@@ -14,18 +15,18 @@ interface GoalUnavailableViewProps {
  * Sem isso, qualquer erro de rede jogaria o usuário de volta no onboarding.
  */
 export function GoalUnavailableView({ onRetry, isRetrying }: GoalUnavailableViewProps) {
+  const { t } = useTranslation();
   return (
     <SafeAreaView className="flex-1 bg-areia">
       <View className="flex-1 justify-center gap-6 px-6">
         <View className="gap-2">
-          <AppText variant="subtitle" accessibilityRole="header" className="text-grafite">Não foi possível carregar</AppText>
+          <AppText variant="subtitle" accessibilityRole="header" className="text-grafite">{t('goalUnavailable.title')}</AppText>
           <AppText className="text-grafite">
-            Não conseguimos buscar sua meta agora. Seus dados continuam salvos — é só tentar de
-            novo quando a conexão voltar.
+            {t('goalUnavailable.body')}
           </AppText>
         </View>
 
-        <PrimaryButton label="Tentar de novo" onPress={onRetry} isLoading={isRetrying} />
+        <PrimaryButton label={t('common.tryAgain')} onPress={onRetry} isLoading={isRetrying} />
       </View>
     </SafeAreaView>
   );

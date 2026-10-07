@@ -1,4 +1,5 @@
 import { MICRONUTRIENTS, type MicronutrientKey, type MicroTotal } from '@minhasaude/shared';
+import { appLocale } from '@/i18n/format';
 
 const SPOKEN_UNIT = { g: 'gramas', mg: 'miligramas', mcg: 'microgramas' } as const;
 
@@ -8,7 +9,7 @@ function decimalsFor(value: number): number {
 }
 
 function formatNumber(value: number): string {
-  return value.toLocaleString('pt-BR', { maximumFractionDigits: decimalsFor(value) });
+  return value.toLocaleString(appLocale(), { maximumFractionDigits: decimalsFor(value) });
 }
 
 /** "2,6 mg"; null vira "sem dado", nunca zero. */

@@ -1,4 +1,5 @@
 import type { DeviceSource, ExamStatus, ExamType } from './types';
+import { appLocale } from '@/i18n/format';
 
 export const EXAM_TYPE_LABELS: Record<ExamType, string> = {
   blood_panel: 'Exame de sangue',
@@ -24,7 +25,7 @@ export const DEVICE_LABELS: Record<DeviceSource, string> = {
 
 export function formatExamDate(isoDate: string | null): string {
   if (!isoDate) return 'Data não informada';
-  return new Date(`${isoDate.slice(0, 10)}T12:00:00`).toLocaleDateString('pt-BR', {
+  return new Date(`${isoDate.slice(0, 10)}T12:00:00`).toLocaleDateString(appLocale(), {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
@@ -33,5 +34,5 @@ export function formatExamDate(isoDate: string | null): string {
 
 /** Valor como o laudo escreveu, com vírgula decimal na tela. */
 export function formatExamValue(value: number): string {
-  return value.toLocaleString('pt-BR', { maximumFractionDigits: 2 });
+  return value.toLocaleString(appLocale(), { maximumFractionDigits: 2 });
 }

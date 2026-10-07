@@ -1,26 +1,28 @@
 import { Tabs, TabList, TabTrigger, TabSlot, TabTriggerSlotProps, TabListProps } from 'expo-router/ui';
 import { Pressable, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { AppText } from '@/components/ui/app-text';
 import { MIN_TOUCH_TARGET } from '@/constants/accessibility';
 
 export default function AppTabs() {
+  const { t } = useTranslation();
   return (
     <Tabs>
       <TabSlot style={{ height: '100%' }} />
       <TabList asChild>
         <CustomTabList>
           <TabTrigger name="home" href="/" asChild>
-            <TabButton>Hoje</TabButton>
+            <TabButton>{t('tabs.today')}</TabButton>
           </TabTrigger>
           <TabTrigger name="progress" href="/progress" asChild>
-            <TabButton>Progresso</TabButton>
+            <TabButton>{t('tabs.progress')}</TabButton>
           </TabTrigger>
           <TabTrigger name="exams" href="/exams" asChild>
-            <TabButton>Exames</TabButton>
+            <TabButton>{t('tabs.exams')}</TabButton>
           </TabTrigger>
           <TabTrigger name="profile" href="/profile" asChild>
-            <TabButton>Perfil</TabButton>
+            <TabButton>{t('tabs.profile')}</TabButton>
           </TabTrigger>
         </CustomTabList>
       </TabList>

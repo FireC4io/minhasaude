@@ -9,9 +9,10 @@ import { TextButton } from '@/components/ui/text-button';
 import { addDaysToIsoDate, localDateFromIso, todayIsoDate, weekOf } from '@/features/diary/date-utils';
 
 import { weeklyAverage } from './weekly-summary';
+import { appLocale } from '@/i18n/format';
 
 const shortDay = (date: string): string =>
-  localDateFromIso(date).toLocaleDateString('pt-BR', { day: 'numeric', month: 'short' });
+  localDateFromIso(date).toLocaleDateString(appLocale(), { day: 'numeric', month: 'short' });
 
 const ROWS = [
   { key: 'kcal', label: 'Calorias', unit: 'kcal' },

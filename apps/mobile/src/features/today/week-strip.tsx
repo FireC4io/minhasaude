@@ -3,6 +3,7 @@ import { Pressable, View } from 'react-native';
 import { AppText } from '@/components/ui/app-text';
 import { MIN_TOUCH_TARGET } from '@/constants/accessibility';
 import { localDateFromIso, todayIsoDate, weekOf } from '@/features/diary/date-utils';
+import { appLocale } from '@/i18n/format';
 
 const WEEKDAY_INITIALS = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
 
@@ -13,7 +14,7 @@ interface WeekStripProps {
 }
 
 export const spokenDay = (date: string): string =>
-  localDateFromIso(date).toLocaleDateString('pt-BR', {
+  localDateFromIso(date).toLocaleDateString(appLocale(), {
     weekday: 'long',
     day: 'numeric',
     month: 'long',

@@ -1,5 +1,6 @@
 import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
+import { appLocale } from '@/i18n/format';
 
 export interface PickedFile {
   uri: string;
@@ -66,6 +67,6 @@ export async function pickExamPdf(): Promise<PickResult> {
 export function formatFileSize(bytes: number | null): string {
   if (bytes === null) return '';
   return bytes >= 1024 * 1024
-    ? `${(bytes / (1024 * 1024)).toLocaleString('pt-BR', { maximumFractionDigits: 1 })} MB`
+    ? `${(bytes / (1024 * 1024)).toLocaleString(appLocale(), { maximumFractionDigits: 1 })} MB`
     : `${Math.max(1, Math.round(bytes / 1024))} KB`;
 }

@@ -4,6 +4,7 @@ import { buildWeightChart } from '@/features/weight/chart-geometry';
 import { formatKg } from '@/features/weight/format-weight';
 
 import type { DayRow, GoalRow, ProgressReport, WeekRow, WeightSection } from './progress-report';
+import { appLocale } from '@/i18n/format';
 
 /**
  * HTML do relatório de progresso, impresso em PDF pelo `expo-print`.
@@ -28,7 +29,7 @@ const kcal = (value: number): string => `${displayNumber(value, 0)} kcal`;
 const grams = (value: number): string => `${displayNumber(value, 0)} g`;
 
 function dateLabel(isoDate: string): string {
-  return localDateFromIso(isoDate).toLocaleDateString('pt-BR', {
+  return localDateFromIso(isoDate).toLocaleDateString(appLocale(), {
     day: 'numeric',
     month: 'short',
     year: 'numeric',
@@ -36,7 +37,7 @@ function dateLabel(isoDate: string): string {
 }
 
 function dateTimeLabel(isoDateTime: string): string {
-  return new Date(isoDateTime).toLocaleDateString('pt-BR', {
+  return new Date(isoDateTime).toLocaleDateString(appLocale(), {
     day: 'numeric',
     month: 'short',
     year: 'numeric',

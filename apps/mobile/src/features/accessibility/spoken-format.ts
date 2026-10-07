@@ -1,45 +1,41 @@
+import i18n from 'i18next';
+
+import { formatDate, formatNumber, isSingularUnit } from '@/i18n/format';
+
 /**
  * Números e datas no formato em que o leitor de tela deve falar.
  *
  * O texto visual usa abreviações ("130g", "128 kcal", "12 de set.") que o
  * TalkBack/VoiceOver leem mal ou soletram. Os rótulos de acessibilidade usam
- * estas funções para dizer a unidade por extenso, com vírgula decimal pt-BR.
+ * estas funções para dizer a unidade por extenso, no idioma em uso.
  */
 
-function formatNumber(value: number, maximumFractionDigits: number): string {
-  return value.toLocaleString('pt-BR', { maximumFractionDigits });
+type Unit = 'kcal' | 'gram' | 'kilo';
+
+function withUnit(value: number, formatted: string, unit: Unit): string {
+  const word = i18n.t(`units.${unit}.${isSingularUnit(value) ? 'one' : 'other'}`);
+  return `${formatted} ${word}`;
 }
 
-// Norma culta: singular de 0 (exclusive) até 2 (exclusive) — "1,5 quilo",
-// "0,5 grama" —, plural no zero e de 2 em diante.
-function withUnit(value: number, formatted: string, singular: string, plural: string): string {
-  const isSingular = value !== 0 && Math.abs(value) < 2;
-  return `${formatted} ${isSingular ? singular : plural}`;
-}
-
-/** Número para a tela, com vírgula decimal: "2,5". */
+/** Número para a tela, no formato do idioma: "2,5" em português, "2.5" em inglês. */
 export function displayNumber(value: number, maximumFractionDigits = 1): string {
   return formatNumber(value, maximumFractionDigits);
 }
 
 export function spokenKcal(value: number): string {
   const rounded = Math.round(value);
-  return withUnit(rounded, formatNumber(rounded, 0), 'quilocaloria', 'quilocalorias');
+  return withUnit(rounded, formatNumber(rounded, 0), 'kcal');
 }
 
 export function spokenGrams(value: number): string {
-  return withUnit(value, formatNumber(value, 1), 'grama', 'gramas');
+  return withUnit(value, formatNumber(value, 1), 'gram');
 }
 
 export function spokenKg(value: number): string {
   const rounded = Math.round(value * 10) / 10;
-  return withUnit(rounded, formatNumber(rounded, 1), 'quilo', 'quilos');
+  return withUnit(rounded, formatNumber(rounded, 1), 'kilo');
 }
 
 export function spokenDate(isoDateTime: string): string {
-  return new Date(isoDateTime).toLocaleDateString('pt-BR', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  });
+  return formatDate(new Date(isoDateTime), { day: 'numeric', month: 'long', year: 'numeric' });
 }

@@ -5,6 +5,7 @@ import { AppText } from '@/components/ui/app-text';
 import { TextButton } from '@/components/ui/text-button';
 
 import { formatKg } from './format-weight';
+import { appLocale } from '@/i18n/format';
 
 interface LastWeightCardProps {
   onRegister: () => void;
@@ -19,7 +20,7 @@ export function LastWeightCard({ onRegister }: LastWeightCardProps) {
   const last = query.data?.data[0];
 
   const when = last
-    ? new Date(last.measuredAt).toLocaleDateString('pt-BR', { day: 'numeric', month: 'long' })
+    ? new Date(last.measuredAt).toLocaleDateString(appLocale(), { day: 'numeric', month: 'long' })
     : null;
 
   return (

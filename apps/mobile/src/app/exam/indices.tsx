@@ -9,6 +9,7 @@ import { ExamDisclaimer } from '@/features/exams/exam-disclaimer';
 import { formatExamDate, formatExamValue } from '@/features/exams/exam-labels';
 import { useExamDocuments } from '@/features/exams/exam-repository';
 import { markerInfo } from '@/features/exams/marker-catalog';
+import { appLocale } from '@/i18n/format';
 
 /**
  * Índices calculados de um exame revisado: número, fórmula, valores usados,
@@ -62,7 +63,7 @@ function IndexCard({ index }: { index: ComputedIndex }) {
   const formatted =
     value === null
       ? null
-      : `${value.toLocaleString('pt-BR', {
+      : `${value.toLocaleString(appLocale(), {
           minimumFractionDigits: calculator.decimals,
           maximumFractionDigits: calculator.decimals,
         })}${calculator.unit ? ` ${calculator.unit}` : ''}`;
