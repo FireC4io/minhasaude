@@ -1,4 +1,5 @@
 import { TextInput, useColorScheme, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { AppText } from '@/components/ui/app-text';
 import { PreviewTag } from '@/components/ui/preview-tag';
@@ -7,6 +8,7 @@ import { usePreviewValue } from '@/features/preview/preview-store';
 
 /** Notas do dia (prévia — sem API ainda, o texto fica só na memória). */
 export function NotesCard({ date }: { date: string }) {
+  const { t } = useTranslation();
   const [note, setNote] = usePreviewValue(`notes:${date}`, '');
   const colors = GotaVitalColors[useColorScheme() === 'dark' ? 'dark' : 'light'];
 
@@ -14,16 +16,16 @@ export function NotesCard({ date }: { date: string }) {
     <View className="gap-2 rounded-2xl bg-superficie p-4">
       <View className="flex-row items-center gap-2">
         <AppText variant="label" className="text-grafite-suave">
-          Notas do dia
+          {t('notes.title')}
         </AppText>
         <PreviewTag />
       </View>
       <TextInput
-        accessibilityLabel="Notas do dia"
-        accessibilityHint="Prévia: o texto não fica salvo ao fechar o app"
+        accessibilityLabel={t('notes.title')}
+        accessibilityHint={t('notes.hint')}
         value={note}
         onChangeText={setNote}
-        placeholder="Como foi o seu dia?"
+        placeholder={t('notes.placeholder')}
         placeholderTextColor={colors.grafiteSuave}
         multiline
         textAlignVertical="top"

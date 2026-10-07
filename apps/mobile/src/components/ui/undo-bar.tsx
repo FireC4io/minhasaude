@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { AppText } from '@/components/ui/app-text';
 import { TextButton } from '@/components/ui/text-button';
@@ -15,7 +16,8 @@ interface UndoBarProps {
 
 /** Aviso com "Desfazer" depois de uma remoção (F4-16) — nada some sem volta. */
 export function UndoBar({ message, onUndo, onDismiss, durationMs = 10_000 }: UndoBarProps) {
-  useAnnounce(`${message}. Para desfazer, toque em Desfazer.`);
+  const { t } = useTranslation();
+  useAnnounce(t('misc.undoAnnounce', { message }));
 
   useEffect(() => {
     const timer = setTimeout(onDismiss, durationMs);
@@ -28,7 +30,7 @@ export function UndoBar({ message, onUndo, onDismiss, durationMs = 10_000 }: Und
       className="absolute bottom-24 left-4 right-4 flex-row items-center gap-3 rounded-2xl bg-grafite px-4 py-2">
       <AppText className="flex-1 text-areia">{message}</AppText>
       <TextButton
-        label="Desfazer"
+        label={t('misc.undo')}
         onPress={onUndo}
         textVariant="bodyStrong"
         textClassName="text-areia underline"

@@ -1,5 +1,6 @@
 import { useRouter } from 'expo-router';
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { AppText } from '@/components/ui/app-text';
 import { TextButton } from '@/components/ui/text-button';
@@ -13,6 +14,7 @@ interface ModalHeaderProps {
  * existe o "voltar" do navegador, e o gesto de arrastar não é óbvio para todos.
  */
 export function ModalHeader({ title }: ModalHeaderProps) {
+  const { t } = useTranslation();
   const router = useRouter();
   return (
     <View className="flex-row items-center justify-between gap-3">
@@ -20,7 +22,7 @@ export function ModalHeader({ title }: ModalHeaderProps) {
         {title}
       </AppText>
       <TextButton
-        label="Fechar"
+        label={t('common.close')}
         onPress={() => router.back()}
         textVariant="bodyStrong"
         textClassName="text-mamao-forte"

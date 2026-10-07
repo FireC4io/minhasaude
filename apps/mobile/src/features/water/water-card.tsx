@@ -1,4 +1,5 @@
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { AppText } from '@/components/ui/app-text';
 import { PreviewTag } from '@/components/ui/preview-tag';
@@ -31,6 +32,7 @@ function Glass({ full }: { full: boolean }) {
 
 /** Água do dia (prévia — sem API ainda, valores só na memória). */
 export function WaterCard({ date, onOpenDetails }: WaterCardProps) {
+  const { t } = useTranslation();
   const [totalMl, setTotalMl] = usePreviewValue(`water:${date}`, 0);
   const [goalMl] = usePreviewValue('water:goal', DEFAULT_WATER_GOAL_ML);
   const [lastAdded, setLastAdded] = usePreviewValue<string | null>('water:announce', null);
@@ -42,19 +44,19 @@ export function WaterCard({ date, onOpenDetails }: WaterCardProps) {
   function add(ml: number) {
     const next = totalMl + ml;
     setTotalMl(next);
-    setLastAdded(`${formatMl(ml)} registrados. ${spokenWater(next, goalMl)}`);
+    setLastAdded(`${t('water.added', { amount: formatMl(ml) })} ${spokenWater(next, goalMl)}`);
   }
 
   return (
     <View className="gap-3 rounded-2xl bg-superficie p-4">
       <View
         accessible
-        accessibilityLabel={`${spokenWater(totalMl, goalMl)} Prévia: não fica salvo ao fechar o app.`}
+        accessibilityLabel={t('water.previewSpoken', { water: spokenWater(totalMl, goalMl) })}
         className="gap-2">
         <View className="flex-row items-baseline justify-between">
           <View className="flex-row items-center gap-2">
             <AppText variant="label" className="text-grafite-suave">
-              Água
+              {t('water.title')}
             </AppText>
             <PreviewTag />
           </View>
@@ -74,14 +76,14 @@ export function WaterCard({ date, onOpenDetails }: WaterCardProps) {
           <TextButton
             key={ml}
             label={`+ ${formatMl(ml)}`}
-            accessibilityLabel={`Registrar ${formatMl(ml).replace('ml', 'mililitros').replace('L', 'litro')}`}
+            accessibilityLabel={t('water.addSpoken', { amount: formatMl(ml) })}
             onPress={() => add(ml)}
             textVariant="bodyStrong"
             textClassName="text-mamao-forte"
           />
         ))}
         <TextButton
-          label="Outro valor"
+          label={t('water.other')}
           onPress={onOpenDetails}
           textVariant="bodyStrong"
           textClassName="text-mamao-forte"

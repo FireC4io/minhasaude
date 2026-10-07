@@ -66,7 +66,7 @@ export function WeightEntryForm({ onSaved }: WeightEntryFormProps) {
         label={t('weight.label')}
         value={weightKg}
         onChangeText={setWeightKg}
-        placeholder="ex.: 70,5"
+        placeholder={t('weight.placeholder')}
         keyboardType="decimal-pad"
         returnKeyType="done"
         onSubmitEditing={() => void handleSubmit()}

@@ -2,6 +2,7 @@ import { useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 
 import { AppText } from '@/components/ui/app-text';
 import { FormError } from '@/components/ui/form-error';
@@ -22,6 +23,7 @@ const parseMl = (text: string): number | null => {
 
 /** Água: valor livre e meta ajustável (F4-35). Prévia — sem API ainda. */
 export default function WaterScreen() {
+  const { t } = useTranslation();
   const params = useLocalSearchParams<{ date?: string }>();
   const date = params.date ?? todayIsoDate();
   const [totalMl, setTotalMl] = usePreviewValue(`water:${date}`, 0);
@@ -36,23 +38,23 @@ export default function WaterScreen() {
     setError(null);
     const ml = parseMl(amount);
     if (!ml) {
-      setError('Digite a quantidade em mililitros, por exemplo 300.');
+      setError(t('water.amountError'));
       return;
     }
     setTotalMl(totalMl + ml);
     setAmount('');
-    setMessage(`${formatMl(ml)} registrados.`);
+    setMessage(t('water.added', { amount: formatMl(ml) }));
   }
 
   function saveGoal() {
     setError(null);
     const ml = parseMl(goalText);
     if (!ml) {
-      setError('Digite a meta em mililitros, por exemplo 2000.');
+      setError(t('water.goalError'));
       return;
     }
     setGoalMl(ml);
-    setMessage(`Meta de água ajustada para ${formatMl(ml)}.`);
+    setMessage(t('water.goalSaved', { amount: formatMl(ml) }));
   }
 
   return (
@@ -61,27 +63,27 @@ export default function WaterScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         className="flex-1">
         <ScrollView contentContainerClassName="gap-6 px-6 py-6" keyboardShouldPersistTaps="handled">
-          <ModalHeader title="Água" />
-          <PreviewBanner missing="Ainda não há onde guardar a água no servidor: o que você registrar aqui some ao fechar o app." />
+          <ModalHeader title={t('water.title')} />
+          <PreviewBanner missing={t('water.preview')} />
 
           <WaterCard date={date} onOpenDetails={() => undefined} />
 
           <View className="gap-3">
             <AuthTextField
-              label="Outra quantidade (ml)"
+              label={t('water.otherAmount')}
               value={amount}
               onChangeText={setAmount}
-              placeholder="ex.: 300"
+              placeholder={t('misc.waterPlaceholder')}
               keyboardType="number-pad"
               returnKeyType="done"
               onSubmitEditing={addCustom}
             />
-            <PrimaryButton label="Registrar" onPress={addCustom} isLoading={false} />
+            <PrimaryButton label={t('water.log')} onPress={addCustom} isLoading={false} />
           </View>
 
           <View className="gap-3">
             <AuthTextField
-              label="Sua meta diária (ml)"
+              label={t('water.goal')}
               value={goalText}
               onChangeText={setGoalText}
               keyboardType="number-pad"
@@ -89,10 +91,9 @@ export default function WaterScreen() {
               onSubmitEditing={saveGoal}
             />
             <AppText variant="caption" className="text-grafite-suave">
-              Você escolhe a meta. O app não calcula quanto você deve beber: se tiver dúvida, converse
-              com um profissional de saúde.
+              {t('water.goalHint')}
             </AppText>
-            <PrimaryButton label="Salvar meta" onPress={saveGoal} isLoading={false} />
+            <PrimaryButton label={t('water.saveGoal')} onPress={saveGoal} isLoading={false} />
           </View>
 
           <FormError message={error} />

@@ -145,7 +145,7 @@ export default function DiaryEntryScreen() {
               label={t('diary.search')}
               value={searchTerm}
               onChangeText={setSearchTerm}
-              placeholder="ex.: arroz branco"
+              placeholder={t('misc.foodPlaceholder')}
               returnKeyType="search"
             />
             {searchQuery.isFetching ? <LoadingIndicator label={t('diary.searching')} /> : null}

@@ -15,6 +15,7 @@ import {
   getDiaryControllerGetByDateQueryKey,
   useDiaryControllerCreate,
 } from '@/api/generated/endpoints/diary/diary';
+import { useTranslation } from 'react-i18next';
 import { foodsControllerSearch } from '@/api/generated/endpoints/foods/foods';
 import { DiaryQuantityUnit, type MealType } from '@/api/generated/models';
 import { AppText } from '@/components/ui/app-text';
@@ -44,6 +45,7 @@ const formatTime = (seconds: number) =>
  * da base e **revisado antes de salvar** — a estimativa nunca entra sozinha.
  */
 export default function VoiceEntryScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
   const queryClient = useQueryClient();
   const params = useLocalSearchParams<{ date?: string }>();
@@ -67,7 +69,7 @@ export default function VoiceEntryScreen() {
     setError(null);
     const items = parseMealPhrase(phrase);
     if (items.length === 0) {
-      setError('Não entendemos nenhum alimento. Tente algo como “150 gramas de arroz e um bife”.');
+      setError(t('voice.nothing'));
       return;
     }
     setDrafts(
@@ -88,7 +90,7 @@ export default function VoiceEntryScreen() {
     const chosen = drafts.filter((draft) => draft.include);
     const missingGrams = chosen.find((draft) => !(parseDecimal(draft.grams) > 0));
     if (missingGrams) {
-      setError(`Falta a quantidade em gramas de “${missingGrams.spoken}”, ou desmarque o item.`);
+      setError(t('voice.missingGrams', { item: missingGrams.spoken }));
       return;
     }
     setSaving(true);
@@ -99,7 +101,7 @@ export default function VoiceEntryScreen() {
           draft.food ?? (await foodsControllerSearch({ q: draft.spoken, limit: 5 })).data[0];
         if (!food) {
           setError(
-            `Não achamos “${draft.spoken}” na base. Desmarque o item e adicione pela busca.`,
+            t('voice.notFound', { item: draft.spoken }),
           );
           return;
         }
@@ -117,11 +119,11 @@ export default function VoiceEntryScreen() {
         queryKey: getDiaryControllerGetByDateQueryKey({ date }),
       });
       AccessibilityInfo.announceForAccessibility(
-        `${chosen.length} ${chosen.length === 1 ? 'alimento adicionado' : 'alimentos adicionados'} ao ${MEAL_TYPE_LABELS[meal].toLowerCase()}.`,
+        t('voice.added', { count: chosen.length, meal: MEAL_TYPE_LABELS[meal].toLowerCase() }),
       );
       router.back();
     } catch {
-      setError('Não foi possível salvar tudo. Confira sua internet e tente de novo.');
+      setError(t('voice.saveError'));
     } finally {
       setSaving(false);
     }
@@ -133,8 +135,8 @@ export default function VoiceEntryScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         className="flex-1">
         <ScrollView contentContainerClassName="gap-6 px-6 py-6" keyboardShouldPersistTaps="handled">
-          <ModalHeader title="Falar o que comeu" />
-          <PreviewBanner missing="A transcrição por inteligência artificial ainda não existe: depois de gravar, aparece uma frase de exemplo, que você pode trocar pelo que comeu." />
+          <ModalHeader title={t('voice.title')} />
+          <PreviewBanner missing={t('voice.preview')} />
 
           {drafts === null ? (
             <>
@@ -145,7 +147,7 @@ export default function VoiceEntryScreen() {
                   }
                   accessibilityRole="button"
                   accessibilityLabel={
-                    recorder.state === 'recording' ? 'Parar de gravar' : 'Gravar o que comeu'
+                    recorder.state === 'recording' ? t('voice.stop') : t('voice.record')
                   }
                   accessibilityState={{ busy: recorder.state === 'recording' }}
                   style={{ width: 112, height: 112 }}
@@ -168,28 +170,28 @@ export default function VoiceEntryScreen() {
                   accessibilityLiveRegion="polite"
                   className="text-grafite">
                   {recorder.state === 'recording'
-                    ? `Gravando… ${formatTime(recorder.seconds)} · toque para parar`
-                    : 'Toque e diga o que comeu'}
+                    ? t('voice.recording', { time: formatTime(recorder.seconds) })
+                    : t('voice.tap')}
                 </AppText>
                 <AppText variant="caption" className="text-center text-grafite-suave">
-                  Exemplo: “150 gramas de arroz, 100 gramas de feijão e um bife”.
+                  {t('voice.example')}
                 </AppText>
               </View>
 
               {recorder.state === 'denied' ? (
-                <FormError message="Sem permissão para o microfone. Libere nas configurações do celular, ou digite abaixo." />
+                <FormError message={t('voice.noMic')} />
               ) : null}
 
               <AuthTextField
-                label="Ou digite o que comeu"
+                label={t('voice.typeIt')}
                 value={phrase}
                 onChangeText={setPhrase}
-                placeholder="ex.: duas bananas e um iogurte"
+                placeholder={t('misc.voicePlaceholder')}
                 multiline
                 returnKeyType="done"
               />
               <SelectChips
-                label="Em qual refeição?"
+                label={t('voice.whichMeal')}
                 options={MEAL_TYPE_ORDER}
                 optionLabels={MEAL_TYPE_LABELS}
                 value={meal}
@@ -197,7 +199,7 @@ export default function VoiceEntryScreen() {
               />
               <FormError message={error} />
               <PrimaryButton
-                label="Continuar"
+                label={t('voice.next')}
                 disabled={phrase.trim().length === 0}
                 onPress={interpret}
                 isLoading={false}
@@ -206,8 +208,7 @@ export default function VoiceEntryScreen() {
           ) : (
             <>
               <AppText className="text-grafite">
-                Confira cada item antes de salvar no {MEAL_TYPE_LABELS[meal].toLowerCase()}. A
-                quantidade é sempre sua: o app não adivinha porções.
+                {t('voice.checkEach', { meal: MEAL_TYPE_LABELS[meal].toLowerCase() })}
               </AppText>
               {drafts.map((draft) => (
                 <VoiceItemCard
@@ -220,12 +221,12 @@ export default function VoiceEntryScreen() {
               ))}
               <FormError message={error} />
               <PrimaryButton
-                label="Salvar no diário"
+                label={t('voice.save')}
                 onPress={() => void save()}
                 isLoading={saving}
               />
               <PrimaryButton
-                label="Voltar e falar de novo"
+                label={t('voice.again')}
                 onPress={() => setDrafts(null)}
                 isLoading={false}
               />

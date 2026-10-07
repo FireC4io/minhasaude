@@ -68,13 +68,25 @@ migrations com cuidado, testes antes, e avisar o dono antes de publicar mudança
 
 </details>
 
-### 7. Micronutrientes
+### 7. ✅ Micronutrientes (2026-10-07, `5eb2a41`, em produção)
 - Expor fibras, sódio, cálcio, ferro e vitaminas da TACO (`fiberGPer100g` já existe no banco). Mostrar na
   busca, na conta da quantidade e no resumo do dia.
 
-### 8. Textos e idiomas
+### 8. ✅ Textos e idiomas (2026-10-07)
+- Feito: i18next com pt-BR como fonte (`apps/mobile/src/i18n/locales/pt-BR.ts`); `en.ts`/`es.ts` tipados a partir
+  dela (tradução faltando quebra o build) e teste confere variáveis `{{x}}` iguais nos três idiomas. Idioma segue o
+  celular ou Perfil → Preferências. Números/datas via `i18n/format.ts` (nada de `'pt-BR'` fixo). Todas as telas,
+  inclusive as prévias, o PDF e os textos do leitor de tela, revisadas para linguagem simples (F4-12).
+- Pendente: revisão das traduções por falante nativo; a voz (prévia) só entende frases em português; nomes de
+  alimentos da TACO e das fórmulas de índices (shared) seguem em português.
+
+<details><summary>Plano original</summary>
+
+#### Textos e idiomas
 - Tirar os textos do código para arquivos de tradução (F4-36), revisando para **linguagem simples** (F4-12).
 - Adicionar **inglês e espanhol** na interface. Nomes de alimentos da TACO seguem em português.
+
+</details>
 
 ### 9. Qualidade
 - **Maestro**: fluxos criar conta → onboarding → registrar almoço → registrar peso → sair, também com fonte

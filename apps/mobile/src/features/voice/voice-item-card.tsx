@@ -1,4 +1,5 @@
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { useFoodsControllerSearch } from '@/api/generated/endpoints/foods/foods';
 import type { FoodResponseDto } from '@/api/generated/models';
@@ -28,6 +29,7 @@ interface VoiceItemCardProps {
  * A sugestão é só a primeira da busca — a pessoa confirma ou troca.
  */
 export function VoiceItemCard({ draft, onChange }: VoiceItemCardProps) {
+  const { t } = useTranslation();
   const search = useFoodsControllerSearch(
     { q: draft.spoken, limit: 5 },
     { query: { enabled: draft.spoken.trim().length >= 2 } },
@@ -39,8 +41,9 @@ export function VoiceItemCard({ draft, onChange }: VoiceItemCardProps) {
   return (
     <View className="gap-3 rounded-2xl bg-superficie p-4">
       <AppText variant="caption" className="text-grafite-suave">
-        Você disse: “{draft.countHint ? `${draft.countHint} ` : ''}
-        {draft.spoken}”
+        {t('voice.youSaid', {
+          text: `${draft.countHint ? `${draft.countHint} ` : ''}${draft.spoken}`,
+        })}
       </AppText>
 
       {search.isPending && !draft.food ? (
@@ -51,7 +54,7 @@ export function VoiceItemCard({ draft, onChange }: VoiceItemCardProps) {
         </AppText>
       ) : (
         <AppText className="text-grafite">
-          Não achamos este alimento. Desmarque e adicione pela busca depois.
+          {t('voice.itemNotFound')}
         </AppText>
       )}
 
@@ -63,7 +66,7 @@ export function VoiceItemCard({ draft, onChange }: VoiceItemCardProps) {
             .map((option) => (
               <TextButton
                 key={option.id}
-                label={`Trocar por ${option.name}`}
+                label={t('voice.swap', { name: option.name })}
                 onPress={() => onChange({ ...draft, food: option })}
                 textVariant="caption"
                 textClassName="text-mamao-forte"
@@ -75,11 +78,11 @@ export function VoiceItemCard({ draft, onChange }: VoiceItemCardProps) {
       {chosen && draft.include ? (
         <>
           <AuthTextField
-            label="Quantidade (g)"
+            label={t('voice.quantity')}
             value={draft.grams}
             onChangeText={(grams) => onChange({ ...draft, grams, food: chosen })}
             placeholder={
-              draft.countHint ? `${draft.countHint} unidade(s): quantos gramas?` : 'ex.: 100'
+              draft.countHint ? t('voice.unitsHow', { count: draft.countHint }) : t('voice.placeholder')
             }
             keyboardType="decimal-pad"
           />
@@ -92,7 +95,7 @@ export function VoiceItemCard({ draft, onChange }: VoiceItemCardProps) {
       ) : null}
 
       <CheckboxRow
-        label="Incluir no diário"
+        label={t('voice.include')}
         checked={draft.include}
         onChange={(include) => onChange({ ...draft, include, food: chosen })}
       />
