@@ -128,8 +128,15 @@ Issues **#30** e **#31** acima.
 - [x] Aprovado pelo usuário em 2026-10-06 (escolheu o mamão queimado em vez do `#d22800`, que lia como vermelho de erro)
 - **Atenção**: couve (`#3e8e5b`) dá 3,58:1 sobre a areia no claro — hoje não é usado como texto; se precisar, criar `couve-forte` e adicionar o par no teste. O spinner do botão primário é `#FBF0E4` fixo, e no escuro fica sobre o mamão claro (gráfico, pede 3:1) — conferir na #34
 
-### F4-08. Catálogo de componentes
-- [ ] Tela só de desenvolvimento com cada componente base em todos os estados (normal, pressionado, desabilitado, carregando, erro), nos dois temas — referência visual para revisar
+### F4-08. Catálogo de componentes ✅ (2026-10-06)
+- [x] Rota `dev-catalog`, protegida por `__DEV__` no `_layout.tsx` raiz (não existe no build de produção). Abrir com `adb shell am start -a android.intent.action.VIEW -d "exp://127.0.0.1:8081/--/dev-catalog"`
+- [x] Os dois temas na mesma tela, independente do modo do aparelho: cada bloco recebe as variáveis da paleta via `vars()` do NativeWind (`features/dev-catalog/theme-vars.ts`). Validado no emulador
+- [x] PrimaryButton, TextButton, AuthTextField, SelectChips, FormError e LoadingIndicator em normal/desabilitado/carregando/erro/selecionado. "Pressionado" é `active:opacity-*` e só aparece tocando
+- **Componente base novo entra no catálogo** (`features/dev-catalog/component-catalog.tsx`)
+- **Achados do catálogo, ainda não corrigidos**:
+  1. `PrimaryButton` carregando usa a mesma opacidade 50% do desabilitado — parece travado, e o spinner creme quase some sobre o mamão esmaecido
+  2. `LoadingIndicator` usa o azul padrão do sistema, fora da paleta
+  3. `placeholderTextColor` do `AuthTextField` é `#8A9891` fixo, não token
 
 ---
 

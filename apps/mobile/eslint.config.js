@@ -25,6 +25,6 @@ module.exports = [
   {
     // Gerado pelo orval (`pnpm generate:api`) — nunca editado à mão, não faz
     // sentido lintar como código nosso.
-    ignores: ['.expo/**', 'dist/**', 'android/**', 'ios/**', 'src/api/generated/**'],
+    ignores: ['.expo/**', 'dist/**', 'android/**', 'ios/**', 'src/api/generated/**', '**/coverage/**'],
   },
 ];

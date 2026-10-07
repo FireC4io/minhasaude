@@ -62,6 +62,10 @@ function RootNavigator() {
       <Stack.Protected guard={route === 'auth'}>
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
       </Stack.Protected>
+      {/* Catálogo de componentes: nunca existe no build de produção. */}
+      <Stack.Protected guard={__DEV__}>
+        <Stack.Screen name="dev-catalog" options={{ title: 'Catálogo (dev)' }} />
+      </Stack.Protected>
     </Stack>
   );
 }
