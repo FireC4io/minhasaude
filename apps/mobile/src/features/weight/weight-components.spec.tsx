@@ -24,7 +24,7 @@ describe('WeightChart', () => {
     await render(<WeightChart measurements={[]} />);
 
     expect(screen.queryByRole('image')).toBeNull();
-    expect(screen.getByText(/Nenhum peso registrado ainda/)).toBeTruthy();
+    expect(screen.getByText(/Nenhum peso neste período/)).toBeTruthy();
   });
 });
 

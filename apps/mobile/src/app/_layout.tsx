@@ -80,6 +80,9 @@ function RootNavigator() {
         <Stack.Screen name="(app)" options={{ headerShown: false }} />
         <Stack.Screen name="diary-entry" options={{ presentation: 'modal', headerShown: false }} />
         <Stack.Screen name="account" options={{ headerShown: false }} />
+        <Stack.Screen name="quick-add" options={{ presentation: 'modal', headerShown: false }} />
+        <Stack.Screen name="weight-entry" options={{ presentation: 'modal', headerShown: false }} />
+        <Stack.Screen name="water" options={{ presentation: 'modal', headerShown: false }} />
       </Stack.Protected>
       <Stack.Protected guard={route === 'onboarding'}>
         <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />
