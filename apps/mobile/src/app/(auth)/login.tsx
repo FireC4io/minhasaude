@@ -2,6 +2,7 @@ import { isAxiosError } from 'axios';
 import { useRouter } from 'expo-router';
 import { useRef, useState } from 'react';
 import { View, type TextInput } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { AppText } from '@/components/ui/app-text';
 import { FormError } from '@/components/ui/form-error';
@@ -14,6 +15,7 @@ import { PasswordField } from '@/features/auth/password-field';
 import { PrimaryButton } from '@/features/auth/primary-button';
 
 export default function LoginScreen() {
+  const { t } = useTranslation();
   // `Link` do expo-router ignora o className do NativeWind: o texto saía preto e na fonte do sistema.
   const router = useRouter();
   const { login } = useAuth();
@@ -25,7 +27,7 @@ export default function LoginScreen() {
 
   async function handleSubmit() {
     if (!email || !password) {
-      setError('Preencha o e-mail e a senha.');
+      setError(t('auth.login.fillBoth'));
       return;
     }
     setError(null);
@@ -35,8 +37,8 @@ export default function LoginScreen() {
     } catch (err) {
       setError(
         isAxiosError(err) && err.response?.status === 401
-          ? 'E-mail ou senha incorretos. Confira e tente de novo — use “Mostrar senha” para ver o que digitou.'
-          : 'Não foi possível entrar. Confira sua internet e tente de novo.',
+          ? t('auth.login.wrong')
+          : t('auth.login.failed'),
       );
     } finally {
       setIsSubmitting(false);
@@ -47,14 +49,14 @@ export default function LoginScreen() {
     <FormScreen centered>
       <View className="gap-1">
         <AppText variant="title" accessibilityRole="header" className="text-grafite">
-          Bem-vindo de volta
+          {t('auth.login.title')}
         </AppText>
         <AppText className="text-grafite">Entre para continuar seu acompanhamento.</AppText>
       </View>
 
       <View className="gap-4">
         <AuthTextField
-          label="E-mail"
+          label={t('auth.email')}
           value={email}
           onChangeText={setEmail}
           keyboardType="email-address"
@@ -66,7 +68,7 @@ export default function LoginScreen() {
         />
         <PasswordField
           ref={passwordRef}
-          label="Senha"
+          label={t('auth.password')}
           value={password}
           onChangeText={setPassword}
           autoComplete="password"
@@ -76,13 +78,13 @@ export default function LoginScreen() {
         />
         <FormError message={error} />
         <PrimaryButton
-          label="Entrar"
+          label={t('auth.signIn')}
           onPress={() => void handleSubmit()}
           isLoading={isSubmitting}
         />
         {PREVIEW_FEATURES ? (
           <TextButton
-            label="Esqueci minha senha"
+            label={t('auth.forgotPassword')}
             onPress={() => router.push('/forgot-password')}
             textVariant="bodyStrong"
             textClassName="text-mamao-forte"
@@ -94,7 +96,7 @@ export default function LoginScreen() {
       <View className="flex-row flex-wrap items-center justify-center gap-1">
         <AppText className="text-grafite">Não tem conta?</AppText>
         <TextButton
-          label="Criar conta"
+          label={t('auth.createAccount')}
           onPress={() => router.push('/register')}
           textVariant="bodyStrong"
           textClassName="text-mamao-forte"

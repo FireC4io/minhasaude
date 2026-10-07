@@ -1,6 +1,7 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { AppText } from '@/components/ui/app-text';
 import { FormError } from '@/components/ui/form-error';
@@ -17,16 +18,17 @@ import { PrimaryButton } from '@/features/auth/primary-button';
  * não revelar quem tem conta.
  */
 export default function ForgotPasswordScreen() {
+  const { t } = useTranslation();
   // `Link` do expo-router ignora o className do NativeWind: o texto saía preto e na fonte do sistema.
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [sent, setSent] = useState(false);
-  useAnnounce(sent ? 'Pedido registrado. Confira sua caixa de entrada.' : null);
+  useAnnounce(sent ? t('auth.forgot.sentAnnounce') : null);
 
   function handleSubmit() {
     if (!email.includes('@')) {
-      setError('Digite o e-mail da sua conta, como maria@exemplo.com.');
+      setError(t('auth.forgot.invalidEmail'));
       return;
     }
     setError(null);
@@ -35,31 +37,30 @@ export default function ForgotPasswordScreen() {
 
   return (
     <FormScreen centered>
-      <PreviewBanner missing="O envio do e-mail de recuperação ainda não existe no servidor. Nenhum e-mail será enviado." />
+      <PreviewBanner missing={t('auth.forgot.preview')} />
 
       <View className="gap-1">
         <AppText variant="title" accessibilityRole="header" className="text-grafite">
-          Esqueci minha senha
+          {t('auth.forgotPassword')}
         </AppText>
         <AppText className="text-grafite">
-          Digite o e-mail da sua conta. Vamos enviar um link para você criar uma senha nova.
+          {t('auth.forgot.intro')}
         </AppText>
       </View>
 
       {sent ? (
         <View className="gap-3 rounded-2xl bg-superficie p-4">
           <AppText variant="bodyStrong" className="text-grafite">
-            ✓ Pedido registrado
+            {t('auth.forgot.sentTitle')}
           </AppText>
           <AppText className="text-grafite">
-            Se houver uma conta com {email.trim()}, o link chega em alguns minutos. Confira também a
-            caixa de spam. O link vale por 30 minutos e só pode ser usado uma vez.
+            {t('auth.forgot.sentBody', { email: email.trim() })}
           </AppText>
         </View>
       ) : (
         <View className="gap-4">
           <AuthTextField
-            label="E-mail"
+            label={t('auth.email')}
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
@@ -69,12 +70,12 @@ export default function ForgotPasswordScreen() {
             onSubmitEditing={handleSubmit}
           />
           <FormError message={error} />
-          <PrimaryButton label="Enviar link" onPress={handleSubmit} isLoading={false} />
+          <PrimaryButton label={t('auth.forgot.send')} onPress={handleSubmit} isLoading={false} />
         </View>
       )}
 
       <TextButton
-        label="Voltar para entrar"
+        label={t('auth.forgot.back')}
         onPress={() => router.push('/login')}
         textVariant="bodyStrong"
         textClassName="text-mamao-forte"

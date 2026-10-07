@@ -2,6 +2,7 @@ import { isAxiosError } from 'axios';
 import { useRouter } from 'expo-router';
 import { useRef, useState } from 'react';
 import { View, type TextInput } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { AppText } from '@/components/ui/app-text';
 import { FormError } from '@/components/ui/form-error';
@@ -15,6 +16,7 @@ import { PrimaryButton } from '@/features/auth/primary-button';
 const MIN_PASSWORD_LENGTH = 8;
 
 export default function RegisterScreen() {
+  const { t } = useTranslation();
   // `Link` do expo-router ignora o className do NativeWind: o texto saía preto e na fonte do sistema.
   const router = useRouter();
   const { register } = useAuth();
@@ -26,12 +28,12 @@ export default function RegisterScreen() {
 
   async function handleSubmit() {
     if (!email.includes('@')) {
-      setError('Digite um e-mail válido, como maria@exemplo.com.');
+      setError(t('auth.emailExample'));
       return;
     }
     // A regra fica visível embaixo do campo; o botão nunca fica travado sem dizer por quê.
     if (password.length < MIN_PASSWORD_LENGTH) {
-      setError(`A senha precisa de pelo menos ${MIN_PASSWORD_LENGTH} caracteres.`);
+      setError(t('auth.register.passwordMin', { min: MIN_PASSWORD_LENGTH }));
       return;
     }
     setError(null);
@@ -41,8 +43,8 @@ export default function RegisterScreen() {
     } catch (err) {
       setError(
         isAxiosError(err) && err.response?.status === 409
-          ? 'Já existe uma conta com este e-mail. Toque em “Entrar” logo abaixo.'
-          : 'Não foi possível criar a conta. Confira sua internet e tente de novo.',
+          ? t('auth.register.exists')
+          : t('auth.register.failed'),
       );
     } finally {
       setIsSubmitting(false);
@@ -53,16 +55,16 @@ export default function RegisterScreen() {
     <FormScreen centered>
       <View className="gap-1">
         <AppText variant="title" accessibilityRole="header" className="text-grafite">
-          Criar conta
+          {t('auth.createAccount')}
         </AppText>
         <AppText className="text-grafite">
-          Registre sua alimentação e acompanhe sua saúde num só lugar.
+          {t('auth.register.intro')}
         </AppText>
       </View>
 
       <View className="gap-4">
         <AuthTextField
-          label="E-mail"
+          label={t('auth.email')}
           value={email}
           onChangeText={setEmail}
           keyboardType="email-address"
@@ -74,24 +76,24 @@ export default function RegisterScreen() {
         />
         <PasswordField
           ref={passwordRef}
-          label="Senha"
+          label={t('auth.password')}
           value={password}
           onChangeText={setPassword}
           autoComplete="password-new"
           textContentType="newPassword"
           returnKeyType="go"
-          accessibilityHint={`Pelo menos ${MIN_PASSWORD_LENGTH} caracteres`}
+          accessibilityHint={t('auth.register.passwordHint', { min: MIN_PASSWORD_LENGTH })}
           onSubmitEditing={() => void handleSubmit()}
         />
         <AppText variant="caption" className="text-grafite-suave">
-          Use pelo menos {MIN_PASSWORD_LENGTH} caracteres.
+          {t('auth.register.passwordRule', { min: MIN_PASSWORD_LENGTH })}
           {password.length > 0 && password.length < MIN_PASSWORD_LENGTH
-            ? ` Faltam ${MIN_PASSWORD_LENGTH - password.length}.`
+            ? t('auth.register.passwordMissing', { count: MIN_PASSWORD_LENGTH - password.length })
             : ''}
         </AppText>
         <FormError message={error} />
         <PrimaryButton
-          label="Criar conta"
+          label={t('auth.createAccount')}
           onPress={() => void handleSubmit()}
           isLoading={isSubmitting}
         />
@@ -100,7 +102,7 @@ export default function RegisterScreen() {
       <View className="flex-row flex-wrap items-center justify-center gap-1">
         <AppText className="text-grafite">Já tem conta?</AppText>
         <TextButton
-          label="Entrar"
+          label={t('auth.signIn')}
           onPress={() => router.push('/login')}
           textVariant="bodyStrong"
           textClassName="text-mamao-forte"

@@ -1,26 +1,14 @@
 import { useRouter } from 'expo-router';
 import { ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 
 import { AppText } from '@/components/ui/app-text';
 import { BrandMark } from '@/components/ui/brand-mark';
 import { TextButton } from '@/components/ui/text-button';
 import { PrimaryButton } from '@/features/auth/primary-button';
 
-const FEATURES = [
-  {
-    title: 'Anote o que você come',
-    text: 'Busque o alimento ou fale a refeição. O app faz a conta das calorias e nutrientes.',
-  },
-  {
-    title: 'Acompanhe seu peso',
-    text: 'Registre quando quiser e veja a evolução num gráfico simples.',
-  },
-  {
-    title: 'Guarde seus exames',
-    text: 'Exames de sangue e bioimpedância num só lugar, com a faixa do próprio laudo.',
-  },
-];
+const FEATURES = ['food', 'weight', 'exams'] as const;
 
 /**
  * Boas-vindas antes do login (F4-31). Uma tela só, rolável, em vez de painéis
@@ -28,6 +16,7 @@ const FEATURES = [
  * celular, e cada painel escondia os botões.
  */
 export default function WelcomeScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
 
   return (
@@ -39,14 +28,14 @@ export default function WelcomeScreen() {
             Gota Vital
           </AppText>
           <AppText className="text-center text-grafite">
-            Sua alimentação e sua saúde, num app fácil de usar.
+            {t('auth.welcome.tagline')}
           </AppText>
         </View>
 
         <View className="gap-3">
           {FEATURES.map((feature, index) => (
             <View
-              key={feature.title}
+              key={feature}
               accessible
               className="flex-row gap-4 rounded-2xl bg-superficie p-4">
               <AppText variant="numberLarge" className="text-mamao-forte">
@@ -54,9 +43,9 @@ export default function WelcomeScreen() {
               </AppText>
               <View className="flex-1 gap-1">
                 <AppText variant="bodyStrong" className="text-grafite">
-                  {feature.title}
+                  {t(`auth.welcome.${feature}Title`)}
                 </AppText>
-                <AppText className="text-grafite">{feature.text}</AppText>
+                <AppText className="text-grafite">{t(`auth.welcome.${feature}Text`)}</AppText>
               </View>
             </View>
           ))}
@@ -64,12 +53,12 @@ export default function WelcomeScreen() {
 
         <View className="gap-2">
           <PrimaryButton
-            label="Criar minha conta"
+            label={t('auth.welcome.createMine')}
             onPress={() => router.push('/register')}
             isLoading={false}
           />
           <TextButton
-            label="Já tenho conta"
+            label={t('auth.welcome.haveAccount')}
             onPress={() => router.push('/login')}
             textVariant="bodyStrong"
             textClassName="text-mamao-forte"
@@ -78,8 +67,7 @@ export default function WelcomeScreen() {
         </View>
 
         <AppText variant="caption" className="text-center text-grafite-suave">
-          Gratuito e sem anúncios. As informações do app não substituem a orientação de um
-          profissional de saúde.
+          {t('auth.welcome.footer')}
         </AppText>
       </ScrollView>
     </SafeAreaView>
