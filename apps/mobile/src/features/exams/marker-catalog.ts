@@ -1,3 +1,7 @@
+import i18n from 'i18next';
+
+import { translatedLabels } from '@/i18n/labels';
+
 /**
  * Catálogo de marcadores no app (espelha `exam_marker_catalog`). A explicação
  * diz o que o exame mede, em linguagem simples — nunca o que um valor
@@ -14,79 +18,51 @@ export interface MarkerInfo {
   whatItMeasures: string;
 }
 
+type KnownMarker =
+  | 'glucose_fasting'
+  | 'insulin_fasting'
+  | 'hba1c'
+  | 'total_cholesterol'
+  | 'hdl'
+  | 'ldl'
+  | 'triglycerides'
+  | 'creatinine'
+  | 'hemoglobin';
+
+// Nome e explicação lidos na hora (getters), no idioma em uso.
+function marker(code: KnownMarker, category: MarkerCategory, canonicalUnit: string): MarkerInfo {
+  return {
+    code,
+    category,
+    canonicalUnit,
+    get displayName() {
+      return i18n.t(`exams.markers.${code}.name`);
+    },
+    get whatItMeasures() {
+      return i18n.t(`exams.markers.${code}.what`);
+    },
+  };
+}
+
 const MARKERS: readonly MarkerInfo[] = [
-  {
-    code: 'glucose_fasting',
-    displayName: 'Glicose em jejum',
-    category: 'metabolic',
-    canonicalUnit: 'mg/dL',
-    whatItMeasures: 'A quantidade de açúcar (glicose) no sangue depois de algumas horas sem comer.',
-  },
-  {
-    code: 'insulin_fasting',
-    displayName: 'Insulina em jejum',
-    category: 'metabolic',
-    canonicalUnit: 'µU/mL',
-    whatItMeasures: 'O hormônio que ajuda a glicose a entrar nas células, medido em jejum.',
-  },
-  {
-    code: 'hba1c',
-    displayName: 'Hemoglobina glicada (HbA1c)',
-    category: 'metabolic',
-    canonicalUnit: '%',
-    whatItMeasures: 'Uma média aproximada da glicose no sangue nos últimos meses.',
-  },
-  {
-    code: 'total_cholesterol',
-    displayName: 'Colesterol total',
-    category: 'lipid',
-    canonicalUnit: 'mg/dL',
-    whatItMeasures: 'A soma das formas de colesterol que circulam no sangue.',
-  },
-  {
-    code: 'hdl',
-    displayName: 'Colesterol HDL',
-    category: 'lipid',
-    canonicalUnit: 'mg/dL',
-    whatItMeasures: 'A parte do colesterol transportada pelas lipoproteínas de alta densidade.',
-  },
-  {
-    code: 'ldl',
-    displayName: 'Colesterol LDL',
-    category: 'lipid',
-    canonicalUnit: 'mg/dL',
-    whatItMeasures: 'A parte do colesterol transportada pelas lipoproteínas de baixa densidade.',
-  },
-  {
-    code: 'triglycerides',
-    displayName: 'Triglicerídeos',
-    category: 'lipid',
-    canonicalUnit: 'mg/dL',
-    whatItMeasures: 'Um tipo de gordura que circula no sangue.',
-  },
-  {
-    code: 'creatinine',
-    displayName: 'Creatinina',
-    category: 'renal',
-    canonicalUnit: 'mg/dL',
-    whatItMeasures: 'Uma substância produzida pelos músculos e eliminada pelos rins.',
-  },
-  {
-    code: 'hemoglobin',
-    displayName: 'Hemoglobina',
-    category: 'blood',
-    canonicalUnit: 'g/dL',
-    whatItMeasures: 'A proteína dos glóbulos vermelhos que leva oxigênio pelo corpo.',
-  },
+  marker('glucose_fasting', 'metabolic', 'mg/dL'),
+  marker('insulin_fasting', 'metabolic', 'µU/mL'),
+  marker('hba1c', 'metabolic', '%'),
+  marker('total_cholesterol', 'lipid', 'mg/dL'),
+  marker('hdl', 'lipid', 'mg/dL'),
+  marker('ldl', 'lipid', 'mg/dL'),
+  marker('triglycerides', 'lipid', 'mg/dL'),
+  marker('creatinine', 'renal', 'mg/dL'),
+  marker('hemoglobin', 'blood', 'g/dL'),
 ];
 
-export const CATEGORY_LABELS: Record<MarkerCategory, string> = {
-  metabolic: 'Glicose e insulina',
-  lipid: 'Colesterol e gorduras',
-  renal: 'Rins',
-  blood: 'Sangue',
-  body_composition: 'Composição corporal',
-};
+export const CATEGORY_LABELS: Record<MarkerCategory, string> = translatedLabels({
+  metabolic: 'exams.categories.metabolic',
+  lipid: 'exams.categories.lipid',
+  renal: 'exams.categories.renal',
+  blood: 'exams.categories.blood',
+  body_composition: 'exams.categories.body_composition',
+});
 
 export const CATEGORY_ORDER: readonly MarkerCategory[] = [
   'metabolic',

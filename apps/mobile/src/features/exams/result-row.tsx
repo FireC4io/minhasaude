@@ -1,4 +1,5 @@
 import { Pressable, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { AppText } from '@/components/ui/app-text';
 import { MIN_TOUCH_TARGET } from '@/constants/accessibility';
@@ -19,6 +20,7 @@ interface ResultRowProps {
  * O texto é informativo — "acima da faixa do laudo", nunca "alterado" ou "risco".
  */
 export function ResultRow({ result, onPress }: ResultRowProps) {
+  const { t } = useTranslation();
   const info = markerInfo(result.markerCode);
   const value = result.confirmedValue ?? Number(result.rawValue.replace(',', '.'));
   const unit = result.confirmedUnit ?? result.rawUnit;
@@ -35,7 +37,7 @@ export function ResultRow({ result, onPress }: ResultRowProps) {
       accessibilityLabel={`${info.displayName}: ${formatExamValue(value)} ${unit}. ${positionText}${
         result.rawReferenceRange ? `: ${result.rawReferenceRange}` : ''
       }.`}
-      accessibilityHint={onPress ? 'Mostra a evolução deste exame' : undefined}
+      accessibilityHint={onPress ? t('exams.showTrend') : undefined}
       style={{ minHeight: MIN_TOUCH_TARGET }}
       className="gap-2 border-b border-linha py-3 active:opacity-70">
       <View className="flex-row flex-wrap items-baseline justify-between gap-x-3">

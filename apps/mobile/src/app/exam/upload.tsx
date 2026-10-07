@@ -1,6 +1,8 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Image, ScrollView, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import i18n from 'i18next';
 
 import { AppText } from '@/components/ui/app-text';
 import { FormError } from '@/components/ui/form-error';
@@ -23,25 +25,37 @@ import {
 import type { DeviceSource, ExamType } from '@/features/exams/types';
 import { uploadAvailability } from '@/features/exams/upload-limit';
 
+// Getters: os textos são lidos na hora de desenhar, no idioma em uso.
 const TYPE_OPTIONS = [
   {
-    value: 'blood_panel',
-    label: EXAM_TYPE_LABELS.blood_panel,
-    description: 'Glicose, colesterol, creatinina e outros',
+    value: 'blood_panel' as const,
+    get label() {
+      return EXAM_TYPE_LABELS.blood_panel;
+    },
+    get description() {
+      return i18n.t('exams.upload.bloodHint');
+    },
   },
   {
-    value: 'bioimpedance',
-    label: EXAM_TYPE_LABELS.bioimpedance,
-    description: 'Gordura, músculo e água do corpo',
+    value: 'bioimpedance' as const,
+    get label() {
+      return EXAM_TYPE_LABELS.bioimpedance;
+    },
+    get description() {
+      return i18n.t('exams.upload.bioHint');
+    },
   },
-] as const;
+];
 
 const DEVICE_OPTIONS = (['inbody', 'tanita', 'omron', 'other'] as const).map((device) => ({
   value: device,
-  label: DEVICE_LABELS[device],
+  get label() {
+    return DEVICE_LABELS[device];
+  },
 }));
 
 export default function UploadExamScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
   const documents = useExamDocuments();
   const [examType, setExamType] = useState<ExamType | null>(null);
@@ -57,29 +71,23 @@ export default function UploadExamScreen() {
     try {
       const result = await picker();
       if (result.status === 'denied') {
-        setError(
-          'Sem permissão para usar a câmera. Libere nas configurações do celular ou escolha uma foto da galeria.',
-        );
+        setError(t('exams.upload.noCamera'));
       } else if (result.status === 'picked') {
         if (result.file.sizeBytes !== null && result.file.sizeBytes > MAX_FILE_BYTES) {
-          setError(
-            'Arquivo grande demais (máximo 10 MB). Tente uma foto com menos zoom ou o PDF do laboratório.',
-          );
+          setError(t('exams.upload.tooBig'));
           return;
         }
         setFile(result.file);
       }
     } catch {
-      setError('Não foi possível abrir o arquivo. Tente de novo.');
+      setError(t('exams.upload.openError'));
     }
   }
 
   function send() {
     if (!examType || !file) return;
     if (examType === 'bioimpedance' && !device) {
-      setError(
-        'Escolha o aparelho da bioimpedância: medidas de aparelhos diferentes não se comparam.',
-      );
+      setError(t('exams.upload.chooseDevice'));
       return;
     }
     const document = previewExamRepository.upload({
@@ -92,10 +100,10 @@ export default function UploadExamScreen() {
 
   return (
     <ScrollView className="flex-1 bg-areia" contentContainerClassName="gap-6 px-6 py-6">
-      <PreviewBanner missing="O arquivo não sai do aparelho: a leitura é simulada com valores de demonstração." />
+      <PreviewBanner missing={t('exams.upload.preview')} />
 
       <RadioList
-        label="Que exame é?"
+        label={t('exams.upload.whichExam')}
         options={TYPE_OPTIONS}
         value={examType}
         onChange={setExamType}
@@ -103,7 +111,7 @@ export default function UploadExamScreen() {
 
       {examType === 'bioimpedance' ? (
         <RadioList
-          label="Em qual aparelho foi feito?"
+          label={t('exams.upload.whichDevice')}
           options={DEVICE_OPTIONS}
           value={device}
           onChange={setDevice}
@@ -113,11 +121,10 @@ export default function UploadExamScreen() {
       {blocked && availability?.nextDate ? (
         <View className="gap-1 rounded-2xl bg-superficie p-4">
           <AppText variant="bodyStrong" className="text-grafite">
-            Você já enviou um exame deste tipo neste mês
+            {t('exams.upload.limitTitle')}
           </AppText>
           <AppText className="text-grafite">
-            Dá para enviar outro a partir de {formatExamDate(availability.nextDate)}. O limite é de
-            um envio por tipo de exame a cada 30 dias.
+            {t('exams.upload.limitText', { date: formatExamDate(availability.nextDate) })}
           </AppText>
         </View>
       ) : null}
@@ -126,12 +133,12 @@ export default function UploadExamScreen() {
         file ? (
           <View className="gap-3 rounded-2xl bg-superficie p-4">
             <AppText variant="label" className="text-grafite-suave">
-              Arquivo escolhido
+              {t('exams.upload.chosen')}
             </AppText>
             {file.kind === 'image' ? (
               <Image
                 source={{ uri: file.uri }}
-                accessibilityLabel="Prévia da foto do exame"
+                accessibilityLabel={t('exams.upload.photoPreview')}
                 className="h-48 w-full rounded-xl"
                 resizeMode="contain"
               />
@@ -141,7 +148,7 @@ export default function UploadExamScreen() {
               {file.name} {file.sizeBytes ? `· ${formatFileSize(file.sizeBytes)}` : ''}
             </AppText>
             <TextButton
-              label="Trocar arquivo"
+              label={t('exams.upload.change')}
               onPress={() => setFile(null)}
               textClassName="text-mamao-forte"
               className="self-start"
@@ -150,27 +157,26 @@ export default function UploadExamScreen() {
         ) : (
           <View className="gap-2">
             <AppText variant="label" className="text-grafite">
-              Como você quer enviar?
+              {t('exams.upload.how')}
             </AppText>
             <View className="rounded-2xl bg-superficie px-4">
               <ListRow
-                title="Tirar foto do exame"
-                description="Com a câmera agora"
+                title={t('exams.upload.camera')}
+                description={t('exams.upload.cameraHint')}
                 onPress={() => void choose(takeExamPhoto)}
               />
               <ListRow
-                title="Escolher foto da galeria"
+                title={t('exams.upload.gallery')}
                 onPress={() => void choose(pickExamImage)}
               />
               <ListRow
-                title="Escolher arquivo PDF"
-                description="O PDF do laboratório é o mais fácil de ler"
+                title={t('exams.upload.pdf')}
+                description={t('exams.upload.pdfHint')}
                 onPress={() => void choose(pickExamPdf)}
               />
             </View>
             <AppText variant="caption" className="text-grafite-suave">
-              Para a foto sair legível: boa luz, o laudo inteiro na imagem, sem cortar a faixa de
-              referência e sem reflexo.
+              {t('exams.upload.photoTips')}
             </AppText>
           </View>
         )
@@ -179,7 +185,7 @@ export default function UploadExamScreen() {
       <FormError message={error} />
 
       {file && !blocked ? (
-        <PrimaryButton label="Enviar exame" onPress={send} isLoading={false} />
+        <PrimaryButton label={t('exams.upload.send')} onPress={send} isLoading={false} />
       ) : null}
     </ScrollView>
   );

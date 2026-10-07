@@ -2,6 +2,7 @@ import { useRouter } from 'expo-router';
 import type { ReactNode } from 'react';
 import { ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 
 import { AppText } from '@/components/ui/app-text';
 import { ListRow } from '@/components/ui/list-row';
@@ -18,6 +19,7 @@ export default function ExamsScreen() {
 }
 
 function ExamsHome() {
+  const { t } = useTranslation();
   const router = useRouter();
   const [hasConsent] = useExamConsent();
   const documents = useExamDocuments();
@@ -28,39 +30,38 @@ function ExamsHome() {
     <SafeAreaView className="flex-1 bg-areia">
       <ScrollView contentContainerClassName="gap-6 px-6 py-8">
         <AppText variant="title" accessibilityRole="header" className="text-grafite">
-          Exames
+          {t('exams.title')}
         </AppText>
-        <PreviewBanner missing="O envio e a leitura de exames ainda não existem no servidor. Os exames abaixo são de uma pessoa fictícia." />
+        <PreviewBanner missing={t('exams.home.preview')} />
 
         {!hasConsent ? (
           <View className="gap-3 rounded-2xl bg-superficie p-4">
             <AppText variant="subtitle" className="text-grafite">
-              Guarde seus exames num só lugar
+              {t('exams.home.introTitle')}
             </AppText>
             <AppText className="text-grafite">
-              Envie a foto ou o PDF do exame. O app lê os valores, você confere, e acompanha a
-              evolução de cada um ao longo do tempo.
+              {t('exams.home.introText')}
             </AppText>
             <AppText variant="caption" className="text-grafite-suave">
-              Exames são dados de saúde: antes, precisamos da sua autorização.
+              {t('exams.home.introConsent')}
             </AppText>
             <PrimaryButton
-              label="Ver como funciona e autorizar"
+              label={t('exams.home.authorize')}
               onPress={() => router.push('/exam/consent')}
               isLoading={false}
             />
           </View>
         ) : (
           <PrimaryButton
-            label="Enviar exame"
-            hint="Foto, imagem da galeria ou PDF"
+            label={t('exams.home.send')}
+            hint={t('exams.home.sendHint')}
             onPress={() => router.push('/exam/upload')}
             isLoading={false}
           />
         )}
 
         {waitingReview.length > 0 ? (
-          <Section title="Esperando sua revisão">
+          <Section title={t('exams.home.waiting')}>
             {waitingReview.map((document) => (
               <ListRow
                 key={document.id}
@@ -74,9 +75,9 @@ function ExamsHome() {
           </Section>
         ) : null}
 
-        <Section title="Exames de sangue">
+        <Section title={t('exams.home.blood')}>
           {bloodPanels.length === 0 ? (
-            <AppText className="py-3 text-grafite-suave">Nenhum exame de sangue ainda.</AppText>
+            <AppText className="py-3 text-grafite-suave">{t('exams.home.noBlood')}</AppText>
           ) : (
             bloodPanels.map((document) => (
               <ListRow
@@ -97,15 +98,15 @@ function ExamsHome() {
           )}
         </Section>
 
-        <Section title="Mais">
+        <Section title={t('exams.home.more')}>
           <ListRow
-            title="Índices calculados"
-            description="HOMA-IR, Castelli, filtração dos rins e outros, com a fórmula"
+            title={t('exams.home.indices')}
+            description={t('exams.home.indicesHint')}
             onPress={() => router.push('/exam/indices')}
           />
           <ListRow
-            title="Bioimpedância"
-            description="Gordura e músculo, separados por aparelho"
+            title={t('exams.home.bio')}
+            description={t('exams.home.bioHint')}
             onPress={() => router.push('/exam/bioimpedance')}
           />
         </Section>
@@ -115,19 +116,19 @@ function ExamsHome() {
 }
 
 function ExamsComingSoon() {
+  const { t } = useTranslation();
   return (
     <SafeAreaView className="flex-1 bg-areia">
       <ScrollView contentContainerClassName="gap-6 px-6 py-8">
         <AppText variant="title" accessibilityRole="header" className="text-grafite">
-          Exames
+          {t('exams.title')}
         </AppText>
         <View className="gap-2 rounded-2xl bg-superficie p-4">
           <AppText variant="bodyStrong" className="text-grafite">
-            Em breve
+            {t('exams.home.soon')}
           </AppText>
           <AppText className="text-grafite">
-            Aqui você vai poder guardar seus exames de sangue e de bioimpedância e acompanhar os
-            resultados ao longo do tempo.
+            {t('exams.home.soonText')}
           </AppText>
         </View>
       </ScrollView>

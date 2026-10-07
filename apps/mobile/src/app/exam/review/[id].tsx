@@ -1,6 +1,7 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { AppText } from '@/components/ui/app-text';
 import { CheckboxRow } from '@/components/ui/checkbox-row';
@@ -24,6 +25,7 @@ interface Draft {
  * lido continua guardado como veio (`raw_value`); o conferido vai separado.
  */
 export default function ReviewExamScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const document = useExamDocument(id);
@@ -33,7 +35,7 @@ export default function ReviewExamScreen() {
   if (!document) {
     return (
       <View className="flex-1 bg-areia px-6 py-6">
-        <AppText className="text-grafite">Este exame não foi encontrado.</AppText>
+        <AppText className="text-grafite">{t('exams.review.notFound')}</AppText>
       </View>
     );
   }
@@ -51,7 +53,7 @@ export default function ReviewExamScreen() {
     );
     if (invalid) {
       setError(
-        `Confira o valor de ${markerInfo(invalid.markerCode).displayName}: use só números, como 92 ou 5,4.`,
+        t('exams.review.invalid', { name: markerInfo(invalid.markerCode).displayName }),
       );
       return;
     }
@@ -74,8 +76,7 @@ export default function ReviewExamScreen() {
       className="flex-1 bg-areia">
       <ScrollView contentContainerClassName="gap-5 px-6 py-6" keyboardShouldPersistTaps="handled">
         <AppText className="text-grafite">
-          Exame de {formatExamDate(document.collectedAt)}. Compare cada valor com o laudo. Corrija o
-          que estiver diferente e desmarque o que não estiver no seu exame.
+          {t('exams.review.intro', { date: formatExamDate(document.collectedAt) })}
         </AppText>
 
         {document.results.map((result) => {
@@ -88,13 +89,15 @@ export default function ReviewExamScreen() {
                 {info.displayName}
               </AppText>
               <AppText variant="caption" className="text-grafite-suave">
-                Lido no laudo: {result.rawValue} {result.rawUnit}
-                {result.rawReferenceRange ? ` · Referência: ${result.rawReferenceRange}` : ''}
+                {t('exams.review.read', { value: result.rawValue, unit: result.rawUnit })}
+                {result.rawReferenceRange
+                  ? t('exams.review.reference', { range: result.rawReferenceRange })
+                  : ''}
               </AppText>
               {draft.include ? (
                 <AuthTextField
-                  label={`Valor (${result.rawUnit})`}
-                  accessibilityLabel={`Valor de ${info.displayName}, em ${result.rawUnit}`}
+                  label={t('exams.review.value', { unit: result.rawUnit })}
+                  accessibilityLabel={t('exams.review.valueSpoken', { name: info.displayName, unit: result.rawUnit })}
                   value={draft.value}
                   onChangeText={(value) => update(result, { value })}
                   keyboardType="decimal-pad"
@@ -102,11 +105,11 @@ export default function ReviewExamScreen() {
               ) : null}
               {changed && draft.include ? (
                 <AppText variant="caption" className="text-grafite">
-                  ✎ Você corrigiu este valor. O lido no laudo fica guardado.
+                  {t('exams.review.corrected')}
                 </AppText>
               ) : null}
               <CheckboxRow
-                label="Está no meu exame"
+                label={t('exams.review.included')}
                 checked={draft.include}
                 onChange={(include) => update(result, { include })}
               />
@@ -116,7 +119,7 @@ export default function ReviewExamScreen() {
 
         <FormError message={error} />
         <PrimaryButton
-          label={`Confirmar ${includedCount} ${includedCount === 1 ? 'valor' : 'valores'}`}
+          label={t('exams.review.confirm', { count: includedCount })}
           onPress={confirm}
           isLoading={false}
         />

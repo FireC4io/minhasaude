@@ -4,6 +4,8 @@
  * não tem tabela de referência própria e não diz se algo é "normal".
  */
 
+import { translatedLabels } from '@/i18n/labels';
+
 export interface ReferenceRange {
   low: number | null;
   high: number | null;
@@ -41,12 +43,12 @@ export function positionInRange(value: number, range: ReferenceRange | null): Ra
   return 'within';
 }
 
-const POSITION_TEXT: Record<RangePosition, string> = {
-  below: 'Abaixo da faixa de referência do laudo',
-  within: 'Dentro da faixa de referência do laudo',
-  above: 'Acima da faixa de referência do laudo',
-  unknown: 'Sem faixa de referência no laudo',
-};
+const POSITION_TEXT: Record<RangePosition, string> = translatedLabels({
+  below: 'exams.position.below',
+  within: 'exams.position.within',
+  above: 'exams.position.above',
+  unknown: 'exams.position.unknown',
+});
 
 export function describePosition(position: RangePosition): string {
   return POSITION_TEXT[position];

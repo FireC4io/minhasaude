@@ -1,5 +1,6 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { ScrollView, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { AppText } from '@/components/ui/app-text';
 import { LoadingIndicator } from '@/components/ui/loading-indicator';
@@ -18,16 +19,17 @@ import { CATEGORY_LABELS, CATEGORY_ORDER, markerInfo } from '@/features/exams/ma
 import { ResultRow } from '@/features/exams/result-row';
 
 export default function ExamDetailScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const document = useExamDocument(id);
-  useAnnounce(document?.status === 'extracted' ? 'Leitura concluída. Confira os valores.' : null);
+  useAnnounce(document?.status === 'extracted' ? t('exams.detail.readAnnounce') : null);
 
   if (!document) {
     return (
       <View className="flex-1 gap-4 bg-areia px-6 py-6">
         <AppText className="text-grafite">
-          Este exame não foi encontrado. Ele pode ter sido apagado.
+          {t('exams.detail.notFound')}
         </AppText>
       </View>
     );
@@ -65,10 +67,9 @@ export default function ExamDetailScreen() {
 
       {document.status === 'processing' || document.status === 'pending' ? (
         <View className="gap-3 rounded-2xl bg-superficie p-4">
-          <LoadingIndicator label="Lendo os valores do exame" />
+          <LoadingIndicator label={t('exams.detail.reading')} />
           <AppText className="text-center text-grafite">
-            Estamos lendo os valores do laudo. Pode levar alguns minutos — você pode sair desta tela
-            e voltar depois.
+            {t('exams.detail.readingText')}
           </AppText>
         </View>
       ) : null}
@@ -76,8 +77,7 @@ export default function ExamDetailScreen() {
       {document.status === 'failed' ? (
         <View className="gap-2 rounded-2xl bg-superficie p-4">
           <AppText className="text-grafite">
-            Não conseguimos ler este arquivo. Tente uma foto com mais luz e com o laudo inteiro, ou
-            o PDF do laboratório.
+            {t('exams.detail.failed')}
           </AppText>
         </View>
       ) : null}
@@ -85,11 +85,10 @@ export default function ExamDetailScreen() {
       {document.status === 'extracted' ? (
         <View className="gap-3 rounded-2xl bg-superficie p-4">
           <AppText className="text-grafite">
-            Lemos {document.results.length} valores. Confira cada um com o laudo antes de usarmos: a
-            leitura automática pode errar.
+            {t('exams.detail.read', { count: document.results.length })}
           </AppText>
           <PrimaryButton
-            label="Conferir os valores"
+            label={t('exams.detail.check')}
             onPress={() =>
               router.push({ pathname: '/exam/review/[id]', params: { id: document.id } })
             }
@@ -122,7 +121,7 @@ export default function ExamDetailScreen() {
             </View>
           ))}
           <TextButton
-            label="Ver índices calculados deste exame"
+            label={t('exams.detail.indices')}
             onPress={() => router.push({ pathname: '/exam/indices', params: { id: document.id } })}
             textVariant="bodyStrong"
             textClassName="text-mamao-forte"
@@ -133,8 +132,10 @@ export default function ExamDetailScreen() {
       ) : null}
 
       <TextButton
-        label="Apagar este exame"
-        accessibilityLabel={`Apagar o exame de ${formatExamDate(document.collectedAt ?? document.uploadedAt)}`}
+        label={t('exams.detail.delete')}
+        accessibilityLabel={t('exams.detail.deleteSpoken', {
+          date: formatExamDate(document.collectedAt ?? document.uploadedAt),
+        })}
         onPress={remove}
         textVariant="bodyStrong"
         textClassName="text-jabuticaba"
