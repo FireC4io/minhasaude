@@ -70,12 +70,12 @@ describe('LGPD - consents, export, delete (e2e)', () => {
     expect(response.body.consents.length).toBeGreaterThan(0);
   });
 
-  it('DELETE /v1/me inicia exclusão e bloqueia login em seguida', async () => {
+  it('DELETE /v1/me apaga a conta e bloqueia login em seguida', async () => {
     const response = await request(app.getHttpServer())
       .delete('/v1/me')
       .set('Authorization', `Bearer ${accessToken}`)
-      .expect(202);
-    expect(response.body.scheduledPurgeAt).toBeDefined();
+      .expect(200);
+    expect(response.body.status).toBe('deleted');
 
     await request(app.getHttpServer())
       .post('/v1/auth/login')

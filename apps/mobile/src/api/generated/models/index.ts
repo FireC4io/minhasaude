@@ -22,6 +22,8 @@ export * from './createDiaryEntryDtoUnit';
 export * from './createFoodDto';
 export * from './dailySummaryResponseDto';
 export * from './dailySummaryTotalsResponseDto';
+export * from './deletionResponseDto';
+export * from './deletionStatus';
 export * from './diaryControllerGetByDateParams';
 export * from './diaryEntryResponseDto';
 export * from './diaryMealsResponseDto';

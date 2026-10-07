@@ -25,6 +25,7 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  DeletionResponseDto,
   MeResponseDto,
   ProfileResponseDto,
   UpdateProfileDto
@@ -143,7 +144,7 @@ export function useUsersControllerGetMe<TData = Awaited<ReturnType<typeof usersC
 
 
 /**
- * @summary Inicia a exclusão da conta (LGPD, direito ao esquecimento)
+ * @summary Exclui a conta e todos os dados na hora (LGPD, direito ao esquecimento)
  */
 export const usersControllerRequestDeletion = (
 
@@ -151,7 +152,7 @@ export const usersControllerRequestDeletion = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<DeletionResponseDto>(
       {url: `/v1/me`, method: 'DELETE', signal
     },
       );
@@ -195,7 +196,7 @@ const {mutation: mutationOptions} = options ?
 
 
     /**
- * @summary Inicia a exclusão da conta (LGPD, direito ao esquecimento)
+ * @summary Exclui a conta e todos os dados na hora (LGPD, direito ao esquecimento)
  */
 export const useUsersControllerRequestDeletion = <TError = unknown,
     TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof usersControllerRequestDeletion>>, TError,void, TContext>, }

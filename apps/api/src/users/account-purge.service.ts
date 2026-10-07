@@ -13,9 +13,8 @@ export interface PurgeResult {
 /**
  * Executa de fato a exclusão de conta pedida em `DELETE /v1/me`.
  *
- * Até então o endpoint só marcava a conta como `PENDING_DELETION` e agendava
- * `scheduledPurgeAt` — nenhum job apagava nada, então o direito ao
- * esquecimento (LGPD) ficava pela metade.
+ * O endpoint chama `purgeRequest` na hora. `purgeDueAccounts` (agendado) é a
+ * rede de segurança: retoma qualquer pedido que falhou no meio.
  *
  * Os passos são idempotentes de propósito, em vez de uma transação: anonimizar
  * consent já anonimizado não faz nada, apagar usuário inexistente não faz nada,
@@ -43,7 +42,7 @@ export class AccountPurgeService {
 
     for (const pedido of vencidos) {
       try {
-        await this.purgeOne(pedido, now);
+        await this.purgeRequest(pedido, now);
         purged += 1;
       } catch (error: unknown) {
         failed += 1;
@@ -63,7 +62,7 @@ export class AccountPurgeService {
     return { purged, failed };
   }
 
-  private async purgeOne(pedido: AccountDeletionRequest, now: Date): Promise<void> {
+  async purgeRequest(pedido: AccountDeletionRequest, now: Date = new Date()): Promise<void> {
     // Primeiro os identificadores diretos: `consents` não tem FK pra `users`,
     // então não cai no cascade. O registro fica como prova de que o
     // consentimento existiu, sem IP nem user agent.

@@ -49,7 +49,7 @@ export default function ProfileScreen() {
           />
           <ListRow
             title="Excluir minha conta"
-            description="Apaga seus dados em até 30 dias"
+            description="Apaga todos os seus dados na hora"
             tone="danger"
             onPress={go('/account/delete')}
           />

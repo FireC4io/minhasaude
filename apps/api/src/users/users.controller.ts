@@ -3,6 +3,7 @@ import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { MeResponseDto, ProfileResponseDto } from './dto/me-response.dto';
+import { DeletionResponseDto } from './dto/deletion-response.dto';
 import { toDto } from '../common/serialization/to-dto';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import type { JwtPayload } from '../auth/types/jwt-payload.interface';
@@ -38,9 +39,10 @@ export class UsersController {
   }
 
   @Delete()
-  @HttpCode(HttpStatus.ACCEPTED)
-  @ApiOperation({ summary: 'Inicia a exclusão da conta (LGPD, direito ao esquecimento)' })
-  requestDeletion(@CurrentUser() user: JwtPayload) {
-    return this.usersService.requestDeletion(user.sub);
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Exclui a conta e todos os dados na hora (LGPD, direito ao esquecimento)' })
+  @ApiOkResponse({ type: DeletionResponseDto })
+  async requestDeletion(@CurrentUser() user: JwtPayload) {
+    return toDto(DeletionResponseDto, await this.usersService.requestDeletion(user.sub));
   }
 }

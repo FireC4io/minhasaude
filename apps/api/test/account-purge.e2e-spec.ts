@@ -8,8 +8,10 @@ import { AccountPurgeService } from '../src/users/account-purge.service';
 /**
  * Prova que a exclusão de conta apaga os dados de verdade.
  *
- * Antes disso, `DELETE /v1/me` só marcava a conta e agendava o purge — nenhum
- * job executava, então o direito ao esquecimento (LGPD) parava no papel.
+ * A exclusão acontece na hora (decisão do dono do projeto, 2026-10-07): não há
+ * como cancelar e o login já era bloqueado, então um prazo de espera só
+ * guardaria dados sem benefício para a pessoa. O job agendado ficou como
+ * rede de segurança, para retomar uma exclusão que falhou no meio.
  */
 describe('Exclusão de conta - purge (e2e)', () => {
   let app: INestApplication;
@@ -21,10 +23,6 @@ describe('Exclusão de conta - purge (e2e)', () => {
   const hoje = new Date().toISOString().slice(0, 10);
   let accessToken: string;
   let userId: string;
-
-  // Depois do prazo de arrependimento (30 dias), pra disparar o purge sem
-  // precisar mexer no relógio nem na linha do banco.
-  const DEPOIS_DO_PRAZO = new Date(Date.now() + 31 * 24 * 60 * 60 * 1000);
 
   // `foods` guarda o dono em `owner_user_id`, as demais em `user_id`.
   async function contar(tabela: string): Promise<number> {
@@ -109,23 +107,13 @@ describe('Exclusão de conta - purge (e2e)', () => {
     expect(await contar('consents')).toBe(1);
   });
 
-  it('não apaga nada enquanto o prazo de arrependimento não vence', async () => {
-    await request(app.getHttpServer())
+  it('DELETE /v1/me apaga o usuário e tudo que depende dele na hora', async () => {
+    const response = await request(app.getHttpServer())
       .delete('/v1/me')
       .set('Authorization', `Bearer ${accessToken}`)
-      .expect(202);
+      .expect(200);
 
-    const resultado = await purgeService.purgeDueAccounts(new Date());
-
-    expect(resultado.purged).toBe(0);
-    expect(await contar('profiles')).toBe(1);
-  });
-
-  it('apaga o usuário e tudo que depende dele quando o prazo vence', async () => {
-    const resultado = await purgeService.purgeDueAccounts(DEPOIS_DO_PRAZO);
-
-    expect(resultado.purged).toBeGreaterThanOrEqual(1);
-    expect(resultado.failed).toBe(0);
+    expect(response.body).toEqual({ status: 'deleted' });
 
     const usuarios = await dataSource.query('select count(*)::int as n from users where id = $1', [
       userId,
@@ -138,6 +126,13 @@ describe('Exclusão de conta - purge (e2e)', () => {
     expect(await contar('diary_entries')).toBe(0);
     expect(await contar('foods')).toBe(0);
     expect(await contar('refresh_tokens')).toBe(0);
+  });
+
+  it('não deixa entrar de novo com a conta apagada', async () => {
+    await request(app.getHttpServer())
+      .post('/v1/auth/login')
+      .send({ email, password })
+      .expect(401);
   });
 
   it('mantém o consent como prova, mas sem IP nem user agent', async () => {
@@ -163,7 +158,7 @@ describe('Exclusão de conta - purge (e2e)', () => {
   });
 
   it('é idempotente: rodar de novo não reprocessa o pedido concluído', async () => {
-    const resultado = await purgeService.purgeDueAccounts(DEPOIS_DO_PRAZO);
+    const resultado = await purgeService.purgeDueAccounts(new Date());
 
     expect(resultado.failed).toBe(0);
     const pedidos = await dataSource.query(

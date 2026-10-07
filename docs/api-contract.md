@@ -12,7 +12,7 @@ Convenções: prefixo `/v1`, respostas no envelope padrão (`success`, `data`, `
 ## users / profile
 - `GET /v1/me` — dados da conta + perfil
 - `PATCH /v1/me/profile` — atualiza peso, altura, idade, sexo, nível de atividade, objetivo
-- `DELETE /v1/me` — inicia exclusão de conta (LGPD, ver módulo consents)
+- `DELETE /v1/me` — exclui a conta e todos os dados na hora (LGPD); responde `{ status: "deleted" | "pending_retry" }` — `pending_retry` = conta bloqueada, job diário termina o purge
 - `GET /v1/me/export` — exporta todos os dados do usuário (LGPD, ver módulo consents)
 
 ## goals

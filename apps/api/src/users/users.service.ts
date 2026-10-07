@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Repository } from 'typeorm';
 import { User, UserStatus } from '../database/entities/user.entity';
@@ -10,11 +10,14 @@ import { BodyMeasurementsService } from '../body-measurements/body-measurements.
 import { GoalsService } from '../goals/goals.service';
 import { DiaryService } from '../diary/diary.service';
 import type { UpdateProfileDto } from './dto/update-profile.dto';
+import { AccountPurgeService } from './account-purge.service';
 
-const DELETION_GRACE_PERIOD_DAYS = 30;
+export type DeletionStatus = 'deleted' | 'pending_retry';
 
 @Injectable()
 export class UsersService {
+  private readonly logger = new Logger(UsersService.name);
+
   constructor(
     @InjectRepository(User) private readonly users: Repository<User>,
     @InjectRepository(Profile) private readonly profiles: Repository<Profile>,
@@ -25,6 +28,7 @@ export class UsersService {
     private readonly bodyMeasurementsService: BodyMeasurementsService,
     private readonly goalsService: GoalsService,
     private readonly diaryService: DiaryService,
+    private readonly accountPurgeService: AccountPurgeService,
   ) {}
 
   private async getUserOrThrow(userId: string): Promise<User> {
@@ -77,14 +81,22 @@ export class UsersService {
     };
   }
 
-  async requestDeletion(userId: string): Promise<{ scheduledPurgeAt: Date }> {
+  /**
+   * Exclusão imediata (decisão do dono do projeto, 2026-10-07): não há como
+   * cancelar, então um prazo de espera só guardaria dados sem benefício.
+   *
+   * A conta é bloqueada e os tokens revogados antes de apagar. Se o purge
+   * falhar no meio, o pedido fica com `scheduledPurgeAt` já vencido e o job
+   * diário (`AccountPurgeScheduler`) termina o trabalho — a pessoa não
+   * consegue mais entrar de qualquer forma.
+   */
+  async requestDeletion(userId: string): Promise<{ status: DeletionStatus }> {
     const user = await this.getUserOrThrow(userId);
     if (user.status === UserStatus.PENDING_DELETION) {
       throw new ConflictException('Exclusão de conta já está em andamento.');
     }
 
     const now = new Date();
-    const scheduledPurgeAt = new Date(now.getTime() + DELETION_GRACE_PERIOD_DAYS * 24 * 60 * 60 * 1000);
 
     user.status = UserStatus.PENDING_DELETION;
     await this.users.save(user);
@@ -94,14 +106,24 @@ export class UsersService {
       { revokedAt: now },
     );
 
-    const request = this.deletionRequests.create({
-      userId,
-      requestedAt: now,
-      scheduledPurgeAt,
-      completedAt: null,
-    });
-    await this.deletionRequests.save(request);
+    const request = await this.deletionRequests.save(
+      this.deletionRequests.create({
+        userId,
+        requestedAt: now,
+        scheduledPurgeAt: now,
+        completedAt: null,
+      }),
+    );
 
-    return { scheduledPurgeAt };
+    try {
+      await this.accountPurgeService.purgeRequest(request, now);
+      return { status: 'deleted' };
+    } catch (error: unknown) {
+      this.logger.error(
+        `Exclusão imediata da conta ${userId} falhou; o job diário vai tentar de novo (pedido ${request.id})`,
+        error instanceof Error ? error.stack : String(error),
+      );
+      return { status: 'pending_retry' };
+    }
   }
 }
