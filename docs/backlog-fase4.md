@@ -91,6 +91,32 @@ Issues **#30** e **#31** acima.
 
 ---
 
+## Status em 2026-10-07 (noite de trabalho autônomo — detalhes em `docs/noite-2026-10-06.md`)
+
+| Item | Status |
+|---|---|
+| F4-20 navegação (Hoje · Progresso · Exames · Perfil, "+") | ✅ |
+| F4-30 tela Hoje | ✅ exceto sequência de dias (decisão pendente) |
+| F4-31 boas-vindas e onboarding | ✅ boas-vindas, exemplos por atividade, data DD/MM/AAAA · ⏳ passos com barra de progresso, ritmo semanal |
+| F4-32 recuperar senha / Google | 🟡 tela em prévia (falta API e envio de e-mail) · ⏳ Google |
+| F4-33 Progresso | ✅ |
+| F4-34 recentes | ✅ |
+| F4-35 água | 🟡 prévia (falta tabela na API) |
+| F4-14 teclado | ✅ |
+| F4-15 formato brasileiro | ✅ |
+| F4-16 estados de tela | ✅ |
+| F4-17 gráfico de peso | ✅ |
+| F4-18 internet ruim | ✅ aviso de servidor lento e cache no aparelho por 24 h |
+| #33 perfil, exportar, excluir | ✅ validado no emulador |
+| F4-21 Sobre | ✅ |
+| F4-22 preferências | ✅ tema e consentimentos · ⏳ lembretes (Fase 6) |
+| F4-10 não depender só de cor | 🟡 ✓ nas seleções, formas no gráfico e nos exames · ⏳ revisão geral |
+| F4-11 movimento reduzido | ✅ |
+| #32 fonte 200% | 🟡 macros empilhados · ⏳ conferência tela a tela |
+| F4-12, F4-36, F4-25, F4-01/02, #34 | ⏳ |
+| Fase 5 — telas de exame | 🟡 prévia completa; calculadoras de índices reais no shared |
+| Voz | 🟡 prévia: gravação, frase → itens por regras, revisão e salvar no diário · ⏳ transcrição por IA |
+
 ## Bloco B — Ambiente de validação real
 
 ### F4-01. Emulador Android como ferramenta do dia a dia
