@@ -5,8 +5,8 @@ import { useStackScreenOptions } from '@/features/navigation/stack-screen-option
 export default function AccountLayout() {
   return (
     <Stack screenOptions={useStackScreenOptions()}>
-      <Stack.Screen name="edit" options={{ title: 'Seus dados e sua meta' }} />
-      <Stack.Screen name="export" options={{ title: 'Exportar meus dados' }} />
+      <Stack.Screen name="edit" options={{ title: 'Seus dados' }} />
+      <Stack.Screen name="export" options={{ title: 'Exportar dados' }} />
       <Stack.Screen name="privacy" options={{ title: 'Privacidade' }} />
       <Stack.Screen name="delete" options={{ title: 'Excluir conta' }} />
       <Stack.Screen name="preferences" options={{ title: 'Preferências' }} />

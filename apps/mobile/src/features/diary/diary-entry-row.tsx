@@ -27,7 +27,8 @@ export function DiaryEntryRow({ entry, onPress, onDelete }: DiaryEntryRowProps) 
         accessibilityHint="Abre para editar a quantidade"
         style={{ minHeight: MIN_TOUCH_TARGET, justifyContent: 'center' }}
         className="flex-1 gap-0.5 py-2 pr-2">
-        <AppText className="text-grafite" numberOfLines={1}>
+        {/* Sem corte: com fonte grande o nome quebra linha em vez de virar "Banana, prata, cr…" (#32). */}
+        <AppText className="text-grafite">
           {entry.food.name}
         </AppText>
         <AppText variant="caption" className="text-grafite">
