@@ -5,11 +5,17 @@ import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
-import { QueryClientProvider } from '@tanstack/react-query';
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 
 import { APP_FONTS } from '@/constants/typography';
+import { SlowNetworkBanner } from '@/features/network/slow-network-banner';
 import { applyThemePreference, loadThemePreference } from '@/features/preferences/theme-preference';
-import { queryClient } from '@/api/query-client';
+import {
+  PERSIST_MAX_AGE_MS,
+  queryClient,
+  queryPersister,
+  shouldPersistQuery,
+} from '@/api/query-client';
 import { useGoalsControllerGetCurrent } from '@/api/generated/endpoints/goals/goals';
 import { AuthProvider, useAuth } from '@/features/auth/auth-context';
 import { GoalUnavailableView } from '@/features/onboarding/goal-unavailable-view';
@@ -40,13 +46,20 @@ export default function RootLayout() {
   }
 
   return (
-    <QueryClientProvider client={queryClient}>
+    <PersistQueryClientProvider
+      client={queryClient}
+      persistOptions={{
+        persister: queryPersister,
+        maxAge: PERSIST_MAX_AGE_MS,
+        dehydrateOptions: { shouldDehydrateQuery: shouldPersistQuery },
+      }}>
       <AuthProvider>
         <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
           <RootNavigator />
+          <SlowNetworkBanner />
         </ThemeProvider>
       </AuthProvider>
-    </QueryClientProvider>
+    </PersistQueryClientProvider>
   );
 }
 

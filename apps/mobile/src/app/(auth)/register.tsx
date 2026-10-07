@@ -1,32 +1,48 @@
 import { isAxiosError } from 'axios';
-import { Link } from 'expo-router';
-import { useState } from 'react';
-import { KeyboardAvoidingView, Platform, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
+import { useRef, useState } from 'react';
+import { View, type TextInput } from 'react-native';
 
+import { AppText } from '@/components/ui/app-text';
 import { FormError } from '@/components/ui/form-error';
+import { FormScreen } from '@/components/ui/form-screen';
+import { TextButton } from '@/components/ui/text-button';
 import { useAuth } from '@/features/auth/auth-context';
 import { AuthTextField } from '@/features/auth/auth-text-field';
+import { PasswordField } from '@/features/auth/password-field';
 import { PrimaryButton } from '@/features/auth/primary-button';
-import { AppText } from '@/components/ui/app-text';
+
+const MIN_PASSWORD_LENGTH = 8;
 
 export default function RegisterScreen() {
+  // `Link` do expo-router ignora o className do NativeWind: o texto saía preto e na fonte do sistema.
+  const router = useRouter();
   const { register } = useAuth();
+  const passwordRef = useRef<TextInput>(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function handleSubmit() {
+    if (!email.includes('@')) {
+      setError('Digite um e-mail válido, como maria@exemplo.com.');
+      return;
+    }
+    // A regra fica visível embaixo do campo; o botão nunca fica travado sem dizer por quê.
+    if (password.length < MIN_PASSWORD_LENGTH) {
+      setError(`A senha precisa de pelo menos ${MIN_PASSWORD_LENGTH} caracteres.`);
+      return;
+    }
     setError(null);
     setIsSubmitting(true);
     try {
-      await register(email, password);
+      await register(email.trim(), password);
     } catch (err) {
       setError(
         isAxiosError(err) && err.response?.status === 409
-          ? 'Já existe uma conta com este email.'
-          : 'Não foi possível criar a conta. Tente novamente.',
+          ? 'Já existe uma conta com este e-mail. Toque em “Entrar” logo abaixo.'
+          : 'Não foi possível criar a conta. Confira sua internet e tente de novo.',
       );
     } finally {
       setIsSubmitting(false);
@@ -34,50 +50,63 @@ export default function RegisterScreen() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-areia">
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        className="flex-1 justify-center gap-6 px-6">
-        <View className="gap-1">
-          <AppText variant="title" accessibilityRole="header" className="text-grafite">Criar conta</AppText>
-          <AppText className="text-grafite">
-            Registre sua alimentação e acompanhe seus exames num só lugar.
-          </AppText>
-        </View>
+    <FormScreen centered>
+      <View className="gap-1">
+        <AppText variant="title" accessibilityRole="header" className="text-grafite">
+          Criar conta
+        </AppText>
+        <AppText className="text-grafite">
+          Registre sua alimentação e acompanhe sua saúde num só lugar.
+        </AppText>
+      </View>
 
-        <View className="gap-4">
-          <AuthTextField
-            label="Email"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            autoComplete="email"
-            textContentType="emailAddress"
-          />
-          <AuthTextField
-            label="Senha"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-            autoComplete="password-new"
-            textContentType="newPassword"
-          />
-          <FormError message={error} />
-          <PrimaryButton
-            label="Criar conta"
-            onPress={handleSubmit}
-            isLoading={isSubmitting}
-            disabled={!email || password.length < 8}
-          />
-        </View>
+      <View className="gap-4">
+        <AuthTextField
+          label="E-mail"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoComplete="email"
+          textContentType="emailAddress"
+          returnKeyType="next"
+          submitBehavior="submit"
+          onSubmitEditing={() => passwordRef.current?.focus()}
+        />
+        <PasswordField
+          ref={passwordRef}
+          label="Senha"
+          value={password}
+          onChangeText={setPassword}
+          autoComplete="password-new"
+          textContentType="newPassword"
+          returnKeyType="go"
+          accessibilityHint={`Pelo menos ${MIN_PASSWORD_LENGTH} caracteres`}
+          onSubmitEditing={() => void handleSubmit()}
+        />
+        <AppText variant="caption" className="text-grafite-suave">
+          Use pelo menos {MIN_PASSWORD_LENGTH} caracteres.
+          {password.length > 0 && password.length < MIN_PASSWORD_LENGTH
+            ? ` Faltam ${MIN_PASSWORD_LENGTH - password.length}.`
+            : ''}
+        </AppText>
+        <FormError message={error} />
+        <PrimaryButton
+          label="Criar conta"
+          onPress={() => void handleSubmit()}
+          isLoading={isSubmitting}
+        />
+      </View>
 
-        <View className="flex-row justify-center gap-1">
-          <AppText className="text-grafite">Já tem conta?</AppText>
-          <Link href="/login" className="font-body-semibold text-mamao-forte">
-            Entrar
-          </Link>
-        </View>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+      <View className="flex-row flex-wrap items-center justify-center gap-1">
+        <AppText className="text-grafite">Já tem conta?</AppText>
+        <TextButton
+          label="Entrar"
+          onPress={() => router.push('/login')}
+          textVariant="bodyStrong"
+          textClassName="text-mamao-forte"
+          className="self-center"
+        />
+      </View>
+    </FormScreen>
   );
 }

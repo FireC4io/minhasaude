@@ -1,11 +1,11 @@
 import { weightEntrySchema } from '@minhasaude/shared';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { KeyboardAvoidingView, Platform, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { View } from 'react-native';
 
 import { useBodyMeasurementsControllerCreate } from '@/api/generated/endpoints/body-measurements/body-measurements';
 import { FormError } from '@/components/ui/form-error';
+import { FormScreen } from '@/components/ui/form-screen';
 import { AuthTextField } from '@/features/auth/auth-text-field';
 import { PrimaryButton } from '@/features/auth/primary-button';
 import { parseDecimal } from '@/features/forms/parse-decimal';
@@ -23,7 +23,7 @@ export default function WeightScreen() {
 
     const parsed = weightEntrySchema.safeParse({ weightKg: parseDecimal(weightKg) });
     if (!parsed.success) {
-      setError('Informe um peso válido (entre 20 e 400 kg).');
+      setError('Digite seu peso em quilos, entre 20 e 400 — por exemplo, 70,5.');
       return;
     }
 
@@ -37,15 +37,12 @@ export default function WeightScreen() {
       });
       router.push('/summary');
     } catch {
-      setError('Não foi possível salvar seu peso. Tente de novo.');
+      setError('Não foi possível salvar seu peso. Confira sua internet e tente de novo.');
     }
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-areia">
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        className="flex-1 gap-6 px-6 pt-8">
+    <FormScreen>
         <View className="gap-1">
           <AppText variant="title" accessibilityRole="header" className="text-grafite">Seu peso atual</AppText>
           <AppText className="text-grafite">
@@ -60,13 +57,14 @@ export default function WeightScreen() {
             label="Peso (kg)"
             value={weightKg}
             onChangeText={setWeightKg}
-            placeholder="70.5"
+            placeholder="ex.: 70,5"
             keyboardType="decimal-pad"
+            returnKeyType="go"
+            onSubmitEditing={() => void handleSubmit()}
           />
           <FormError message={error} />
-          <PrimaryButton label="Continuar" onPress={handleSubmit} isLoading={createMeasurement.isPending} />
+          <PrimaryButton label="Continuar" onPress={() => void handleSubmit()} isLoading={createMeasurement.isPending} />
         </View>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+    </FormScreen>
   );
 }

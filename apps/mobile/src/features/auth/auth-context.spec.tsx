@@ -4,11 +4,13 @@ import { useState } from 'react';
 import { Pressable, Text } from 'react-native';
 
 import * as generatedAuth from '@/api/generated/endpoints/auth/auth';
+import * as queryClientModule from '@/api/query-client';
 import * as tokenStorage from '@/api/token-storage';
 import { AuthProvider, useAuth } from './auth-context';
 
 jest.mock('@/api/token-storage');
 jest.mock('@/api/generated/endpoints/auth/auth');
+jest.mock('@/api/query-client', () => ({ clearPersistedCache: jest.fn() }));
 
 function AuthProbe() {
   const { isAuthenticated, isLoading, login, register, logout } = useAuth();
@@ -162,5 +164,7 @@ describe('AuthProvider', () => {
     await waitFor(() => expect(screen.getByTestId('isAuthenticated').props.children).toBe('false'));
     expect(logoutMutateAsync).toHaveBeenCalledWith({ data: { refreshToken: 'refresh-1' } });
     expect(tokenStorage.clearStoredTokens).toHaveBeenCalled();
+    // A cópia do cache gravada no aparelho tem diário e peso: não pode sobrar.
+    expect(queryClientModule.clearPersistedCache).toHaveBeenCalled();
   });
 });

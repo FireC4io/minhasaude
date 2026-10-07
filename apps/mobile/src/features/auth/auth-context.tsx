@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
 
 import {
   useAuthControllerLogin,
@@ -7,6 +6,7 @@ import {
   useAuthControllerRegister,
 } from '@/api/generated/endpoints/auth/auth';
 import { setSessionExpiredHandler } from '@/api/http-client';
+import { clearPersistedCache } from '@/api/query-client';
 import { clearStoredTokens, getStoredTokens, setStoredTokens } from '@/api/token-storage';
 
 interface AuthContextValue {
@@ -22,7 +22,6 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const queryClient = useQueryClient();
 
   const loginMutation = useAuthControllerLogin();
   const registerMutation = useAuthControllerRegister();
@@ -43,10 +42,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     setSessionExpiredHandler(() => {
       setIsAuthenticated(false);
-      queryClient.clear();
+      // Inclui a cópia gravada no aparelho: dado de saúde não fica para trás.
+      void clearPersistedCache();
     });
     return () => setSessionExpiredHandler(null);
-  }, [queryClient]);
+  }, []);
 
   async function login(email: string, password: string) {
     const tokens = await loginMutation.mutateAsync({ data: { email, password } });
@@ -69,7 +69,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     }
     await clearStoredTokens();
-    queryClient.clear();
+    await clearPersistedCache();
     setIsAuthenticated(false);
   }
 
