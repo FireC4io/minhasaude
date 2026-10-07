@@ -1,3 +1,4 @@
+import i18n from 'i18next';
 import { localDateFromIso } from '@/features/diary/date-utils';
 import { displayNumber } from '@/features/accessibility/spoken-format';
 import { buildWeightChart } from '@/features/weight/chart-geometry';
@@ -45,12 +46,12 @@ function dateTimeLabel(isoDateTime: string): string {
 }
 
 function signedKg(value: number): string {
-  if (Math.abs(value) < 0.05) return 'sem mudança';
+  if (Math.abs(value) < 0.05) return i18n.t('pdf.noChange');
   return `${value > 0 ? '+' : '−'}${formatKg(Math.abs(value))}`;
 }
 
 function weightSection(weight: WeightSection | null): string {
-  if (!weight) return '<p class="vazio">Nenhum peso registrado ainda.</p>';
+  if (!weight) return `<p class="vazio">${i18n.t('pdf.noWeight')}</p>`;
 
   const chart = buildWeightChart(
     weight.entries.map((e) => ({ measuredAt: e.measuredAt, weightKg: String(e.weightKg) })),
@@ -66,23 +67,23 @@ function weightSection(weight: WeightSection | null): string {
 
   return `
     <div class="cards">
-      <div class="card"><span>Primeiro registro</span><strong>${formatKg(weight.firstKg)}</strong></div>
-      <div class="card"><span>Último registro</span><strong>${formatKg(weight.lastKg)}</strong></div>
-      <div class="card"><span>Diferença</span><strong>${signedKg(weight.changeKg)}</strong></div>
+      <div class="card"><span>${i18n.t('pdf.first')}</span><strong>${formatKg(weight.firstKg)}</strong></div>
+      <div class="card"><span>${i18n.t('pdf.last')}</span><strong>${formatKg(weight.lastKg)}</strong></div>
+      <div class="card"><span>${i18n.t('pdf.difference')}</span><strong>${signedKg(weight.changeKg)}</strong></div>
     </div>
-    <svg viewBox="0 0 ${CHART.width} ${CHART.height}" class="grafico" role="img" aria-label="Gráfico do peso ao longo do tempo">
+    <svg viewBox="0 0 ${CHART.width} ${CHART.height}" class="grafico" role="img" aria-label="${i18n.t('pdf.chartAria')}">
       <polyline points="${chart.polyline}" fill="none" stroke="#3e8e5b" stroke-width="2.5" />
       ${dots}
     </svg>
-    <p class="nota">Escala do gráfico: de ${formatKg(chart.min)} (embaixo) a ${formatKg(chart.max)} (em cima).
-    Só o peso da balança comum. Medidas de aparelhos de bioimpedância não entram aqui.</p>
-    <table><thead><tr><th>Data</th><th class="num">Peso</th></tr></thead><tbody>${rows}</tbody></table>`;
+    <p class="nota">${i18n.t('pdf.scale', { min: formatKg(chart.min), max: formatKg(chart.max) })}
+    ${i18n.t('pdf.scaleOnly')}</p>
+    <table><thead><tr><th>${i18n.t('pdf.date')}</th><th class="num">${i18n.t('pdf.weight')}</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
 
 function weekRow(week: WeekRow): string {
   const target = week.targetKcal === null ? '—' : kcal(week.targetKcal);
   return `<tr>
-    <td>${dateLabel(week.weekStart)} a ${dateLabel(week.weekEnd)}</td>
+    <td>${i18n.t('pdf.weekRange', { from: dateLabel(week.weekStart), to: dateLabel(week.weekEnd) })}</td>
     <td class="num">${week.daysLogged}</td>
     <td class="num">${kcal(week.average.kcal)}</td>
     <td class="num">${target}</td>
@@ -93,18 +94,18 @@ function weekRow(week: WeekRow): string {
 }
 
 function weeksSection(weeks: readonly WeekRow[]): string {
-  if (weeks.length === 0) return '<p class="vazio">Nenhum dia registrado no diário ainda.</p>';
+  if (weeks.length === 0) return `<p class="vazio">${i18n.t('pdf.noDays')}</p>`;
   return `
-    <p class="nota">Média dos dias com registro. Dias sem nada anotado não contam como zero.</p>
+    <p class="nota">${i18n.t('pdf.weekNote')}</p>
     <table>
-      <thead><tr><th>Semana</th><th class="num">Dias</th><th class="num">Média</th><th class="num">Meta</th>
-      <th class="num">Proteína</th><th class="num">Carboidrato</th><th class="num">Gordura</th></tr></thead>
+      <thead><tr><th>${i18n.t('pdf.week')}</th><th class="num">${i18n.t('pdf.days')}</th><th class="num">${i18n.t('pdf.average')}</th><th class="num">${i18n.t('pdf.goal')}</th>
+      <th class="num">${i18n.t('pdf.protein')}</th><th class="num">${i18n.t('pdf.carbs')}</th><th class="num">${i18n.t('pdf.fat')}</th></tr></thead>
       <tbody>${weeks.map(weekRow).join('')}</tbody>
     </table>`;
 }
 
 function goalRow(goal: GoalRow): string {
-  const origin = goal.isManualOverride ? 'Ajustada por você' : 'Calculada pelo app';
+  const origin = goal.isManualOverride ? i18n.t('pdf.manual') : i18n.t('pdf.calculated');
   return `<tr>
     <td>${dateTimeLabel(goal.activeFrom)}</td>
     <td class="num">${kcal(goal.kcal)}</td>
@@ -116,17 +117,17 @@ function goalRow(goal: GoalRow): string {
 }
 
 function goalsSection(goals: readonly GoalRow[]): string {
-  if (goals.length === 0) return '<p class="vazio">Nenhuma meta calculada ainda.</p>';
+  if (goals.length === 0) return `<p class="vazio">${i18n.t('pdf.noGoals')}</p>`;
   return `<table>
-    <thead><tr><th>A partir de</th><th class="num">Calorias</th><th class="num">Proteína</th>
-    <th class="num">Carboidrato</th><th class="num">Gordura</th><th>Origem</th></tr></thead>
+    <thead><tr><th>${i18n.t('pdf.since')}</th><th class="num">${i18n.t('pdf.calories')}</th><th class="num">${i18n.t('pdf.protein')}</th>
+    <th class="num">${i18n.t('pdf.carbs')}</th><th class="num">${i18n.t('pdf.fat')}</th><th>${i18n.t('pdf.origin')}</th></tr></thead>
     <tbody>${goals.map(goalRow).join('')}</tbody>
   </table>`;
 }
 
 function quantityLabel(item: DayRow['meals'][number]['items'][number]): string {
   const value = displayNumber(Number(item.quantity), 1);
-  return item.unit === 'grams' ? `${value} g` : `${value} porção(ões)`;
+  return item.unit === 'grams' ? `${value} g` : i18n.t('pdf.portion', { count: Number(item.quantity), value });
 }
 
 function daySection(day: DayRow): string {
@@ -148,7 +149,7 @@ function daySection(day: DayRow): string {
 }
 
 function diarySection(days: readonly DayRow[]): string {
-  if (days.length === 0) return '<p class="vazio">Nenhum dia registrado no diário ainda.</p>';
+  if (days.length === 0) return `<p class="vazio">${i18n.t('pdf.noDays')}</p>`;
   return days.map(daySection).join('');
 }
 
@@ -175,28 +176,27 @@ const STYLE = `
 
 export function renderReportHtml(report: ProgressReport): string {
   return `<!doctype html>
-<html lang="pt-BR">
-<head><meta charset="utf-8" /><title>Relatório de progresso — Gota Vital</title><style>${STYLE}</style></head>
+<html lang="${appLocale()}">
+<head><meta charset="utf-8" /><title>${i18n.t('pdf.docTitle')}</title><style>${STYLE}</style></head>
 <body>
-  <h1>Relatório de progresso</h1>
-  <p class="sub">Gota Vital · gerado em ${dateTimeLabel(report.generatedAt)}</p>
+  <h1>${i18n.t('pdf.title')}</h1>
+  <p class="sub">${i18n.t('pdf.generated', { date: dateTimeLabel(report.generatedAt) })}</p>
 
-  <h2>Peso</h2>
+  <h2>${i18n.t('pdf.weight')}</h2>
   ${weightSection(report.weight)}
 
-  <h2>Médias por semana</h2>
+  <h2>${i18n.t('pdf.weeks')}</h2>
   ${weeksSection(report.weeks)}
 
-  <h2>Suas metas</h2>
+  <h2>${i18n.t('pdf.goals')}</h2>
   ${goalsSection(report.goals)}
 
-  <h2>Diário completo</h2>
+  <h2>${i18n.t('pdf.diary')}</h2>
   ${diarySection(report.days)}
 
   <footer>
-    Este relatório é informativo e não substitui orientação de nutricionista ou médico.
-    Os números vêm do que você registrou no app.<br />
-    Dados nutricionais: Tabela Brasileira de Composição de Alimentos (TACO/Unicamp) e Open Food Facts (licença ODbL).
+    ${i18n.t('pdf.footer')}<br />
+    ${i18n.t('pdf.credits')}
   </footer>
 </body>
 </html>`;
