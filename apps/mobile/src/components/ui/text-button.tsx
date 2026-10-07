@@ -31,7 +31,7 @@ export function TextButton({
   disabled,
   busy,
   className,
-  textClassName = 'text-sm font-semibold text-mamao',
+  textClassName = 'text-sm font-semibold text-mamao-forte',
 }: TextButtonProps) {
   const isDisabled = Boolean(disabled || busy);
 

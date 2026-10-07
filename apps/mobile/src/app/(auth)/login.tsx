@@ -70,7 +70,7 @@ export default function LoginScreen() {
 
         <View className="flex-row justify-center gap-1">
           <Text className="text-grafite">Não tem conta?</Text>
-          <Link href="/register" className="font-semibold text-mamao">
+          <Link href="/register" className="font-semibold text-mamao-forte">
             Criar conta
           </Link>
         </View>

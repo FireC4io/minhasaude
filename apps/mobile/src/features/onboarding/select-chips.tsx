@@ -43,7 +43,7 @@ export function SelectChips<TValue extends string>({
               style={{ minHeight: MIN_TOUCH_TARGET, justifyContent: 'center' }}
               className={
                 selected
-                  ? 'rounded-full bg-mamao px-4 py-2'
+                  ? 'rounded-full bg-mamao-forte px-4 py-2'
                   : 'rounded-full border border-grafite px-4 py-2'
               }>
               <Text className={selected ? 'text-areia' : 'text-grafite'}>{optionLabels[option]}</Text>

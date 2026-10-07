@@ -120,12 +120,13 @@ Issues **#30** e **#31** acima.
 - [ ] Barra de abas pintada com a paleta nos dois temas (hoje usa `constants/theme.ts` do template e fica preta no escuro)
 - [ ] Remover os resquícios do template (`animated-icon.tsx`, `themed-text.tsx`, `constants/theme.ts`)
 
-### F4-07. Paleta com contraste aprovado ⚠️ decisão de design
+### F4-07. Paleta com contraste aprovado ✅ (2026-10-06)
 **Contexto**: achado #1 — a cor de ação reprova no modo claro.
-- [ ] Criar uma variante da cor de ação para texto e para fundo de botão que passe 4,5:1, mantendo o mamão atual para áreas grandes e decorativas
-- [ ] Mesmo tratamento para o maracujá
-- [ ] Teste automatizado que calcula o contraste de cada par texto/fundo dos tokens, nos dois temas, e reprova abaixo de 4,5:1
-- [ ] **Precisa da aprovação do usuário**: altera a identidade aprovada em 2026-09-18
+- [x] Token `mamao-forte` (`#b8481f`, "mamão queimado") para texto e fundo de botão: 4,69:1 sobre a areia, 5,27:1 com texto creme. O mamão `#ff6f4d` fica só para áreas grandes e decorativas. Os 7 usos de ação foram trocados (botão primário, chip selecionado, `TextButton`, links de login/registro, "+ Adicionar")
+- [x] Token `maracuja-forte` (`#91630d`, 4,68:1) para quando o maracujá for texto; os anéis seguem com o original. No escuro as duas variantes repetem o hex original, que já passa
+- [x] Teste `features/accessibility/contrast.spec.ts`: contraste de cada par texto/fundo usado de verdade, nos dois temas, e igualdade dos hex entre `global.css` e `gota-vital-colors.ts`
+- [x] Aprovado pelo usuário em 2026-10-06 (escolheu o mamão queimado em vez do `#d22800`, que lia como vermelho de erro)
+- **Atenção**: couve (`#3e8e5b`) dá 3,58:1 sobre a areia no claro — hoje não é usado como texto; se precisar, criar `couve-forte` e adicionar o par no teste. O spinner do botão primário é `#FBF0E4` fixo, e no escuro fica sobre o mamão claro (gráfico, pede 3:1) — conferir na #34
 
 ### F4-08. Catálogo de componentes
 - [ ] Tela só de desenvolvimento com cada componente base em todos os estados (normal, pressionado, desabilitado, carregando, erro), nos dois temas — referência visual para revisar

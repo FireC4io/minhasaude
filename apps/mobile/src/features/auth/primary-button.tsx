@@ -32,7 +32,7 @@ export function PrimaryButton({
       accessibilityState={{ disabled: Boolean(isDisabled), busy: Boolean(isLoading) }}
       // Objeto, não função — ver o comentário em `TextButton`.
       style={{ minHeight: MIN_TOUCH_TARGET, justifyContent: 'center' }}
-      className={`items-center rounded-2xl bg-mamao px-4 py-3 ${
+      className={`items-center rounded-2xl bg-mamao-forte px-4 py-3 ${
         isDisabled ? 'opacity-50' : 'active:opacity-80'
       }`}>
       {isLoading ? (

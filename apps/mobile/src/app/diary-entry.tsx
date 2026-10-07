@@ -169,7 +169,7 @@ export default function DiaryEntryScreen() {
                   onPress={() => setSelectedFood(null)}
                   hint="Volta para a busca"
                   className="self-start"
-                  textClassName="text-sm text-mamao"
+                  textClassName="text-sm text-mamao-forte"
                 />
               </View>
             ) : null}

@@ -10,10 +10,12 @@
   --color-areia: #fbf0e4; /* fundo */
   --color-superficie: #ffffff; /* card sobre o fundo — nunca usar bg-white direto */
   --color-grafite: #2b3a34; /* texto principal */
-  --color-mamao: #ff6f4d; /* acento — ações, metas */
+  --color-mamao: #ff6f4d; /* acento decorativo — áreas grandes; reprova como texto (2,45:1) */
+  --color-mamao-forte: #b8481f; /* ações: botão, chip selecionado, texto clicável (F4-07) */
   --color-couve: #3e8e5b; /* nutrição, progresso positivo */
   --color-jabuticaba: #8c2f4b; /* exames — nunca vermelho de alerta clínico */
-  --color-maracuja: #c98a12; /* destaque, anéis de meta */
+  --color-maracuja: #c98a12; /* destaque decorativo, anéis de meta */
+  --color-maracuja-forte: #91630d; /* maracujá quando for texto */
 
   --font-display:
     Spline Sans, Inter, ui-sans-serif, system-ui, sans-serif, Apple Color Emoji, Segoe UI Emoji,
@@ -30,8 +32,10 @@
     --color-superficie: #2a211b;
     --color-grafite: #f5eae0;
     --color-mamao: #ff8264;
+    --color-mamao-forte: #ff8264;
     --color-couve: #63bf87;
     --color-jabuticaba: #e0839a;
     --color-maracuja: #f0bb4e;
+    --color-maracuja-forte: #f0bb4e;
   }
 }

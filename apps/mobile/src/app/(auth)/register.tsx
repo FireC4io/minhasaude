@@ -72,7 +72,7 @@ export default function RegisterScreen() {
 
         <View className="flex-row justify-center gap-1">
           <Text className="text-grafite">Já tem conta?</Text>
-          <Link href="/login" className="font-semibold text-mamao">
+          <Link href="/login" className="font-semibold text-mamao-forte">
             Entrar
           </Link>
         </View>

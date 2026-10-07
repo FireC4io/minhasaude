@@ -50,7 +50,7 @@ export function MealSection({ mealType, entries, onEntryPress, onEntryDelete, on
         accessibilityLabel={`Adicionar alimento ao ${label.toLowerCase()}`}
         onPress={onAddPress}
         className="self-start"
-        textClassName="font-semibold text-mamao"
+        textClassName="font-semibold text-mamao-forte"
       />
     </View>
   );
