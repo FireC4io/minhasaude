@@ -6,17 +6,34 @@ migrations com cuidado, testes antes, e avisar o dono antes de publicar mudança
 
 ## Ordem sugerida
 
-### 1. Exclusão de conta permanente (backend + app) — decisão do dono
+### 1. ✅ Exclusão de conta permanente (2026-10-07, `0df0109`)
+- Feito: exclusão **na hora** (decisão do dono). O login já recusava `PENDING_DELETION` — a "lacuna" anotada
+  estava errada. O job diário ficou só como rede de segurança se o purge falhar no meio.
+
+<details><summary>Plano original</summary>
+
 - Login recusa conta em `PENDING_DELETION` (ou exclusão imediata, sem prazo — confirmar qual no início).
 - Antes de confirmar, a tela mostra o que será apagado e oferece **baixar o relatório de progresso**.
 - Testes unitários + e2e; conferir que o `ON DELETE CASCADE` cobre tudo.
 
-### 2. Relatório de progresso para baixar
+</details>
+
+### 2. ✅ Relatório de progresso (2026-10-07, `6c3b84a`)
+- Feito: PDF gerado no aparelho (`expo-print`) com peso, médias semanais vs. meta, metas e diário completo;
+  `GET /v1/me/progress-report`; Perfil → Relatório de progresso e na tela de exclusão. Export LGPD: **o dono
+  deixou para discutir depois** (alimentos cadastrados seguem fora).
+- Falta: validar o PDF num aparelho real (no navegador, renderizado com Edge headless e conferido).
+
+<details><summary>Plano original</summary>
+
 - Definir com o dono o conteúdo (peso, médias, metas, diário; exames quando existirem) e o formato
   (PDF legível é o mais provável). Reaproveitar na exclusão de conta e no Perfil.
 - Junto: discutir o conteúdo exato da exportação LGPD (incluir alimentos cadastrados pela pessoa).
 
+</details>
+
 ### 3. Busca de alimento por relevância (backend)
+- Mais um caso real: "pao frances" → "Torrada, pão francês" primeiro.
 - Ordenar: começa com o termo → contém o termo → similaridade `pg_trgm`; forma comum (cozido) e nome curto
   antes de prato composto; alimentos mais registrados pela pessoa primeiro; sinônimos simples.
 - Testes com casos reais: "arroz", "feijão", "pão", "banana".
