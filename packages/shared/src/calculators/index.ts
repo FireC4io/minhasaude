@@ -4,3 +4,4 @@ export * from './katch-mcardle';
 export * from './tdee';
 export * from './macros';
 export * from './target-kcal';
+export * from './exam-indices';
