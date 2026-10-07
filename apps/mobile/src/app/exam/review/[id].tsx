@@ -63,7 +63,7 @@ export default function ReviewExamScreen() {
         unit: result.rawUnit,
       })),
     );
-    router.replace({ pathname: '/exam/[id]', params: { id: document?.id } });
+    router.replace({ pathname: '/exam/[id]', params: { id } });
   }
 
   const includedCount = document.results.filter((result) => draftFor(result).include).length;
