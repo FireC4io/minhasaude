@@ -65,7 +65,16 @@ export default function DeleteAccountScreen() {
         recuperar depois. Se quiser guardar uma cópia, faça isso antes.
       </AppText>
 
-      <TextButton label="Guardar uma cópia dos meus dados" onPress={() => router.push('/account/export')} />
+      <View className="gap-1">
+        <TextButton
+          label="Baixar relatório de progresso (PDF)"
+          onPress={() => router.push('/account/report')}
+        />
+        <TextButton
+          label="Exportar todos os meus dados (arquivo)"
+          onPress={() => router.push('/account/export')}
+        />
+      </View>
 
       <View className="gap-2 rounded-2xl bg-superficie p-4">
         <AppText variant="label" className="text-grafite-suave">

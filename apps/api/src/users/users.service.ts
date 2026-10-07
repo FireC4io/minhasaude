@@ -9,6 +9,7 @@ import { ConsentsService } from '../consents/consents.service';
 import { BodyMeasurementsService } from '../body-measurements/body-measurements.service';
 import { GoalsService } from '../goals/goals.service';
 import { DiaryService } from '../diary/diary.service';
+import { BodyMeasurementSource } from '../database/entities/body-measurement.entity';
 import type { UpdateProfileDto } from './dto/update-profile.dto';
 import { AccountPurgeService } from './account-purge.service';
 
@@ -90,6 +91,26 @@ export class UsersService {
    * diário (`AccountPurgeScheduler`) termina o trabalho — a pessoa não
    * consegue mais entrar de qualquer forma.
    */
+  /**
+   * Dados do relatório de progresso (o PDF é montado no celular). Separado do
+   * export LGPD de propósito: o conteúdo da exportação ainda será discutido.
+   * Só o peso da balança comum entra — o relatório nunca mistura aparelhos.
+   */
+  async getProgressReport(userId: string) {
+    const measurements = await this.bodyMeasurementsService.listAll(userId);
+    const goals = await this.goalsService.listAll(userId);
+    const diaryEntries = await this.diaryService.listAllWithFood(userId);
+
+    return {
+      generatedAt: new Date(),
+      weights: measurements
+        .filter((m) => m.source === BodyMeasurementSource.MANUAL)
+        .reverse(),
+      goals: [...goals].reverse(),
+      diaryEntries,
+    };
+  }
+
   async requestDeletion(userId: string): Promise<{ status: DeletionStatus }> {
     const user = await this.getUserOrThrow(userId);
     if (user.status === UserStatus.PENDING_DELETION) {

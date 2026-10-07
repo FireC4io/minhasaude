@@ -45,6 +45,7 @@ export * from './paginatedFoodResponseDto';
 export * from './paginatedGoalTargetResponseDto';
 export * from './paginationMetaDto';
 export * from './profileResponseDto';
+export * from './progressReportResponseDto';
 export * from './recalculateGoalDto';
 export * from './recalculateGoalDtoMethod';
 export * from './refreshDto';

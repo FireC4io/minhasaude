@@ -238,4 +238,13 @@ export class DiaryService {
   async listAll(userId: string): Promise<DiaryEntry[]> {
     return this.entries.find({ where: { userId }, order: { entryDate: 'DESC', createdAt: 'ASC' } });
   }
+
+  // Relatório de progresso: precisa do nome do alimento, em ordem cronológica.
+  async listAllWithFood(userId: string): Promise<DiaryEntry[]> {
+    return this.entries.find({
+      where: { userId },
+      relations: { food: true },
+      order: { entryDate: 'ASC', createdAt: 'ASC' },
+    });
+  }
 }

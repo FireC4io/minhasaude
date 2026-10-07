@@ -4,6 +4,7 @@ import { UsersService } from './users.service';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { MeResponseDto, ProfileResponseDto } from './dto/me-response.dto';
 import { DeletionResponseDto } from './dto/deletion-response.dto';
+import { ProgressReportResponseDto } from './dto/progress-report-response.dto';
 import { toDto } from '../common/serialization/to-dto';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import type { JwtPayload } from '../auth/types/jwt-payload.interface';
@@ -36,6 +37,13 @@ export class UsersController {
   @ApiOperation({ summary: 'Exporta todos os dados do usuário (LGPD, direito de portabilidade)' })
   exportData(@CurrentUser() user: JwtPayload) {
     return this.usersService.exportData(user.sub);
+  }
+
+  @Get('progress-report')
+  @ApiOperation({ summary: 'Dados do relatório de progresso (peso, metas e diário) para gerar o PDF' })
+  @ApiOkResponse({ type: ProgressReportResponseDto })
+  async getProgressReport(@CurrentUser() user: JwtPayload) {
+    return toDto(ProgressReportResponseDto, await this.usersService.getProgressReport(user.sub));
   }
 
   @Delete()

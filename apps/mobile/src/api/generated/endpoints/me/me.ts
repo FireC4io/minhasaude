@@ -28,6 +28,7 @@ import type {
   DeletionResponseDto,
   MeResponseDto,
   ProfileResponseDto,
+  ProgressReportResponseDto,
   UpdateProfileDto
 } from '../../models';
 
@@ -356,6 +357,98 @@ export function useUsersControllerExportData<TData = Awaited<ReturnType<typeof u
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
   const queryOptions = getUsersControllerExportDataQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+/**
+ * @summary Dados do relatório de progresso (peso, metas e diário) para gerar o PDF
+ */
+export const usersControllerGetProgressReport = (
+
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<ProgressReportResponseDto>(
+      {url: `/v1/me/progress-report`, method: 'GET', signal
+    },
+      );
+    }
+
+
+
+
+export const getUsersControllerGetProgressReportQueryKey = () => {
+    return [
+    `/v1/me/progress-report`
+    ] as const;
+    }
+
+
+export const getUsersControllerGetProgressReportQueryOptions = <TData = Awaited<ReturnType<typeof usersControllerGetProgressReport>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof usersControllerGetProgressReport>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getUsersControllerGetProgressReportQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof usersControllerGetProgressReport>>> = ({ signal }) => usersControllerGetProgressReport(signal);
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof usersControllerGetProgressReport>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type UsersControllerGetProgressReportQueryResult = NonNullable<Awaited<ReturnType<typeof usersControllerGetProgressReport>>>
+export type UsersControllerGetProgressReportQueryError = unknown
+
+
+export function useUsersControllerGetProgressReport<TData = Awaited<ReturnType<typeof usersControllerGetProgressReport>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof usersControllerGetProgressReport>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof usersControllerGetProgressReport>>,
+          TError,
+          Awaited<ReturnType<typeof usersControllerGetProgressReport>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useUsersControllerGetProgressReport<TData = Awaited<ReturnType<typeof usersControllerGetProgressReport>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof usersControllerGetProgressReport>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof usersControllerGetProgressReport>>,
+          TError,
+          Awaited<ReturnType<typeof usersControllerGetProgressReport>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useUsersControllerGetProgressReport<TData = Awaited<ReturnType<typeof usersControllerGetProgressReport>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof usersControllerGetProgressReport>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Dados do relatório de progresso (peso, metas e diário) para gerar o PDF
+ */
+
+export function useUsersControllerGetProgressReport<TData = Awaited<ReturnType<typeof usersControllerGetProgressReport>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof usersControllerGetProgressReport>>, TError, TData>>, }
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getUsersControllerGetProgressReportQueryOptions(options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

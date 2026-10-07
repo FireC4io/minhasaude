@@ -6,6 +6,7 @@ export default function AccountLayout() {
   return (
     <Stack screenOptions={useStackScreenOptions()}>
       <Stack.Screen name="edit" options={{ title: 'Seus dados' }} />
+      <Stack.Screen name="report" options={{ title: 'Relatório de progresso' }} />
       <Stack.Screen name="export" options={{ title: 'Exportar dados' }} />
       <Stack.Screen name="privacy" options={{ title: 'Privacidade' }} />
       <Stack.Screen name="delete" options={{ title: 'Excluir conta' }} />

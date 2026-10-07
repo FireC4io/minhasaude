@@ -38,6 +38,11 @@ export default function ProfileScreen() {
 
         <Section title="Seus dados, seus direitos">
           <ListRow
+            title="Relatório de progresso"
+            description="Um PDF com peso, médias, metas e diário"
+            onPress={go('/account/report')}
+          />
+          <ListRow
             title="Exportar meus dados"
             description="Um arquivo com tudo o que o app guarda sobre você"
             onPress={go('/account/export')}
