@@ -46,8 +46,8 @@ export default function ConsentScreen() {
             • Seus dados não são vendidos nem compartilhados com terceiros para publicidade.
           </AppText>
           <AppText className="text-grafite">
-            • Você pode exportar todos os seus dados ou excluir sua conta a qualquer momento, nas
-            configurações do app.
+            • Você pode exportar todos os seus dados ou excluir sua conta a qualquer momento, pela
+            aba Perfil.
           </AppText>
           <AppText className="text-grafite">
             • Este aceite vale para a versão {CURRENT_PRIVACY_POLICY_VERSION} da nossa política de

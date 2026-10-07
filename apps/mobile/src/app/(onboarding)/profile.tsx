@@ -7,7 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useUsersControllerUpdateProfile } from '@/api/generated/endpoints/me/me';
 import type { UpdateProfileDto } from '@/api/generated/models';
 import { AppText } from '@/components/ui/app-text';
-import { ProfileForm } from '@/features/profile/profile-form';
+import { SteppedProfileForm } from '@/features/profile/stepped-profile-form';
 
 export default function OnboardingProfileScreen() {
   const router = useRouter();
@@ -43,8 +43,7 @@ export default function OnboardingProfileScreen() {
             </AppText>
           </View>
 
-          <ProfileForm
-            submitLabel="Continuar"
+          <SteppedProfileForm
             isSubmitting={updateProfile.isPending}
             submitError={submitError}
             onSubmit={(data) => void handleSubmit(data)}

@@ -1,0 +1,60 @@
+import { render, screen, userEvent } from '@testing-library/react-native';
+
+import { SteppedProfileForm } from './stepped-profile-form';
+
+describe('SteppedProfileForm', () => {
+  it('mostra um assunto por vez, com o passo atual', async () => {
+    await render(<SteppedProfileForm isSubmitting={false} onSubmit={jest.fn()} />);
+
+    expect(screen.getByText('Passo 1 de 4')).toBeTruthy();
+    expect(screen.getByLabelText('Data de nascimento')).toBeTruthy();
+    expect(screen.queryByText('Objetivo')).toBeNull();
+  });
+
+  it('não avança sem preencher, e diz o que falta', async () => {
+    await render(<SteppedProfileForm isSubmitting={false} onSubmit={jest.fn()} />);
+
+    await userEvent.press(screen.getByRole('button', { name: 'Continuar' }));
+
+    expect(screen.getByText('Passo 1 de 4')).toBeTruthy();
+    expect(screen.getByRole('alert')).toHaveTextContent(/data de nascimento/i);
+  });
+
+  it('percorre os passos e envia o perfil completo no final', async () => {
+    const onSubmit = jest.fn();
+    await render(<SteppedProfileForm isSubmitting={false} onSubmit={onSubmit} />);
+
+    await userEvent.type(screen.getByLabelText('Data de nascimento'), '20051996');
+    await userEvent.type(screen.getByLabelText('Altura (cm)'), '165');
+    await userEvent.press(screen.getByRole('button', { name: 'Continuar' }));
+
+    await userEvent.press(screen.getByRole('radio', { name: 'Feminino' }));
+    await userEvent.press(screen.getByRole('button', { name: 'Continuar' }));
+
+    await userEvent.press(screen.getByRole('radio', { name: /^Moderadamente ativo/ }));
+    await userEvent.press(screen.getByRole('button', { name: 'Continuar' }));
+
+    expect(screen.getByText('Passo 4 de 4')).toBeTruthy();
+    await userEvent.press(screen.getByRole('radio', { name: 'Emagrecer' }));
+    await userEvent.press(screen.getByRole('button', { name: 'Calcular minha meta' }));
+
+    expect(onSubmit).toHaveBeenCalledWith({
+      birthDate: '1996-05-20',
+      heightCm: 165,
+      sex: 'female',
+      activityLevel: 'moderate',
+      goal: 'lose',
+    });
+  });
+
+  it('volta ao passo anterior sem perder o que foi preenchido', async () => {
+    await render(<SteppedProfileForm isSubmitting={false} onSubmit={jest.fn()} />);
+    await userEvent.type(screen.getByLabelText('Data de nascimento'), '20051996');
+    await userEvent.type(screen.getByLabelText('Altura (cm)'), '165');
+    await userEvent.press(screen.getByRole('button', { name: 'Continuar' }));
+
+    await userEvent.press(screen.getByRole('button', { name: 'Voltar' }));
+
+    expect(screen.getByLabelText('Data de nascimento')).toHaveDisplayValue('20/05/1996');
+  });
+});

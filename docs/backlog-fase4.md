@@ -97,7 +97,7 @@ Issues **#30** e **#31** acima.
 |---|---|
 | F4-20 navegação (Hoje · Progresso · Exames · Perfil, "+") | ✅ |
 | F4-30 tela Hoje | ✅ exceto sequência de dias (decisão pendente) |
-| F4-31 boas-vindas e onboarding | ✅ boas-vindas, exemplos por atividade, data DD/MM/AAAA · ⏳ passos com barra de progresso, ritmo semanal |
+| F4-31 boas-vindas e onboarding | ✅ boas-vindas, perfil em 4 passos com barra de progresso, exemplos por atividade, data DD/MM/AAAA · ⏳ ritmo semanal (precisa de API) |
 | F4-32 recuperar senha / Google | 🟡 tela em prévia (falta API e envio de e-mail) · ⏳ Google |
 | F4-33 Progresso | ✅ |
 | F4-34 recentes | ✅ |
