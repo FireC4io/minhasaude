@@ -1,3 +1,4 @@
+import { join } from 'node:path';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -35,8 +36,12 @@ import type { Env } from '../config/env.schema';
           FoodPortion,
           DiaryEntry,
         ],
-        // Migrations aplicadas manualmente (migration:run) - nunca synchronize
-        // em ambiente algum, ver CLAUDE.md.
+        // Migrations aplicadas no boot: antes dependiam de `migration:run` à mão,
+        // e as da Fase 2 em diante nunca chegaram à produção (descoberto em
+        // 2026-10-07). Compilado lê os .js de dist; em teste (ts-jest), os .ts.
+        migrations: [join(__dirname, 'migrations', `*.${__filename.endsWith('.ts') ? 'ts' : 'js'}`)],
+        migrationsRun: true,
+        // Nunca synchronize em ambiente algum, ver CLAUDE.md.
         synchronize: false,
         logging: config.get('NODE_ENV', { infer: true }) !== 'production',
       }),
