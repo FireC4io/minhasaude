@@ -1,11 +1,18 @@
 import { useState } from 'react';
 import { Modal, Pressable, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 
 import { AppText } from '@/components/ui/app-text';
 import { TextButton } from '@/components/ui/text-button';
 import { MIN_TOUCH_TARGET } from '@/constants/accessibility';
-import { isoDateFromLocal, localDateFromIso, monthGrid, todayIsoDate } from '@/features/diary/date-utils';
+import {
+  isoDateFromLocal,
+  localDateFromIso,
+  monthGrid,
+  todayIsoDate,
+  weekdayNames,
+} from '@/features/diary/date-utils';
 
 import { useReduceMotion } from '@/features/accessibility/use-reduce-motion';
 
@@ -19,7 +26,6 @@ interface CalendarModalProps {
   onClose: () => void;
 }
 
-const WEEKDAYS = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
 
 /** Primeiro dia do mês deslocado de `months` meses. */
 const shiftMonth = (date: string, months: number): string => {
@@ -32,6 +38,7 @@ const shiftMonth = (date: string, months: number): string => {
  * Quem usa passa `key` com o dia exibido: ao reabrir, volta para o mês certo.
  */
 export function CalendarModal({ visible, selectedDate, onSelect, onClose }: CalendarModalProps) {
+  const { t } = useTranslation();
   const [month, setMonth] = useState(selectedDate);
   const reduceMotion = useReduceMotion();
   const today = todayIsoDate();
@@ -53,15 +60,15 @@ export function CalendarModal({ visible, selectedDate, onSelect, onClose }: Cale
       <SafeAreaView className="flex-1 gap-4 bg-areia px-6 py-4">
         <View className="flex-row items-center justify-between">
           <AppText variant="subtitle" accessibilityRole="header" className="text-grafite">
-            Escolher dia
+            {t('today.pickDay')}
           </AppText>
-          <TextButton label="Fechar" onPress={onClose} textClassName="text-mamao-forte" />
+          <TextButton label={t('common.close')} onPress={onClose} textClassName="text-mamao-forte" />
         </View>
 
         <View className="flex-row items-center justify-between">
           <TextButton
             label="‹"
-            accessibilityLabel="Mês anterior"
+            accessibilityLabel={t('today.previousMonth')}
             onPress={() => setMonth(shiftMonth(month, -1))}
             textVariant="subtitle"
             textClassName="text-grafite"
@@ -75,7 +82,7 @@ export function CalendarModal({ visible, selectedDate, onSelect, onClose }: Cale
           </AppText>
           <TextButton
             label="›"
-            accessibilityLabel="Próximo mês"
+            accessibilityLabel={t('today.nextMonth')}
             onPress={() => setMonth(shiftMonth(month, 1))}
             textVariant="subtitle"
             textClassName="text-grafite"
@@ -84,7 +91,7 @@ export function CalendarModal({ visible, selectedDate, onSelect, onClose }: Cale
         </View>
 
         <View className="flex-row" importantForAccessibility="no-hide-descendants">
-          {WEEKDAYS.map((day) => (
+          {weekdayNames('short').map((day) => (
             <AppText key={day} variant="caption" className="flex-1 text-center text-grafite-suave">
               {day}
             </AppText>
@@ -107,7 +114,7 @@ export function CalendarModal({ visible, selectedDate, onSelect, onClose }: Cale
                     key={date}
                     onPress={() => choose(date)}
                     accessibilityRole="button"
-                    accessibilityLabel={`${spokenDay(date)}${date === today ? ', hoje' : ''}`}
+                    accessibilityLabel={`${spokenDay(date)}${date === today ? t('today.todaySuffix') : ''}`}
                     accessibilityState={{ selected }}
                     style={{ minHeight: MIN_TOUCH_TARGET }}
                     className={`flex-1 items-center justify-center rounded-xl active:opacity-70 ${frame}`}>
@@ -122,7 +129,7 @@ export function CalendarModal({ visible, selectedDate, onSelect, onClose }: Cale
         </View>
 
         <TextButton
-          label="Ir para hoje"
+          label={t('today.goToToday')}
           onPress={() => choose(today)}
           textVariant="bodyStrong"
           textClassName="text-mamao-forte"

@@ -1,25 +1,28 @@
 import { useEffect, useState } from 'react';
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import type { MacroTotalsDto } from '@/api/generated/models';
 import { AppText } from '@/components/ui/app-text';
 import { SelectChips } from '@/features/onboarding/select-chips';
 
 import { loadMacroMode, saveMacroMode } from './macro-mode-preference';
+import { translatedLabels } from '@/i18n/labels';
+
 import { macroValue, progressFraction, type MacroDisplayMode } from './progress-math';
 
 const MODES = ['remaining', 'consumed', 'percent'] as const;
-const MODE_LABELS: Record<MacroDisplayMode, string> = {
-  remaining: 'Restante',
-  consumed: 'Consumido',
-  percent: 'Porcentagem',
-};
+const MODE_LABELS: Record<MacroDisplayMode, string> = translatedLabels({
+  remaining: 'today.modes.remaining',
+  consumed: 'today.modes.consumed',
+  percent: 'today.modes.percent',
+});
 
 // Nomes por extenso: "Carbo" confundia (F4-12).
 const MACROS = [
-  { key: 'proteinG', label: 'Proteínas' },
-  { key: 'fatG', label: 'Gorduras' },
-  { key: 'carbG', label: 'Carboidratos' },
+  { key: 'proteinG', labelKey: 'today.protein' },
+  { key: 'fatG', labelKey: 'today.fat' },
+  { key: 'carbG', labelKey: 'today.carbs' },
 ] as const;
 
 interface MacrosCardProps {
@@ -32,6 +35,7 @@ interface MacrosCardProps {
  * 200% elas se atropelavam — achado #2) e com o modo de exibição escolhido.
  */
 export function MacrosCard({ consumed, target }: MacrosCardProps) {
+  const { t } = useTranslation();
   const [mode, setMode] = useState<MacroDisplayMode>('remaining');
 
   useEffect(() => {
@@ -46,10 +50,11 @@ export function MacrosCard({ consumed, target }: MacrosCardProps) {
   return (
     <View className="gap-4 rounded-2xl bg-superficie p-4">
       <AppText variant="label" accessibilityRole="header" className="text-grafite-suave">
-        Nutrientes
+        {t('today.nutrients')}
       </AppText>
 
-      {MACROS.map(({ key, label }) => {
+      {MACROS.map(({ key, labelKey }) => {
+        const label = t(labelKey);
         const targetG = target ? target[key] : null;
         const value = macroValue(mode, consumed[key], targetG);
         const fraction = progressFraction(consumed[key], targetG);
@@ -75,7 +80,7 @@ export function MacrosCard({ consumed, target }: MacrosCardProps) {
 
       {target ? (
         <SelectChips
-          label="Mostrar"
+          label={t('today.show')}
           options={MODES}
           optionLabels={MODE_LABELS}
           value={mode}

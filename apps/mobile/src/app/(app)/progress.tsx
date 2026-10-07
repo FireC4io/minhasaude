@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 
 import { useBodyMeasurementsControllerList } from '@/api/generated/endpoints/body-measurements/body-measurements';
 import { AppText } from '@/components/ui/app-text';
@@ -20,6 +21,7 @@ const LIST_PARAMS = { source: 'manual', limit: 100 } as const;
 
 /** Progresso (F4-33): peso com período, médias semanais e espaço dos exames. */
 export default function ProgressScreen() {
+  const { t } = useTranslation();
   const historyQuery = useBodyMeasurementsControllerList(LIST_PARAMS);
   const [period, setPeriod] = useState<Period>('90d');
 
@@ -33,23 +35,23 @@ export default function ProgressScreen() {
         className="flex-1">
         <ScrollView contentContainerClassName="gap-6 px-6 py-8" keyboardShouldPersistTaps="handled">
           <AppText variant="title" accessibilityRole="header" className="text-grafite">
-            Progresso
+            {t('progress.title')}
           </AppText>
 
           <View className="gap-4">
             <AppText variant="subtitle" accessibilityRole="header" className="text-grafite">
-              Peso
+              {t('progress.weight')}
             </AppText>
             <WeightEntryForm />
 
             {historyQuery.isPending ? (
-              <LoadingIndicator label="Carregando seu histórico de peso" />
+              <LoadingIndicator label={t('progress.loadingWeight')} />
             ) : historyQuery.isError ? (
-              <FormError message="Não foi possível carregar seu histórico agora. Confira sua internet." />
+              <FormError message={t('progress.weightError')} />
             ) : (
               <>
                 <SelectChips
-                  label="Período"
+                  label={t('progress.period')}
                   options={PERIODS}
                   optionLabels={PERIOD_LABELS}
                   value={period}
@@ -66,11 +68,10 @@ export default function ProgressScreen() {
           {PREVIEW_FEATURES ? (
             <View className="gap-2 rounded-2xl bg-superficie p-4">
               <AppText variant="subtitle" accessibilityRole="header" className="text-grafite">
-                Exames
+                {t('progress.exams')}
               </AppText>
               <AppText className="text-grafite">
-                Quando você guardar exames, a evolução de marcadores como glicose e colesterol vai
-                aparecer aqui. Veja a aba Exames.
+                {t('progress.examsSoon')}
               </AppText>
             </View>
           ) : null}

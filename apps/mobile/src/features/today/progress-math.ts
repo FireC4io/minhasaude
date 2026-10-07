@@ -1,3 +1,5 @@
+import i18n from 'i18next';
+
 /**
  * Textos e frações dos cards da tela Hoje. Informativos (RDC 657/2022): dizem
  * o número, nunca o que a pessoa "deveria" fazer.
@@ -11,12 +13,12 @@ export function progressFraction(consumed: number, target: number | null): numbe
 }
 
 export function caloriesStatus(consumed: number, target: number | null): string {
-  if (!target) return 'Calcule sua meta no Perfil para ver quanto falta';
+  if (!target) return i18n.t('today.noGoal');
 
   const difference = Math.round(target - consumed);
-  if (difference > 0) return `Faltam ${difference} kcal`;
-  if (difference < 0) return `${-difference} kcal acima da meta`;
-  return 'Meta do dia atingida';
+  if (difference > 0) return i18n.t('today.left', { kcal: difference });
+  if (difference < 0) return i18n.t('today.over', { kcal: -difference });
+  return i18n.t('today.reached');
 }
 
 export function macroValue(mode: MacroDisplayMode, consumed: number, target: number | null): string {
@@ -27,10 +29,10 @@ export function macroValue(mode: MacroDisplayMode, consumed: number, target: num
   switch (mode) {
     case 'remaining': {
       const left = targetG - consumedG;
-      return left >= 0 ? `${left} g restantes` : `${-left} g acima`;
+      return left >= 0 ? i18n.t('today.gramsLeft', { grams: left }) : i18n.t('today.gramsOver', { grams: -left });
     }
     case 'consumed':
-      return `${consumedG} de ${targetG} g`;
+      return i18n.t('today.gramsOf', { consumed: consumedG, target: targetG });
     case 'percent':
       return `${Math.round((consumed / target) * 100)}%`;
   }

@@ -33,7 +33,7 @@ describe('caloriesStatus', () => {
 
 describe('macroValue', () => {
   it('restante, em gramas', () => {
-    expect(macroValue('remaining', 40, 100)).toBe('60 g restantes');
+    expect(macroValue('remaining', 40, 100)).toBe('60 g faltando');
   });
 
   it('restante não fica negativo: mostra quanto passou', () => {

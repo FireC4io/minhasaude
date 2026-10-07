@@ -1,5 +1,6 @@
 import { useColorScheme, View } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';
+import { useTranslation } from 'react-i18next';
 
 import { AppText } from '@/components/ui/app-text';
 import { GotaVitalColors } from '@/constants/gota-vital-colors';
@@ -18,16 +19,17 @@ const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
 /** Calorias do dia com anel de progresso. O anel só reforça; o texto diz tudo. */
 export function CaloriesCard({ consumedKcal, targetKcal }: CaloriesCardProps) {
+  const { t } = useTranslation();
   const colors = GotaVitalColors[useColorScheme() === 'dark' ? 'dark' : 'light'];
   const fraction = progressFraction(consumedKcal, targetKcal);
   const consumed = Math.round(consumedKcal);
   const status = caloriesStatus(consumedKcal, targetKcal);
-  const spokenTarget = targetKcal ? ` de uma meta de ${Math.round(targetKcal)}` : '';
+  const spokenTarget = targetKcal ? t('today.caloriesSpokenTarget', { target: Math.round(targetKcal) }) : '';
 
   return (
     <View
       accessible
-      accessibilityLabel={`Calorias: ${consumed} quilocalorias consumidas${spokenTarget}. ${status}.`}
+      accessibilityLabel={t('today.caloriesSpoken', { consumed, target: spokenTarget, status })}
       className="flex-row items-center gap-4 rounded-2xl bg-superficie p-4">
       <Svg width={SIZE} height={SIZE} accessibilityElementsHidden importantForAccessibility="no">
         <Circle
@@ -53,7 +55,7 @@ export function CaloriesCard({ consumedKcal, targetKcal }: CaloriesCardProps) {
       </Svg>
       <View className="flex-1 gap-1">
         <AppText variant="label" className="text-grafite-suave">
-          Calorias
+          {t('today.calories')}
         </AppText>
         <AppText variant="numberLarge" className="text-grafite">
           {consumed}

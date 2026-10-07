@@ -1,3 +1,4 @@
+import i18n from 'i18next';
 import { appLocale } from '@/i18n/format';
 
 /**
@@ -31,11 +32,24 @@ export function addDaysToIsoDate(date: string, days: number): string {
 
 export function formatIsoDateLabel(date: string, now: Date = new Date()): string {
   const today = todayIsoDate(now);
-  if (date === today) return 'Hoje';
-  if (date === addDaysToIsoDate(today, -1)) return 'Ontem';
-  if (date === addDaysToIsoDate(today, 1)) return 'Amanhã';
+  if (date === today) return i18n.t('today.today');
+  if (date === addDaysToIsoDate(today, -1)) return i18n.t('today.yesterday');
+  if (date === addDaysToIsoDate(today, 1)) return i18n.t('today.tomorrow');
 
   return localDateFromIso(date).toLocaleDateString(appLocale(), { day: 'numeric', month: 'long' });
+}
+
+/**
+ * Nomes dos dias da semana, de domingo a sábado, no idioma em uso
+ * (`narrow` = "D", `short` = "dom."). Vem do Intl, nada fixo em português.
+ */
+export function weekdayNames(style: 'narrow' | 'short'): string[] {
+  const sunday = localDateFromIso('2026-10-04');
+  return Array.from({ length: 7 }, (_, index) => {
+    const day = new Date(sunday);
+    day.setDate(sunday.getDate() + index);
+    return day.toLocaleDateString(appLocale(), { weekday: style });
+  });
 }
 
 /** Domingo a sábado da semana que contém `date`. */

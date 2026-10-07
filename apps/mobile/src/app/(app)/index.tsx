@@ -11,6 +11,7 @@ import {
   useDiaryControllerGetByDate,
   useDiaryControllerRemove,
 } from '@/api/generated/endpoints/diary/diary';
+import { useTranslation } from 'react-i18next';
 import type { DiaryEntryResponseDto, MealType } from '@/api/generated/models';
 import { AppText } from '@/components/ui/app-text';
 import { FloatingAddButton } from '@/components/ui/floating-add-button';
@@ -35,6 +36,7 @@ import { LastWeightCard } from '@/features/weight/last-weight-card';
 
 /** Tela Hoje (F4-30): data, semana, calorias, nutrientes, refeições, água, peso e notas. */
 export default function TodayScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
   const queryClient = useQueryClient();
   const [currentDate, setCurrentDate] = useState(todayIsoDate());
@@ -121,15 +123,15 @@ export default function TodayScreen() {
         <View className="flex-row flex-wrap items-center justify-between gap-2">
           <TextButton
             label={`${dateLabel} ▾`}
-            accessibilityLabel={`Dia exibido: ${dateLabel}`}
-            hint="Abre o calendário para escolher outro dia"
+            accessibilityLabel={t('today.shownDay', { date: dateLabel })}
+            hint={t('today.openCalendar')}
             onPress={() => setCalendarOpen(true)}
             textVariant="title"
             textClassName="capitalize text-grafite"
           />
           {!isToday ? (
             <TextButton
-              label="Voltar para hoje"
+              label={t('today.backToToday')}
               onPress={() => showDate(todayIsoDate())}
               textVariant="bodyStrong"
               textClassName="text-mamao-forte"
@@ -144,12 +146,12 @@ export default function TodayScreen() {
         />
 
         {dayQuery.isPending ? (
-          <LoadingIndicator label="Carregando o dia" className="mt-8" />
+          <LoadingIndicator label={t('today.loadingDay')} className="mt-8" />
         ) : dayQuery.isError || !summary ? (
           <View className="gap-2">
-            <FormError message="Não foi possível carregar este dia. Confira sua internet." />
+            <FormError message={t('today.loadDayError')} />
             <TextButton
-              label="Tentar de novo"
+              label={t('common.tryAgain')}
               onPress={() => void dayQuery.refetch()}
               textVariant="bodyStrong"
               textClassName="text-mamao-forte"
@@ -164,22 +166,21 @@ export default function TodayScreen() {
             />
             <MacrosCard consumed={summary.summary.consumed} target={summary.summary.target} />
             {hasEntries ? (
-              <MicrosPanel title="Outros nutrientes do dia" rows={rowsForDay(summary.summary.micros)} />
+              <MicrosPanel title={t('today.otherNutrients')} rows={rowsForDay(summary.summary.micros)} />
             ) : null}
 
             <View className="gap-4">
               <AppText variant="subtitle" accessibilityRole="header" className="text-grafite">
-                Refeições
+                {t('today.meals')}
               </AppText>
               {!hasEntries ? (
                 <AppText className="text-grafite-suave">
-                  Nada registrado neste dia ainda. Toque em “+ Adicionar alimento” na refeição, ou no
-                  botão + no canto da tela.
+                  {t('today.empty')}
                 </AppText>
               ) : null}
               {canCopyPrevious ? (
                 <TextButton
-                  label={copyDay.isPending ? 'Copiando…' : 'Copiar as refeições do dia anterior'}
+                  label={copyDay.isPending ? t('today.copying') : t('today.copyPrevious')}
                   onPress={() => void copyPreviousDay()}
                   busy={copyDay.isPending}
                   textVariant="bodyStrong"
@@ -213,7 +214,7 @@ export default function TodayScreen() {
 
       {removed ? (
         <UndoBar
-          message={`${removed.food.name} removido`}
+          message={t('today.removed', { name: removed.food.name })}
           onUndo={() => void undoRemove()}
           onDismiss={dismissUndo}
         />

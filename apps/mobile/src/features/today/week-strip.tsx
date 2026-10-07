@@ -1,11 +1,11 @@
 import { Pressable, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { AppText } from '@/components/ui/app-text';
 import { MIN_TOUCH_TARGET } from '@/constants/accessibility';
-import { localDateFromIso, todayIsoDate, weekOf } from '@/features/diary/date-utils';
+import { localDateFromIso, todayIsoDate, weekdayNames, weekOf } from '@/features/diary/date-utils';
 import { appLocale } from '@/i18n/format';
 
-const WEEKDAY_INITIALS = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
 
 interface WeekStripProps {
   selectedDate: string;
@@ -26,7 +26,9 @@ export const spokenDay = (date: string): string =>
  * falado, porque ponto e borda não chegam a quem não enxerga.
  */
 export function WeekStrip({ selectedDate, daysWithEntries, onSelect }: WeekStripProps) {
+  const { t } = useTranslation();
   const today = todayIsoDate();
+  const initials = weekdayNames('narrow');
 
   return (
     <View accessibilityRole="tablist" className="flex-row justify-between">
@@ -34,8 +36,8 @@ export function WeekStrip({ selectedDate, daysWithEntries, onSelect }: WeekStrip
         const selected = date === selectedDate;
         const isToday = date === today;
         const hasEntries = daysWithEntries.has(date);
-        const spoken = `${spokenDay(date)}${isToday ? ', hoje' : ''}${
-          hasEntries ? ', com registro' : ''
+        const spoken = `${spokenDay(date)}${isToday ? t('today.todaySuffix') : ''}${
+          hasEntries ? t('today.withEntries') : ''
         }`;
         const frame = selected ? 'bg-mamao-forte' : isToday ? 'border-2 border-mamao-forte' : '';
         const dot = hasEntries ? (selected ? 'bg-areia' : 'bg-couve') : '';
@@ -49,7 +51,7 @@ export function WeekStrip({ selectedDate, daysWithEntries, onSelect }: WeekStrip
             style={{ minHeight: MIN_TOUCH_TARGET + 16, minWidth: 40 }}
             className={`items-center justify-center gap-0.5 rounded-2xl px-1 active:opacity-70 ${frame}`}>
             <AppText variant="caption" className={selected ? 'text-areia' : 'text-grafite-suave'}>
-              {WEEKDAY_INITIALS[index]}
+              {initials[index]}
             </AppText>
             <AppText variant="bodyStrong" className={selected ? 'text-areia' : 'text-grafite'}>
               {localDateFromIso(date).getDate()}

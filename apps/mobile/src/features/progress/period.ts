@@ -1,11 +1,13 @@
+import { translatedLabels } from '@/i18n/labels';
+
 export const PERIODS = ['30d', '90d', 'all'] as const;
 export type Period = (typeof PERIODS)[number];
 
-export const PERIOD_LABELS: Record<Period, string> = {
-  '30d': '30 dias',
-  '90d': '3 meses',
-  all: 'Tudo',
-};
+export const PERIOD_LABELS: Record<Period, string> = translatedLabels({
+  '30d': 'progress.periods.30d',
+  '90d': 'progress.periods.90d',
+  all: 'progress.periods.all',
+});
 
 const PERIOD_DAYS: Record<Exclude<Period, 'all'>, number> = { '30d': 30, '90d': 90 };
 

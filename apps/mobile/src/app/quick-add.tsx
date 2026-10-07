@@ -1,6 +1,7 @@
 import { useLocalSearchParams, useRouter, type Href } from 'expo-router';
 import { ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 
 import type { MealType } from '@/api/generated/models';
 import { AppText } from '@/components/ui/app-text';
@@ -13,6 +14,7 @@ import { mealForHour } from '@/features/today/meal-for-hour';
 
 /** Registro rápido a partir do "+" da tela Hoje (F4-20). */
 export default function QuickAddScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
   const params = useLocalSearchParams<{ date?: string }>();
   const date = params.date ?? todayIsoDate();
@@ -27,18 +29,18 @@ export default function QuickAddScreen() {
   return (
     <SafeAreaView className="flex-1 bg-areia">
       <ScrollView contentContainerClassName="gap-6 px-6 py-6">
-        <ModalHeader title="Registrar" />
+        <ModalHeader title={t('quickAdd.title')} />
 
         <View className="gap-1">
           <AppText variant="label" accessibilityRole="header" className="text-grafite-suave">
-            Alimento
+            {t('quickAdd.food')}
           </AppText>
           <View className="rounded-2xl bg-superficie px-4">
             {meals.map((meal) => (
               <ListRow
                 key={meal}
                 title={MEAL_TYPE_LABELS[meal]}
-                description={meal === suggested ? 'Sugerido pelo horário' : undefined}
+                description={meal === suggested ? t('quickAdd.suggested') : undefined}
                 onPress={go({ pathname: '/diary-entry', params: { date, mealType: meal } })}
               />
             ))}
@@ -47,20 +49,20 @@ export default function QuickAddScreen() {
 
         <View className="gap-1">
           <AppText variant="label" accessibilityRole="header" className="text-grafite-suave">
-            Outros registros
+            {t('quickAdd.others')}
           </AppText>
           <View className="rounded-2xl bg-superficie px-4">
             {PREVIEW_FEATURES ? (
               <ListRow
-                title="Falar o que comeu"
-                description="Diga a refeição e revise antes de salvar"
+                title={t('quickAdd.voice')}
+                description={t('quickAdd.voiceHint')}
                 onPress={go({ pathname: '/voice-entry', params: { date } })}
               />
             ) : null}
             {PREVIEW_FEATURES ? (
-              <ListRow title="Água" onPress={go({ pathname: '/water', params: { date } })} />
+              <ListRow title={t('quickAdd.water')} onPress={go({ pathname: '/water', params: { date } })} />
             ) : null}
-            <ListRow title="Peso" onPress={go('/weight-entry')} />
+            <ListRow title={t('quickAdd.weight')} onPress={go('/weight-entry')} />
           </View>
         </View>
       </ScrollView>
