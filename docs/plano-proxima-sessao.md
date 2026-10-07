@@ -53,12 +53,20 @@ migrations com cuidado, testes antes, e avisar o dono antes de publicar mudança
 - Recuperar senha por e-mail na mesma leva (a tela já existe em prévia): escolher serviço de e-mail com nível
   gratuito.
 
-### 5. Tempo da cópia no celular escolhido pela pessoa
+### 5. ✅ Tempo da cópia no celular escolhido pela pessoa (2026-10-07, `7685145`)
 - Perfil → Preferências: 1, 7 ou 30 dias (máximo 30). Hoje é fixo em 24 h (`PERSIST_MAX_AGE_MS`).
 
-### 6. Ritmo semanal no onboarding
+### 6. ✅ Ritmo semanal no onboarding (2026-10-07, `656148c`, em produção)
+- Feito: 0,25 / 0,5 / 0,75 kg por semana (mais leve marcada), calculadora de meta 2.0.0 com trava na TMB,
+  `calculator_version` gravado na meta. Conferido em produção.
+
+<details><summary>Plano original</summary>
+
+#### Ritmo semanal no onboarding
 - Opções 0,25 / 0,5 / 0,75 kg por semana, conservadora marcada, texto sem promessa (RDC 657/2022).
 - Precisa de campo novo na meta (API + migration + calculadora com `calculator_version`).
+
+</details>
 
 ### 7. Micronutrientes
 - Expor fibras, sódio, cálcio, ferro e vitaminas da TACO (`fiberGPer100g` já existe no banco). Mostrar na
