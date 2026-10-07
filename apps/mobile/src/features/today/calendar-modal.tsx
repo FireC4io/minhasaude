@@ -7,6 +7,8 @@ import { TextButton } from '@/components/ui/text-button';
 import { MIN_TOUCH_TARGET } from '@/constants/accessibility';
 import { isoDateFromLocal, localDateFromIso, monthGrid, todayIsoDate } from '@/features/diary/date-utils';
 
+import { useReduceMotion } from '@/features/accessibility/use-reduce-motion';
+
 import { spokenDay } from './week-strip';
 
 interface CalendarModalProps {
@@ -30,6 +32,7 @@ const shiftMonth = (date: string, months: number): string => {
  */
 export function CalendarModal({ visible, selectedDate, onSelect, onClose }: CalendarModalProps) {
   const [month, setMonth] = useState(selectedDate);
+  const reduceMotion = useReduceMotion();
   const today = todayIsoDate();
 
   const rawMonthLabel = localDateFromIso(month).toLocaleDateString('pt-BR', {
@@ -45,7 +48,7 @@ export function CalendarModal({ visible, selectedDate, onSelect, onClose }: Cale
   }
 
   return (
-    <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
+    <Modal visible={visible} animationType={reduceMotion ? 'none' : 'slide'} onRequestClose={onClose}>
       <SafeAreaView className="flex-1 gap-4 bg-areia px-6 py-4">
         <View className="flex-row items-center justify-between">
           <AppText variant="subtitle" accessibilityRole="header" className="text-grafite">
