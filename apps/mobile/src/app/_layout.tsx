@@ -10,6 +10,9 @@ import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client
 import { APP_FONTS } from '@/constants/typography';
 import { SlowNetworkBanner } from '@/features/network/slow-network-banner';
 import { applyThemePreference, loadThemePreference } from '@/features/preferences/theme-preference';
+// Importar daqui também inicializa o i18n (efeito do módulo).
+import { applyLanguagePreference } from '@/i18n';
+import { loadLanguagePreference } from '@/i18n/languages';
 import {
   loadOfflineCopyDays,
   offlineCopyMaxAgeMs,
@@ -41,6 +44,7 @@ export default function RootLayout() {
   useEffect(() => {
     void loadThemePreference().then(applyThemePreference);
     void loadOfflineCopyDays().then(setOfflineCopyDays);
+    void loadLanguagePreference().then(applyLanguagePreference);
   }, []);
 
   useEffect(() => {
