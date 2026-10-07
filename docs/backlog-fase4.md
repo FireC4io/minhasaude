@@ -114,7 +114,7 @@ Issues **#30** e **#31** acima.
 | F4-11 movimento reduzido | ✅ |
 | #32 fonte 200% | 🟡 macros empilhados · ⏳ conferência tela a tela |
 | F4-12, F4-36, F4-25, F4-01/02, #34 | ⏳ |
-| **Novos (2026-10-07)** | ⏳ aviso + relatório de progresso antes de excluir · tempo da cópia no celular escolhido pela pessoa (até 30 dias) · login com Google (prioridade) · micronutrientes (fibras, sódio, cálcio, ferro, vitaminas — TACO) · busca por relevância · relatório visual atualizado |
+| **Novos (2026-10-07)** | ⏳ aviso + relatório de progresso antes de excluir · tempo da cópia no celular escolhido pela pessoa (até 30 dias) · login com Google (prioridade) · micronutrientes (fibras, sódio, cálcio, ferro, vitaminas — TACO) · busca por relevância · relatório visual atualizado · ritmo semanal · linguagem simples · Maestro · TalkBack · **app em inglês e espanhol** (junto com F4-36) |
 | Fase 5 — telas de exame | 🟡 prévia completa; calculadoras de índices reais no shared |
 | Voz | 🟡 prévia: gravação, frase → itens por regras, revisão e salvar no diário · ⏳ transcrição por IA |
 
