@@ -1,2 +1,3 @@
 export * from './calculators';
 export * from './onboarding';
+export * from './nutrition';

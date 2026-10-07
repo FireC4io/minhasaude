@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
+import { MicroTotalsDto } from '../../foods/dto/micros.dto';
 import { DiaryEntryResponseDto } from './diary-entry-response.dto';
 import { MacroTotalsDto } from './macro-totals.dto';
 
@@ -40,6 +41,12 @@ class DailySummaryTotalsResponseDto {
   @Expose()
   @Type(() => MacroTotalsDto)
   remaining!: MacroTotalsDto | null;
+
+  // Soma do dia com quantos itens tinham cada nutriente (total "parcial").
+  @ApiProperty({ type: MicroTotalsDto })
+  @Expose()
+  @Type(() => MicroTotalsDto)
+  micros!: MicroTotalsDto;
 }
 
 export class DailySummaryResponseDto {

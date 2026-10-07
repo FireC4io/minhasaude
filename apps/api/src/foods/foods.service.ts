@@ -170,7 +170,29 @@ export class FoodsService {
       fatGPer100g: fat.toString(),
       carbGPer100g: carb.toString(),
       fiberGPer100g: n?.fiber_100g !== undefined ? n.fiber_100g.toString() : null,
+      microsPer100g: offMicros(n),
     });
     return this.foods.save(food);
   }
+}
+
+const GRAMS_TO_MG = 1000;
+const gToMg = (value: number | undefined): number | null =>
+  value === undefined || !Number.isFinite(value) ? null : Math.round(value * GRAMS_TO_MG * 100) / 100;
+
+// O OFF guarda minerais em gramas; aqui tudo vira mg, como na TACO. Vitamina A
+// fica de fora: a unidade no OFF varia por produto (UI, µg, RE) e um número
+// errado seria pior que "sem dado".
+function offMicros(n: OffProduct['nutriments']): Record<string, number | null> {
+  return {
+    fiberG: n?.fiber_100g ?? null,
+    sodiumMg: gToMg(n?.sodium_100g),
+    potassiumMg: gToMg(n?.potassium_100g),
+    calciumMg: gToMg(n?.calcium_100g),
+    ironMg: gToMg(n?.iron_100g),
+    magnesiumMg: gToMg(n?.magnesium_100g),
+    zincMg: gToMg(n?.zinc_100g),
+    vitaminCMg: gToMg(n?.['vitamin-c_100g']),
+    vitaminARaeMcg: null,
+  };
 }

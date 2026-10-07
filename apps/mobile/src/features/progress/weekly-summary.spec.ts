@@ -1,3 +1,4 @@
+import { sumMicros } from '@minhasaude/shared';
 import { weeklyAverage } from './weekly-summary';
 
 const day = (kcal: number, logged = true) => ({
@@ -8,6 +9,7 @@ const day = (kcal: number, logged = true) => ({
     consumed: { kcal, proteinG: kcal / 20, fatG: kcal / 40, carbG: kcal / 8 },
     target: { kcal: 2000, proteinG: 100, fatG: 60, carbG: 250 },
     remaining: null,
+    micros: sumMicros([]),
   },
 });
 

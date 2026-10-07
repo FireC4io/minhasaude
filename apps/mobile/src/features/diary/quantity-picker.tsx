@@ -7,12 +7,18 @@ import { displayNumber, spokenGrams, spokenKcal } from '@/features/accessibility
 import { AuthTextField } from '@/features/auth/auth-text-field';
 import { parseDecimal } from '@/features/forms/parse-decimal';
 
+import { MicrosPanel } from '@/features/nutrition/micros-panel';
+import { rowsForPortion } from '@/features/nutrition/micros-rows';
+
 import { nutrientsFor } from './food-math';
 
 const SHORTCUTS_G = [50, 100, 150, 200] as const;
 
 interface QuantityPickerProps {
-  food: Pick<FoodResponseDto, 'kcalPer100g' | 'proteinGPer100g' | 'fatGPer100g' | 'carbGPer100g'> | null;
+  food: Pick<
+    FoodResponseDto,
+    'kcalPer100g' | 'proteinGPer100g' | 'fatGPer100g' | 'carbGPer100g' | 'micros'
+  > | null;
   value: string;
   onChange: (value: string) => void;
   onSubmit: () => void;
@@ -64,6 +70,9 @@ export function QuantityPicker({ food, value, onChange, onSubmit }: QuantityPick
             Carboidratos {displayNumber(preview.carbG)} g
           </AppText>
         </View>
+      ) : null}
+      {food && preview && preview.kcal > 0 ? (
+        <MicrosPanel title="Outros nutrientes" rows={rowsForPortion(food.micros, grams)} />
       ) : null}
     </View>
   );

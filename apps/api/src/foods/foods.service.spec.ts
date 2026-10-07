@@ -225,6 +225,29 @@ describe('FoodsService', () => {
       expect(repo.create).toHaveBeenCalledWith(expect.objectContaining({ source: FoodSource.OFF, externalId: '123', barcode: '123' }));
     });
 
+    it('converte minerais do OFF de gramas para mg e não arrisca a vitamina A', async () => {
+      repo.findOne.mockResolvedValue(null);
+      openFoodFacts.searchByTerm.mockResolvedValue([
+        {
+          code: '789',
+          product_name: 'Biscoito',
+          nutriments: {
+            'energy-kcal_100g': 450,
+            proteins_100g: 7,
+            fat_100g: 15,
+            carbohydrates_100g: 70,
+            sodium_100g: 0.32,
+            iron_100g: 0.0042,
+          },
+        },
+      ]);
+
+      await service.search('user-1', { q: 'biscoito-raro', page: 1, limit: 20 });
+
+      const created = repo.create.mock.calls.at(-1)?.[0];
+      expect(created.microsPer100g).toMatchObject({ sodiumMg: 320, ironMg: 4.2, calciumMg: null, vitaminARaeMcg: null });
+    });
+
     it('não recacheia (nem duplica) um produto do OFF já cacheado', async () => {
       repo.createQueryBuilder.mockReturnValue(mockQueryBuilder(0, []));
       const existing = { id: 'food-2', source: FoodSource.OFF, externalId: '123' };

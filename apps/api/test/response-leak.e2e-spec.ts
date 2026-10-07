@@ -25,6 +25,8 @@ const CAMPOS_INTERNOS = [
   'externalId',
   'barcode',
   'rawPayload',
+  // jsonb cru dos micronutrientes: o cliente recebe `micros`, já montado.
+  'microsPer100g',
   'deletedAt',
 ];
 

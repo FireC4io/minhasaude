@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { parse } from 'csv-parse/sync';
+import type { Micros } from '@minhasaude/shared';
 
 // CSV exportado da planilha oficial "Tabela Brasileira de Composição de
 // Alimentos" (TACO, 4ª edição, NEPA/Unicamp) - crédito obrigatório na tela de
@@ -19,6 +20,14 @@ const COL = {
   fat: 6,
   carb: 8,
   fiber: 9,
+  calcium: 11,
+  magnesium: 12,
+  iron: 16,
+  sodium: 17,
+  potassium: 18,
+  zinc: 20,
+  vitaminARae: 23,
+  vitaminC: 28,
 } as const;
 
 export interface TacoRow {
@@ -29,6 +38,8 @@ export interface TacoRow {
   fatGPer100g: number;
   carbGPer100g: number;
   fiberGPer100g: number | null;
+  /** Chaves de `MICRONUTRIENTS` do shared; null = não medido na TACO. */
+  micros: Micros;
 }
 
 // "Tr" (traço) é quantidade desprezível -> 0. "NA"/vazio/"*" significa que o
@@ -94,6 +105,17 @@ export function readTacoRows(csvPath: string): { rows: TacoRow[]; skipped: strin
       fatGPer100g,
       carbGPer100g,
       fiberGPer100g,
+      micros: {
+        fiberG: fiberGPer100g,
+        sodiumMg: parseNutrient(record[COL.sodium]),
+        potassiumMg: parseNutrient(record[COL.potassium]),
+        calciumMg: parseNutrient(record[COL.calcium]),
+        ironMg: parseNutrient(record[COL.iron]),
+        magnesiumMg: parseNutrient(record[COL.magnesium]),
+        zincMg: parseNutrient(record[COL.zinc]),
+        vitaminCMg: parseNutrient(record[COL.vitaminC]),
+        vitaminARaeMcg: parseNutrient(record[COL.vitaminARae]),
+      },
     });
   }
 

@@ -13,6 +13,14 @@ export interface OffNutriments {
   fat_100g?: number;
   carbohydrates_100g?: number;
   fiber_100g?: number;
+  // Minerais e vitamina C vêm em gramas por 100 g no OFF.
+  sodium_100g?: number;
+  potassium_100g?: number;
+  calcium_100g?: number;
+  iron_100g?: number;
+  magnesium_100g?: number;
+  zinc_100g?: number;
+  'vitamin-c_100g'?: number;
 }
 
 export interface OffProduct {

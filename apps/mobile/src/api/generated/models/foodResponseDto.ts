@@ -6,6 +6,7 @@
  * OpenAPI spec version: 0.1.0
  */
 import type { FoodSource } from './foodSource';
+import type { MicrosDto } from './microsDto';
 
 export interface FoodResponseDto {
   id: string;
@@ -17,4 +18,5 @@ export interface FoodResponseDto {
   proteinGPer100g: string;
   fatGPer100g: string;
   carbGPer100g: string;
+  micros: MicrosDto;
 }

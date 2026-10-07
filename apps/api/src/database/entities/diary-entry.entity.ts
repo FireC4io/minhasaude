@@ -1,3 +1,4 @@
+import type { Micros } from '@minhasaude/shared';
 import { Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 import { BaseEntity } from './base.entity';
 import { User } from './user.entity';
@@ -70,4 +71,9 @@ export class DiaryEntry extends BaseEntity {
 
   @Column({ type: 'numeric', name: 'carb_g_snapshot', precision: 6, scale: 2 })
   carbGSnapshot!: string;
+
+  // Micronutrientes da quantidade registrada, congelados como os macros.
+  // null = entrada anterior aos micronutrientes sem backfill possível.
+  @Column({ type: 'jsonb', name: 'micros_snapshot', nullable: true })
+  microsSnapshot!: Micros | null;
 }

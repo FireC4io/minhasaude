@@ -61,6 +61,12 @@ export class Food extends BaseEntity {
   @Column({ type: 'numeric', name: 'fiber_g_per_100g', precision: 6, scale: 2, nullable: true })
   fiberGPer100g!: string | null;
 
+  // Micronutrientes por 100 g (chaves de `MICRONUTRIENTS` do shared, inclusive
+  // fibras, que também segue na coluna acima). Chave ausente ou null = a fonte
+  // não mediu — nunca zero inventado. Ler sempre via `foodMicrosPer100g`.
+  @Column({ type: 'jsonb', name: 'micros_per_100g', nullable: true })
+  microsPer100g!: Partial<Record<string, number | null>> | null;
+
   // Coluna gerada (STORED) pra full-text search - ver ADR-0004. unaccent()
   // não entra aqui porque não é IMMUTABLE (Postgres recusa gerar a coluna);
   // o fuzzy/tolerância a acento fica a cargo do índice trigram em `name`

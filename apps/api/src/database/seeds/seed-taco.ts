@@ -33,6 +33,7 @@ async function seedTaco(): Promise<void> {
       fatGPer100g: row.fatGPer100g.toString(),
       carbGPer100g: row.carbGPer100g.toString(),
       fiberGPer100g: row.fiberGPer100g !== null ? row.fiberGPer100g.toString() : null,
+      microsPer100g: row.micros,
     });
     await foods.save(food);
     created++;

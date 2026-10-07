@@ -6,9 +6,11 @@
  * OpenAPI spec version: 0.1.0
  */
 import type { MacroTotalsDto } from './macroTotalsDto';
+import type { MicroTotalsDto } from './microTotalsDto';
 
 export interface DailySummaryTotalsResponseDto {
   consumed: MacroTotalsDto;
   target: MacroTotalsDto | null;
   remaining: MacroTotalsDto | null;
+  micros: MicroTotalsDto;
 }

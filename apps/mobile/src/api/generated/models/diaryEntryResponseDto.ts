@@ -8,6 +8,7 @@
 import type { DiaryQuantityUnit } from './diaryQuantityUnit';
 import type { FoodResponseDto } from './foodResponseDto';
 import type { MealType } from './mealType';
+import type { MicrosDto } from './microsDto';
 
 export interface DiaryEntryResponseDto {
   id: string;
@@ -23,4 +24,5 @@ export interface DiaryEntryResponseDto {
   proteinGSnapshot: string;
   fatGSnapshot: string;
   carbGSnapshot: string;
+  microsSnapshot: MicrosDto | null;
 }

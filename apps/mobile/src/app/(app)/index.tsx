@@ -25,6 +25,8 @@ import { MEAL_TYPE_ORDER } from '@/features/diary/meal-type-labels';
 import { CalendarModal } from '@/features/today/calendar-modal';
 import { CaloriesCard } from '@/features/today/calories-card';
 import { MacrosCard } from '@/features/today/macros-card';
+import { MicrosPanel } from '@/features/nutrition/micros-panel';
+import { rowsForDay } from '@/features/nutrition/micros-rows';
 import { NotesCard } from '@/features/today/notes-card';
 import { dayHasEntries, useWeekEntries } from '@/features/today/use-week-entries';
 import { WeekStrip } from '@/features/today/week-strip';
@@ -161,6 +163,9 @@ export default function TodayScreen() {
               targetKcal={summary.summary.target?.kcal ?? null}
             />
             <MacrosCard consumed={summary.summary.consumed} target={summary.summary.target} />
+            {hasEntries ? (
+              <MicrosPanel title="Outros nutrientes do dia" rows={rowsForDay(summary.summary.micros)} />
+            ) : null}
 
             <View className="gap-4">
               <AppText variant="subtitle" accessibilityRole="header" className="text-grafite">

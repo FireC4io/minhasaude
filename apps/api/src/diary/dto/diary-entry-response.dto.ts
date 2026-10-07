@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import { MealType, DiaryQuantityUnit } from '../../database/entities/diary-entry.entity';
 import { FoodResponseDto } from '../../foods/dto/food-response.dto';
+import { MicrosDto } from '../../foods/dto/micros.dto';
 
 export class DiaryEntryResponseDto {
   @ApiProperty()
@@ -54,4 +55,11 @@ export class DiaryEntryResponseDto {
   @ApiProperty()
   @Expose()
   carbGSnapshot!: string;
+
+  // Micronutrientes da quantidade registrada (snapshot). null = entrada sem
+  // esse dado (não mostrar como zero).
+  @ApiProperty({ type: MicrosDto, nullable: true })
+  @Expose()
+  @Type(() => MicrosDto)
+  microsSnapshot!: MicrosDto | null;
 }

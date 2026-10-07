@@ -1,5 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Expose } from 'class-transformer';
+import { Expose, Transform, Type } from 'class-transformer';
+import { foodMicrosPer100g } from '../food-micros';
+import { MicrosDto } from './micros.dto';
 import { FoodSource } from '../../database/entities/food.entity';
 
 // @Expose() é o que faz o filtro valer em runtime (ver common/serialization/to-dto.ts):
@@ -40,4 +42,12 @@ export class FoodResponseDto {
   @ApiProperty()
   @Expose()
   carbGPer100g!: string;
+
+  // Por 100 g. Montado da entidade (jsonb + coluna antiga de fibra) — o
+  // cliente nunca vê o jsonb cru.
+  @ApiProperty({ type: MicrosDto })
+  @Expose()
+  @Transform(({ obj }) => foodMicrosPer100g(obj), { toClassOnly: true })
+  @Type(() => MicrosDto)
+  micros!: MicrosDto;
 }

@@ -1,6 +1,8 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { scaleMicros, sumMicros, type Micros, type MicroTotals } from '@minhasaude/shared';
+import { foodMicrosPer100g } from '../foods/food-micros';
 import { DiaryEntry, MealType, DiaryQuantityUnit } from '../database/entities/diary-entry.entity';
 import { Food } from '../database/entities/food.entity';
 import { FoodPortion } from '../database/entities/food-portion.entity';
@@ -24,6 +26,7 @@ export interface DailySummary {
     consumed: MacroTotals;
     target: MacroTotals | null;
     remaining: MacroTotals | null;
+    micros: MicroTotals;
   };
 }
 
@@ -49,7 +52,7 @@ export class DiaryService {
     quantity: number,
     unit: DiaryQuantityUnit,
     portionId: string | null,
-  ): Promise<MacroTotals & { grams: number; food: Food }> {
+  ): Promise<MacroTotals & { grams: number; food: Food; micros: Micros }> {
     const food = await this.foodsService.findById(foodId, userId);
 
     let grams: number;
@@ -74,6 +77,7 @@ export class DiaryService {
       carbG: round2(Number(food.carbGPer100g) * multiplier),
       grams,
       food,
+      micros: scaleMicros(foodMicrosPer100g(food), grams),
     };
   }
 
@@ -93,6 +97,7 @@ export class DiaryService {
       proteinGSnapshot: snap.proteinG.toString(),
       fatGSnapshot: snap.fatG.toString(),
       carbGSnapshot: snap.carbG.toString(),
+      microsSnapshot: snap.micros,
     });
     entry.food = snap.food;
     return this.entries.save(entry);
@@ -117,6 +122,7 @@ export class DiaryService {
       entry.proteinGSnapshot = snap.proteinG.toString();
       entry.fatGSnapshot = snap.fatG.toString();
       entry.carbGSnapshot = snap.carbG.toString();
+      entry.microsSnapshot = snap.micros;
       entry.food = snap.food;
     }
 
@@ -198,7 +204,11 @@ export class DiaryService {
       carbG: round2(target.carbG - roundedConsumed.carbG),
     };
 
-    return { date, meals, summary: { consumed: roundedConsumed, target, remaining } };
+    // Soma com contagem de quem tinha o dado: a tela mostra "parcial" em vez
+    // de um total que parece completo.
+    const micros = sumMicros(dayEntries.map((e) => e.microsSnapshot));
+
+    return { date, meals, summary: { consumed: roundedConsumed, target, remaining, micros } };
   }
 
   // Recalcula o snapshot a partir do alimento atual no momento da cópia -
@@ -227,6 +237,7 @@ export class DiaryService {
         proteinGSnapshot: snap.proteinG.toString(),
         fatGSnapshot: snap.fatG.toString(),
         carbGSnapshot: snap.carbG.toString(),
+        microsSnapshot: snap.micros,
       });
       entry.food = snap.food;
       created.push(await this.entries.save(entry));
