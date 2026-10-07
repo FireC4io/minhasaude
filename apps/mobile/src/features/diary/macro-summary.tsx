@@ -1,6 +1,7 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import type { MacroTotalsDto } from '@/api/generated/models';
 import { describeMacroSummary } from './accessibility-labels';
+import { AppText } from '@/components/ui/app-text';
 
 interface MacroSummaryProps {
   consumed: MacroTotalsDto;
@@ -15,10 +16,10 @@ function round(value: number): number {
 function MacroColumn({ label, valueG, targetG }: { label: string; valueG: number; targetG?: number }) {
   return (
     <View className="items-center gap-0.5">
-      <Text className="text-xs text-grafite">{label}</Text>
-      <Text className="text-base font-semibold text-grafite">
+      <AppText variant="caption" className="text-grafite">{label}</AppText>
+      <AppText variant="number" className="text-grafite">
         {round(valueG)}g{targetG !== undefined ? ` / ${round(targetG)}g` : ''}
-      </Text>
+      </AppText>
     </View>
   );
 }
@@ -32,15 +33,15 @@ export function MacroSummary({ consumed, target, remaining }: MacroSummaryProps)
       accessibilityLabel={describeMacroSummary(consumed, target, remaining)}
       className="gap-3 rounded-2xl border border-grafite bg-superficie p-4">
       <View className="gap-1">
-        <Text className="text-lg font-semibold text-grafite">
+        <AppText variant="numberLarge" className="text-grafite">
           {round(consumed.kcal)} kcal{target ? ` de ${round(target.kcal)}` : ' consumidas'}
-        </Text>
+        </AppText>
         {remaining ? (
-          <Text className="text-sm text-grafite">{round(remaining.kcal)} kcal restantes</Text>
+          <AppText variant="caption" className="text-grafite">{round(remaining.kcal)} kcal restantes</AppText>
         ) : (
-          <Text className="text-sm italic text-grafite">
+          <AppText variant="caption" className="italic text-grafite">
             Calcule sua meta para ver quanto ainda falta.
-          </Text>
+          </AppText>
         )}
       </View>
       <View className="flex-row justify-between">

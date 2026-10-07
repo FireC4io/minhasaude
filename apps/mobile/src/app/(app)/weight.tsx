@@ -1,7 +1,7 @@
 import { weightEntrySchema } from '@minhasaude/shared';
 import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, Text, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import {
@@ -15,6 +15,7 @@ import { PrimaryButton } from '@/features/auth/primary-button';
 import { WeightChart } from '@/features/weight/weight-chart';
 import { WeightHistoryList } from '@/features/weight/weight-history-list';
 import { parseDecimal } from '@/features/forms/parse-decimal';
+import { AppText } from '@/components/ui/app-text';
 
 // Só medidas registradas na mão: o app nunca mistura fontes no mesmo gráfico,
 // porque bioimpedância de aparelhos diferentes não é comparável (CLAUDE.md).
@@ -63,10 +64,10 @@ export default function WeightScreen() {
         className="flex-1">
         <ScrollView contentContainerClassName="gap-6 px-6 py-8">
           <View className="gap-1">
-            <Text accessibilityRole="header" className="text-3xl font-semibold text-grafite">Peso</Text>
-            <Text className="text-base text-grafite">
+            <AppText variant="title" accessibilityRole="header" className="text-grafite">Peso</AppText>
+            <AppText className="text-grafite">
               Registre seu peso quando quiser e acompanhe a evolução ao longo do tempo.
-            </Text>
+            </AppText>
           </View>
 
           <View className="gap-4">
@@ -87,9 +88,9 @@ export default function WeightScreen() {
           </View>
 
           {historyQuery.isError ? (
-            <Text className="text-sm text-jabuticaba">
+            <AppText variant="caption" className="text-jabuticaba">
               Não foi possível carregar seu histórico agora.
-            </Text>
+            </AppText>
           ) : (
             <>
               <WeightChart measurements={measurements} />

@@ -1,5 +1,6 @@
-import { Pressable, Text } from 'react-native';
+import { Pressable } from 'react-native';
 
+import { AppText, type TextVariant } from '@/components/ui/app-text';
 import { MIN_TOUCH_TARGET } from '@/constants/accessibility';
 
 interface TextButtonProps {
@@ -15,6 +16,9 @@ interface TextButtonProps {
   disabled?: boolean;
   busy?: boolean;
   className?: string;
+  /** Variante da escala tipográfica do rótulo. */
+  textVariant?: TextVariant;
+  /** Cor e ajustes do rótulo — tamanho e peso vêm de `textVariant`. */
   textClassName?: string;
 }
 
@@ -31,7 +35,8 @@ export function TextButton({
   disabled,
   busy,
   className,
-  textClassName = 'text-sm font-semibold text-mamao-forte',
+  textVariant = 'label',
+  textClassName = 'text-mamao-forte',
 }: TextButtonProps) {
   const isDisabled = Boolean(disabled || busy);
 
@@ -48,7 +53,9 @@ export function TextButton({
       // A opacidade de pressionado/desabilitado vai por classe pelo mesmo motivo.
       style={{ minHeight: MIN_TOUCH_TARGET, minWidth: MIN_TOUCH_TARGET, justifyContent: 'center' }}
       className={`${className ?? ''} ${isDisabled ? 'opacity-50' : 'active:opacity-70'}`}>
-      <Text className={textClassName}>{label}</Text>
+      <AppText variant={textVariant} className={textClassName}>
+        {label}
+      </AppText>
     </Pressable>
   );
 }

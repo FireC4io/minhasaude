@@ -1,14 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
-import {
-  FlatList,
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  Text,
-  View,
-} from 'react-native';
+import { FlatList, KeyboardAvoidingView, Platform, Pressable, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import {
@@ -29,6 +22,7 @@ import { PrimaryButton } from '@/features/auth/primary-button';
 import { describeSearchStatus } from '@/features/diary/accessibility-labels';
 import { MEAL_TYPE_LABELS } from '@/features/diary/meal-type-labels';
 import { parseDecimal } from '@/features/forms/parse-decimal';
+import { AppText } from '@/components/ui/app-text';
 
 export default function DiaryEntryScreen() {
   const router = useRouter();
@@ -117,9 +111,9 @@ export default function DiaryEntryScreen() {
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         className="flex-1 gap-4 px-6 pt-4">
-        <Text accessibilityRole="header" className="text-2xl font-semibold text-grafite">
+        <AppText variant="subtitle" accessibilityRole="header" className="text-grafite">
           {isEditing ? params.foodName : mealType ? MEAL_TYPE_LABELS[mealType] : 'Alimento'}
-        </Text>
+        </AppText>
 
         {showSearch ? (
           <View className="flex-1 gap-3">
@@ -134,9 +128,9 @@ export default function DiaryEntryScreen() {
             {/* Visível e com liveRegion: quem usa leitor de tela fica sabendo
                 que a busca terminou, e quantos resultados vieram. */}
             {searchStatus ? (
-              <Text accessibilityLiveRegion="polite" className="text-sm text-grafite">
+              <AppText variant="caption" accessibilityLiveRegion="polite" className="text-grafite">
                 {searchStatus}
-              </Text>
+              </AppText>
             ) : null}
             <FlatList
               data={results}
@@ -149,8 +143,8 @@ export default function DiaryEntryScreen() {
                   accessibilityHint="Escolhe este alimento"
                   style={{ minHeight: MIN_TOUCH_TARGET, justifyContent: 'center' }}
                   className="border-b border-grafite py-3">
-                  <Text className="text-base text-grafite">{item.name}</Text>
-                  {item.brand ? <Text className="text-xs text-grafite">{item.brand}</Text> : null}
+                  <AppText className="text-grafite">{item.name}</AppText>
+                  {item.brand ? <AppText variant="caption" className="text-grafite">{item.brand}</AppText> : null}
                 </Pressable>
               )}
             />
@@ -159,17 +153,19 @@ export default function DiaryEntryScreen() {
           <View className="gap-4">
             {!isEditing && selectedFood ? (
               <View className="gap-1">
-                <Text
+                <AppText
+                  variant="bodyStrong"
                   accessibilityLabel={`Alimento escolhido: ${selectedFood.name}`}
-                  className="text-base font-semibold text-grafite">
+                  className="text-grafite">
                   {selectedFood.name}
-                </Text>
+                </AppText>
                 <TextButton
                   label="Trocar alimento"
                   onPress={() => setSelectedFood(null)}
                   hint="Volta para a busca"
                   className="self-start"
-                  textClassName="text-sm text-mamao-forte"
+                  textVariant="caption"
+                  textClassName="text-mamao-forte"
                 />
               </View>
             ) : null}
@@ -194,7 +190,8 @@ export default function DiaryEntryScreen() {
                 onPress={() => void handleDelete()}
                 busy={removeEntry.isPending}
                 className="items-center"
-                textClassName="text-center text-sm text-jabuticaba"
+                textVariant="caption"
+                textClassName="text-center text-jabuticaba"
               />
             ) : null}
           </View>

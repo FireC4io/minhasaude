@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { AccessibilityInfo, Text, View } from 'react-native';
+import { AccessibilityInfo, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import {
@@ -11,6 +11,7 @@ import type { GoalTargetResponseDto } from '@/api/generated/models';
 import { FormError } from '@/components/ui/form-error';
 import { PrimaryButton } from '@/features/auth/primary-button';
 import { describeGoal } from '@/features/onboarding/accessibility-labels';
+import { AppText } from '@/components/ui/app-text';
 
 export default function SummaryScreen() {
   const queryClient = useQueryClient();
@@ -47,10 +48,10 @@ export default function SummaryScreen() {
     <SafeAreaView className="flex-1 bg-areia">
       <View className="flex-1 justify-center gap-6 px-6">
         <View className="gap-1">
-          <Text accessibilityRole="header" className="text-3xl font-semibold text-grafite">Sua meta</Text>
-          <Text className="text-base text-grafite">
+          <AppText variant="title" accessibilityRole="header" className="text-grafite">Sua meta</AppText>
+          <AppText className="text-grafite">
             Calculamos a partir do seu perfil e do peso registrado.
-          </Text>
+          </AppText>
         </View>
 
         {result ? (
@@ -59,24 +60,24 @@ export default function SummaryScreen() {
               accessible
               accessibilityLabel={describeGoal(result)}
               className="gap-2 rounded-2xl border border-grafite bg-superficie p-4">
-              <Text className="text-base text-grafite">
+              <AppText className="text-grafite">
                 Taxa metabólica basal estimada: {Math.round(Number(result.bmrKcal))} kcal/dia
-              </Text>
-              <Text className="text-base text-grafite">
+              </AppText>
+              <AppText className="text-grafite">
                 Gasto energético total estimado: {Math.round(Number(result.tdeeKcal))} kcal/dia
-              </Text>
-              <Text className="text-lg font-semibold text-grafite">
+              </AppText>
+              <AppText variant="heading" className="text-grafite">
                 Meta diária: {Math.round(Number(result.targetKcal))} kcal
-              </Text>
-              <Text className="text-base text-grafite">
+              </AppText>
+              <AppText className="text-grafite">
                 Proteína: {Math.round(Number(result.proteinG))}g · Gordura:{' '}
                 {Math.round(Number(result.fatG))}g · Carboidrato: {Math.round(Number(result.carbG))}g
-              </Text>
+              </AppText>
             </View>
-            <Text className="text-sm italic text-grafite">
+            <AppText variant="caption" className="italic text-grafite">
               Informativo, baseado em fórmulas padrão da literatura — não substitui orientação de
               um nutricionista ou médico.
-            </Text>
+            </AppText>
             <PrimaryButton label="Continuar" onPress={handleContinue} />
           </View>
         ) : (

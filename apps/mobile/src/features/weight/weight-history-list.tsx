@@ -1,8 +1,9 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 
 import type { BodyMeasurementResponseDto } from '@/api/generated/models';
 import { describeWeightEntry } from './accessibility-labels';
 import { formatKg } from './format-weight';
+import { AppText } from '@/components/ui/app-text';
 
 interface WeightHistoryListProps {
   measurements: readonly BodyMeasurementResponseDto[];
@@ -23,9 +24,9 @@ export function WeightHistoryList({ measurements }: WeightHistoryListProps) {
 
   return (
     <View className="gap-2">
-      <Text accessibilityRole="header" className="text-lg font-semibold text-grafite">
+      <AppText variant="heading" accessibilityRole="header" className="text-grafite">
         Histórico
-      </Text>
+      </AppText>
 
       <View className="overflow-hidden rounded-2xl border border-grafite/20 bg-superficie">
         {measurements.map((measurement, index) => (
@@ -38,10 +39,10 @@ export function WeightHistoryList({ measurements }: WeightHistoryListProps) {
             className={`flex-row items-center justify-between px-4 py-3 ${
               index > 0 ? 'border-t border-grafite/10' : ''
             }`}>
-            <Text className="text-base text-grafite">{formatMeasuredAt(measurement.measuredAt)}</Text>
-            <Text className="text-base font-semibold text-grafite">
+            <AppText className="text-grafite">{formatMeasuredAt(measurement.measuredAt)}</AppText>
+            <AppText variant="number" className="text-grafite">
               {formatKg(measurement.weightKg)}
-            </Text>
+            </AppText>
           </View>
         ))}
       </View>

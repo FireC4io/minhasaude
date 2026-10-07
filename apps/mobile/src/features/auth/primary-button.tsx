@@ -1,6 +1,7 @@
-import { ActivityIndicator, Pressable, Text } from 'react-native';
+import { ActivityIndicator, Pressable } from 'react-native';
 
 import { MIN_TOUCH_TARGET } from '@/constants/accessibility';
+import { AppText } from '@/components/ui/app-text';
 
 interface PrimaryButtonProps {
   label: string;
@@ -37,7 +38,7 @@ export function PrimaryButton({ label, onPress, isLoading, disabled, hint }: Pri
         // na prop, e o spinner acompanha o tema como o rótulo.
         <ActivityIndicator className="text-areia" />
       ) : (
-        <Text className="font-semibold text-areia">{label}</Text>
+        <AppText variant="bodyStrong" className="text-areia">{label}</AppText>
       )}
     </Pressable>
   );

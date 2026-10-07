@@ -1,9 +1,11 @@
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
+import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { useColorScheme } from 'react-native';
 import { QueryClientProvider } from '@tanstack/react-query';
 
 import { AnimatedSplashOverlay } from '@/components/animated-icon';
+import { APP_FONTS } from '@/constants/typography';
 import { queryClient } from '@/api/query-client';
 import { useGoalsControllerGetCurrent } from '@/api/generated/endpoints/goals/goals';
 import { AuthProvider, useAuth } from '@/features/auth/auth-context';
@@ -14,6 +16,14 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
+  const [fontsLoaded, fontError] = useFonts(APP_FONTS);
+
+  // A splash nativa segue na tela enquanto as fontes carregam. Se falharem,
+  // o app abre com a fonte do sistema em vez de travar na splash.
+  if (!fontsLoaded && !fontError) {
+    return null;
+  }
+
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>

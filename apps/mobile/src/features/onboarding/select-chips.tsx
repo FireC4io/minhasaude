@@ -1,6 +1,7 @@
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 
 import { MIN_TOUCH_TARGET } from '@/constants/accessibility';
+import { AppText } from '@/components/ui/app-text';
 
 interface SelectChipsProps<TValue extends string> {
   label: string;
@@ -21,7 +22,7 @@ export function SelectChips<TValue extends string>({
 }: SelectChipsProps<TValue>) {
   return (
     <View className="gap-2">
-      <Text className="text-sm font-medium text-grafite">{label}</Text>
+      <AppText variant="label" className="text-grafite">{label}</AppText>
 
       {/* `radiogroup` sem `accessible`: o grupo dá o contexto, mas cada chip
           continua sendo focável individualmente pelo leitor de tela. */}
@@ -46,19 +47,19 @@ export function SelectChips<TValue extends string>({
                   ? 'rounded-full bg-mamao-forte px-4 py-2'
                   : 'rounded-full border border-grafite px-4 py-2'
               }>
-              <Text className={selected ? 'text-areia' : 'text-grafite'}>{optionLabels[option]}</Text>
+              <AppText className={selected ? 'text-areia' : 'text-grafite'}>{optionLabels[option]}</AppText>
             </Pressable>
           );
         })}
       </View>
 
       {error ? (
-        <Text
+        <AppText variant="caption"
           accessibilityRole="alert"
           accessibilityLiveRegion="polite"
-          className="text-sm text-jabuticaba">
+          className="text-jabuticaba">
           {error}
-        </Text>
+        </AppText>
       ) : null}
     </View>
   );

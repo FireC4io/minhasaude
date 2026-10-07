@@ -1,6 +1,7 @@
-import { Text } from 'react-native';
+
 
 import { useAnnounce } from '@/features/accessibility/use-announce';
+import { AppText } from '@/components/ui/app-text';
 
 interface FormErrorProps {
   message: string | null | undefined;
@@ -19,11 +20,11 @@ export function FormError({ message }: FormErrorProps) {
   }
 
   return (
-    <Text
+    <AppText variant="caption"
       accessibilityRole="alert"
       accessibilityLiveRegion="polite"
-      className="text-sm text-jabuticaba">
+      className="text-jabuticaba">
       {message}
-    </Text>
+    </AppText>
   );
 }

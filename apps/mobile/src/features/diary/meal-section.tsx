@@ -1,9 +1,10 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 import type { DiaryEntryResponseDto, MealType } from '@/api/generated/models';
 import { TextButton } from '@/components/ui/text-button';
 import { describeMealHeader } from './accessibility-labels';
 import { DiaryEntryRow } from './diary-entry-row';
 import { MEAL_TYPE_LABELS } from './meal-type-labels';
+import { AppText } from '@/components/ui/app-text';
 
 interface MealSectionProps {
   mealType: MealType;
@@ -30,8 +31,8 @@ export function MealSection({ mealType, entries, onEntryPress, onEntryDelete, on
         accessibilityRole="header"
         accessibilityLabel={describeMealHeader(label, entries.length, kcalTotal)}
         className="flex-row items-center justify-between">
-        <Text className="text-base font-semibold text-grafite">{label}</Text>
-        {entries.length > 0 ? <Text className="text-sm text-grafite">{round(kcalTotal)} kcal</Text> : null}
+        <AppText variant="bodyStrong" className="text-grafite">{label}</AppText>
+        {entries.length > 0 ? <AppText variant="caption" className="text-grafite">{round(kcalTotal)} kcal</AppText> : null}
       </View>
 
       <View className="gap-2">
@@ -50,7 +51,8 @@ export function MealSection({ mealType, entries, onEntryPress, onEntryDelete, on
         accessibilityLabel={`Adicionar alimento ao ${label.toLowerCase()}`}
         onPress={onAddPress}
         className="self-start"
-        textClassName="font-semibold text-mamao-forte"
+        textVariant="bodyStrong"
+        textClassName="text-mamao-forte"
       />
     </View>
   );

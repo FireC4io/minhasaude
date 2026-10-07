@@ -1,13 +1,14 @@
 import { isAxiosError } from 'axios';
 import { Link } from 'expo-router';
 import { useState } from 'react';
-import { KeyboardAvoidingView, Platform, Text, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { FormError } from '@/components/ui/form-error';
 import { useAuth } from '@/features/auth/auth-context';
 import { AuthTextField } from '@/features/auth/auth-text-field';
 import { PrimaryButton } from '@/features/auth/primary-button';
+import { AppText } from '@/components/ui/app-text';
 
 export default function LoginScreen() {
   const { login } = useAuth();
@@ -38,8 +39,8 @@ export default function LoginScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         className="flex-1 justify-center gap-6 px-6">
         <View className="gap-1">
-          <Text accessibilityRole="header" className="text-3xl font-semibold text-grafite">Bem-vindo de volta</Text>
-          <Text className="text-base text-grafite">Entre pra continuar seu acompanhamento.</Text>
+          <AppText variant="title" accessibilityRole="header" className="text-grafite">Bem-vindo de volta</AppText>
+          <AppText className="text-grafite">Entre pra continuar seu acompanhamento.</AppText>
         </View>
 
         <View className="gap-4">
@@ -69,8 +70,8 @@ export default function LoginScreen() {
         </View>
 
         <View className="flex-row justify-center gap-1">
-          <Text className="text-grafite">Não tem conta?</Text>
-          <Link href="/register" className="font-semibold text-mamao-forte">
+          <AppText className="text-grafite">Não tem conta?</AppText>
+          <Link href="/register" className="font-body-semibold text-mamao-forte">
             Criar conta
           </Link>
         </View>

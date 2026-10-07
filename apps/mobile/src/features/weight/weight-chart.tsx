@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { Text, useColorScheme, useWindowDimensions, View } from 'react-native';
+import { useColorScheme, useWindowDimensions, View } from 'react-native';
 import Svg, { Circle, Line, Polyline } from 'react-native-svg';
 
 import { GotaVitalColors } from '@/constants/gota-vital-colors';
 import { describeWeightTrend } from './accessibility-labels';
 import { buildWeightChart, type WeightMeasurementLike } from './chart-geometry';
 import { formatKg } from './format-weight';
+import { AppText } from '@/components/ui/app-text';
 
 const CHART_HEIGHT = 180;
 const PADDING = 16;
@@ -44,10 +45,10 @@ export function WeightChart({ measurements }: WeightChartProps) {
   if (chart.points.length === 0) {
     return (
       <View className="items-center justify-center rounded-2xl border border-grafite/20 bg-superficie p-6">
-        <Text className="text-center text-base text-grafite">
+        <AppText className="text-center text-grafite">
           Nenhum peso registrado ainda. Registre o primeiro acima para começar a acompanhar sua
           evolução.
-        </Text>
+        </AppText>
       </View>
     );
   }
@@ -62,8 +63,8 @@ export function WeightChart({ measurements }: WeightChartProps) {
       className="gap-2 rounded-2xl border border-grafite/20 bg-superficie p-4"
       onLayout={(event) => setLarguraMedida(event.nativeEvent.layout.width - 32)}>
       <View className="flex-row justify-between">
-        <Text className="text-sm text-grafite">{formatKg(chart.max)}</Text>
-        <Text className="text-sm text-grafite">{formatKg(chart.min)}</Text>
+        <AppText variant="number" className="text-grafite">{formatKg(chart.max)}</AppText>
+        <AppText variant="number" className="text-grafite">{formatKg(chart.min)}</AppText>
       </View>
 
       <Svg width={width} height={CHART_HEIGHT}>
@@ -98,9 +99,9 @@ export function WeightChart({ measurements }: WeightChartProps) {
       </Svg>
 
       {chart.points.length === 1 ? (
-        <Text className="text-center text-sm text-grafite">
+        <AppText variant="caption" className="text-center text-grafite">
           Registre outro peso para ver a linha de evolução.
-        </Text>
+        </AppText>
       ) : null}
     </View>
   );

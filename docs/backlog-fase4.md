@@ -109,10 +109,12 @@ Issues **#30** e **#31** acima.
 
 ## Bloco C — Identidade Gota Vital e sistema de design
 
-### F4-05. Tipografia e escala tipográfica
-- [ ] Carregar Fredoka (títulos), Work Sans (texto) e JetBrains Mono (números) via `expo-font`, com fallback
-- [ ] Escala tipográfica com nomes (título, subtítulo, corpo, legenda, número) em vez de `text-sm`/`text-base` soltos
-- [ ] Números de nutrição e peso com algarismos tabulares, para as colunas alinharem
+### F4-05. Tipografia e escala tipográfica ✅ (2026-10-06)
+- [x] Fredoka 600, Work Sans 400/500/600 e JetBrains Mono 500 via `@expo-google-fonts/*` + `useFonts` no `_layout.tsx` raiz (`src/constants/typography.ts`). A splash segura até carregar; se falhar, abre com a fonte do sistema
+- [x] Componente `AppText` (`src/components/ui/app-text.tsx`) com 9 variantes: `title`, `subtitle`, `heading`, `body`, `bodyStrong`, `label`, `caption`, `number`, `numberLarge`. Todas as telas migradas; `TextButton` ganhou `textVariant`. `text-xs` (12 px) deixou de existir — o menor texto é 14 px
+- [x] Números de macros, kcal do card e peso em JetBrains Mono (monoespaçada → colunas alinhadas). Validado no emulador (diário e peso)
+- **Regra**: nunca `font-semibold`/`font-bold` com essas fontes — no Android o `fontWeight` troca a fonte customizada pela do sistema. Peso novo = família nova em `typography.ts` + `tailwind.config.js` (o teste `app-text.spec.tsx` trava as duas coisas)
+- Fora do escopo, ficou para o F4-06: os componentes do template (`themed-text`, `hint-row`, `web-badge`, `app-tabs.web`, `collapsible`) seguem com `Text` cru
 
 ### F4-06. Ícone, splash, ícones das abas e barra de abas
 - [ ] Ícone do app e splash com o símbolo Gota Vital (hoje: logo do Expo)

@@ -1,8 +1,9 @@
-import { Alert, Pressable, Text, View } from 'react-native';
+import { Alert, Pressable, View } from 'react-native';
 import type { DiaryEntryResponseDto } from '@/api/generated/models';
 import { TextButton } from '@/components/ui/text-button';
 import { MIN_TOUCH_TARGET } from '@/constants/accessibility';
 import { describeDiaryEntry } from './accessibility-labels';
+import { AppText } from '@/components/ui/app-text';
 
 interface DiaryEntryRowProps {
   entry: DiaryEntryResponseDto;
@@ -33,12 +34,12 @@ export function DiaryEntryRow({ entry, onPress, onDelete }: DiaryEntryRowProps) 
         accessibilityHint="Abre para editar a quantidade"
         style={{ minHeight: MIN_TOUCH_TARGET, justifyContent: 'center' }}
         className="flex-1 gap-0.5 py-2 pr-2">
-        <Text className="text-base text-grafite" numberOfLines={1}>
+        <AppText className="text-grafite" numberOfLines={1}>
           {entry.food.name}
-        </Text>
-        <Text className="text-xs text-grafite">
+        </AppText>
+        <AppText variant="caption" className="text-grafite">
           {Number(entry.quantity)}g · {Math.round(Number(entry.kcalSnapshot))} kcal
-        </Text>
+        </AppText>
       </Pressable>
       <TextButton
         label="Remover"
@@ -46,7 +47,8 @@ export function DiaryEntryRow({ entry, onPress, onDelete }: DiaryEntryRowProps) 
         accessibilityLabel={`Remover ${entry.food.name}`}
         onPress={confirmDelete}
         className="items-end"
-        textClassName="text-sm text-jabuticaba"
+        textVariant="caption"
+        textClassName="text-jabuticaba"
       />
     </View>
   );

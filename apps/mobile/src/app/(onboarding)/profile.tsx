@@ -2,7 +2,7 @@ import { ACTIVITY_LEVELS, GOALS, SEXES, profileFormSchema, type Goal, type Sex }
 import { isAxiosError } from 'axios';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { KeyboardAvoidingView, Platform, Text, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useUsersControllerUpdateProfile } from '@/api/generated/endpoints/me/me';
@@ -12,6 +12,7 @@ import { PrimaryButton } from '@/features/auth/primary-button';
 import { ACTIVITY_LEVEL_LABELS, GOAL_LABELS, SEX_LABELS } from '@/features/onboarding/enum-labels';
 import { SelectChips } from '@/features/onboarding/select-chips';
 import { parseDecimal } from '@/features/forms/parse-decimal';
+import { AppText } from '@/components/ui/app-text';
 
 export default function ProfileScreen() {
   const router = useRouter();
@@ -58,10 +59,10 @@ export default function ProfileScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         className="flex-1 gap-6 px-6 pt-8">
         <View className="gap-1">
-          <Text accessibilityRole="header" className="text-3xl font-semibold text-grafite">Seu perfil</Text>
-          <Text className="text-base text-grafite">
+          <AppText variant="title" accessibilityRole="header" className="text-grafite">Seu perfil</AppText>
+          <AppText className="text-grafite">
             Usamos isso pra calcular sua meta calórica e de macronutrientes.
-          </Text>
+          </AppText>
         </View>
 
         <View className="gap-4">

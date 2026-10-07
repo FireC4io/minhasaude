@@ -1,7 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { AccessibilityInfo, ScrollView, Text, View } from 'react-native';
+import { AccessibilityInfo, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import {
@@ -19,6 +19,7 @@ import { addDaysToIsoDate, formatIsoDateLabel, todayIsoDate } from '@/features/d
 import { MacroSummary } from '@/features/diary/macro-summary';
 import { MealSection } from '@/features/diary/meal-section';
 import { MEAL_TYPE_ORDER } from '@/features/diary/meal-type-labels';
+import { AppText } from '@/components/ui/app-text';
 
 export default function DiaryScreen() {
   const router = useRouter();
@@ -82,15 +83,16 @@ export default function DiaryScreen() {
   return (
     <SafeAreaView className="flex-1 bg-areia">
       <View className="flex-row items-center justify-between px-6 pt-2">
-        <Text accessibilityRole="header" className="text-2xl font-semibold text-grafite">
+        <AppText variant="subtitle" accessibilityRole="header" className="text-grafite">
           Diário
-        </Text>
+        </AppText>
         <TextButton
           label="Sair"
           onPress={() => void logout()}
           hint="Encerra a sessão neste aparelho"
           className="items-end"
-          textClassName="text-sm text-grafite"
+          textVariant="caption"
+          textClassName="text-grafite"
         />
       </View>
 
@@ -102,7 +104,8 @@ export default function DiaryScreen() {
           accessibilityLabel="Dia anterior"
           onPress={() => showDate(addDaysToIsoDate(currentDate, -1))}
           className="items-center"
-          textClassName="text-2xl text-grafite"
+          textVariant="subtitle"
+          textClassName="text-grafite"
         />
         <TextButton
           label={dateLabel}
@@ -110,14 +113,16 @@ export default function DiaryScreen() {
           hint={isToday ? undefined : 'Volta para hoje'}
           onPress={() => showDate(todayIsoDate())}
           className="items-center"
-          textClassName="text-lg font-semibold capitalize text-grafite"
+          textVariant="heading"
+          textClassName="capitalize text-grafite"
         />
         <TextButton
           label="›"
           accessibilityLabel="Próximo dia"
           onPress={() => showDate(addDaysToIsoDate(currentDate, 1))}
           className="items-center"
-          textClassName="text-2xl text-grafite"
+          textVariant="subtitle"
+          textClassName="text-grafite"
         />
       </View>
 

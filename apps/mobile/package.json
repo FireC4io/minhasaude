@@ -17,6 +17,9 @@
     "reset-project": "node ./scripts/reset-project.js"
   },
   "dependencies": {
+    "@expo-google-fonts/fredoka": "^0.4.1",
+    "@expo-google-fonts/jetbrains-mono": "^0.4.1",
+    "@expo-google-fonts/work-sans": "^0.4.2",
     "@expo/ui": "~57.0.19",
     "@minhasaude/shared": "workspace:^",
     "@tanstack/react-query": "^5.103.1",

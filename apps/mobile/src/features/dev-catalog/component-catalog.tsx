@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import { vars } from 'nativewind';
 
 import { FormError } from '@/components/ui/form-error';
@@ -11,6 +11,7 @@ import { PrimaryButton } from '@/features/auth/primary-button';
 import { SelectChips } from '@/features/onboarding/select-chips';
 
 import { paletteCssVars } from './theme-vars';
+import { AppText } from '@/components/ui/app-text';
 
 const THEMES: readonly { scheme: GotaVitalScheme; title: string }[] = [
   { scheme: 'light', title: 'Tema claro' },
@@ -35,9 +36,9 @@ export function ComponentCatalog() {
     <ScrollView>
       {THEMES.map(({ scheme, title }) => (
         <View key={scheme} style={vars(paletteCssVars(scheme))} className="gap-6 bg-areia p-6">
-          <Text accessibilityRole="header" className="text-2xl font-bold text-grafite">
+          <AppText variant="subtitle" accessibilityRole="header" className="text-grafite">
             {title}
-          </Text>
+          </AppText>
           <ThemeSamples />
         </View>
       ))}
@@ -58,10 +59,11 @@ function ThemeSamples() {
         <TextButton
           label="+ Adicionar alimento"
           onPress={noop}
-          textClassName="font-semibold text-mamao-forte"
+          textVariant="bodyStrong"
+          textClassName="text-mamao-forte"
         />
-        <TextButton label="Desabilitado" onPress={noop} disabled textClassName="text-mamao-forte" />
-        <TextButton label="Copiando…" onPress={noop} busy textClassName="text-mamao-forte" />
+        <TextButton label="Desabilitado" onPress={noop} disabled textVariant="body" textClassName="text-mamao-forte" />
+        <TextButton label="Copiando…" onPress={noop} busy textVariant="body" textClassName="text-mamao-forte" />
       </Section>
 
       <Section title="AuthTextField">
@@ -109,7 +111,7 @@ function ThemeSamples() {
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
     <View className="gap-3 rounded-2xl bg-superficie p-4">
-      <Text className="font-mono text-xs text-grafite">{title}</Text>
+      <AppText variant="number" className="text-grafite">{title}</AppText>
       {children}
     </View>
   );

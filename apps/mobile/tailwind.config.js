@@ -16,6 +16,15 @@ module.exports = {
         maracuja: 'var(--color-maracuja)',
         'maracuja-forte': 'var(--color-maracuja-forte)',
       },
+      // Uma família por peso (ver src/constants/typography.ts). O primeiro nome
+      // é o registrado pelo expo-font; os seguintes são o fallback.
+      fontFamily: {
+        display: ['Fredoka_600SemiBold', 'system-ui', 'sans-serif'],
+        body: ['WorkSans_400Regular', 'system-ui', 'sans-serif'],
+        'body-medium': ['WorkSans_500Medium', 'system-ui', 'sans-serif'],
+        'body-semibold': ['WorkSans_600SemiBold', 'system-ui', 'sans-serif'],
+        mono: ['JetBrainsMono_500Medium', 'ui-monospace', 'monospace'],
+      },
     },
   },
   plugins: [],
