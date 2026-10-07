@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ScrollView, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { AppText } from '@/components/ui/app-text';
 import { PreviewBanner } from '@/components/ui/preview-banner';
@@ -11,9 +12,9 @@ import { MarkerChart } from '@/features/exams/marker-chart';
 type Device = BioimpedanceMeasurement['source'];
 
 const METRICS = [
-  { key: 'bodyFatPercent', label: 'Gordura corporal', unit: '%' },
-  { key: 'muscleMassKg', label: 'Massa muscular', unit: 'kg' },
-  { key: 'weightKg', label: 'Peso no aparelho', unit: 'kg' },
+  { key: 'bodyFatPercent', labelKey: 'examsMore.bodyFat', unit: '%' },
+  { key: 'muscleMassKg', labelKey: 'examsMore.muscle', unit: 'kg' },
+  { key: 'weightKg', labelKey: 'examsMore.deviceWeight', unit: 'kg' },
 ] as const;
 
 /**
@@ -22,6 +23,7 @@ const METRICS = [
  * calcula diferença entre elas.
  */
 export default function BioimpedanceScreen() {
+  const { t } = useTranslation();
   const devices = [...new Set(DEMO_BIOIMPEDANCE.map((measurement) => measurement.source))];
   const [device, setDevice] = useState<Device>(devices[0] ?? 'inbody');
   const labels = Object.fromEntries(devices.map((d) => [d, DEVICE_LABELS[d]])) as Record<
@@ -35,22 +37,20 @@ export default function BioimpedanceScreen() {
 
   return (
     <ScrollView className="flex-1 bg-areia" contentContainerClassName="gap-6 px-6 py-6">
-      <PreviewBanner missing="Medidas de demonstração, de uma pessoa fictícia." />
+      <PreviewBanner missing={t('examsMore.bioPreview')} />
 
       <View className="gap-2 rounded-2xl border-2 border-maracuja-forte bg-superficie p-4">
         <AppText variant="bodyStrong" className="text-grafite">
-          ⚠ Compare só medidas do mesmo aparelho
+          {t('examsMore.bioWarnTitle')}
         </AppText>
         <AppText className="text-grafite">
-          Cada aparelho de bioimpedância calcula gordura e músculo de um jeito. Uma diferença entre
-          duas marcas pode ser só do aparelho, não do seu corpo. Por isso as medidas ficam
-          separadas.
+          {t('examsMore.bioWarnText')}
         </AppText>
       </View>
 
       {devices.length > 1 ? (
         <SelectChips
-          label="Aparelho"
+          label={t('examsMore.device')}
           options={devices}
           optionLabels={labels}
           value={device}
@@ -58,7 +58,8 @@ export default function BioimpedanceScreen() {
         />
       ) : null}
 
-      {METRICS.map(({ key, label, unit }) => {
+      {METRICS.map(({ key, labelKey, unit }) => {
+        const label = t(labelKey);
         const points = measurements
           .filter((measurement) => measurement[key] !== null)
           .map((measurement) => ({
@@ -81,12 +82,19 @@ export default function BioimpedanceScreen() {
             <MarkerChart
               points={points}
               unit={unit}
-              description={`${label} no ${DEVICE_LABELS[device]}: ${points
-                .map(
-                  (point) =>
-                    `${formatExamValue(point.value)} ${unit} em ${formatExamDate(point.date)}`,
-                )
-                .join('; ')}.`}
+              description={t('examsMore.onDevice', {
+                label,
+                device: DEVICE_LABELS[device],
+                points: points
+                  .map((point) =>
+                    t('examsMore.pointOn', {
+                      value: formatExamValue(point.value),
+                      unit,
+                      date: formatExamDate(point.date),
+                    }),
+                  )
+                  .join('; '),
+              })}
             />
           </View>
         );

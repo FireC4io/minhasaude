@@ -1,5 +1,6 @@
 import { useLocalSearchParams } from 'expo-router';
 import { ScrollView, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { AppText } from '@/components/ui/app-text';
 import { ExamDisclaimer } from '@/features/exams/exam-disclaimer';
@@ -11,6 +12,7 @@ import { ResultRow } from '@/features/exams/result-row';
 
 /** Evolução de um marcador entre os exames revisados. */
 export default function MarkerHistoryScreen() {
+  const { t } = useTranslation();
   const { code } = useLocalSearchParams<{ code: string }>();
   const info = markerInfo(code);
   const documents = useExamDocuments();
@@ -33,7 +35,12 @@ export default function MarkerHistoryScreen() {
     points.length >= 2
       ? `${info.displayName}: ${points
           .map(
-            (point) => `${formatExamValue(point.value)} ${unit} em ${formatExamDate(point.date)}`,
+            (point) =>
+              t('examsMore.pointOn', {
+                value: formatExamValue(point.value),
+                unit,
+                date: formatExamDate(point.date),
+              }),
           )
           .join('; ')}.`
       : '';
@@ -53,13 +60,13 @@ export default function MarkerHistoryScreen() {
         <MarkerChart points={points} unit={unit} description={description} />
       ) : (
         <AppText className="text-grafite-suave">
-          Com dois ou mais exames revisados, a evolução aparece num gráfico aqui.
+          {t('examsMore.twoNeeded')}
         </AppText>
       )}
 
       <View className="gap-1">
         <AppText variant="label" accessibilityRole="header" className="text-grafite-suave">
-          Exame a exame
+          {t('examsMore.byExam')}
         </AppText>
         <View className="rounded-2xl bg-superficie px-4">
           {[...history].reverse().map(({ document, result }) => (
@@ -74,8 +81,7 @@ export default function MarkerHistoryScreen() {
       </View>
 
       <AppText variant="caption" className="text-grafite-suave">
-        Laboratórios diferentes podem usar métodos e faixas de referência diferentes. Por isso cada
-        valor é comparado com a faixa do seu próprio laudo.
+        {t('examsMore.labsDiffer')}
       </AppText>
       <ExamDisclaimer />
     </ScrollView>

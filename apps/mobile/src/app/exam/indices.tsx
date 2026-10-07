@@ -1,5 +1,6 @@
 import { useLocalSearchParams } from 'expo-router';
 import { ScrollView, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { useUsersControllerGetMe } from '@/api/generated/endpoints/me/me';
 import { AppText } from '@/components/ui/app-text';
@@ -16,6 +17,7 @@ import { appLocale } from '@/i18n/format';
  * versão da fórmula e referência. Sem rótulo clínico (RDC 657/2022).
  */
 export default function IndicesScreen() {
+  const { t } = useTranslation();
   const { id } = useLocalSearchParams<{ id?: string }>();
   const documents = useExamDocuments();
   const meQuery = useUsersControllerGetMe();
@@ -29,7 +31,7 @@ export default function IndicesScreen() {
     return (
       <View className="flex-1 bg-areia px-6 py-6">
         <AppText className="text-grafite">
-          Os índices aparecem depois que você enviar e conferir um exame de sangue.
+          {t('examsMore.indicesEmpty')}
         </AppText>
       </View>
     );
@@ -43,7 +45,7 @@ export default function IndicesScreen() {
 
   return (
     <ScrollView className="flex-1 bg-areia" contentContainerClassName="gap-5 px-6 py-6">
-      <PreviewBanner missing="Calculados a partir do exame de demonstração. As fórmulas são as reais e têm testes." />
+      <PreviewBanner missing={t('examsMore.indicesPreview')} />
       <AppText className="text-grafite">
         A partir do exame de {formatExamDate(document.collectedAt)}. São fórmulas conhecidas na
         literatura, feitas com os valores que você conferiu.
@@ -59,6 +61,7 @@ export default function IndicesScreen() {
 }
 
 function IndexCard({ index }: { index: ComputedIndex }) {
+  const { t } = useTranslation();
   const { calculator, value, inputs, missing } = index;
   const formatted =
     value === null
@@ -76,12 +79,21 @@ function IndexCard({ index }: { index: ComputedIndex }) {
       accessible
       accessibilityLabel={
         formatted
-          ? `${calculator.displayName}: ${formatted}. Fórmula: ${calculator.formula}. Valores usados: ${usedValues}.`
-          : `${calculator.displayName}: não calculado. ${
-              missing.length > 0
-                ? `Falta: ${missing.map((code) => markerInfo(code).displayName).join(', ')}.`
-                : 'Falta a data de nascimento ou o sexo no seu perfil.'
-            }`
+          ? t('examsMore.indexSpoken', {
+              name: calculator.displayName,
+              value: formatted,
+              formula: calculator.formula,
+              used: usedValues,
+            })
+          : t('examsMore.indexMissingSpoken', {
+              name: calculator.displayName,
+              reason:
+                missing.length > 0
+                  ? t('examsMore.missingSpoken', {
+                      items: missing.map((code) => markerInfo(code).displayName).join(', '),
+                    })
+                  : t('examsMore.missingProfileSpoken'),
+            })
       }
       className="gap-2 rounded-2xl bg-superficie p-4">
       <AppText variant="bodyStrong" className="text-grafite">
@@ -94,14 +106,16 @@ function IndexCard({ index }: { index: ComputedIndex }) {
       ) : (
         <AppText className="text-grafite-suave">
           {missing.length > 0
-            ? `Não calculado: o exame não tem ${missing
-                .map((code) => markerInfo(code).displayName.toLowerCase())
-                .join(' e ')} conferido.`
-            : 'Não calculado: precisa da data de nascimento e do sexo no seu perfil.'}
+            ? t('examsMore.notCalculated', {
+                items: missing
+                  .map((code) => markerInfo(code).displayName.toLowerCase())
+                  .join(t('examsMore.and')),
+              })
+            : t('examsMore.notCalculatedProfile')}
         </AppText>
       )}
       <AppText variant="caption" className="text-grafite">
-        Fórmula: {calculator.formula}
+        {t('examsMore.formula', { formula: calculator.formula })}
       </AppText>
       {formatted ? (
         <AppText variant="caption" className="text-grafite">
