@@ -3,7 +3,7 @@ import '@/global.css';
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useColorScheme } from 'react-native';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 
@@ -11,7 +11,11 @@ import { APP_FONTS } from '@/constants/typography';
 import { SlowNetworkBanner } from '@/features/network/slow-network-banner';
 import { applyThemePreference, loadThemePreference } from '@/features/preferences/theme-preference';
 import {
-  PERSIST_MAX_AGE_MS,
+  loadOfflineCopyDays,
+  offlineCopyMaxAgeMs,
+  type OfflineCopyDays,
+} from '@/features/preferences/offline-copy-preference';
+import {
   queryClient,
   queryPersister,
   shouldPersistQuery,
@@ -26,13 +30,17 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [fontsLoaded, fontError] = useFonts(APP_FONTS);
-  const isReady = fontsLoaded || Boolean(fontError);
+  // O tempo da cópia precisa estar lido antes de restaurá-la: o maxAge só é
+  // conferido nesse momento.
+  const [offlineCopyDays, setOfflineCopyDays] = useState<OfflineCopyDays | null>(null);
+  const isReady = (fontsLoaded || Boolean(fontError)) && offlineCopyDays !== null;
 
   // A splash nativa (gota Gota Vital) segue na tela enquanto as fontes
   // carregam. Se falharem, o app abre com a fonte do sistema em vez de travar.
   // Tema escolhido em Preferências; sem escolha, segue o aparelho.
   useEffect(() => {
     void loadThemePreference().then(applyThemePreference);
+    void loadOfflineCopyDays().then(setOfflineCopyDays);
   }, []);
 
   useEffect(() => {
@@ -41,7 +49,7 @@ export default function RootLayout() {
     }
   }, [isReady]);
 
-  if (!isReady) {
+  if (!isReady || offlineCopyDays === null) {
     return null;
   }
 
@@ -50,7 +58,7 @@ export default function RootLayout() {
       client={queryClient}
       persistOptions={{
         persister: queryPersister,
-        maxAge: PERSIST_MAX_AGE_MS,
+        maxAge: offlineCopyMaxAgeMs(offlineCopyDays),
         dehydrateOptions: { shouldDehydrateQuery: shouldPersistQuery },
       }}>
       <AuthProvider>

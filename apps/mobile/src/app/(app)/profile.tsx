@@ -63,7 +63,7 @@ export default function ProfileScreen() {
         <Section title="App">
           <ListRow
             title="Preferências"
-            description="Tema claro, escuro ou do aparelho"
+            description="Tema e por quanto tempo guardar a cópia no celular"
             onPress={go('/account/preferences')}
           />
           <ListRow

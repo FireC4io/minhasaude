@@ -2,13 +2,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
 import { QueryClient, type Query } from '@tanstack/react-query';
 
-const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+import { MAX_OFFLINE_COPY_MS } from '@/features/preferences/offline-copy-preference';
 
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      // O cache precisa viver ao menos tanto quanto a cópia gravada no aparelho.
-      gcTime: ONE_DAY_MS,
+      // O cache precisa viver ao menos tanto quanto a cópia gravada no aparelho:
+      // com gcTime menor, a consulta some da memória e é apagada da cópia.
+      gcTime: MAX_OFFLINE_COPY_MS,
       retry: 2,
     },
   },
@@ -19,16 +20,16 @@ export const queryClient = new QueryClient({
  * sem internet ou enquanto o servidor gratuito acorda.
  *
  * Contém dado de saúde (diário, peso) sem criptografia no armazenamento do
- * app — por isso dura no máximo 24 h e é apagada ao sair da conta, ao expirar
- * a sessão e ao excluir a conta (`clearPersistedCache`).
+ * app — por isso a pessoa escolhe por quanto tempo ela fica sem abrir o app
+ * (1, 7 ou 30 dias, padrão 1; ver `offline-copy-preference`), e ela é apagada
+ * ao sair da conta, ao expirar a sessão e ao excluir a conta
+ * (`clearPersistedCache`).
  */
 export const queryPersister = createAsyncStoragePersister({
   storage: AsyncStorage,
   key: 'gota-vital:query-cache',
   throttleTime: 2000,
 });
-
-export const PERSIST_MAX_AGE_MS = ONE_DAY_MS;
 
 /** Só respostas de sucesso, e nunca nada de autenticação. */
 export function shouldPersistQuery(query: Pick<Query, 'queryKey' | 'state'>): boolean {

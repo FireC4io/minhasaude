@@ -11,13 +11,27 @@ import {
   saveThemePreference,
   type ThemePreference,
 } from '@/features/preferences/theme-preference';
+import {
+  OFFLINE_COPY_DAYS,
+  OFFLINE_COPY_LABELS,
+  loadOfflineCopyDays,
+  saveOfflineCopyDays,
+  type OfflineCopyDays,
+} from '@/features/preferences/offline-copy-preference';
 
 export default function PreferencesScreen() {
   const [theme, setTheme] = useState<ThemePreference | null>(null);
+  const [offlineDays, setOfflineDays] = useState<OfflineCopyDays | null>(null);
 
   useEffect(() => {
     void loadThemePreference().then(setTheme);
+    void loadOfflineCopyDays().then(setOfflineDays);
   }, []);
+
+  function chooseOfflineDays(days: OfflineCopyDays) {
+    setOfflineDays(days);
+    void saveOfflineCopyDays(days);
+  }
 
   function chooseTheme(preference: ThemePreference) {
     setTheme(preference);
@@ -41,6 +55,19 @@ export default function PreferencesScreen() {
       <AppText variant="caption" className="text-grafite-suave">
         Para letras maiores, aumente o tamanho da fonte nas configurações do celular: o app
         acompanha.
+      </AppText>
+
+      <SelectChips
+        label="Cópia dos dados no celular"
+        options={OFFLINE_COPY_DAYS}
+        optionLabels={OFFLINE_COPY_LABELS}
+        value={offlineDays}
+        onChange={chooseOfflineDays}
+      />
+      <AppText variant="caption" className="text-grafite-suave">
+        O app guarda no celular uma cópia do que você já viu, para abrir mesmo sem internet. Se
+        você ficar mais tempo que isso sem abrir o app, a cópia é apagada. Ela também é apagada
+        quando você sai da conta. A nova escolha vale a partir da próxima vez que abrir o app.
       </AppText>
     </ScrollView>
   );
