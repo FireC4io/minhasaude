@@ -1,0 +1,44 @@
+name: Deploy check (produção)
+
+# Confere se o commit enviado para main chegou mesmo à produção. Entre 25/09 e
+# 07/10/2026, 25 deploys falharam no Render sem ninguém perceber e a produção
+# ficou presa numa versão antiga. Se este job falhar, o GitHub manda e-mail
+# para quem fez o push.
+#
+# Não precisa de segredo: o /health devolve o commit em execução
+# (RENDER_GIT_COMMIT), e o repositório é público.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+concurrency:
+  # Push novo cancela a conferência do anterior: só o último commit importa.
+  group: deploy-check
+  cancel-in-progress: true
+
+jobs:
+  wait-for-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Esperar o commit entrar no ar
+        env:
+          EXPECTED: ${{ github.sha }}
+          HEALTH_URL: https://minhasaude-api.onrender.com/health
+        run: |
+          # Build + deploy no Render gratuito leva ~3-5 min; 25 min de folga.
+          deadline=$(( $(date +%s) + 25 * 60 ))
+          while [ "$(date +%s)" -lt "$deadline" ]; do
+            body=$(curl -s -m 60 "$HEALTH_URL" || true)
+            running=$(echo "$body" | jq -r '.commit // empty' 2>/dev/null || true)
+            echo "$(date -u +%H:%M:%S) em produção: ${running:-indisponível}"
+            if [ "$running" = "$EXPECTED" ]; then
+              echo "Deploy de $EXPECTED no ar, banco: $(echo "$body" | jq -r '.database')"
+              exit 0
+            fi
+            sleep 30
+          done
+          echo "::error::O commit $EXPECTED não entrou em produção em 25 minutos. Ver eventos e logs do serviço minhasaude-api no Render."
+          exit 1

@@ -26,4 +26,9 @@ describe('Health (e2e)', () => {
     expect(response.body.database).toBe('up');
     expect(typeof response.body.timestamp).toBe('string');
   });
+
+  it('informa o commit em execução (null fora do Render)', async () => {
+    const response = await request(app.getHttpServer()).get('/health').expect(200);
+    expect(response.body.commit).toBe(process.env.RENDER_GIT_COMMIT ?? null);
+  });
 });
