@@ -17,6 +17,11 @@ function withUnit(value: number, formatted: string, singular: string, plural: st
   return `${formatted} ${isSingular ? singular : plural}`;
 }
 
+/** Número para a tela, com vírgula decimal: "2,5". */
+export function displayNumber(value: number, maximumFractionDigits = 1): string {
+  return formatNumber(value, maximumFractionDigits);
+}
+
 export function spokenKcal(value: number): string {
   const rounded = Math.round(value);
   return withUnit(rounded, formatNumber(rounded, 0), 'quilocaloria', 'quilocalorias');

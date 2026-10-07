@@ -1,4 +1,4 @@
-import { Alert, Pressable, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import type { DiaryEntryResponseDto } from '@/api/generated/models';
 import { TextButton } from '@/components/ui/text-button';
 import { MIN_TOUCH_TARGET } from '@/constants/accessibility';
@@ -12,17 +12,10 @@ interface DiaryEntryRowProps {
 }
 
 export function DiaryEntryRow({ entry, onPress, onDelete }: DiaryEntryRowProps) {
-  function confirmDelete() {
-    Alert.alert('Remover entrada', `Remover "${entry.food.name}" do diário?`, [
-      { text: 'Cancelar', style: 'cancel' },
-      { text: 'Remover', style: 'destructive', onPress: onDelete },
-    ]);
-  }
-
   // Editar e remover são irmãos, não um botão dentro do outro: um Pressable
   // acessível engole os filhos, e o "Remover" sumiria para o leitor de tela.
   return (
-    <View className="flex-row items-center justify-between rounded-xl border border-grafite bg-superficie px-3">
+    <View className="flex-row items-center justify-between rounded-xl border border-linha bg-superficie px-3">
       <Pressable
         onPress={onPress}
         accessibilityRole="button"
@@ -38,14 +31,15 @@ export function DiaryEntryRow({ entry, onPress, onDelete }: DiaryEntryRowProps) 
           {entry.food.name}
         </AppText>
         <AppText variant="caption" className="text-grafite">
-          {Number(entry.quantity)}g · {Math.round(Number(entry.kcalSnapshot))} kcal
+          {Number(entry.quantity)} g · {Math.round(Number(entry.kcalSnapshot))} kcal
         </AppText>
       </Pressable>
       <TextButton
         label="Remover"
         // Numa lista com vários "Remover", o nome precisa dizer qual.
         accessibilityLabel={`Remover ${entry.food.name}`}
-        onPress={confirmDelete}
+        // Sem pergunta de confirmação: a tela oferece "Desfazer" logo depois (F4-16).
+        onPress={onDelete}
         className="items-end"
         textVariant="caption"
         textClassName="text-jabuticaba"
