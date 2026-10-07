@@ -1,4 +1,5 @@
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import type { BodyMeasurementResponseDto } from '@/api/generated/models';
 import { describeWeightEntry } from './accessibility-labels';
@@ -19,6 +20,7 @@ function formatMeasuredAt(measuredAt: string): string {
 }
 
 export function WeightHistoryList({ measurements }: WeightHistoryListProps) {
+  const { t } = useTranslation();
   if (measurements.length === 0) {
     return null;
   }
@@ -26,7 +28,7 @@ export function WeightHistoryList({ measurements }: WeightHistoryListProps) {
   return (
     <View className="gap-2">
       <AppText variant="heading" accessibilityRole="header" className="text-grafite">
-        Histórico
+        {t('weight.history')}
       </AppText>
 
       <View className="overflow-hidden rounded-2xl border border-linha bg-superficie">

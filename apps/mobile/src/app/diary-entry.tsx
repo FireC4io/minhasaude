@@ -11,6 +11,7 @@ import {
   useDiaryControllerRemove,
   useDiaryControllerUpdate,
 } from '@/api/generated/endpoints/diary/diary';
+import { useTranslation } from 'react-i18next';
 import { useFoodsControllerSearch } from '@/api/generated/endpoints/foods/foods';
 import { DiaryQuantityUnit, type FoodResponseDto, type MealType } from '@/api/generated/models';
 import { AppText } from '@/components/ui/app-text';
@@ -29,6 +30,7 @@ import { useRecentFoods } from '@/features/diary/use-recent-foods';
 import { parseDecimal } from '@/features/forms/parse-decimal';
 
 export default function DiaryEntryScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
   const queryClient = useQueryClient();
   const params = useLocalSearchParams<{
@@ -77,17 +79,17 @@ export default function DiaryEntryScreen() {
     setError(null);
     const grams = parseDecimal(quantity);
     if (!Number.isFinite(grams) || grams <= 0) {
-      setError('Digite a quantidade em gramas, por exemplo 100.');
+      setError(t('diary.quantityError'));
       return;
     }
 
     try {
       if (isEditing && params.id) {
         await updateEntry.mutateAsync({ id: params.id, data: { quantity: grams } });
-        AccessibilityInfo.announceForAccessibility('Quantidade atualizada.');
+        AccessibilityInfo.announceForAccessibility(t('diary.quantityUpdated'));
       } else {
         if (!selectedFood || !mealType) {
-          setError('Escolha um alimento na lista.');
+          setError(t('diary.chooseFood'));
           return;
         }
         await createEntry.mutateAsync({
@@ -95,13 +97,13 @@ export default function DiaryEntryScreen() {
         });
         // Anúncio antes de fechar: a confirmação do registro chega mesmo com a tela sumindo.
         AccessibilityInfo.announceForAccessibility(
-          `${selectedFood.name} adicionado ao ${MEAL_TYPE_LABELS[mealType].toLowerCase()}.`,
+          t('diary.added', { food: selectedFood.name, meal: MEAL_TYPE_LABELS[mealType].toLowerCase() }),
         );
       }
       await invalidateDay();
       router.back();
     } catch {
-      setError('Não foi possível salvar. Confira sua internet e tente de novo.');
+      setError(t('diary.saveError'));
     }
   }
 
@@ -109,11 +111,11 @@ export default function DiaryEntryScreen() {
     if (!params.id) return;
     try {
       await removeEntry.mutateAsync({ id: params.id });
-      AccessibilityInfo.announceForAccessibility(`${params.foodName ?? 'Alimento'} removido.`);
+      AccessibilityInfo.announceForAccessibility(t('diary.removedAnnounce', { food: params.foodName ?? t('diary.food') }));
       await invalidateDay();
       router.back();
     } catch {
-      setError('Não foi possível remover. Confira sua internet e tente de novo.');
+      setError(t('diary.removeError'));
     }
   }
 
@@ -123,7 +125,11 @@ export default function DiaryEntryScreen() {
   useAnnounce(searchStatus);
   const showSearch = !isEditing && !selectedFood;
   const isTyping = searchTerm.trim().length >= 2;
-  const title = isEditing ? (params.foodName ?? 'Alimento') : mealType ? MEAL_TYPE_LABELS[mealType] : 'Alimento';
+  const title = isEditing
+    ? (params.foodName ?? t('diary.food'))
+    : mealType
+      ? MEAL_TYPE_LABELS[mealType]
+      : t('diary.food');
 
   return (
     <SafeAreaView className="flex-1 bg-areia">
@@ -136,13 +142,13 @@ export default function DiaryEntryScreen() {
           <View className="flex-1 gap-3">
             <AuthTextField
               testID="diary-food-search"
-              label="Buscar alimento"
+              label={t('diary.search')}
               value={searchTerm}
               onChangeText={setSearchTerm}
               placeholder="ex.: arroz branco"
               returnKeyType="search"
             />
-            {searchQuery.isFetching ? <LoadingIndicator label="Buscando alimentos" /> : null}
+            {searchQuery.isFetching ? <LoadingIndicator label={t('diary.searching')} /> : null}
             {/* Visível e com liveRegion: quem usa leitor de tela fica sabendo
                 que a busca terminou, e quantos resultados vieram. */}
             {searchStatus ? (
@@ -166,12 +172,11 @@ export default function DiaryEntryScreen() {
                 ListHeaderComponent={
                   recents.length > 0 ? (
                     <AppText variant="label" accessibilityRole="header" className="text-grafite-suave">
-                      Registrados recentemente
+                      {t('diary.recent')}
                     </AppText>
                   ) : (
                     <AppText className="text-grafite-suave">
-                      Digite pelo menos 2 letras do alimento. Os que você registrar vão aparecer aqui
-                      para escolher com um toque.
+                      {t('diary.searchHelp')}
                     </AppText>
                   )
                 }
@@ -191,14 +196,14 @@ export default function DiaryEntryScreen() {
               <View className="gap-1">
                 <AppText
                   variant="bodyStrong"
-                  accessibilityLabel={`Alimento escolhido: ${selectedFood.name}`}
+                  accessibilityLabel={t('diary.chosen', { food: selectedFood.name })}
                   className="text-grafite">
                   {selectedFood.name}
                 </AppText>
                 <TextButton
-                  label="Trocar alimento"
+                  label={t('diary.change')}
                   onPress={() => setSelectedFood(null)}
-                  hint="Volta para a busca"
+                  hint={t('diary.changeHint')}
                   className="self-start"
                   textClassName="text-mamao-forte"
                 />
@@ -214,12 +219,12 @@ export default function DiaryEntryScreen() {
 
             <FormError message={error} />
 
-            <PrimaryButton label="Salvar" onPress={() => void handleSave()} isLoading={isSaving} />
+            <PrimaryButton label={t('diary.save')} onPress={() => void handleSave()} isLoading={isSaving} />
 
             {isEditing ? (
               <TextButton
-                label="Remover do diário"
-                accessibilityLabel={`Remover ${params.foodName ?? 'alimento'} do diário`}
+                label={t('diary.remove')}
+                accessibilityLabel={t('diary.removeSpoken', { food: params.foodName ?? t('diary.food') })}
                 onPress={() => void handleDelete()}
                 busy={removeEntry.isPending}
                 className="items-center"

@@ -1,4 +1,5 @@
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import type { FoodResponseDto } from '@/api/generated/models';
 import { AppText } from '@/components/ui/app-text';
@@ -29,6 +30,7 @@ interface QuantityPickerProps {
  * aquilo dá antes de salvar.
  */
 export function QuantityPicker({ food, value, onChange, onSubmit }: QuantityPickerProps) {
+  const { t } = useTranslation();
   const grams = parseDecimal(value);
   const preview = food ? nutrientsFor(food, grams) : null;
 
@@ -36,10 +38,10 @@ export function QuantityPicker({ food, value, onChange, onSubmit }: QuantityPick
     <View className="gap-3">
       <AuthTextField
         testID="diary-quantity"
-        label="Quantidade (g)"
+        label={t('diary.quantity')}
         value={value}
         onChangeText={onChange}
-        placeholder="ex.: 100"
+        placeholder={t('diary.quantityPlaceholder')}
         keyboardType="decimal-pad"
         returnKeyType="done"
         onSubmitEditing={onSubmit}
@@ -49,7 +51,7 @@ export function QuantityPicker({ food, value, onChange, onSubmit }: QuantityPick
           <TextButton
             key={shortcut}
             label={`${shortcut} g`}
-            accessibilityLabel={`${shortcut} gramas`}
+            accessibilityLabel={t('diary.gramsSpoken', { grams: shortcut })}
             onPress={() => onChange(String(shortcut))}
             textVariant="bodyStrong"
             textClassName="text-mamao-forte"
@@ -59,20 +61,28 @@ export function QuantityPicker({ food, value, onChange, onSubmit }: QuantityPick
       {preview && preview.kcal > 0 ? (
         <View
           accessible
-          accessibilityLabel={`Isso dá ${spokenKcal(preview.kcal)}: ${spokenGrams(preview.proteinG)} de proteínas, ${spokenGrams(preview.fatG)} de gorduras e ${spokenGrams(preview.carbG)} de carboidratos.`}
+          accessibilityLabel={t('diary.previewSpoken', {
+            kcal: spokenKcal(preview.kcal),
+            protein: spokenGrams(preview.proteinG),
+            fat: spokenGrams(preview.fatG),
+            carbs: spokenGrams(preview.carbG),
+          })}
           accessibilityLiveRegion="polite"
           className="gap-1 rounded-2xl bg-superficie p-4">
           <AppText variant="numberLarge" className="text-grafite">
             {preview.kcal} kcal
           </AppText>
           <AppText variant="caption" className="text-grafite">
-            Proteínas {displayNumber(preview.proteinG)} g · Gorduras {displayNumber(preview.fatG)} g ·
-            Carboidratos {displayNumber(preview.carbG)} g
+            {t('goal.macros', {
+              protein: displayNumber(preview.proteinG),
+              fat: displayNumber(preview.fatG),
+              carb: displayNumber(preview.carbG),
+            })}
           </AppText>
         </View>
       ) : null}
       {food && preview && preview.kcal > 0 ? (
-        <MicrosPanel title="Outros nutrientes" rows={rowsForPortion(food.micros, grams)} />
+        <MicrosPanel title={t('diary.otherNutrients')} rows={rowsForPortion(food.micros, grams)} />
       ) : null}
     </View>
   );

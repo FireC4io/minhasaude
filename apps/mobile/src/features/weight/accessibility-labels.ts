@@ -1,3 +1,4 @@
+import i18n from 'i18next';
 import { spokenDate, spokenKg } from '@/features/accessibility/spoken-format';
 import type { WeightMeasurementLike } from './chart-geometry';
 
@@ -26,8 +27,8 @@ function toSortedReadings(measurements: readonly WeightMeasurementLike[]): Readi
 // bom ou ruim — o texto é informativo, nunca prescritivo (RDC 657/2022).
 function describeVariation(first: number, last: number): string {
   const delta = Math.round((last - first) * 10) / 10;
-  if (delta === 0) return 'sem variação';
-  return `${delta < 0 ? 'redução' : 'aumento'} de ${spokenKg(Math.abs(delta))}`;
+  if (delta === 0) return i18n.t('weight.noChange');
+  return i18n.t(delta < 0 ? 'weight.decrease' : 'weight.increase', { amount: spokenKg(Math.abs(delta)) });
 }
 
 /**
@@ -44,16 +45,23 @@ export function describeWeightTrend(measurements: readonly WeightMeasurementLike
   }
 
   if (readings.length === 1) {
-    return `Gráfico de evolução do peso com 1 registro: ${spokenKg(first.weightKg)} em ${spokenDate(first.measuredAt)}.`;
+    return i18n.t('weight.chartOne', { weight: spokenKg(first.weightKg), date: spokenDate(first.measuredAt) });
   }
 
   const weights = readings.map((r) => r.weightKg);
 
   return [
-    `Gráfico de evolução do peso com ${readings.length} registros, de ${spokenDate(first.measuredAt)} a ${spokenDate(last.measuredAt)}.`,
-    `Primeiro registro: ${spokenKg(first.weightKg)}.`,
-    `Mais recente: ${spokenKg(last.weightKg)}, ${describeVariation(first.weightKg, last.weightKg)}.`,
-    `Menor valor: ${spokenKg(Math.min(...weights))}.`,
-    `Maior valor: ${spokenKg(Math.max(...weights))}.`,
+    i18n.t('weight.chartMany', {
+      count: readings.length,
+      from: spokenDate(first.measuredAt),
+      to: spokenDate(last.measuredAt),
+    }),
+    i18n.t('weight.chartFirst', { weight: spokenKg(first.weightKg) }),
+    i18n.t('weight.chartLast', {
+      weight: spokenKg(last.weightKg),
+      variation: describeVariation(first.weightKg, last.weightKg),
+    }),
+    i18n.t('weight.chartMin', { weight: spokenKg(Math.min(...weights)) }),
+    i18n.t('weight.chartMax', { weight: spokenKg(Math.max(...weights)) }),
   ].join(' ');
 }

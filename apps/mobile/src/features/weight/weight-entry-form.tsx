@@ -7,6 +7,7 @@ import {
   getBodyMeasurementsControllerListQueryKey,
   useBodyMeasurementsControllerCreate,
 } from '@/api/generated/endpoints/body-measurements/body-measurements';
+import { useTranslation } from 'react-i18next';
 import { AppText } from '@/components/ui/app-text';
 import { FormError } from '@/components/ui/form-error';
 import { useAnnounce } from '@/features/accessibility/use-announce';
@@ -22,6 +23,7 @@ interface WeightEntryFormProps {
 
 /** Registro de peso manual — usado no Progresso e no "+" da tela Hoje. */
 export function WeightEntryForm({ onSaved }: WeightEntryFormProps) {
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const createMeasurement = useBodyMeasurementsControllerCreate();
   const [weightKg, setWeightKg] = useState('');
@@ -35,7 +37,7 @@ export function WeightEntryForm({ onSaved }: WeightEntryFormProps) {
 
     const parsed = weightEntrySchema.safeParse({ weightKg: parseDecimal(weightKg) });
     if (!parsed.success) {
-      setError('Digite seu peso em quilos, entre 20 e 400 — por exemplo, 70,5.');
+      setError(t('weight.invalid'));
       return;
     }
 
@@ -48,12 +50,12 @@ export function WeightEntryForm({ onSaved }: WeightEntryFormProps) {
         },
       });
       setWeightKg('');
-      setSaved(`Peso de ${formatKg(parsed.data.weightKg)} registrado.`);
+      setSaved(t('weight.saved', { weight: formatKg(parsed.data.weightKg) }));
       // Sem parâmetros a chave é o prefixo de todas as listas (Progresso, card de último peso).
       await queryClient.invalidateQueries({ queryKey: getBodyMeasurementsControllerListQueryKey() });
       onSaved?.();
     } catch {
-      setError('Não foi possível salvar seu peso. Confira sua internet e tente de novo.');
+      setError(t('weight.saveError'));
     }
   }
 
@@ -61,7 +63,7 @@ export function WeightEntryForm({ onSaved }: WeightEntryFormProps) {
     <View className="gap-4">
       <AuthTextField
         testID="weight-kg"
-        label="Peso (kg)"
+        label={t('weight.label')}
         value={weightKg}
         onChangeText={setWeightKg}
         placeholder="ex.: 70,5"
@@ -76,7 +78,7 @@ export function WeightEntryForm({ onSaved }: WeightEntryFormProps) {
         </AppText>
       ) : null}
       <PrimaryButton
-        label="Registrar peso"
+        label={t('weight.log')}
         onPress={() => void handleSubmit()}
         isLoading={createMeasurement.isPending}
       />

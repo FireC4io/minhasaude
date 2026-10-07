@@ -50,7 +50,7 @@ describe('MealSection', () => {
   it('refeição vazia avisa que não há nada registrado', async () => {
     await render(montar([]));
 
-    expect(screen.getByRole('header', { name: 'Almoço, nenhum alimento registrado' })).toBeTruthy();
+    expect(screen.getByRole('header', { name: 'Almoço, nenhum alimento anotado' })).toBeTruthy();
   });
 
   it('a linha é lida como uma frase só e abre a edição', async () => {

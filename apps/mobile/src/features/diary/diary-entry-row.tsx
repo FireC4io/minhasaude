@@ -1,4 +1,5 @@
 import { Pressable, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import type { DiaryEntryResponseDto } from '@/api/generated/models';
 import { TextButton } from '@/components/ui/text-button';
 import { MIN_TOUCH_TARGET } from '@/constants/accessibility';
@@ -12,6 +13,7 @@ interface DiaryEntryRowProps {
 }
 
 export function DiaryEntryRow({ entry, onPress, onDelete }: DiaryEntryRowProps) {
+  const { t } = useTranslation();
   // Editar e remover são irmãos, não um botão dentro do outro: um Pressable
   // acessível engole os filhos, e o "Remover" sumiria para o leitor de tela.
   return (
@@ -24,7 +26,7 @@ export function DiaryEntryRow({ entry, onPress, onDelete }: DiaryEntryRowProps) 
           quantity: entry.quantity,
           kcal: entry.kcalSnapshot,
         })}
-        accessibilityHint="Abre para editar a quantidade"
+        accessibilityHint={t('diary.editHint')}
         style={{ minHeight: MIN_TOUCH_TARGET, justifyContent: 'center' }}
         className="flex-1 gap-0.5 py-2 pr-2">
         {/* Sem corte: com fonte grande o nome quebra linha em vez de virar "Banana, prata, cr…" (#32). */}
@@ -36,9 +38,9 @@ export function DiaryEntryRow({ entry, onPress, onDelete }: DiaryEntryRowProps) 
         </AppText>
       </Pressable>
       <TextButton
-        label="Remover"
+        label={t('diary.removeShort')}
         // Numa lista com vários "Remover", o nome precisa dizer qual.
-        accessibilityLabel={`Remover ${entry.food.name}`}
+        accessibilityLabel={t('diary.removeShortSpoken', { food: entry.food.name })}
         // Sem pergunta de confirmação: a tela oferece "Desfazer" logo depois (F4-16).
         onPress={onDelete}
         className="items-end"

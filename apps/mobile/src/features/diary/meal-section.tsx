@@ -1,4 +1,5 @@
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import type { DiaryEntryResponseDto, MealType } from '@/api/generated/models';
 import { TextButton } from '@/components/ui/text-button';
 import { describeMealHeader } from './accessibility-labels';
@@ -19,6 +20,7 @@ function round(value: number): number {
 }
 
 export function MealSection({ mealType, entries, onEntryPress, onEntryDelete, onAddPress }: MealSectionProps) {
+  const { t } = useTranslation();
   const label = MEAL_TYPE_LABELS[mealType];
   const kcalTotal = entries.reduce((sum, entry) => sum + Number(entry.kcalSnapshot), 0);
 
@@ -47,8 +49,8 @@ export function MealSection({ mealType, entries, onEntryPress, onEntryDelete, on
       </View>
 
       <TextButton
-        label="+ Adicionar alimento"
-        accessibilityLabel={`Adicionar alimento ao ${label.toLowerCase()}`}
+        label={t('diary.addFood')}
+        accessibilityLabel={t('diary.addFoodSpoken', { meal: label.toLowerCase() })}
         onPress={onAddPress}
         className="self-start"
         textVariant="bodyStrong"

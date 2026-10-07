@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useColorScheme, useWindowDimensions, View } from 'react-native';
 import Svg, { Circle, Line, Polyline, Rect } from 'react-native-svg';
+import { useTranslation } from 'react-i18next';
 
 import { AppText } from '@/components/ui/app-text';
 import { GotaVitalColors } from '@/constants/gota-vital-colors';
@@ -36,6 +37,7 @@ const shortDate = (iso: string): string =>
  * diferentes não é comparável (CLAUDE.md).
  */
 export function WeightChart({ measurements }: WeightChartProps) {
+  const { t } = useTranslation();
   const colors = GotaVitalColors[useColorScheme() === 'dark' ? 'dark' : 'light'];
   const { width: windowWidth } = useWindowDimensions();
   const [measuredWidth, setMeasuredWidth] = useState<number | null>(null);
@@ -55,7 +57,7 @@ export function WeightChart({ measurements }: WeightChartProps) {
     return (
       <View className="items-center justify-center rounded-2xl border border-linha bg-superficie p-6">
         <AppText className="text-center text-grafite">
-          Nenhum peso neste período. Registre um peso acima para começar a acompanhar.
+          {t('weight.emptyPeriod')}
         </AppText>
       </View>
     );
@@ -142,7 +144,7 @@ export function WeightChart({ measurements }: WeightChartProps) {
 
       {chart.points.length === 1 ? (
         <AppText variant="caption" className="text-center text-grafite">
-          Registre outro peso para ver a linha de evolução.
+          {t('weight.oneMore')}
         </AppText>
       ) : null}
     </View>

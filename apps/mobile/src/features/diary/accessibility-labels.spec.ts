@@ -22,7 +22,7 @@ describe('describeMealHeader', () => {
   });
 
   it('avisa que a refeição está vazia', () => {
-    expect(describeMealHeader('Lanche', 0, 0)).toBe('Lanche, nenhum alimento registrado');
+    expect(describeMealHeader('Lanche', 0, 0)).toBe('Lanche, nenhum alimento anotado');
   });
 });
 

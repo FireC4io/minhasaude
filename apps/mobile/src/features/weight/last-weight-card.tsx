@@ -1,4 +1,5 @@
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { useBodyMeasurementsControllerList } from '@/api/generated/endpoints/body-measurements/body-measurements';
 import { AppText } from '@/components/ui/app-text';
@@ -16,6 +17,7 @@ const LIST_PARAMS = { source: 'manual', limit: 1 } as const;
 
 /** Último peso registrado, com atalho para registrar outro. */
 export function LastWeightCard({ onRegister }: LastWeightCardProps) {
+  const { t } = useTranslation();
   const query = useBodyMeasurementsControllerList(LIST_PARAMS);
   const last = query.data?.data[0];
 
@@ -28,11 +30,11 @@ export function LastWeightCard({ onRegister }: LastWeightCardProps) {
       <View
         accessible
         accessibilityLabel={
-          last ? `Último peso: ${formatKg(last.weightKg)}, em ${when}` : 'Nenhum peso registrado ainda'
+          last ? t('weight.lastSpoken', { weight: formatKg(last.weightKg), date: when }) : t('weight.noneYet')
         }
         className="flex-row items-baseline justify-between">
         <AppText variant="label" className="text-grafite-suave">
-          Peso
+          {t('weight.title')}
         </AppText>
         {last ? (
           <AppText variant="number" className="text-grafite">
@@ -41,10 +43,10 @@ export function LastWeightCard({ onRegister }: LastWeightCardProps) {
         ) : null}
       </View>
       <AppText variant="caption" className="text-grafite">
-        {last ? `Registrado em ${when}` : 'Nenhum peso registrado ainda.'}
+        {last ? t('weight.loggedOn', { date: when }) : `${t('weight.noneYet')}.`}
       </AppText>
       <TextButton
-        label="Registrar peso"
+        label={t('weight.log')}
         onPress={onRegister}
         textVariant="bodyStrong"
         textClassName="text-mamao-forte"

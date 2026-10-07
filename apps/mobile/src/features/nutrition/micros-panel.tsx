@@ -1,6 +1,7 @@
 import { MICRONUTRIENT_KEYS, MICRONUTRIENTS, type MicronutrientKey } from '@minhasaude/shared';
 import { useState } from 'react';
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { AppText } from '@/components/ui/app-text';
 import { TextButton } from '@/components/ui/text-button';
@@ -25,13 +26,14 @@ interface MicrosPanelProps {
  * ou limites (informativo, RDC 657/2022). "sem dado" nunca vira zero.
  */
 export function MicrosPanel({ title, rows, initiallyOpen = false }: MicrosPanelProps) {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(initiallyOpen);
 
   return (
     <View className="gap-2 rounded-2xl bg-superficie p-4">
       <TextButton
-        label={open ? `Esconder ${title.toLowerCase()}` : `Ver ${title.toLowerCase()}`}
-        hint={open ? undefined : 'Mostra fibras, sódio, minerais e vitaminas'}
+        label={open ? t('micros.hide', { title: title.toLowerCase() }) : t('micros.show', { title: title.toLowerCase() })}
+        hint={open ? undefined : t('micros.showHint')}
         onPress={() => setOpen(!open)}
         textVariant="bodyStrong"
         textClassName="text-mamao-forte"
@@ -44,7 +46,7 @@ export function MicrosPanel({ title, rows, initiallyOpen = false }: MicrosPanelP
             return (
               <View key={key} accessible accessibilityLabel={spoken} className="gap-0.5">
                 <View className="flex-row justify-between gap-4">
-                  <AppText className="text-grafite">{MICRONUTRIENTS[key].label}</AppText>
+                  <AppText className="text-grafite">{t(`micros.names.${key}`)}</AppText>
                   <AppText variant="bodyStrong" className="text-grafite">
                     {formatMicro(key, row.amount)}
                   </AppText>
@@ -58,8 +60,7 @@ export function MicrosPanel({ title, rows, initiallyOpen = false }: MicrosPanelP
             );
           })}
           <AppText variant="caption" className="text-grafite-suave">
-            Valores da Tabela TACO (Unicamp) ou do Open Food Facts. “Sem dado” quer dizer que a
-            fonte não mediu esse nutriente.
+            {t('micros.sources')}
           </AppText>
         </View>
       ) : null}
