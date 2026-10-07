@@ -10,6 +10,17 @@ overrides:
   js-yaml: ">=4.3.2 <5"
   path-to-regexp: ">=8.4.0"
   lodash: ">=4.18.0"
+  # 2026-10-07: alertas do audit em ferramentas de build (react-devtools-core e terser).
+  shell-quote: ">=1.11.0 <2"
+  source-map-js: ">=1.2.2 <2"
+# Alertas sem versão corrigida publicada (2026-10-07). Os dois só existem em
+# ferramenta de desenvolvimento do Expo (assinatura de código do CLI e o
+# file-map do Metro), nunca no bundle do app nem na API. Revisar quando sair
+# correção: rodar `pnpm audit` sem esta lista.
+auditConfig:
+  ignoreGhsas:
+    - GHSA-86w9-cpqp-85rv # node-forge <=1.4.0, via @expo/code-signing-certificates
+    - GHSA-vfj7-8cjw-p6xm # braces <=3.0.3, via metro-file-map > micromatch
 allowBuilds:
   '@parcel/watcher': true
   '@scarf/scarf': true
