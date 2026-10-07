@@ -32,11 +32,20 @@ migrations com cuidado, testes antes, e avisar o dono antes de publicar mudança
 
 </details>
 
-### 3. Busca de alimento por relevância (backend)
-- Mais um caso real: "pao frances" → "Torrada, pão francês" primeiro.
+### 3. ✅ Busca de alimento por relevância (2026-10-07)
+- Feito: ordem em camadas (hábito da pessoa nos últimos 180 dias → forma padrão → nome-base igual ao termo →
+  nome-base + demais palavras → começa com o termo → cita o termo → similaridade; cozido antes de cru, nome curto
+  antes de longo) e sinônimos regionais (aipim/macaxeira, pão de sal, cacetinho, jerimum). Código em
+  `apps/api/src/foods/search/`; formas padrão em `PREFERRED_FOODS` (teste confere cada nome contra o CSV da TACO).
+- Achado: a TACO importada não tem leite de vaca fluido (só em pó), então "leite" traz "Leite, de coco" primeiro.
+
+<details><summary>Plano original</summary>
+
 - Ordenar: começa com o termo → contém o termo → similaridade `pg_trgm`; forma comum (cozido) e nome curto
   antes de prato composto; alimentos mais registrados pela pessoa primeiro; sinônimos simples.
 - Testes com casos reais: "arroz", "feijão", "pão", "banana".
+
+</details>
 
 ### 4. Login com Google — prioridade de comodidade
 - **Passo do dono**: criar projeto no Google Cloud e a tela de consentimento OAuth (gratuito).

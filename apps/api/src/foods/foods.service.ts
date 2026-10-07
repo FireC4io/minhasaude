@@ -1,12 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Food, FoodSource } from '../database/entities/food.entity';
 import { OpenFoodFactsClient, type OffProduct } from './open-food-facts.client';
 import type { CreateFoodDto } from './dto/create-food.dto';
 import type { UpdateFoodDto } from './dto/update-food.dto';
 import type { SearchFoodsQueryDto } from './dto/search-foods-query.dto';
 import type { PaginatedResult } from '../common/types/paginated-result.interface';
+import { buildSearchTerms, type SearchTerms } from './search/search-terms';
+import { buildFoodSearchQuery } from './search/food-search.query';
 
 @Injectable()
 export class FoodsService {
@@ -76,7 +78,13 @@ export class FoodsService {
   // públicos (TACO/OFF) + os custom do próprio usuário entram na busca -
   // sem busca compartilhada entre usuários (product-plan.md seção 2).
   async search(userId: string, query: SearchFoodsQueryDto): Promise<PaginatedResult<Food>> {
-    const local = await this.searchLocal(userId, query.q, query.page, query.limit);
+    const terms = buildSearchTerms(query.q);
+    if (terms.query.length < 2) {
+      // Só pontuação ("!!"): nada para buscar, nem no Open Food Facts.
+      return { data: [], meta: { total: 0, page: query.page, limit: query.limit } };
+    }
+
+    const local = await this.searchLocal(userId, terms, query.page, query.limit);
     if (local.meta.total > 0) {
       return local;
     }
@@ -91,28 +99,34 @@ export class FoodsService {
 
   private async searchLocal(
     userId: string,
-    q: string,
+    terms: SearchTerms,
     page: number,
     limit: number,
   ): Promise<PaginatedResult<Food>> {
-    const baseQuery = this.foods
+    const { sql, params } = buildFoodSearchQuery(userId, terms, page, limit);
+    const rows: { id: string; total: number }[] = await this.foods.query(sql, params);
+    const total = rows[0]?.total ?? (page > 1 ? await this.countLocal(userId, terms.query) : 0);
+
+    // A ordem é a do SQL; o `findBy` só hidrata as entidades.
+    const byId = new Map(
+      (rows.length ? await this.foods.findBy({ id: In(rows.map((r) => r.id)) }) : []).map((f) => [f.id, f]),
+    );
+    const data = rows.map((r) => byId.get(r.id)).filter((f): f is Food => f !== undefined);
+
+    return { data, meta: { total, page, limit } };
+  }
+
+  // Página além do fim não traz linha nenhuma, e com ela some o total da
+  // janela. Sem isso, o total viria 0 e a busca cairia no Open Food Facts.
+  private async countLocal(userId: string, query: string): Promise<number> {
+    return this.foods
       .createQueryBuilder('food')
       .where('(food.source != :custom OR food.owner_user_id = :userId)', {
         custom: FoodSource.CUSTOM,
         userId,
       })
-      .andWhere('immutable_unaccent(lower(:q)) <% immutable_unaccent(lower(food.name))', { q });
-
-    const total = await baseQuery.getCount();
-    const data = await baseQuery
-      .addSelect('word_similarity(immutable_unaccent(lower(:q)), immutable_unaccent(lower(food.name)))', 'score')
-      .orderBy('score', 'DESC')
-      .addOrderBy('food.name', 'ASC')
-      .skip((page - 1) * limit)
-      .take(limit)
-      .getMany();
-
-    return { data, meta: { total, page, limit } };
+      .andWhere('(:q)::text <% immutable_unaccent(lower(food.name))', { q: query })
+      .getCount();
   }
 
   private async fetchAndCacheFromOpenFoodFacts(query: string): Promise<Food[]> {

@@ -35,6 +35,8 @@ type MockRepo = {
   findOne: jest.Mock;
   remove: jest.Mock;
   createQueryBuilder: jest.Mock;
+  query: jest.Mock;
+  findBy: jest.Mock;
 };
 
 function mockRepo(): MockRepo {
@@ -44,6 +46,9 @@ function mockRepo(): MockRepo {
     findOne: jest.fn(),
     remove: jest.fn(async (entity) => entity),
     createQueryBuilder: jest.fn(() => mockQueryBuilder(0, [])),
+    // Busca local ranqueada: SQL devolve ids na ordem, findBy hidrata.
+    query: jest.fn(async () => []),
+    findBy: jest.fn(async () => []),
   };
 }
 
@@ -163,12 +168,46 @@ describe('FoodsService', () => {
   describe('search', () => {
     it('retorna resultado local sem consultar o Open Food Facts quando encontra algo', async () => {
       const localFood = { id: 'food-1', name: 'Arroz, integral, cozido' };
-      repo.createQueryBuilder.mockReturnValue(mockQueryBuilder(1, [localFood]));
+      repo.query.mockResolvedValue([{ id: 'food-1', total: 1 }]);
+      repo.findBy.mockResolvedValue([localFood]);
 
       const result = await service.search('user-1', { q: 'arros', page: 1, limit: 20 });
 
       expect(result.data).toEqual([localFood]);
       expect(result.meta.total).toBe(1);
+      expect(openFoodFacts.searchByTerm).not.toHaveBeenCalled();
+    });
+
+    it('mantém a ordem de relevância do SQL, não a do findBy', async () => {
+      repo.query.mockResolvedValue([
+        { id: 'b', total: 2 },
+        { id: 'a', total: 2 },
+      ]);
+      repo.findBy.mockResolvedValue([
+        { id: 'a', name: 'A' },
+        { id: 'b', name: 'B' },
+      ]);
+
+      const result = await service.search('user-1', { q: 'arroz', page: 1, limit: 20 });
+
+      expect(result.data.map((f) => f.id)).toEqual(['b', 'a']);
+    });
+
+    it('termo só com pontuação não busca nada, nem no Open Food Facts', async () => {
+      const result = await service.search('user-1', { q: '!!', page: 1, limit: 20 });
+
+      expect(result.data).toEqual([]);
+      expect(repo.query).not.toHaveBeenCalled();
+      expect(openFoodFacts.searchByTerm).not.toHaveBeenCalled();
+    });
+
+    it('página além do fim ainda informa o total e não cai no Open Food Facts', async () => {
+      repo.query.mockResolvedValue([]);
+      repo.createQueryBuilder.mockReturnValue(mockQueryBuilder(7, []));
+
+      const result = await service.search('user-1', { q: 'arroz', page: 9, limit: 20 });
+
+      expect(result.meta.total).toBe(7);
       expect(openFoodFacts.searchByTerm).not.toHaveBeenCalled();
     });
 
