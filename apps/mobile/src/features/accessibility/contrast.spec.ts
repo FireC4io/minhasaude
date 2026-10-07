@@ -15,6 +15,8 @@ type ColorName = keyof (typeof GotaVitalColors)['light'];
 const TEXT_PAIRS: readonly (readonly [text: ColorName, background: ColorName])[] = [
   ['grafite', 'areia'],
   ['grafite', 'superficie'],
+  ['grafiteSuave', 'areia'],
+  ['grafiteSuave', 'superficie'],
   ['jabuticaba', 'areia'],
   ['jabuticaba', 'superficie'],
   ['mamaoForte', 'areia'],

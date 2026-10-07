@@ -1,5 +1,7 @@
 import { render, screen } from '@testing-library/react-native';
 
+import { GotaVitalColors } from '@/constants/gota-vital-colors';
+
 import { AuthTextField } from './auth-text-field';
 
 describe('AuthTextField', () => {
@@ -46,5 +48,15 @@ describe('AuthTextField', () => {
     await render(<AuthTextField label="Email" value="ana@exemplo.br" onChangeText={jest.fn()} />);
 
     expect(screen.getByLabelText('Email')).toHaveDisplayValue('ana@exemplo.br');
+  });
+
+  // Achado do catálogo (F4-08): o placeholder era `#8A9891` fixo, 2,68:1 sobre a areia.
+  it('pinta o placeholder com o token grafite-suave do tema', async () => {
+    await render(<AuthTextField label="Busca" placeholder="ex: arroz" value="" />);
+
+    expect(screen.getByLabelText('Busca')).toHaveProp(
+      'placeholderTextColor',
+      GotaVitalColors.light.grafiteSuave,
+    );
   });
 });

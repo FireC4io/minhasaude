@@ -10,6 +10,7 @@
   --color-areia: #fbf0e4; /* fundo */
   --color-superficie: #ffffff; /* card sobre o fundo — nunca usar bg-white direto */
   --color-grafite: #2b3a34; /* texto principal */
+  --color-grafite-suave: #5f6e67; /* texto secundário e placeholder — passa 4,5:1 */
   --color-mamao: #ff6f4d; /* acento decorativo — áreas grandes; reprova como texto (2,45:1) */
   --color-mamao-forte: #b8481f; /* ações: botão, chip selecionado, texto clicável (F4-07) */
   --color-couve: #3e8e5b; /* nutrição, progresso positivo */
@@ -31,6 +32,7 @@
     --color-areia: #1e1712;
     --color-superficie: #2a211b;
     --color-grafite: #f5eae0;
+    --color-grafite-suave: #a39a90;
     --color-mamao: #ff8264;
     --color-mamao-forte: #ff8264;
     --color-couve: #63bf87;

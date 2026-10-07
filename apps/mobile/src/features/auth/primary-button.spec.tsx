@@ -82,4 +82,22 @@ describe('PrimaryButton', () => {
 
     expect(typeof element.props.style).toBe('object');
   });
+
+  // Achado do catálogo (F4-08): carregando usava a mesma opacidade do
+  // desabilitado — o botão parecia travado e o spinner quase sumia.
+  it('carregando mantém a cor cheia; só desabilitado fica esmaecido', () => {
+    const carregando = PrimaryButton({ label: 'Salvar', onPress: jest.fn(), isLoading: true });
+    const desabilitado = PrimaryButton({ label: 'Salvar', onPress: jest.fn(), disabled: true });
+
+    expect(carregando.props.className).not.toContain('opacity-50');
+    expect(desabilitado.props.className).toContain('opacity-50');
+  });
+
+  it('o spinner segue a cor do texto do botão em vez de um hex fixo', () => {
+    const element = PrimaryButton({ label: 'Salvar', onPress: jest.fn(), isLoading: true });
+    const spinner = element.props.children;
+
+    expect(spinner.props.className).toContain('text-areia');
+    expect(spinner.props.color).toBeUndefined();
+  });
 });

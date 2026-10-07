@@ -8,6 +8,7 @@ module.exports = {
         areia: 'var(--color-areia)',
         superficie: 'var(--color-superficie)',
         grafite: 'var(--color-grafite)',
+        'grafite-suave': 'var(--color-grafite-suave)',
         mamao: 'var(--color-mamao)',
         'mamao-forte': 'var(--color-mamao-forte)',
         couve: 'var(--color-couve)',

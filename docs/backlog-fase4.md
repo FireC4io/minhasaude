@@ -133,10 +133,10 @@ Issues **#30** e **#31** acima.
 - [x] Os dois temas na mesma tela, independente do modo do aparelho: cada bloco recebe as variáveis da paleta via `vars()` do NativeWind (`features/dev-catalog/theme-vars.ts`). Validado no emulador
 - [x] PrimaryButton, TextButton, AuthTextField, SelectChips, FormError e LoadingIndicator em normal/desabilitado/carregando/erro/selecionado. "Pressionado" é `active:opacity-*` e só aparece tocando
 - **Componente base novo entra no catálogo** (`features/dev-catalog/component-catalog.tsx`)
-- **Achados do catálogo, ainda não corrigidos**:
-  1. `PrimaryButton` carregando usa a mesma opacidade 50% do desabilitado — parece travado, e o spinner creme quase some sobre o mamão esmaecido
-  2. `LoadingIndicator` usa o azul padrão do sistema, fora da paleta
-  3. `placeholderTextColor` do `AuthTextField` é `#8A9891` fixo, não token
+- **Achados do catálogo — corrigidos em 2026-10-06**, validados no emulador:
+  1. `PrimaryButton` carregando usava a opacidade 50% do desabilitado → agora só o desabilitado esmaece, e o spinner usa `className="text-areia"` (segue o tema) em vez de `#FBF0E4` fixo
+  2. `LoadingIndicator` usava o azul do sistema → `text-mamao-forte`
+  3. Placeholder `#8A9891` fixo (2,68:1) → token novo `grafite-suave` (`#5f6e67` claro 4,78:1 / `#a39a90` escuro 6,39:1), também para texto secundário. Vem de `GotaVitalColors` pelo `useColorScheme`, porque `placeholderTextColor` é prop e o `useUnstableNativeVariable` não funciona na web — por isso, **no bloco escuro do catálogo o placeholder aparece com o tom claro**; no aparelho em modo escuro ele fica certo
 
 ---
 

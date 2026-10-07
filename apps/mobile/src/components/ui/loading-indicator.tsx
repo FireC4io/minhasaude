@@ -18,8 +18,9 @@ export function LoadingIndicator({ label, className }: LoadingIndicatorProps) {
       accessibilityRole="progressbar"
       accessibilityLabel={label}
       accessibilityLiveRegion="polite"
-      className={className}>
-      <ActivityIndicator />
+      className={className}
+    >
+      <ActivityIndicator testID="loading-indicator-spinner" className="text-mamao-forte" />
     </View>
   );
 }

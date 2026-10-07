@@ -1,4 +1,6 @@
-import { Text, TextInput, View, type TextInputProps } from 'react-native';
+import { Text, TextInput, useColorScheme, View, type TextInputProps } from 'react-native';
+
+import { GotaVitalColors } from '@/constants/gota-vital-colors';
 
 interface AuthTextFieldProps extends TextInputProps {
   label: string;
@@ -6,6 +8,9 @@ interface AuthTextFieldProps extends TextInputProps {
 }
 
 export function AuthTextField({ label, error, ...inputProps }: AuthTextFieldProps) {
+  // `placeholderTextColor` é prop, não estilo: o `className` não alcança.
+  const scheme = useColorScheme() === 'dark' ? 'dark' : 'light';
+
   return (
     <View className="gap-1">
       <Text className="text-sm font-medium text-grafite">{label}</Text>
@@ -16,7 +21,7 @@ export function AuthTextField({ label, error, ...inputProps }: AuthTextFieldProp
         // O erro precisa chegar a quem não enxerga a cor jabuticaba.
         accessibilityHint={error ?? inputProps.accessibilityHint}
         className="rounded-xl border border-grafite bg-areia px-4 py-3 text-base text-grafite"
-        placeholderTextColor="#8A9891"
+        placeholderTextColor={GotaVitalColors[scheme].grafiteSuave}
         autoCapitalize="none"
         autoCorrect={false}
         {...inputProps}
@@ -25,7 +30,8 @@ export function AuthTextField({ label, error, ...inputProps }: AuthTextFieldProp
         <Text
           accessibilityRole="alert"
           accessibilityLiveRegion="polite"
-          className="text-sm text-jabuticaba">
+          className="text-sm text-jabuticaba"
+        >
           {error}
         </Text>
       ) : null}
