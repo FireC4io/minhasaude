@@ -97,6 +97,7 @@ function RootNavigator() {
         <Stack.Screen name="quick-add" options={{ presentation: 'modal', headerShown: false }} />
         <Stack.Screen name="weight-entry" options={{ presentation: 'modal', headerShown: false }} />
         <Stack.Screen name="water" options={{ presentation: 'modal', headerShown: false }} />
+        <Stack.Screen name="voice-entry" options={{ presentation: 'modal', headerShown: false }} />
       </Stack.Protected>
       <Stack.Protected guard={route === 'onboarding'}>
         <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />

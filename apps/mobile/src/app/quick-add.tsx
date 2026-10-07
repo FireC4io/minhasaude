@@ -51,6 +51,13 @@ export default function QuickAddScreen() {
           </AppText>
           <View className="rounded-2xl bg-superficie px-4">
             {PREVIEW_FEATURES ? (
+              <ListRow
+                title="Falar o que comeu"
+                description="Diga a refeição e revise antes de salvar"
+                onPress={go({ pathname: '/voice-entry', params: { date } })}
+              />
+            ) : null}
+            {PREVIEW_FEATURES ? (
               <ListRow title="Água" onPress={go({ pathname: '/water', params: { date } })} />
             ) : null}
             <ListRow title="Peso" onPress={go('/weight-entry')} />
