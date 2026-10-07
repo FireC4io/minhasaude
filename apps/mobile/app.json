@@ -8,7 +8,7 @@
     "scheme": "gotavital",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon"
+      "icon": "./assets/images/icon.png"
     },
     "android": {
       "adaptiveIcon": {
@@ -30,7 +30,11 @@
         {
           "backgroundColor": "#FBF0E4",
           "image": "./assets/images/splash-icon.png",
-          "imageWidth": 76
+          "imageWidth": 120,
+          "dark": {
+            "backgroundColor": "#1E1712",
+            "image": "./assets/images/splash-icon-dark.png"
+          }
         }
       ]
     ],

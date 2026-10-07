@@ -116,11 +116,12 @@ Issues **#30** e **#31** acima.
 - **Regra**: nunca `font-semibold`/`font-bold` com essas fontes — no Android o `fontWeight` troca a fonte customizada pela do sistema. Peso novo = família nova em `typography.ts` + `tailwind.config.js` (o teste `app-text.spec.tsx` trava as duas coisas)
 - Fora do escopo, ficou para o F4-06: os componentes do template (`themed-text`, `hint-row`, `web-badge`, `app-tabs.web`, `collapsible`) seguem com `Text` cru
 
-### F4-06. Ícone, splash, ícones das abas e barra de abas
-- [ ] Ícone do app e splash com o símbolo Gota Vital (hoje: logo do Expo)
-- [ ] Set de ícones próprio para as abas
-- [ ] Barra de abas pintada com a paleta nos dois temas (hoje usa `constants/theme.ts` do template e fica preta no escuro)
-- [ ] Remover os resquícios do template (`animated-icon.tsx`, `themed-text.tsx`, `constants/theme.ts`)
+### F4-06. Ícone, splash, ícones das abas e barra de abas ✅ (2026-10-06)
+- [x] Ícone (iOS e adaptativo do Android, com monocromático), splash clara e escura e favicon com o símbolo Gota Vital. Gerados por `apps/mobile/scripts/generate-brand-assets.py` a partir da geometria do SVG aprovado — **para mudar a marca, edite o script e rode de novo, não as PNGs**. Ícone e splash só aparecem num build nativo (no Expo Go são os do Expo Go) — **ainda não vistos num aparelho**
+- [x] Ícones próprios das abas: prato e garfo (Diário), balança (Peso), traço simples em `renderingMode="template"`
+- [x] Barra de abas nativa e da web com a paleta: selecionado em `mamao-forte`, resto em `grafite-suave`, fundo `superficie`. Validada no emulador nos dois temas
+- [x] Removidos os resquícios do template (13 arquivos de código + 15 imagens + `assets/expo.icon`) e o overlay animado com o logo do Expo — a splash nativa some quando as fontes carregam
+- **Achado ao validar**: o `import '@/global.css'` morava no `constants/theme.ts` do template; apagá-lo tirou o estilo do app inteiro com todos os testes verdes. Agora está no `_layout.tsx` raiz, e `src/integration/global-css-import.spec.ts` trava isso
 
 ### F4-07. Paleta com contraste aprovado ✅ (2026-10-06)
 **Contexto**: achado #1 — a cor de ação reprova no modo claro.

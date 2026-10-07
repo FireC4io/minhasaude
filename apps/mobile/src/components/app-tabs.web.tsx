@@ -1,17 +1,8 @@
-import {
-  Tabs,
-  TabList,
-  TabTrigger,
-  TabSlot,
-  TabTriggerSlotProps,
-  TabListProps,
-} from 'expo-router/ui';
-import { Pressable, View, StyleSheet } from 'react-native';
+import { Tabs, TabList, TabTrigger, TabSlot, TabTriggerSlotProps, TabListProps } from 'expo-router/ui';
+import { Pressable, View } from 'react-native';
 
-import { ThemedText } from './themed-text';
-import { ThemedView } from './themed-view';
-
-import { MaxContentWidth, Spacing } from '@/constants/theme';
+import { AppText } from '@/components/ui/app-text';
+import { MIN_TOUCH_TARGET } from '@/constants/accessibility';
 
 export default function AppTabs() {
   return (
@@ -33,14 +24,16 @@ export default function AppTabs() {
 
 export function TabButton({ children, isFocused, ...props }: TabTriggerSlotProps) {
   return (
-    <Pressable {...props} style={({ pressed }) => pressed && styles.pressed}>
-      <ThemedView
-        type={isFocused ? 'backgroundSelected' : 'backgroundElement'}
-        style={styles.tabButtonView}>
-        <ThemedText type="small" themeColor={isFocused ? 'text' : 'textSecondary'}>
-          {children}
-        </ThemedText>
-      </ThemedView>
+    <Pressable
+      {...props}
+      // Objeto, não função — ver o comentário em `TextButton`.
+      style={{ minHeight: MIN_TOUCH_TARGET, justifyContent: 'center' }}
+      className={`rounded-2xl px-4 active:opacity-70 ${isFocused ? 'bg-areia' : ''}`}>
+      <AppText
+        variant="label"
+        className={isFocused ? 'text-mamao-forte' : 'text-grafite-suave'}>
+        {children}
+      </AppText>
     </Pressable>
   );
 }
@@ -51,46 +44,16 @@ export function CustomTabList(props: TabListProps) {
     // visível. Sem isso, a faixa transparente de 76px vira um escudo sobre o
     // topo de todas as telas na web e engole cliques — o botão "Sair" e as
     // setas de navegação entre dias do diário ficavam inalcançáveis.
-    <View {...props} pointerEvents="box-none" style={styles.tabListContainer}>
-      <ThemedView type="backgroundElement" style={styles.innerContainer}>
-        <ThemedText type="smallBold" style={styles.brandText}>
+    <View
+      {...props}
+      pointerEvents="box-none"
+      className="absolute w-full flex-row items-center justify-center p-4">
+      <View className="max-w-[800px] grow flex-row items-center gap-2 rounded-[32px] bg-superficie px-8 py-2">
+        <AppText variant="bodyStrong" className="mr-auto text-grafite">
           Gota Vital
-        </ThemedText>
-
+        </AppText>
         {props.children}
-      </ThemedView>
+      </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  tabListContainer: {
-    position: 'absolute',
-    width: '100%',
-    padding: Spacing.three,
-    justifyContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-  innerContainer: {
-    paddingVertical: Spacing.two,
-    paddingHorizontal: Spacing.five,
-    borderRadius: Spacing.five,
-    flexDirection: 'row',
-    alignItems: 'center',
-    flexGrow: 1,
-    gap: Spacing.two,
-    maxWidth: MaxContentWidth,
-  },
-  brandText: {
-    marginRight: 'auto',
-  },
-  pressed: {
-    opacity: 0.7,
-  },
-  tabButtonView: {
-    paddingVertical: Spacing.one,
-    paddingHorizontal: Spacing.three,
-    borderRadius: Spacing.three,
-  },
-});
