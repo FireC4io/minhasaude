@@ -1,5 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsDateString, IsEnum, IsOptional, IsNumber, Max, Min } from 'class-validator';
+import { IsDateString, IsEnum, IsIn, IsOptional, IsNumber, Max, Min } from 'class-validator';
+import { WEEKLY_PACES_KG } from '@minhasaude/shared';
 import { ActivityLevel, Goal, Sex } from '../../database/entities/profile.entity';
 
 export class UpdateProfileDto {
@@ -29,4 +30,10 @@ export class UpdateProfileDto {
   @IsOptional()
   @IsEnum(Goal)
   goal?: Goal;
+
+  // null limpa o ritmo (objetivo "manter").
+  @ApiPropertyOptional({ type: Number, nullable: true, enum: [...WEEKLY_PACES_KG] })
+  @IsOptional()
+  @IsIn([...WEEKLY_PACES_KG])
+  weeklyPaceKg?: number | null;
 }

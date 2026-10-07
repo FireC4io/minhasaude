@@ -8,6 +8,7 @@
 import type { UpdateProfileDtoActivityLevel } from './updateProfileDtoActivityLevel';
 import type { UpdateProfileDtoGoal } from './updateProfileDtoGoal';
 import type { UpdateProfileDtoSex } from './updateProfileDtoSex';
+import type { UpdateProfileDtoWeeklyPaceKg } from './updateProfileDtoWeeklyPaceKg';
 
 export interface UpdateProfileDto {
   birthDate?: string;
@@ -15,4 +16,6 @@ export interface UpdateProfileDto {
   heightCm?: number;
   activityLevel?: UpdateProfileDtoActivityLevel;
   goal?: UpdateProfileDtoGoal;
+  /** @nullable */
+  weeklyPaceKg?: UpdateProfileDtoWeeklyPaceKg;
 }

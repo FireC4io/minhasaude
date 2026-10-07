@@ -18,5 +18,7 @@ export interface ProfileResponseDto {
   activityLevel: ActivityLevel | null;
   goal: Goal | null;
   /** @nullable */
+  weeklyPaceKg: string | null;
+  /** @nullable */
   goalUpdatedAt: string | null;
 }

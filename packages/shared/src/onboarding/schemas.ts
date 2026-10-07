@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { ACTIVITY_LEVELS, GOALS, SEXES } from './enums';
+import { WEEKLY_PACES_KG } from '../calculators/target-kcal';
 
 // Limites espelham as validações de apps/api/src/users/dto/update-profile.dto.ts.
 export const profileFormSchema = z.object({
@@ -8,6 +9,11 @@ export const profileFormSchema = z.object({
   heightCm: z.number().min(50).max(272),
   activityLevel: z.enum(ACTIVITY_LEVELS),
   goal: z.enum(GOALS),
+  // Só faz sentido para perder ou ganhar; em "manter" fica null.
+  weeklyPaceKg: z
+    .union([z.literal(WEEKLY_PACES_KG[0]), z.literal(WEEKLY_PACES_KG[1]), z.literal(WEEKLY_PACES_KG[2])])
+    .nullable()
+    .optional(),
 });
 
 export type ProfileFormValues = z.infer<typeof profileFormSchema>;

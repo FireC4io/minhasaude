@@ -23,6 +23,8 @@ import { GOAL_LABELS, SEX_LABELS } from '@/features/onboarding/enum-labels';
 import { SelectChips } from '@/features/onboarding/select-chips';
 
 import { ACTIVITY_OPTIONS } from './activity-options';
+import { WeeklyPacePicker } from './weekly-pace-picker';
+import { DEFAULT_PACE_OPTION, paceOptionToKg, type PaceOption } from './weekly-pace';
 
 type ActivityLevel = (typeof ACTIVITY_LEVELS)[number];
 
@@ -51,6 +53,7 @@ export function SteppedProfileForm({
   const [sex, setSex] = useState<Sex | null>(null);
   const [activityLevel, setActivityLevel] = useState<ActivityLevel | null>(null);
   const [goal, setGoal] = useState<Goal | null>(null);
+  const [pace, setPace] = useState<PaceOption | null>(null);
   const [error, setError] = useState<string | null>(null);
   useAnnounce(`Passo ${step + 1} de ${TOTAL}: ${STEP_TITLES[step]}`);
 
@@ -82,9 +85,16 @@ export function SteppedProfileForm({
       heightCm: parseDecimal(heightCm),
       activityLevel,
       goal,
+      weeklyPaceKg: goal === 'maintain' || !pace ? null : paceOptionToKg(pace),
     });
     if (parsed.success) onSubmit(parsed.data);
     else setError('Alguma informação ficou incompleta. Volte e confira os passos.');
+  }
+
+  // Ao escolher perder/ganhar, a opção mais leve já vem marcada.
+  function chooseGoal(value: Goal) {
+    setGoal(value);
+    setPace(value === 'maintain' ? null : (pace ?? DEFAULT_PACE_OPTION));
   }
 
   function back() {
@@ -152,13 +162,16 @@ export function SteppedProfileForm({
         />
       ) : null}
       {step === 3 ? (
-        <SelectChips
-          label="Objetivo"
-          options={GOALS}
-          optionLabels={GOAL_LABELS}
-          value={goal}
-          onChange={setGoal}
-        />
+        <>
+          <SelectChips
+            label="Objetivo"
+            options={GOALS}
+            optionLabels={GOAL_LABELS}
+            value={goal}
+            onChange={chooseGoal}
+          />
+          <WeeklyPacePicker goal={goal} value={pace} onChange={setPace} />
+        </>
       ) : null}
 
       <FormError message={error ?? submitError} />

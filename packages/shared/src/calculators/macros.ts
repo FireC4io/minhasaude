@@ -2,7 +2,7 @@ import type { Goal } from './types';
 
 export interface DistributeMacrosInputs {
   // Orçamento calórico a distribuir - normalmente o target_kcal (já com o
-  // ajuste de déficit/superávit do objetivo aplicado via applyGoalAdjustment),
+  // ajuste de déficit/superávit do objetivo aplicado via computeTargetKcal),
   // não o TDEE bruto.
   kcalBudget: number;
   weightKg: number;

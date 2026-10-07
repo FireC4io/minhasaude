@@ -62,4 +62,5 @@ export * from './updateProfileDto';
 export * from './updateProfileDtoActivityLevel';
 export * from './updateProfileDtoGoal';
 export * from './updateProfileDtoSex';
+export * from './updateProfileDtoWeeklyPaceKg';
 export * from './userStatus';

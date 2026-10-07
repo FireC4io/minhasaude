@@ -11,6 +11,7 @@ import type { GoalTargetResponseDto } from '@/api/generated/models';
 import { FormError } from '@/components/ui/form-error';
 import { PrimaryButton } from '@/features/auth/primary-button';
 import { describeGoal } from '@/features/onboarding/accessibility-labels';
+import { describeGoalTargetPace } from '@/features/profile/weekly-pace';
 import { AppText } from '@/components/ui/app-text';
 
 export default function SummaryScreen() {
@@ -58,7 +59,9 @@ export default function SummaryScreen() {
           <View className="gap-4">
             <View
               accessible
-              accessibilityLabel={describeGoal(result)}
+              accessibilityLabel={[describeGoal(result), describeGoalTargetPace(result)]
+                .filter(Boolean)
+                .join(' ')}
               className="gap-2 rounded-2xl border border-grafite bg-superficie p-4">
               <AppText className="text-grafite">
                 Taxa metabólica basal estimada: {Math.round(Number(result.bmrKcal))} kcal/dia
@@ -73,6 +76,9 @@ export default function SummaryScreen() {
                 Proteína: {Math.round(Number(result.proteinG))}g · Gordura:{' '}
                 {Math.round(Number(result.fatG))}g · Carboidrato: {Math.round(Number(result.carbG))}g
               </AppText>
+              {describeGoalTargetPace(result) ? (
+                <AppText className="text-grafite">{describeGoalTargetPace(result)}</AppText>
+              ) : null}
             </View>
             <AppText variant="caption" className="italic text-grafite">
               Informativo, baseado em fórmulas padrão da literatura — não substitui orientação de

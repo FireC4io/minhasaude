@@ -47,6 +47,11 @@ export class Profile extends BaseEntity {
   @Column({ type: 'enum', enum: Goal, nullable: true })
   goal!: Goal | null;
 
+  // kg por semana (0.25 | 0.5 | 0.75) para perder ou ganhar; null em "manter"
+  // ou em perfis anteriores ao ritmo semanal (calculadora usa o conservador).
+  @Column({ type: 'numeric', name: 'weekly_pace_kg', precision: 3, scale: 2, nullable: true })
+  weeklyPaceKg!: string | null;
+
   @Column({ type: 'timestamptz', name: 'goal_updated_at', nullable: true })
   goalUpdatedAt!: Date | null;
 }

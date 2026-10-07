@@ -78,7 +78,8 @@ describe('Goals (e2e)', () => {
     expect(recalculated.body.isManualOverride).toBe(false);
     const tdee = Number(recalculated.body.tdeeKcal);
     const target = Number(recalculated.body.targetKcal);
-    expect(target).toBeCloseTo(tdee - 500, 1);
+    // Sem ritmo escolhido: conservador, 0,25 kg/semana ≈ 275 kcal/dia (calculadora 2.0.0).
+    expect(target).toBe(Math.round(tdee - 275));
 
     const current = await request(app.getHttpServer())
       .get('/v1/goals/current')
@@ -125,5 +126,21 @@ describe('Goals (e2e)', () => {
       .set('Authorization', `Bearer ${accessToken}`)
       .expect(200);
     expect(response.body.goals.length).toBe(2);
+  });
+
+  it('ritmo semanal: recusa valor fora das opções e usa o escolhido no cálculo', async () => {
+    const server = app.getHttpServer();
+    const auth = { Authorization: `Bearer ${accessToken}` };
+
+    await request(server).patch('/v1/me/profile').set(auth).send({ weeklyPaceKg: 1 }).expect(400);
+    await request(server).patch('/v1/me/profile').set(auth).send({ weeklyPaceKg: 0.75 }).expect(200);
+
+    const goal = await request(server).post('/v1/goals/recalculate').set(auth).send({}).expect(201);
+    expect(Number(goal.body.weeklyPaceKg)).toBe(0.75);
+    expect(goal.body.calculatorVersion).toBe('2.0.0');
+    expect(typeof goal.body.limitedByBmr).toBe('boolean');
+
+    const me = await request(server).get('/v1/me').set(auth).expect(200);
+    expect(Number(me.body.profile.weeklyPaceKg)).toBe(0.75);
   });
 });

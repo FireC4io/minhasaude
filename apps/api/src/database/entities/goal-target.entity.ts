@@ -46,6 +46,19 @@ export class GoalTarget extends BaseEntity {
   @Column({ type: 'numeric', name: 'carb_g', precision: 6, scale: 2 })
   carbG!: string;
 
+  @Column({ type: 'numeric', name: 'weekly_pace_kg', precision: 3, scale: 2, nullable: true })
+  weeklyPaceKg!: string | null;
+
+  // Versão da calculadora de meta (`TARGET_KCAL_VERSION` do shared). Metas
+  // antigas ficam '1.0.0' (ajuste fixo −500/+300): o histórico não muda se a
+  // fórmula mudar.
+  @Column({ type: 'varchar', name: 'calculator_version', length: 16, default: '1.0.0' })
+  calculatorVersion!: string;
+
+  // A trava da TMB segurou a meta (o ritmo pedido ficaria abaixo do gasto em repouso).
+  @Column({ type: 'boolean', name: 'limited_by_bmr', default: false })
+  limitedByBmr!: boolean;
+
   @Column({ type: 'boolean', name: 'is_manual_override', default: false })
   isManualOverride!: boolean;
 

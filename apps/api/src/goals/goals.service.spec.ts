@@ -106,15 +106,47 @@ describe('GoalsService', () => {
       expect(tdee).toBeCloseTo(bmr * ACTIVITY_MULTIPLIERS.moderate, 2);
     });
 
-    it('aplica o déficit de 500kcal do objetivo lose sobre o TDEE pra chegar no target', async () => {
+    const measurement = { weightKg: '80.00', bodyFatPercent: null, measuredAt: new Date() };
+
+    it('sem ritmo escolhido, usa o conservador (0,25 kg/semana ≈ 275 kcal/dia)', async () => {
       profiles.findOne.mockResolvedValue(completeProfile);
-      bodyMeasurementsService.findLatest.mockResolvedValue({
-        weightKg: '80.00',
-        bodyFatPercent: null,
-        measuredAt: new Date(),
-      });
+      bodyMeasurementsService.findLatest.mockResolvedValue(measurement);
       const result = await service.recalculate('user-1', {});
-      expect(Number(result.targetKcal)).toBeCloseTo(Number(result.tdeeKcal) - 500, 2);
+      expect(Number(result.targetKcal)).toBe(Math.round(Number(result.tdeeKcal) - 275));
+      expect(result.weeklyPaceKg).toBe('0.25');
+    });
+
+    it('usa o ritmo do perfil e grava a versão da calculadora', async () => {
+      profiles.findOne.mockResolvedValue({ ...completeProfile, weeklyPaceKg: '0.50' });
+      bodyMeasurementsService.findLatest.mockResolvedValue(measurement);
+      const result = await service.recalculate('user-1', {});
+      expect(Number(result.targetKcal)).toBe(Math.round(Number(result.tdeeKcal) - 550));
+      expect(result.weeklyPaceKg).toBe('0.5');
+      expect(result.calculatorVersion).toBe('2.0.0');
+      expect(result.limitedByBmr).toBe(false);
+    });
+
+    it('em "manter" o ritmo é ignorado e não é gravado', async () => {
+      profiles.findOne.mockResolvedValue({ ...completeProfile, goal: Goal.MAINTAIN, weeklyPaceKg: '0.75' });
+      bodyMeasurementsService.findLatest.mockResolvedValue(measurement);
+      const result = await service.recalculate('user-1', {});
+      expect(Number(result.targetKcal)).toBe(Math.round(Number(result.tdeeKcal)));
+      expect(result.weeklyPaceKg).toBeNull();
+    });
+
+    it('a meta não fica abaixo da TMB, e isso fica registrado', async () => {
+      // Pessoa pequena e sedentária: 0,75 kg/semana passaria do gasto em repouso.
+      profiles.findOne.mockResolvedValue({
+        ...completeProfile,
+        sex: Sex.FEMALE,
+        heightCm: '150',
+        activityLevel: ActivityLevel.SEDENTARY,
+        weeklyPaceKg: '0.75',
+      });
+      bodyMeasurementsService.findLatest.mockResolvedValue({ ...measurement, weightKg: '48.00' });
+      const result = await service.recalculate('user-1', {});
+      expect(Number(result.targetKcal)).toBe(Math.round(Number(result.bmrKcal)));
+      expect(result.limitedByBmr).toBe(true);
     });
 
     it('as calorias de macros somam o target_kcal', async () => {

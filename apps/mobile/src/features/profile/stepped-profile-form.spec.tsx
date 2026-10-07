@@ -44,7 +44,46 @@ describe('SteppedProfileForm', () => {
       sex: 'female',
       activityLevel: 'moderate',
       goal: 'lose',
+      // A opção mais leve vem marcada ao escolher emagrecer.
+      weeklyPaceKg: 0.25,
     });
+  });
+
+  async function goToLastStep(): Promise<void> {
+    await userEvent.type(screen.getByLabelText('Data de nascimento'), '20051996');
+    await userEvent.type(screen.getByLabelText('Altura (cm)'), '165');
+    await userEvent.press(screen.getByRole('button', { name: 'Continuar' }));
+    await userEvent.press(screen.getByRole('radio', { name: 'Feminino' }));
+    await userEvent.press(screen.getByRole('button', { name: 'Continuar' }));
+    await userEvent.press(screen.getByRole('radio', { name: /^Moderadamente ativo/ }));
+    await userEvent.press(screen.getByRole('button', { name: 'Continuar' }));
+  }
+
+  it('ritmo semanal: aparece para emagrecer e envia o escolhido', async () => {
+    const onSubmit = jest.fn();
+    await render(<SteppedProfileForm isSubmitting={false} onSubmit={onSubmit} />);
+    await goToLastStep();
+
+    expect(screen.queryByText('Quanto quer perder por semana?')).toBeNull();
+    await userEvent.press(screen.getByRole('radio', { name: 'Emagrecer' }));
+    expect(screen.getByText('Quanto quer perder por semana?')).toBeTruthy();
+
+    await userEvent.press(screen.getByRole('radio', { name: /^Perder 0,75 kg por semana/ }));
+    await userEvent.press(screen.getByRole('button', { name: 'Calcular minha meta' }));
+
+    expect(onSubmit).toHaveBeenCalledWith(expect.objectContaining({ weeklyPaceKg: 0.75 }));
+  });
+
+  it('ritmo semanal: em "manter o peso" não pergunta e envia sem ritmo', async () => {
+    const onSubmit = jest.fn();
+    await render(<SteppedProfileForm isSubmitting={false} onSubmit={onSubmit} />);
+    await goToLastStep();
+
+    await userEvent.press(screen.getByRole('radio', { name: 'Manter o peso' }));
+    expect(screen.queryByText(/por semana\?/)).toBeNull();
+    await userEvent.press(screen.getByRole('button', { name: 'Calcular minha meta' }));
+
+    expect(onSubmit).toHaveBeenCalledWith(expect.objectContaining({ goal: 'maintain', weeklyPaceKg: null }));
   });
 
   it('volta ao passo anterior sem perder o que foi preenchido', async () => {

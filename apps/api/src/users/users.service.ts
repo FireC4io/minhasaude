@@ -52,8 +52,12 @@ export class UsersService {
     if (!profile) {
       profile = this.profiles.create({ userId, goalUpdatedAt: null });
     }
-    Object.assign(profile, dto);
-    if (dto.goal) {
+    const { weeklyPaceKg, ...rest } = dto;
+    Object.assign(profile, rest);
+    if (weeklyPaceKg !== undefined) {
+      profile.weeklyPaceKg = weeklyPaceKg === null ? null : weeklyPaceKg.toString();
+    }
+    if (dto.goal || weeklyPaceKg !== undefined) {
       profile.goalUpdatedAt = new Date();
     }
     return this.profiles.save(profile);

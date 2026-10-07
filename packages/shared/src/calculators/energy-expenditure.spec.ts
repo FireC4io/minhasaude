@@ -2,7 +2,6 @@ import { mifflinStJeor } from './mifflin-st-jeor';
 import { katchMcArdle } from './katch-mcardle';
 import { calculateTdee, ACTIVITY_MULTIPLIERS } from './tdee';
 import { distributeMacros } from './macros';
-import { applyGoalAdjustment } from './target-kcal';
 import type { ActivityLevel, Goal } from './types';
 
 // Coeficientes conferidos contra Mifflin MD, St Jeor ST, et al. "A new
@@ -48,20 +47,6 @@ describe('calculateTdee', () => {
   ])('aplica o multiplicador correto para activity_level=%s', (level, multiplier) => {
     expect(calculateTdee(1673.75, level)).toBeCloseTo(1673.75 * multiplier, 2);
     expect(ACTIVITY_MULTIPLIERS[level]).toBe(multiplier);
-  });
-});
-
-describe('applyGoalAdjustment', () => {
-  it('aplica déficit de 500kcal/dia para lose (faixa conservadora do CDC)', () => {
-    expect(applyGoalAdjustment(2500, 'lose')).toBe(2000);
-  });
-
-  it('não ajusta o TDEE para maintain', () => {
-    expect(applyGoalAdjustment(2500, 'maintain')).toBe(2500);
-  });
-
-  it('aplica superávit de 300kcal/dia para gain (dentro da faixa 200-500kcal da literatura)', () => {
-    expect(applyGoalAdjustment(2500, 'gain')).toBe(2800);
   });
 });
 

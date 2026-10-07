@@ -22,6 +22,10 @@ export interface GoalTargetResponseDto {
   fatG: string;
   /** gramas/dia */
   carbG: string;
+  /** @nullable */
+  weeklyPaceKg: string | null;
+  calculatorVersion: string;
+  limitedByBmr: boolean;
   isManualOverride: boolean;
   activeFrom: string;
 }

@@ -15,6 +15,11 @@ export enum FoodSource {
 // PATCH/DELETE direto do usuário.
 @Entity('foods')
 @Index(['barcode'])
+// Índices criados à mão nas migrations (parcial e GIN, que o decorator não
+// expressa). `synchronize: false` faz o migration:generate ignorá-los em vez
+// de gerar DROP INDEX — aconteceu na AddWeeklyPace.
+@Index('IDX_foods_source_external_id', { synchronize: false })
+@Index('IDX_foods_search_vector', { synchronize: false })
 export class Food extends BaseEntity {
   @Column({ type: 'enum', enum: FoodSource })
   source!: FoodSource;

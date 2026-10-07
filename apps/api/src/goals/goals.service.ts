@@ -5,7 +5,11 @@ import {
   mifflinStJeor,
   katchMcArdle,
   calculateTdee,
-  applyGoalAdjustment,
+  computeTargetKcal,
+  DEFAULT_WEEKLY_PACE_KG,
+  TARGET_KCAL_VERSION,
+  WEEKLY_PACES_KG,
+  type WeeklyPaceKg,
   distributeMacros,
   type ActivityLevel as SharedActivityLevel,
   type Goal as SharedGoal,
@@ -95,7 +99,11 @@ export class GoalsService {
           });
 
     const tdeeKcal = calculateTdee(bmrKcal, activityLevel);
-    const targetKcal = applyGoalAdjustment(tdeeKcal, goal);
+    // Grava o ritmo de fato usado (o conservador, se o perfil não tem escolha),
+    // para o histórico explicar a meta sem depender do perfil atual.
+    const weeklyPaceKg =
+      goal === 'maintain' ? null : (toWeeklyPace(profile.weeklyPaceKg) ?? DEFAULT_WEEKLY_PACE_KG);
+    const { targetKcal, limitedByBmr } = computeTargetKcal({ tdeeKcal, bmrKcal, goal, weeklyPaceKg });
     const macros = distributeMacros({ kcalBudget: targetKcal, weightKg, goal });
 
     const goalTarget = this.goalTargets.create({
@@ -106,6 +114,7 @@ export class GoalsService {
         heightCm,
         activityLevel: profile.activityLevel,
         goal: profile.goal,
+        weeklyPaceKg,
         weightKg,
         bodyFatPercent,
         measuredAt: latestMeasurement.measuredAt,
@@ -117,6 +126,9 @@ export class GoalsService {
       proteinG: macros.proteinG.toString(),
       fatG: macros.fatG.toString(),
       carbG: macros.carbG.toString(),
+      weeklyPaceKg: weeklyPaceKg === null ? null : weeklyPaceKg.toString(),
+      calculatorVersion: TARGET_KCAL_VERSION,
+      limitedByBmr,
       isManualOverride: false,
       activeFrom: new Date(),
     });
@@ -150,6 +162,11 @@ export class GoalsService {
       proteinG: (dto.proteinG ?? Number(current.proteinG)).toString(),
       fatG: (dto.fatG ?? Number(current.fatG)).toString(),
       carbG: (dto.carbG ?? Number(current.carbG)).toString(),
+      // O ajuste manual herda de qual cálculo partiu; a trava da TMB não se
+      // aplica ao número que a pessoa digitou.
+      weeklyPaceKg: current.weeklyPaceKg,
+      calculatorVersion: current.calculatorVersion,
+      limitedByBmr: false,
       isManualOverride: true,
       activeFrom: new Date(),
     });
@@ -170,4 +187,13 @@ export class GoalsService {
     });
     return { data, meta: { total, page: query.page, limit: query.limit } };
   }
+}
+
+// Coluna numeric volta string pelo TypeORM. Valor fora das opções (ou null)
+// vira null, e a calculadora usa o ritmo conservador.
+function toWeeklyPace(value: string | null): WeeklyPaceKg | null {
+  const pace = Number(value);
+  return value !== null && (WEEKLY_PACES_KG as readonly number[]).includes(pace)
+    ? (pace as WeeklyPaceKg)
+    : null;
 }

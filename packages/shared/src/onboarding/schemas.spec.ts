@@ -26,6 +26,12 @@ describe('profileFormSchema', () => {
     expect(profileFormSchema.safeParse({ ...valid, sex: 'other' }).success).toBe(false);
     expect(profileFormSchema.safeParse({ ...valid, goal: 'bulk' }).success).toBe(false);
   });
+
+  it('aceita só os ritmos semanais oferecidos', () => {
+    expect(profileFormSchema.safeParse({ ...valid, weeklyPaceKg: 0.5 }).success).toBe(true);
+    expect(profileFormSchema.safeParse({ ...valid, weeklyPaceKg: null }).success).toBe(true);
+    expect(profileFormSchema.safeParse({ ...valid, weeklyPaceKg: 1 }).success).toBe(false);
+  });
 });
 
 describe('weightEntrySchema', () => {

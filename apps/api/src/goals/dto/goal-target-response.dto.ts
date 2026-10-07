@@ -35,6 +35,19 @@ export class GoalTargetResponseDto {
   @Expose()
   carbG!: string;
 
+  // kg por semana; null em "manter" e em metas anteriores ao ritmo semanal.
+  @ApiProperty({ type: String, nullable: true, example: '0.25' })
+  @Expose()
+  weeklyPaceKg!: string | null;
+
+  @ApiProperty({ example: '2.0.0' })
+  @Expose()
+  calculatorVersion!: string;
+
+  @ApiProperty()
+  @Expose()
+  limitedByBmr!: boolean;
+
   @ApiProperty()
   @Expose()
   isManualOverride!: boolean;

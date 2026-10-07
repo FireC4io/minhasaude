@@ -45,6 +45,10 @@ export class ProfileResponseDto {
   @Expose()
   goal!: Goal | null;
 
+  @ApiProperty({ type: String, nullable: true, example: '0.25' })
+  @Expose()
+  weeklyPaceKg!: string | null;
+
   @ApiProperty({ type: Date, nullable: true })
   @Expose()
   goalUpdatedAt!: Date | null;

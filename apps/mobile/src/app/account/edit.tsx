@@ -76,6 +76,7 @@ export default function EditProfileScreen() {
               heightCm: profile?.heightCm,
               activityLevel: profile?.activityLevel,
               goal: profile?.goal,
+              weeklyPaceKg: profile?.weeklyPaceKg,
             }}
             submitLabel="Salvar e recalcular a meta"
             isSubmitting={updateProfile.isPending || recalculate.isPending}

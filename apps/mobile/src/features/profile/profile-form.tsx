@@ -20,6 +20,13 @@ import { GOAL_LABELS, SEX_LABELS } from '@/features/onboarding/enum-labels';
 import { SelectChips } from '@/features/onboarding/select-chips';
 
 import { ACTIVITY_OPTIONS } from './activity-options';
+import { WeeklyPacePicker } from './weekly-pace-picker';
+import {
+  DEFAULT_PACE_OPTION,
+  paceKgToOption,
+  paceOptionToKg,
+  type PaceOption,
+} from './weekly-pace';
 
 type ActivityLevel = (typeof ACTIVITY_LEVELS)[number];
 
@@ -29,6 +36,7 @@ export interface ProfileFormInitial {
   heightCm?: string | number | null;
   activityLevel?: ActivityLevel | null;
   goal?: Goal | null;
+  weeklyPaceKg?: string | null;
 }
 
 interface ProfileFormProps {
@@ -57,6 +65,15 @@ export function ProfileForm({
     initial?.activityLevel ?? null,
   );
   const [goal, setGoal] = useState<Goal | null>(initial?.goal ?? null);
+  const [pace, setPace] = useState<PaceOption | null>(
+    paceKgToOption(initial?.weeklyPaceKg) ??
+      (initial?.goal && initial.goal !== 'maintain' ? DEFAULT_PACE_OPTION : null),
+  );
+
+  function chooseGoal(value: Goal) {
+    setGoal(value);
+    setPace(value === 'maintain' ? null : (pace ?? DEFAULT_PACE_OPTION));
+  }
   const [error, setError] = useState<string | null>(null);
 
   function handleSubmit() {
@@ -74,6 +91,7 @@ export function ProfileForm({
       heightCm: parseDecimal(heightCm),
       activityLevel,
       goal,
+      weeklyPaceKg: goal === 'maintain' || !pace ? null : paceOptionToKg(pace),
     });
     if (!parsed.success) {
       setError(
@@ -113,7 +131,8 @@ export function ProfileForm({
         value={activityLevel}
         onChange={setActivityLevel}
       />
-      <SelectChips label="Objetivo" options={GOALS} optionLabels={GOAL_LABELS} value={goal} onChange={setGoal} />
+      <SelectChips label="Objetivo" options={GOALS} optionLabels={GOAL_LABELS} value={goal} onChange={chooseGoal} />
+      <WeeklyPacePicker goal={goal} value={pace} onChange={setPace} />
 
       <FormError message={error ?? submitError} />
 
