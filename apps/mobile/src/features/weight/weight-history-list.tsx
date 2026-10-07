@@ -28,7 +28,7 @@ export function WeightHistoryList({ measurements }: WeightHistoryListProps) {
         Histórico
       </AppText>
 
-      <View className="overflow-hidden rounded-2xl border border-grafite/20 bg-superficie">
+      <View className="overflow-hidden rounded-2xl border border-linha bg-superficie">
         {measurements.map((measurement, index) => (
           <View
             key={measurement.id}
@@ -37,7 +37,7 @@ export function WeightHistoryList({ measurements }: WeightHistoryListProps) {
             accessible
             accessibilityLabel={describeWeightEntry(measurement)}
             className={`flex-row items-center justify-between px-4 py-3 ${
-              index > 0 ? 'border-t border-grafite/10' : ''
+              index > 0 ? 'border-t border-linha' : ''
             }`}>
             <AppText className="text-grafite">{formatMeasuredAt(measurement.measuredAt)}</AppText>
             <AppText variant="number" className="text-grafite">

@@ -21,7 +21,7 @@ import { AppText } from '@/components/ui/app-text';
 // porque bioimpedância de aparelhos diferentes não é comparável (CLAUDE.md).
 const LIST_PARAMS = { source: 'manual' } as const;
 
-export default function WeightScreen() {
+export default function ProgressScreen() {
   const queryClient = useQueryClient();
   const historyQuery = useBodyMeasurementsControllerList(LIST_PARAMS);
   const createMeasurement = useBodyMeasurementsControllerCreate();
@@ -64,7 +64,9 @@ export default function WeightScreen() {
         className="flex-1">
         <ScrollView contentContainerClassName="gap-6 px-6 py-8">
           <View className="gap-1">
-            <AppText variant="title" accessibilityRole="header" className="text-grafite">Peso</AppText>
+            <AppText variant="title" accessibilityRole="header" className="text-grafite">
+              Progresso
+            </AppText>
             <AppText className="text-grafite">
               Registre seu peso quando quiser e acompanhe a evolução ao longo do tempo.
             </AppText>

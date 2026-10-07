@@ -15,6 +15,7 @@ export const GotaVitalColors = {
   light: {
     areia: '#fbf0e4',
     superficie: '#ffffff',
+    linha: '#e3d5c6',
     grafite: '#2b3a34',
     grafiteSuave: '#5f6e67',
     mamao: '#ff6f4d',
@@ -27,6 +28,7 @@ export const GotaVitalColors = {
   dark: {
     areia: '#1e1712',
     superficie: '#2a211b',
+    linha: '#45382f',
     grafite: '#f5eae0',
     grafiteSuave: '#a39a90',
     mamao: '#ff8264',

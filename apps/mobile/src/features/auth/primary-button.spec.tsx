@@ -93,6 +93,13 @@ describe('PrimaryButton', () => {
     expect(desabilitado.props.className).toContain('opacity-50');
   });
 
+  it('a variante de perigo usa jabuticaba no fundo', () => {
+    const element = PrimaryButton({ label: 'Excluir', onPress: jest.fn(), tone: 'danger' });
+
+    expect(element.props.className).toContain('bg-jabuticaba');
+    expect(element.props.className).not.toContain('bg-mamao-forte');
+  });
+
   it('o spinner segue a cor do texto do botão em vez de um hex fixo', () => {
     const element = PrimaryButton({ label: 'Salvar', onPress: jest.fn(), isLoading: true });
     const spinner = element.props.children;

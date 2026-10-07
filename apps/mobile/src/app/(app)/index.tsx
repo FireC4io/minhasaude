@@ -14,7 +14,6 @@ import type { DiaryEntryResponseDto, MealType } from '@/api/generated/models';
 import { FormError } from '@/components/ui/form-error';
 import { LoadingIndicator } from '@/components/ui/loading-indicator';
 import { TextButton } from '@/components/ui/text-button';
-import { useAuth } from '@/features/auth/auth-context';
 import { addDaysToIsoDate, formatIsoDateLabel, todayIsoDate } from '@/features/diary/date-utils';
 import { MacroSummary } from '@/features/diary/macro-summary';
 import { MealSection } from '@/features/diary/meal-section';
@@ -24,7 +23,6 @@ import { AppText } from '@/components/ui/app-text';
 export default function DiaryScreen() {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { logout } = useAuth();
   const [currentDate, setCurrentDate] = useState(todayIsoDate());
 
   const dayQuery = useDiaryControllerGetByDate({ date: currentDate });
@@ -86,14 +84,6 @@ export default function DiaryScreen() {
         <AppText variant="subtitle" accessibilityRole="header" className="text-grafite">
           Diário
         </AppText>
-        <TextButton
-          label="Sair"
-          onPress={() => void logout()}
-          hint="Encerra a sessão neste aparelho"
-          className="items-end"
-          textVariant="caption"
-          textClassName="text-grafite"
-        />
       </View>
 
       <View className="flex-row items-center justify-between px-6 py-1">

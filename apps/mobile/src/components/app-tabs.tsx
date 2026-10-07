@@ -10,6 +10,8 @@ export default function AppTabs() {
   // sobre a superfície nos dois temas (ver contrast.spec.ts).
   return (
     <NativeTabs
+      // Rótulo sempre visível: só o ícone não basta para quem tem pouca familiaridade com apps.
+      labelVisibilityMode="labeled"
       backgroundColor={colors.superficie}
       indicatorColor={colors.areia}
       iconColor={{ default: colors.grafiteSuave, selected: colors.mamaoForte }}
@@ -18,17 +20,30 @@ export default function AppTabs() {
         selected: { color: colors.mamaoForte },
       }}>
       <NativeTabs.Trigger name="index">
-        <NativeTabs.Trigger.Label>Diário</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Label>Hoje</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
           src={require('@/assets/images/tabIcons/diary.png')}
           renderingMode="template"
         />
       </NativeTabs.Trigger>
-
-      <NativeTabs.Trigger name="weight">
-        <NativeTabs.Trigger.Label>Peso</NativeTabs.Trigger.Label>
+      <NativeTabs.Trigger name="progress">
+        <NativeTabs.Trigger.Label>Progresso</NativeTabs.Trigger.Label>
         <NativeTabs.Trigger.Icon
-          src={require('@/assets/images/tabIcons/weight.png')}
+          src={require('@/assets/images/tabIcons/progress.png')}
+          renderingMode="template"
+        />
+      </NativeTabs.Trigger>
+      <NativeTabs.Trigger name="exams">
+        <NativeTabs.Trigger.Label>Exames</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon
+          src={require('@/assets/images/tabIcons/exams.png')}
+          renderingMode="template"
+        />
+      </NativeTabs.Trigger>
+      <NativeTabs.Trigger name="profile">
+        <NativeTabs.Trigger.Label>Perfil</NativeTabs.Trigger.Label>
+        <NativeTabs.Trigger.Icon
+          src={require('@/assets/images/tabIcons/profile.png')}
           renderingMode="template"
         />
       </NativeTabs.Trigger>

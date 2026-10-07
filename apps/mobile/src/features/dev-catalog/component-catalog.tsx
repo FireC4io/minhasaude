@@ -2,7 +2,11 @@ import type { ReactNode } from 'react';
 import { ScrollView, View } from 'react-native';
 import { vars } from 'nativewind';
 
+import { CheckboxRow } from '@/components/ui/checkbox-row';
 import { FormError } from '@/components/ui/form-error';
+import { ListRow } from '@/components/ui/list-row';
+import { PreviewBanner } from '@/components/ui/preview-banner';
+import { RadioList } from '@/components/ui/radio-list';
 import { LoadingIndicator } from '@/components/ui/loading-indicator';
 import { TextButton } from '@/components/ui/text-button';
 import type { GotaVitalScheme } from '@/constants/gota-vital-colors';
@@ -53,6 +57,33 @@ function ThemeSamples() {
         <PrimaryButton label="Salvar" onPress={noop} />
         <PrimaryButton label="Salvar (desabilitado)" onPress={noop} disabled />
         <PrimaryButton label="Salvando" onPress={noop} isLoading />
+        <PrimaryButton label="Excluir minha conta" onPress={noop} tone="danger" />
+      </Section>
+
+      <Section title="ListRow">
+        <ListRow title="Exportar meus dados" description="Um arquivo com tudo" onPress={noop} />
+        <ListRow title="Excluir minha conta" tone="danger" onPress={noop} />
+      </Section>
+
+      <Section title="RadioList">
+        <RadioList
+          label="Como é a sua rotina?"
+          options={[
+            { value: 'a', label: 'Sedentário', description: 'Passa o dia sentado' },
+            { value: 'b', label: 'Ativo', description: 'Treina quase todo dia' },
+          ]}
+          value="b"
+          onChange={noop}
+        />
+      </Section>
+
+      <Section title="CheckboxRow">
+        <CheckboxRow label="Desmarcada" checked={false} onChange={noop} />
+        <CheckboxRow label="Marcada" checked onChange={noop} />
+      </Section>
+
+      <Section title="PreviewBanner">
+        <PreviewBanner missing="A API de exames ainda não existe." />
       </Section>
 
       <Section title="TextButton">

@@ -10,9 +10,18 @@ interface PrimaryButtonProps {
   disabled?: boolean;
   /** Use quando o resultado da ação não for óbvio a partir do rótulo. */
   hint?: string;
+  /** `danger` para ações destrutivas (excluir conta). O rótulo diz a ação; a cor só reforça. */
+  tone?: 'default' | 'danger';
 }
 
-export function PrimaryButton({ label, onPress, isLoading, disabled, hint }: PrimaryButtonProps) {
+export function PrimaryButton({
+  label,
+  onPress,
+  isLoading,
+  disabled,
+  hint,
+  tone = 'default',
+}: PrimaryButtonProps) {
   const isDisabled = disabled || isLoading;
 
   return (
@@ -29,7 +38,9 @@ export function PrimaryButton({ label, onPress, isLoading, disabled, hint }: Pri
       style={{ minHeight: MIN_TOUCH_TARGET, justifyContent: 'center' }}
       // Só o desabilitado esmaece: carregando com 50% parecia travado e
       // apagava o spinner (achado do catálogo, F4-08).
-      className={`items-center rounded-2xl bg-mamao-forte px-4 py-3 ${
+      className={`items-center rounded-2xl px-4 py-3 ${
+        tone === 'danger' ? 'bg-jabuticaba' : 'bg-mamao-forte'
+      } ${
         disabled ? 'opacity-50' : isLoading ? '' : 'active:opacity-80'
       }`}
     >

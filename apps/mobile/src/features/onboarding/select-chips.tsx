@@ -47,7 +47,11 @@ export function SelectChips<TValue extends string>({
                   ? 'rounded-full bg-mamao-forte px-4 py-2'
                   : 'rounded-full border border-grafite px-4 py-2'
               }>
-              <AppText className={selected ? 'text-areia' : 'text-grafite'}>{optionLabels[option]}</AppText>
+              <AppText className={selected ? 'text-areia' : 'text-grafite'}>
+                {/* O ✓ marca a escolha sem depender da cor (F4-10). */}
+                {selected ? '✓ ' : ''}
+                {optionLabels[option]}
+              </AppText>
             </Pressable>
           );
         })}

@@ -118,12 +118,30 @@ def paint_diary(draw: ImageDraw.ImageDraw, u: float) -> None:
     stroke_polyline(draw, [(1.4 * u, 8 * u), (4.6 * u, 8 * u)], 1.2 * u, "black")
 
 
-def paint_weight(draw: ImageDraw.ImageDraw, u: float) -> None:
-    """Balança de banheiro com mostrador."""
+def paint_progress(draw: ImageDraw.ImageDraw, u: float) -> None:
+    """Linha subindo sobre um eixo: a evolução."""
+    stroke_polyline(draw, [(3 * u, 3 * u), (3 * u, 21 * u), (21 * u, 21 * u)], 1.8 * u, "black")
+    stroke_polyline(
+        draw, [(6.5 * u, 16 * u), (10.5 * u, 11 * u), (14 * u, 13.5 * u), (19.5 * u, 6 * u)],
+        1.8 * u, "black",
+    )
+
+
+def paint_exams(draw: ImageDraw.ImageDraw, u: float) -> None:
+    """A gota da marca em traço (a versão monoline do artifact)."""
+    scale = 20 / 88 * u  # gota de 88 unidades de altura em 20 do grid
+    off_x, off_y = 12 * u - 50 * scale, 12 * u - 52 * scale
+    outline = [(off_x + x * scale, off_y + y * scale) for x, y in DROP_OUTLINE]
+    stroke_polyline(draw, [*outline, outline[0]], 1.8 * u, "black")
+    pulse = [(off_x + x * scale, off_y + y * scale) for x, y in PULSE]
+    stroke_polyline(draw, pulse, 1.6 * u, "black")
+
+
+def paint_profile(draw: ImageDraw.ImageDraw, u: float) -> None:
+    """Pessoa: cabeça e ombros."""
     w = round(1.8 * u)
-    draw.rounded_rectangle((3 * u, 3 * u, 21 * u, 21 * u), radius=4 * u, outline="black", width=w)
-    draw.arc((7 * u, 6.5 * u, 17 * u, 16.5 * u), start=200, end=340, fill="black", width=w)
-    stroke_polyline(draw, [(12 * u, 11.5 * u), (14.2 * u, 8.6 * u)], 1.8 * u, "black")
+    draw.ellipse((8 * u, 3 * u, 16 * u, 11 * u), outline="black", width=w)
+    draw.arc((3.5 * u, 13.5 * u, 20.5 * u, 30 * u), start=180, end=360, fill="black", width=w)
 
 
 def main() -> None:
@@ -142,7 +160,9 @@ def main() -> None:
     }
     for scale, suffix in ((1, ""), (2, "@2x"), (3, "@3x")):
         outputs[f"tabIcons/diary{suffix}.png"] = render_tab_icon(24 * scale, paint_diary)
-        outputs[f"tabIcons/weight{suffix}.png"] = render_tab_icon(24 * scale, paint_weight)
+        outputs[f"tabIcons/progress{suffix}.png"] = render_tab_icon(24 * scale, paint_progress)
+        outputs[f"tabIcons/exams{suffix}.png"] = render_tab_icon(24 * scale, paint_exams)
+        outputs[f"tabIcons/profile{suffix}.png"] = render_tab_icon(24 * scale, paint_profile)
 
     for name, image in outputs.items():
         path = OUT / name

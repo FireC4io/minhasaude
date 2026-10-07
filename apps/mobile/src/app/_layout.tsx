@@ -8,6 +8,7 @@ import { useColorScheme } from 'react-native';
 import { QueryClientProvider } from '@tanstack/react-query';
 
 import { APP_FONTS } from '@/constants/typography';
+import { applyThemePreference, loadThemePreference } from '@/features/preferences/theme-preference';
 import { queryClient } from '@/api/query-client';
 import { useGoalsControllerGetCurrent } from '@/api/generated/endpoints/goals/goals';
 import { AuthProvider, useAuth } from '@/features/auth/auth-context';
@@ -23,6 +24,11 @@ export default function RootLayout() {
 
   // A splash nativa (gota Gota Vital) segue na tela enquanto as fontes
   // carregam. Se falharem, o app abre com a fonte do sistema em vez de travar.
+  // Tema escolhido em Preferências; sem escolha, segue o aparelho.
+  useEffect(() => {
+    void loadThemePreference().then(applyThemePreference);
+  }, []);
+
   useEffect(() => {
     if (isReady) {
       void SplashScreen.hideAsync();
@@ -73,6 +79,7 @@ function RootNavigator() {
       <Stack.Protected guard={route === 'app'}>
         <Stack.Screen name="(app)" options={{ headerShown: false }} />
         <Stack.Screen name="diary-entry" options={{ presentation: 'modal', headerShown: false }} />
+        <Stack.Screen name="account" options={{ headerShown: false }} />
       </Stack.Protected>
       <Stack.Protected guard={route === 'onboarding'}>
         <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />

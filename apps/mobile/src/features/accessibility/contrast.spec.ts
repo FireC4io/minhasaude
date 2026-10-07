@@ -22,6 +22,7 @@ const TEXT_PAIRS: readonly (readonly [text: ColorName, background: ColorName])[]
   ['mamaoForte', 'areia'],
   ['mamaoForte', 'superficie'],
   ['areia', 'mamaoForte'],
+  ['areia', 'jabuticaba'],
   ['maracujaForte', 'areia'],
   ['maracujaForte', 'superficie'],
 ];

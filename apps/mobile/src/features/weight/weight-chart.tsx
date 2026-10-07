@@ -44,7 +44,7 @@ export function WeightChart({ measurements }: WeightChartProps) {
 
   if (chart.points.length === 0) {
     return (
-      <View className="items-center justify-center rounded-2xl border border-grafite/20 bg-superficie p-6">
+      <View className="items-center justify-center rounded-2xl border border-linha bg-superficie p-6">
         <AppText className="text-center text-grafite">
           Nenhum peso registrado ainda. Registre o primeiro acima para começar a acompanhar sua
           evolução.
@@ -60,7 +60,7 @@ export function WeightChart({ measurements }: WeightChartProps) {
       accessible
       accessibilityRole="image"
       accessibilityLabel={describeWeightTrend(measurements) ?? undefined}
-      className="gap-2 rounded-2xl border border-grafite/20 bg-superficie p-4"
+      className="gap-2 rounded-2xl border border-linha bg-superficie p-4"
       onLayout={(event) => setLarguraMedida(event.nativeEvent.layout.width - 32)}>
       <View className="flex-row justify-between">
         <AppText variant="number" className="text-grafite">{formatKg(chart.max)}</AppText>
