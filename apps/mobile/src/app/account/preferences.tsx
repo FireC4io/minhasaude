@@ -75,32 +75,28 @@ export default function PreferencesScreen() {
         {t('language.hint')}
       </AppText>
       <SelectChips
-        label="Tema"
+        label={t('preferences.theme')}
         options={THEME_PREFERENCES}
         optionLabels={THEME_PREFERENCE_LABELS}
         value={theme}
         onChange={chooseTheme}
       />
       <AppText variant="caption" className="text-grafite-suave">
-        O tema escuro cansa menos a vista à noite. “Igual ao aparelho” acompanha o que estiver
-        configurado no seu celular. Na versão para navegador, vale sempre o tema do navegador.
+        {t('preferences.themeHint')}
       </AppText>
       <AppText variant="caption" className="text-grafite-suave">
-        Para letras maiores, aumente o tamanho da fonte nas configurações do celular: o app
-        acompanha.
+        {t('preferences.fontHint')}
       </AppText>
 
       <SelectChips
-        label="Cópia dos dados no celular"
+        label={t('preferences.offlineCopy')}
         options={OFFLINE_COPY_DAYS}
         optionLabels={OFFLINE_COPY_LABELS}
         value={offlineDays}
         onChange={chooseOfflineDays}
       />
       <AppText variant="caption" className="text-grafite-suave">
-        O app guarda no celular uma cópia do que você já viu, para abrir mesmo sem internet. Se
-        você ficar mais tempo que isso sem abrir o app, a cópia é apagada. Ela também é apagada
-        quando você sai da conta. A nova escolha vale a partir da próxima vez que abrir o app.
+        {t('preferences.offlineHint')}
       </AppText>
     </ScrollView>
   );

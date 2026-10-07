@@ -8,6 +8,7 @@ import {
 } from '@minhasaude/shared';
 import { useState } from 'react';
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import type { UpdateProfileDto } from '@/api/generated/models';
 import { AppText } from '@/components/ui/app-text';
@@ -28,8 +29,8 @@ import { DEFAULT_PACE_OPTION, paceOptionToKg, type PaceOption } from './weekly-p
 
 type ActivityLevel = (typeof ACTIVITY_LEVELS)[number];
 
-const STEP_TITLES = ['Sobre você', 'Seu corpo', 'Sua rotina', 'Seu objetivo'] as const;
-const TOTAL = STEP_TITLES.length;
+const STEP_KEYS = ['about', 'body', 'routine', 'goal'] as const;
+const TOTAL = STEP_KEYS.length;
 
 interface SteppedProfileFormProps {
   isSubmitting: boolean;
@@ -47,6 +48,7 @@ export function SteppedProfileForm({
   submitError,
   onSubmit,
 }: SteppedProfileFormProps) {
+  const { t } = useTranslation();
   const [step, setStep] = useState(0);
   const [birthDate, setBirthDate] = useState('');
   const [heightCm, setHeightCm] = useState('');
@@ -55,19 +57,20 @@ export function SteppedProfileForm({
   const [goal, setGoal] = useState<Goal | null>(null);
   const [pace, setPace] = useState<PaceOption | null>(null);
   const [error, setError] = useState<string | null>(null);
-  useAnnounce(`Passo ${step + 1} de ${TOTAL}: ${STEP_TITLES[step]}`);
+  const stepTitle = t(`profileForm.steps.${STEP_KEYS[step] ?? 'about'}`);
+  useAnnounce(t('profileForm.stepAnnounce', { current: step + 1, total: TOTAL, title: stepTitle }));
 
   function stepError(): string | null {
     if (step === 0) {
       if (!brDateToIso(birthDate))
-        return 'Confira a data de nascimento: dia, mês e ano, como 20/05/1996.';
+        return t('profileForm.birthDateError');
       const height = parseDecimal(heightCm);
       if (!(height >= 50 && height <= 272))
-        return 'Digite a altura em centímetros, por exemplo 165.';
+        return t('profileForm.heightError');
     }
-    if (step === 1 && !sex) return 'Escolha uma das opções para continuar.';
-    if (step === 2 && !activityLevel) return 'Escolha a opção mais parecida com a sua rotina.';
-    if (step === 3 && !goal) return 'Escolha o seu objetivo.';
+    if (step === 1 && !sex) return t('profileForm.chooseOne');
+    if (step === 2 && !activityLevel) return t('profileForm.chooseRoutine');
+    if (step === 3 && !goal) return t('profileForm.chooseGoal');
     return null;
   }
 
@@ -88,7 +91,7 @@ export function SteppedProfileForm({
       weeklyPaceKg: goal === 'maintain' || !pace ? null : paceOptionToKg(pace),
     });
     if (parsed.success) onSubmit(parsed.data);
-    else setError('Alguma informação ficou incompleta. Volte e confira os passos.');
+    else setError(t('profileForm.stepsIncomplete'));
   }
 
   // Ao escolher perder/ganhar, a opção mais leve já vem marcada.
@@ -106,7 +109,7 @@ export function SteppedProfileForm({
     <View className="gap-5">
       <View className="gap-2">
         <AppText variant="label" className="text-grafite-suave">
-          Passo {step + 1} de {TOTAL}
+          {t('profileForm.step', { current: step + 1, total: TOTAL })}
         </AppText>
         <View className="h-2 overflow-hidden rounded-full bg-linha" importantForAccessibility="no">
           <View
@@ -115,25 +118,25 @@ export function SteppedProfileForm({
           />
         </View>
         <AppText variant="subtitle" accessibilityRole="header" className="text-grafite">
-          {STEP_TITLES[step]}
+          {stepTitle}
         </AppText>
       </View>
 
       {step === 0 ? (
         <>
           <AuthTextField
-            label="Data de nascimento"
+            label={t('profileForm.birthDate')}
             value={birthDate}
             onChangeText={(text) => setBirthDate(maskBrDate(text))}
-            placeholder="DD/MM/AAAA"
+            placeholder={t('profileForm.birthDatePlaceholder')}
             keyboardType="number-pad"
             maxLength={10}
           />
           <AuthTextField
-            label="Altura (cm)"
+            label={t('profileForm.height')}
             value={heightCm}
             onChangeText={setHeightCm}
-            placeholder="ex.: 165"
+            placeholder={t('profileForm.heightPlaceholder')}
             keyboardType="number-pad"
             maxLength={3}
           />
@@ -142,20 +145,20 @@ export function SteppedProfileForm({
       {step === 1 ? (
         <>
           <SelectChips
-            label="Sexo"
+            label={t('profileForm.sex')}
             options={SEXES}
             optionLabels={SEX_LABELS}
             value={sex}
             onChange={setSex}
           />
           <AppText variant="caption" className="text-grafite-suave">
-            Usado só na fórmula de gasto de energia, que é diferente para cada sexo biológico.
+            {t('profileForm.sexHint')}
           </AppText>
         </>
       ) : null}
       {step === 2 ? (
         <RadioList
-          label="Como é a sua rotina?"
+          label={t('profileForm.routine')}
           options={ACTIVITY_OPTIONS}
           value={activityLevel}
           onChange={setActivityLevel}
@@ -164,7 +167,7 @@ export function SteppedProfileForm({
       {step === 3 ? (
         <>
           <SelectChips
-            label="Objetivo"
+            label={t('profileForm.goal')}
             options={GOALS}
             optionLabels={GOAL_LABELS}
             value={goal}
@@ -176,13 +179,13 @@ export function SteppedProfileForm({
 
       <FormError message={error ?? submitError} />
       <PrimaryButton
-        label={step === TOTAL - 1 ? 'Calcular minha meta' : 'Continuar'}
+        label={step === TOTAL - 1 ? t('profileForm.calculate') : t('profileForm.next')}
         onPress={next}
         isLoading={isSubmitting}
       />
       {step > 0 ? (
         <TextButton
-          label="Voltar"
+          label={t('profileForm.back')}
           onPress={back}
           textVariant="bodyStrong"
           textClassName="text-mamao-forte"

@@ -1,4 +1,5 @@
 import { MealType } from '@/api/generated/models';
+import { translatedLabels } from '@/i18n/labels';
 
 export const MEAL_TYPE_ORDER: MealType[] = [
   MealType.breakfast,
@@ -7,9 +8,9 @@ export const MEAL_TYPE_ORDER: MealType[] = [
   MealType.snack,
 ];
 
-export const MEAL_TYPE_LABELS: Record<MealType, string> = {
-  [MealType.breakfast]: 'Café da manhã',
-  [MealType.lunch]: 'Almoço',
-  [MealType.dinner]: 'Jantar',
-  [MealType.snack]: 'Lanche',
-};
+export const MEAL_TYPE_LABELS: Record<MealType, string> = translatedLabels({
+  [MealType.breakfast]: 'labels.meal.breakfast',
+  [MealType.lunch]: 'labels.meal.lunch',
+  [MealType.dinner]: 'labels.meal.dinner',
+  [MealType.snack]: 'labels.meal.snack',
+});

@@ -1,5 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { translatedLabels } from '@/i18n/labels';
+
 /**
  * Por quanto tempo a cópia do cache fica no aparelho sem a pessoa abrir o app
  * (decisão do dono, 2026-10-07: a pessoa escolhe, no máximo 30 dias).
@@ -11,11 +13,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export const OFFLINE_COPY_DAYS = ['1', '7', '30'] as const;
 export type OfflineCopyDays = (typeof OFFLINE_COPY_DAYS)[number];
 
-export const OFFLINE_COPY_LABELS: Record<OfflineCopyDays, string> = {
-  '1': '1 dia',
-  '7': '7 dias',
-  '30': '30 dias',
-};
+export const OFFLINE_COPY_LABELS: Record<OfflineCopyDays, string> = translatedLabels({
+  '1': 'labels.offlineDays.1',
+  '7': 'labels.offlineDays.7',
+  '30': 'labels.offlineDays.30',
+});
 
 const DEFAULT_DAYS: OfflineCopyDays = '1';
 const DAY_MS = 24 * 60 * 60 * 1000;

@@ -1,8 +1,10 @@
 import { DEFAULT_WEEKLY_PACE_KG, WEEKLY_PACES_KG, type Goal } from '@minhasaude/shared';
+import i18n from 'i18next';
 
 import type { GoalTargetResponseDto } from '@/api/generated/models';
 import type { RadioOption } from '@/components/ui/radio-list';
 import { displayNumber } from '@/features/accessibility/spoken-format';
+import { translatedLabels } from '@/i18n/labels';
 
 /**
  * Ritmo semanal no onboarding e na edição do perfil. O `RadioList` trabalha
@@ -16,21 +18,21 @@ export type PaceOption = `${(typeof WEEKLY_PACES_KG)[number]}`;
 
 export const DEFAULT_PACE_OPTION = String(DEFAULT_WEEKLY_PACE_KG) as PaceOption;
 
-const DESCRIPTIONS: Record<PaceOption, string> = {
-  '0.25': 'Mais leve: mudança pequena na alimentação do dia a dia.',
-  '0.5': 'Intermediário.',
-  '0.75': 'Mais puxado: pede uma mudança maior na alimentação.',
-};
-
-const VERB: Record<Exclude<Goal, 'maintain'>, string> = { lose: 'Perder', gain: 'Ganhar' };
-
-const kgPerWeek = (pace: number): string => `${displayNumber(pace, 2)} kg por semana`;
+const DESCRIPTIONS: Record<PaceOption, string> = translatedLabels({
+  '0.25': 'weeklyPace.light',
+  '0.5': 'weeklyPace.medium',
+  '0.75': 'weeklyPace.strong',
+});
 
 export function paceOptionsFor(goal: Goal): readonly RadioOption<PaceOption>[] {
   if (goal === 'maintain') return [];
   return WEEKLY_PACES_KG.map((pace) => {
     const value = String(pace) as PaceOption;
-    return { value, label: `${VERB[goal]} ${kgPerWeek(pace)}`, description: DESCRIPTIONS[value] };
+    return {
+      value,
+      label: i18n.t(goal === 'lose' ? 'weeklyPace.lose' : 'weeklyPace.gain', { amount: displayNumber(pace, 2) }),
+      description: DESCRIPTIONS[value],
+    };
   });
 }
 
@@ -53,10 +55,9 @@ export function describeWeeklyPace(
 ): string | null {
   const option = paceKgToOption(weeklyPaceKg);
   if (goal === 'maintain' || !option) return null;
-  const base = `Ritmo escolhido: ${VERB[goal].toLowerCase()} ${kgPerWeek(Number(option))}.`;
-  return limitedByBmr
-    ? `${base} Para a meta não ficar abaixo do que o seu corpo gasta em repouso, ela foi ajustada para cima.`
-    : base;
+  const amount = displayNumber(Number(option), 2);
+  const base = i18n.t(goal === 'lose' ? 'weeklyPace.chosenLose' : 'weeklyPace.chosenGain', { amount });
+  return limitedByBmr ? `${base} ${i18n.t('weeklyPace.limited')}` : base;
 }
 
 type GoalTargetPace = Pick<

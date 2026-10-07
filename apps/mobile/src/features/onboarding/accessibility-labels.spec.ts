@@ -12,10 +12,10 @@ describe('describeGoal', () => {
         carbG: '326.5',
       }),
     ).toBe(
-      'Taxa metabólica basal estimada: 1.600 quilocalorias por dia. ' +
-        'Gasto energético total estimado: 2.481 quilocalorias por dia. ' +
-        'Meta diária: 2.481 quilocalorias. ' +
-        'Proteína: 137 gramas. Gordura: 69 gramas. Carboidrato: 327 gramas.',
+      'Gasto do corpo em repouso: 1.600 quilocalorias por dia. ' +
+        'Gasto total do dia, com sua rotina: 2.481 quilocalorias por dia. ' +
+        'Meta do dia: 2.481 quilocalorias. ' +
+        'Proteínas: 137 gramas. Gorduras: 69 gramas. Carboidratos: 327 gramas.',
     );
   });
 });

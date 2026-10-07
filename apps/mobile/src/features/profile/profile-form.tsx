@@ -8,6 +8,7 @@ import {
 } from '@minhasaude/shared';
 import { useState } from 'react';
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import type { UpdateProfileDto } from '@/api/generated/models';
 import { FormError } from '@/components/ui/form-error';
@@ -56,6 +57,7 @@ export function ProfileForm({
   submitError,
   onSubmit,
 }: ProfileFormProps) {
+  const { t } = useTranslation();
   const [birthDate, setBirthDate] = useState(isoToBrDate(initial?.birthDate));
   const [sex, setSex] = useState<Sex | null>(initial?.sex ?? null);
   const [heightCm, setHeightCm] = useState(
@@ -81,7 +83,7 @@ export function ProfileForm({
 
     const isoBirthDate = brDateToIso(birthDate);
     if (!isoBirthDate) {
-      setError('Confira a data de nascimento: use dia, mês e ano, como 20/05/1996.');
+      setError(t('profileForm.birthDateError'));
       return;
     }
 
@@ -94,9 +96,7 @@ export function ProfileForm({
       weeklyPaceKg: goal === 'maintain' || !pace ? null : paceOptionToKg(pace),
     });
     if (!parsed.success) {
-      setError(
-        'Falta alguma informação. Confira a altura (em centímetros, ex.: 165) e se escolheu sexo, atividade e objetivo.',
-      );
+      setError(t('profileForm.incomplete'));
       return;
     }
 
@@ -107,31 +107,31 @@ export function ProfileForm({
     <View className="gap-5">
       <AuthTextField
         testID="profile-birth-date"
-        label="Data de nascimento"
+        label={t('profileForm.birthDate')}
         value={birthDate}
         onChangeText={(text) => setBirthDate(maskBrDate(text))}
-        placeholder="DD/MM/AAAA"
+        placeholder={t('profileForm.birthDatePlaceholder')}
         keyboardType="number-pad"
         maxLength={10}
-        accessibilityHint="Digite dia, mês e ano. As barras entram sozinhas."
+        accessibilityHint={t('profileForm.birthDateHint')}
       />
       <AuthTextField
         testID="profile-height-cm"
-        label="Altura (cm)"
+        label={t('profileForm.height')}
         value={heightCm}
         onChangeText={setHeightCm}
-        placeholder="ex.: 165"
+        placeholder={t('profileForm.heightPlaceholder')}
         keyboardType="number-pad"
         maxLength={3}
       />
-      <SelectChips label="Sexo" options={SEXES} optionLabels={SEX_LABELS} value={sex} onChange={setSex} />
+      <SelectChips label={t('profileForm.sex')} options={SEXES} optionLabels={SEX_LABELS} value={sex} onChange={setSex} />
       <RadioList
-        label="Como é a sua rotina?"
+        label={t('profileForm.routine')}
         options={ACTIVITY_OPTIONS}
         value={activityLevel}
         onChange={setActivityLevel}
       />
-      <SelectChips label="Objetivo" options={GOALS} optionLabels={GOAL_LABELS} value={goal} onChange={chooseGoal} />
+      <SelectChips label={t('profileForm.goal')} options={GOALS} optionLabels={GOAL_LABELS} value={goal} onChange={chooseGoal} />
       <WeeklyPacePicker goal={goal} value={pace} onChange={setPace} />
 
       <FormError message={error ?? submitError} />

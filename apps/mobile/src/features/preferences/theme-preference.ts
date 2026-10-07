@@ -1,14 +1,16 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colorScheme } from 'nativewind';
 
+import { translatedLabels } from '@/i18n/labels';
+
 export const THEME_PREFERENCES = ['system', 'light', 'dark'] as const;
 export type ThemePreference = (typeof THEME_PREFERENCES)[number];
 
-export const THEME_PREFERENCE_LABELS: Record<ThemePreference, string> = {
-  system: 'Igual ao aparelho',
-  light: 'Claro',
-  dark: 'Escuro',
-};
+export const THEME_PREFERENCE_LABELS: Record<ThemePreference, string> = translatedLabels({
+  system: 'labels.theme.system',
+  light: 'labels.theme.light',
+  dark: 'labels.theme.dark',
+});
 
 const STORAGE_KEY = 'gota-vital:theme';
 
