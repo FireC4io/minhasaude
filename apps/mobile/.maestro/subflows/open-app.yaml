@@ -1,0 +1,25 @@
+# Sub-fluxo: abre o app no Expo Go apontando para o Metro local
+# (adb reverse tcp:8081 tcp:8081). Usado pelos outros fluxos.
+appId: host.exp.exponent
+---
+- stopApp
+- openLink: exp://127.0.0.1:8081
+# Depois de apagar os dados do Expo Go, ele mostra um aviso e abre o menu
+# de desenvolvimento por cima do app. Espera o que vier primeiro: o aviso ou
+# o app (a primeira carga do bundle depois de religar o emulador é lenta).
+- extendedWaitUntil:
+    visible: "Continue|Sua alimentação e sua saúde.*|Hoje|Sua meta|Antes de começar|Seu perfil|Seu peso atual"
+    timeout: 120000
+- runFlow:
+    when:
+      visible: "Continue"
+    commands:
+      - tapOn: "Continue"
+- runFlow:
+    when:
+      visible: "Go home"
+    commands:
+      - pressKey: back
+- extendedWaitUntil:
+    visible: "Sua alimentação e sua saúde.*|Hoje|Sua meta|Antes de começar|Seu perfil|Seu peso atual"
+    timeout: 120000

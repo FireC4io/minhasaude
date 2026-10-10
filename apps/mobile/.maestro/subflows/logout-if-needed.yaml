@@ -1,0 +1,16 @@
+# Sub-fluxo: se o app abriu com alguém logado, sai da conta para começar do zero.
+appId: host.exp.exponent
+---
+- runFlow:
+    when:
+      visible: "Perfil"
+    commands:
+      - tapOn: "Perfil"
+      - scrollUntilVisible:
+          element: "Sair da conta"
+      - tapOn: "Sair da conta"
+      # O botão "Criar minha conta" fica abaixo da dobra com fonte grande;
+      # o subtítulo das boas-vindas aparece em qualquer tamanho.
+      - extendedWaitUntil:
+          visible: "Sua alimentação e sua saúde.*"
+          timeout: 20000

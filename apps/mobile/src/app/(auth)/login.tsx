@@ -51,7 +51,7 @@ export default function LoginScreen() {
         <AppText variant="title" accessibilityRole="header" className="text-grafite">
           {t('auth.login.title')}
         </AppText>
-        <AppText className="text-grafite">Entre para continuar seu acompanhamento.</AppText>
+        <AppText className="text-grafite">{t('auth.login.intro')}</AppText>
       </View>
 
       <View className="gap-4">
@@ -94,7 +94,7 @@ export default function LoginScreen() {
       </View>
 
       <View className="flex-row flex-wrap items-center justify-center gap-1">
-        <AppText className="text-grafite">Não tem conta?</AppText>
+        <AppText className="text-grafite">{t('auth.login.noAccount')}</AppText>
         <TextButton
           label={t('auth.createAccount')}
           onPress={() => router.push('/register')}

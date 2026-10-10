@@ -39,6 +39,8 @@ export const en: Translations = {
       fillBoth: 'Fill in your email and password.',
       wrong: 'Wrong email or password. Check and try again. Use “Show password” to see what you typed.',
       failed: "Couldn't sign in. Check your internet and try again.",
+      intro: 'Sign in to keep tracking.',
+      noAccount: "Don't have an account?",
     },
     register: {
       intro: 'Log your meals and follow your health in one place.',
@@ -48,6 +50,7 @@ export const en: Translations = {
       passwordMissing: ' {{count}} to go.',
       exists: 'There is already an account with this email. Tap “Sign in” below.',
       failed: "Couldn't create the account. Check your internet and try again.",
+      hasAccount: 'Already have an account?',
     },
     forgot: {
       preview: "Sending the recovery email doesn't exist on the server yet. No email will be sent.",

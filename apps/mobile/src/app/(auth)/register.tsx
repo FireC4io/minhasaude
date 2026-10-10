@@ -100,7 +100,7 @@ export default function RegisterScreen() {
       </View>
 
       <View className="flex-row flex-wrap items-center justify-center gap-1">
-        <AppText className="text-grafite">Já tem conta?</AppText>
+        <AppText className="text-grafite">{t('auth.register.hasAccount')}</AppText>
         <TextButton
           label={t('auth.signIn')}
           onPress={() => router.push('/login')}

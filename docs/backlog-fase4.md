@@ -128,8 +128,8 @@ Issues **#30** e **#31** acima.
 
 ### F4-02. Testes de fluxo ponta a ponta no emulador (Maestro)
 **Contexto**: os bugs mais sérios até aqui (alvo de 48 dp, gráfico que não desenhava, abas engolindo cliques) passaram por todos os testes unitários. Só aparecem com o app rodando.
-- [ ] Maestro (gratuito, fluxos em YAML) com os fluxos críticos: registrar → onboarding → adicionar alimento → registrar peso → sair
-- [ ] Os mesmos fluxos com fonte em 200% e em modo escuro
+- [x] Maestro (gratuito, fluxos em YAML) com os fluxos críticos: registrar → onboarding → adicionar alimento → registrar peso → sair (2026-10-10, `apps/mobile/.maestro/`, como rodar e armadilhas no README de lá)
+- [x] Os mesmos fluxos com fonte em 200% e em modo escuro (`FONT_SCALE=2.0 DARK=1 .maestro/run.sh`)
 - [ ] Rodar localmente antes de fechar cada issue; CI fica para depois (emulador em CI gasta minutos que o orçamento não cobre)
 
 ---

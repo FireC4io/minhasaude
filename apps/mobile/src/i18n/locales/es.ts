@@ -39,6 +39,8 @@ export const es: Translations = {
       fillBoth: 'Completa el correo y la contraseña.',
       wrong: 'Correo o contraseña incorrectos. Revisa e intenta de nuevo. Usa “Mostrar contraseña” para ver lo que escribiste.',
       failed: 'No se pudo entrar. Revisa tu internet e intenta de nuevo.',
+      intro: 'Entra para seguir con tu seguimiento.',
+      noAccount: '¿No tienes cuenta?',
     },
     register: {
       intro: 'Anota tu alimentación y sigue tu salud en un solo lugar.',
@@ -48,6 +50,7 @@ export const es: Translations = {
       passwordMissing: ' Faltan {{count}}.',
       exists: 'Ya existe una cuenta con este correo. Toca “Entrar” aquí abajo.',
       failed: 'No se pudo crear la cuenta. Revisa tu internet e intenta de nuevo.',
+      hasAccount: '¿Ya tienes cuenta?',
     },
     forgot: {
       preview: 'El envío del correo de recuperación todavía no existe en el servidor. No se enviará ningún correo.',

@@ -1,0 +1,201 @@
+# Fluxo crítico (F4-02): criar conta → onboarding → anotar almoço → anotar peso → sair.
+# Pré-requisitos: ver README.md desta pasta (emulador, API local, Metro, idioma pt-BR).
+appId: host.exp.exponent
+---
+- runFlow: subflows/open-app.yaml
+- evalScript: ${output.email = 'maestro-' + Date.now() + '@local.test'}
+
+# Criar conta
+- scrollUntilVisible:
+    element: "Criar minha conta"
+    centerElement: true
+- tapOn: "Criar minha conta"
+# Rótulo e campo têm o mesmo nome; o campo é o segundo.
+- scrollUntilVisible:
+    element: "E-mail"
+    centerElement: true
+- tapOn:
+    text: "E-mail"
+    index: 1
+- inputText: ${output.email}
+# Rótulo e campo têm o mesmo nome; o campo é o segundo.
+- scrollUntilVisible:
+    element: "Senha"
+    centerElement: true
+- tapOn:
+    text: "Senha"
+    index: 1
+- inputText: "SenhaTeste123!"
+- runFlow: subflows/hide-keyboard.yaml
+# O título da tela também diz "Criar conta"; o botão é o que fica abaixo da regra
+# da senha (com fonte grande o título sai da tela, então "o segundo" não serve).
+# Sem centerElement: centralizar arrasta a partir do meio da tela, que com
+# fonte em 200% é o campo de senha — o toque reabre o teclado e cobre o botão.
+- scrollUntilVisible:
+    element:
+      text: "Criar conta"
+      below: "Use pelo menos.*"
+- tapOn:
+    text: "Criar conta"
+    below: "Use pelo menos.*"
+
+# Onboarding: consentimento
+- extendedWaitUntil:
+    visible: "Antes de começar"
+    timeout: 20000
+- scrollUntilVisible:
+    element: "Aceito, quero continuar"
+- tapOn: "Aceito, quero continuar"
+
+# Onboarding: perfil
+- extendedWaitUntil:
+    visible: "Seu perfil"
+    timeout: 20000
+# Rótulo e campo têm o mesmo nome; o campo é o segundo.
+- scrollUntilVisible:
+    element: "Data de nascimento"
+    centerElement: true
+- tapOn:
+    text: "Data de nascimento"
+    index: 1
+- inputText: "15031992"
+# Rótulo e campo têm o mesmo nome; o campo é o segundo.
+- scrollUntilVisible:
+    element: 'Altura \(cm\)'
+    centerElement: true
+- tapOn:
+    text: 'Altura \(cm\)'
+    index: 1
+- inputText: "172"
+- runFlow: subflows/hide-keyboard.yaml
+- scrollUntilVisible:
+    element: "Continuar"
+    centerElement: true
+- tapOn: "Continuar"
+- extendedWaitUntil:
+    visible: "Passo 2 de 4"
+    timeout: 10000
+- scrollUntilVisible:
+    element: ".*Masculino.*"
+    centerElement: true
+- tapOn: ".*Masculino.*"
+- scrollUntilVisible:
+    element: "Continuar"
+    centerElement: true
+- tapOn: "Continuar"
+- extendedWaitUntil:
+    visible: "Passo 3 de 4"
+    timeout: 10000
+- scrollUntilVisible:
+    element: ".*Moderadamente ativo.*"
+    centerElement: true
+- tapOn: ".*Moderadamente ativo.*"
+- scrollUntilVisible:
+    element: "Continuar"
+- tapOn: "Continuar"
+- extendedWaitUntil:
+    visible: "Passo 4 de 4"
+    timeout: 10000
+- scrollUntilVisible:
+    element: ".*Manter o peso.*"
+    centerElement: true
+- tapOn: ".*Manter o peso.*"
+- scrollUntilVisible:
+    element: "Calcular minha meta"
+- tapOn: "Calcular minha meta"
+
+# Onboarding: peso
+- extendedWaitUntil:
+    visible: "Seu peso atual"
+    timeout: 20000
+# Rótulo e campo têm o mesmo nome; o campo é o segundo.
+- scrollUntilVisible:
+    element: 'Peso \(kg\)'
+    centerElement: true
+- tapOn:
+    text: 'Peso \(kg\)'
+    index: 1
+- inputText: "70,5"
+- runFlow: subflows/hide-keyboard.yaml
+- scrollUntilVisible:
+    element: "Continuar"
+    centerElement: true
+- tapOn: "Continuar"
+
+# Onboarding: meta
+- extendedWaitUntil:
+    visible: "Sua meta"
+    timeout: 20000
+- scrollUntilVisible:
+    element: "Calcular minha meta"
+    centerElement: true
+- tapOn: "Calcular minha meta"
+- scrollUntilVisible:
+    element: "Continuar"
+- tapOn: "Continuar"
+
+# Anotar almoço
+- extendedWaitUntil:
+    visible: "Hoje"
+    timeout: 20000
+- scrollUntilVisible:
+    element: "Adicionar alimento ao Almoço"
+- tapOn: "Adicionar alimento ao Almoço"
+# Rótulo e campo têm o mesmo nome; o campo é o segundo.
+- scrollUntilVisible:
+    element: "Buscar alimento"
+    centerElement: true
+- tapOn:
+    text: "Buscar alimento"
+    index: 1
+- inputText: "arroz"
+- extendedWaitUntil:
+    visible: ".*kcal em 100 g.*"
+    timeout: 20000
+- tapOn:
+    text: ".*kcal em 100 g.*"
+    index: 0
+# Rótulo e campo têm o mesmo nome; o campo é o segundo.
+- scrollUntilVisible:
+    element: 'Quantidade \(g\)'
+    centerElement: true
+- tapOn:
+    text: 'Quantidade \(g\)'
+    index: 1
+- eraseText
+- inputText: "150"
+- runFlow: subflows/hide-keyboard.yaml
+- scrollUntilVisible:
+    element: "Salvar"
+    centerElement: true
+- tapOn: "Salvar"
+- extendedWaitUntil:
+    visible: ".*1 alimento.*"
+    timeout: 20000
+
+# Anotar peso (o formulário fica na própria aba Progresso)
+- tapOn: "Progresso"
+- extendedWaitUntil:
+    visible: 'Peso \(kg\)'
+    timeout: 20000
+# Rótulo e campo têm o mesmo nome; o campo é o segundo.
+- scrollUntilVisible:
+    element: 'Peso \(kg\)'
+    centerElement: true
+- tapOn:
+    text: 'Peso \(kg\)'
+    index: 1
+- inputText: "70,2"
+- runFlow: subflows/hide-keyboard.yaml
+- scrollUntilVisible:
+    element: "Anotar peso"
+    centerElement: true
+- tapOn: "Anotar peso"
+- scrollUntilVisible:
+    element: ".*70,2 kg.*"
+- assertNotVisible: "Digite seu peso.*"
+
+# Sair
+- runFlow: subflows/logout-if-needed.yaml
+- scrollUntilVisible:
+    element: "Criar minha conta"

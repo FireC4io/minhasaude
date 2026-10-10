@@ -45,6 +45,8 @@ export const ptBR = {
       fillBoth: 'Preencha o e-mail e a senha.',
       wrong: 'E-mail ou senha incorretos. Confira e tente de novo. Use “Mostrar senha” para ver o que digitou.',
       failed: 'Não foi possível entrar. Confira sua internet e tente de novo.',
+      intro: 'Entre para continuar seu acompanhamento.',
+      noAccount: 'Não tem conta?',
     },
     register: {
       intro: 'Anote sua alimentação e acompanhe sua saúde num só lugar.',
@@ -54,6 +56,7 @@ export const ptBR = {
       passwordMissing: ' Faltam {{count}}.',
       exists: 'Já existe uma conta com este e-mail. Toque em “Entrar” logo abaixo.',
       failed: 'Não foi possível criar a conta. Confira sua internet e tente de novo.',
+      hasAccount: 'Já tem conta?',
     },
     forgot: {
       preview: 'O envio do e-mail de recuperação ainda não existe no servidor. Nenhum e-mail será enviado.',

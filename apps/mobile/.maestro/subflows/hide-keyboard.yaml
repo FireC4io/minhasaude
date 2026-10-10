@@ -1,0 +1,10 @@
+# Sub-fluxo: fecha o teclado e espera ele sumir de verdade.
+# O `hideKeyboard` volta antes do fim da animação; se o próximo passo for um
+# `scrollUntilVisible`, ele vê o alvo ainda coberto e arrasta a partir do meio
+# da tela. Com fonte em 200% o meio da tela é um campo de texto, o arrasto toca
+# nele e o teclado reabre — o passo seguinte nunca acha o botão.
+appId: host.exp.exponent
+---
+- hideKeyboard
+- waitForAnimationToEnd:
+    timeout: 3000

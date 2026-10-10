@@ -89,8 +89,8 @@ migrations com cuidado, testes antes, e avisar o dono antes de publicar mudança
 </details>
 
 ### 9. Qualidade
-- **Maestro**: fluxos criar conta → onboarding → registrar almoço → registrar peso → sair, também com fonte
-  em 200% e modo escuro.
+- ✅ **Maestro** (2026-10-10): criar conta → onboarding → anotar almoço → anotar peso → sair, passando
+  normal e com fonte 200% + modo escuro. Ver `apps/mobile/.maestro/README.md`.
 - **TalkBack** de ponta a ponta no emulador; corrigir o que falhar.
 - Atualizar o **relatório visual** (artifact) com as telas novas.
 
