@@ -46,7 +46,8 @@ describe('validateEnv', () => {
 });
 
 describe('TLS do banco', () => {
-  const pem = '-----BEGIN CERTIFICATE-----\nABC\n-----END CERTIFICATE-----';
+  // Como o Render guarda: barra invertida + n, numa linha só.
+  const pem = '-----BEGIN CERTIFICATE-----\\nABC\\n-----END CERTIFICATE-----';
 
   it('em desenvolvimento aceita banco local sem TLS', () => {
     expect(validateEnv(base).DATABASE_SSL).toBe('disable');
