@@ -1,0 +1,102 @@
+name: Backup do banco
+
+# Cópia semanal do banco de produção, cifrada antes de sair do runner.
+# O plano gratuito do Supabase não tem backup recuperável (achado 16 em
+# docs/security/avaliacao-2026-10.md). Restaurar: docs/security/backup.md.
+#
+# Regras que não podem ser quebradas (o repositório é público e o banco tem
+# dado de saúde):
+# - a cópia sem cifra nunca sai do runner e nunca vira artefato do GitHub;
+# - o GitHub só tem a chave PÚBLICA do age: nem quem invadir este workflow
+#   consegue abrir os backups. A chave privada fica só com o dono;
+# - conexão com o banco só com TLS conferindo o certificado do Supabase.
+
+on:
+  schedule:
+    # Domingo, 03:41 em Brasília.
+    - cron: "41 6 * * 0"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: backup-banco
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      AGE_RECIPIENT: ${{ vars.BACKUP_AGE_RECIPIENT }}
+      BUCKET: ${{ vars.BACKUP_BUCKET }}
+      WORK: ${{ runner.temp }}/backup
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Conferir configuração
+        env:
+          DATABASE_URL: ${{ secrets.BACKUP_DATABASE_URL }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+        run: |
+          missing=0
+          for name in DATABASE_URL R2_ACCOUNT_ID R2_ACCESS_KEY_ID R2_SECRET_ACCESS_KEY AGE_RECIPIENT BUCKET; do
+            if [ -z "${!name}" ]; then echo "::error::falta configurar $name"; missing=1; fi
+          done
+          case "$AGE_RECIPIENT" in age1*) ;; *) echo "::error::BACKUP_AGE_RECIPIENT não é uma chave pública do age"; missing=1;; esac
+          case "$DATABASE_URL" in *sslmode=*) echo "::error::tire o sslmode da BACKUP_DATABASE_URL: o TLS é configurado aqui"; missing=1;; esac
+          exit $missing
+
+      - name: Instalar age
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq age
+
+      - name: Gerar a cópia (pg_dump 17, TLS conferido)
+        env:
+          DATABASE_URL: ${{ secrets.BACKUP_DATABASE_URL }}
+        run: |
+          set -euo pipefail
+          umask 077
+          mkdir -p "$WORK"
+          # Só o schema public: é onde estão todos os dados do app. Os schemas
+          # internos do Supabase não são nossos (e o dono não tem acesso a todos).
+          docker run --rm --network host \
+            -e DATABASE_URL -e PGSSLMODE=verify-full -e PGSSLROOTCERT=/ca/supabase-root-2021.crt \
+            -v "$PWD/infra:/ca:ro" -v "$WORK:/out" \
+            postgres:17 \
+            sh -c 'pg_dump --format=custom --schema=public --no-owner --no-privileges --file=/out/db.dump "$DATABASE_URL"'
+
+      - name: Conferir que a cópia é restaurável
+        run: |
+          set -euo pipefail
+          docker run --rm -v "$WORK:/out:ro" postgres:17 pg_restore --list /out/db.dump > "$WORK/indice.txt"
+          for table in users profiles consents diary_entries body_measurements goal_targets foods; do
+            grep -q "TABLE DATA public $table " "$WORK/indice.txt" || { echo "::error::cópia sem os dados de $table"; exit 1; }
+          done
+          echo "Itens na cópia: $(wc -l < "$WORK/indice.txt")"
+
+      - name: Cifrar e apagar a cópia aberta
+        run: |
+          set -euo pipefail
+          age --recipient "$AGE_RECIPIENT" --output "$WORK/db.dump.age" "$WORK/db.dump"
+          shred -u "$WORK/db.dump" "$WORK/indice.txt"
+
+      - name: Enviar ao bucket privado (Cloudflare R2)
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          AWS_DEFAULT_REGION: auto
+          # O R2 não aceita os checksums que a AWS CLI recente manda por padrão.
+          AWS_REQUEST_CHECKSUM_CALCULATION: when_required
+          AWS_RESPONSE_CHECKSUM_VALIDATION: when_required
+        run: |
+          set -euo pipefail
+          key="gotavital/$(date -u +%Y-%m-%dT%H%MZ).dump.age"
+          endpoint="https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
+          aws s3 cp "$WORK/db.dump.age" "s3://$BUCKET/$key" --endpoint-url "$endpoint" --only-show-errors
+          aws s3api head-object --bucket "$BUCKET" --key "$key" --endpoint-url "$endpoint" > /dev/null
+          echo "Backup guardado: $key ($(du -h "$WORK/db.dump.age" | cut -f1))"
+          rm -f "$WORK/db.dump.age"
