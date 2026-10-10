@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { AppText } from '@/components/ui/app-text';
 import { PreviewTag } from '@/components/ui/preview-tag';
 import { TextButton } from '@/components/ui/text-button';
+import { spokenMl } from '@/features/accessibility/spoken-format';
 import { useAnnounce } from '@/features/accessibility/use-announce';
 import { usePreviewValue } from '@/features/preview/preview-store';
 
@@ -44,7 +45,7 @@ export function WaterCard({ date, onOpenDetails }: WaterCardProps) {
   function add(ml: number) {
     const next = totalMl + ml;
     setTotalMl(next);
-    setLastAdded(`${t('water.added', { amount: formatMl(ml) })} ${spokenWater(next, goalMl)}`);
+    setLastAdded(`${t('water.added', { amount: spokenMl(ml) })} ${spokenWater(next, goalMl)}`);
   }
 
   return (
@@ -76,7 +77,7 @@ export function WaterCard({ date, onOpenDetails }: WaterCardProps) {
           <TextButton
             key={ml}
             label={`+ ${formatMl(ml)}`}
-            accessibilityLabel={t('water.addSpoken', { amount: formatMl(ml) })}
+            accessibilityLabel={t('water.addSpoken', { amount: spokenMl(ml) })}
             onPress={() => add(ml)}
             textVariant="bodyStrong"
             textClassName="text-mamao-forte"

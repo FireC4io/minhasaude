@@ -57,9 +57,10 @@ export function MacrosCard({ consumed, target }: MacrosCardProps) {
         const label = t(labelKey);
         const targetG = target ? target[key] : null;
         const value = macroValue(mode, consumed[key], targetG);
+        const spokenValue = macroValue(mode, consumed[key], targetG, 'spoken');
         const fraction = progressFraction(consumed[key], targetG);
         return (
-          <View key={key} accessible accessibilityLabel={`${label}: ${value}`} className="gap-1">
+          <View key={key} accessible accessibilityLabel={`${label}: ${spokenValue}`} className="gap-1">
             <View className="flex-row flex-wrap items-baseline justify-between gap-x-3">
               <AppText className="text-grafite">{label}</AppText>
               <AppText variant="number" className="text-grafite">

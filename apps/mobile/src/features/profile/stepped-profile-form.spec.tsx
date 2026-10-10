@@ -26,7 +26,7 @@ describe('SteppedProfileForm', () => {
     await render(<SteppedProfileForm isSubmitting={false} onSubmit={onSubmit} />);
 
     await userEvent.type(screen.getByLabelText('Data de nascimento'), '20051996');
-    await userEvent.type(screen.getByLabelText('Altura (cm)'), '165');
+    await userEvent.type(screen.getByLabelText('Altura, em centímetros'), '165');
     await userEvent.press(screen.getByRole('button', { name: 'Continuar' }));
 
     await userEvent.press(screen.getByRole('radio', { name: 'Feminino' }));
@@ -52,7 +52,7 @@ describe('SteppedProfileForm', () => {
 
   async function goToLastStep(): Promise<void> {
     await userEvent.type(screen.getByLabelText('Data de nascimento'), '20051996');
-    await userEvent.type(screen.getByLabelText('Altura (cm)'), '165');
+    await userEvent.type(screen.getByLabelText('Altura, em centímetros'), '165');
     await userEvent.press(screen.getByRole('button', { name: 'Continuar' }));
     await userEvent.press(screen.getByRole('radio', { name: 'Feminino' }));
     await userEvent.press(screen.getByRole('button', { name: 'Continuar' }));
@@ -90,7 +90,7 @@ describe('SteppedProfileForm', () => {
   it('volta ao passo anterior sem perder o que foi preenchido', async () => {
     await render(<SteppedProfileForm isSubmitting={false} onSubmit={jest.fn()} />);
     await userEvent.type(screen.getByLabelText('Data de nascimento'), '20051996');
-    await userEvent.type(screen.getByLabelText('Altura (cm)'), '165');
+    await userEvent.type(screen.getByLabelText('Altura, em centímetros'), '165');
     await userEvent.press(screen.getByRole('button', { name: 'Continuar' }));
 
     await userEvent.press(screen.getByRole('button', { name: 'Voltar' }));

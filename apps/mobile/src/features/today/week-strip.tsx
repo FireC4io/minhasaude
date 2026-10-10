@@ -48,7 +48,7 @@ export function WeekStrip({ selectedDate, daysWithEntries, onSelect }: WeekStrip
             accessibilityRole="tab"
             accessibilityLabel={spoken}
             accessibilityState={{ selected }}
-            style={{ minHeight: MIN_TOUCH_TARGET + 16, minWidth: 40 }}
+            style={{ minHeight: MIN_TOUCH_TARGET + 16, minWidth: MIN_TOUCH_TARGET }}
             className={`items-center justify-center gap-0.5 rounded-2xl px-1 active:opacity-70 ${frame}`}>
             <AppText variant="caption" className={selected ? 'text-areia' : 'text-grafite-suave'}>
               {initials[index]}

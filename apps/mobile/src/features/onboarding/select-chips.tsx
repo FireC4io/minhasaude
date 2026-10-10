@@ -24,12 +24,12 @@ export function SelectChips<TValue extends string>({
     <View className="gap-2">
       <AppText variant="label" className="text-grafite">{label}</AppText>
 
-      {/* `radiogroup` sem `accessible`: o grupo dá o contexto, mas cada chip
-          continua sendo focável individualmente pelo leitor de tela. */}
+      {/* `radiogroup` sem `accessible`: cada chip continua focável um a um.
+          Sem `accessibilityLabel`: no Android o grupo rotulado vira uma parada
+          própria e o TalkBack lia o rótulo duas vezes (o texto acima basta). */}
       <View
         testID="select-chips-group"
         accessibilityRole="radiogroup"
-        accessibilityLabel={label}
         className="flex-row flex-wrap gap-2">
         {options.map((option) => {
           const selected = option === value;

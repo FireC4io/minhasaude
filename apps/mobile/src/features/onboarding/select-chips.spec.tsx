@@ -31,7 +31,10 @@ describe('SelectChips', () => {
     const grupo = screen.getByTestId('select-chips-group');
 
     expect(grupo).toHaveProp('accessibilityRole', 'radiogroup');
-    expect(grupo).toHaveProp('accessibilityLabel', 'Sexo');
+    // Sem rótulo no grupo: o texto visível acima já é lido, e o grupo rotulado
+    // virava uma segunda parada com o mesmo nome no TalkBack.
+    expect(grupo).not.toHaveProp('accessibilityLabel');
+    expect(screen.getByText('Sexo')).toBeTruthy();
   });
 
   it('cada opção é anunciada como botão de rádio', async () => {

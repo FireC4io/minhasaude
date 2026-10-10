@@ -1,4 +1,12 @@
-import { spokenDate, spokenGrams, spokenKcal, spokenKg, displayNumber } from './spoken-format';
+import {
+  displayNumber,
+  spokenDate,
+  spokenFieldLabel,
+  spokenGrams,
+  spokenKcal,
+  spokenKg,
+  spokenMl,
+} from './spoken-format';
 
 describe('spoken-format', () => {
   it('lê quilocalorias arredondadas, com plural correto', () => {
@@ -37,5 +45,28 @@ describe('displayNumber', () => {
     expect(displayNumber(2.5)).toBe('2,5');
     expect(displayNumber(28.14)).toBe('28,1');
     expect(displayNumber(1200)).toBe('1.200');
+  });
+});
+
+describe('spokenMl', () => {
+  it('mililitros até 999, litros a partir de 1.000, com plural', () => {
+    expect(spokenMl(250)).toBe('250 mililitros');
+    expect(spokenMl(1000)).toBe('1 litro');
+    expect(spokenMl(1750)).toBe('1,75 litro');
+    expect(spokenMl(2000)).toBe('2 litros');
+  });
+});
+
+describe('spokenFieldLabel', () => {
+  it('troca a sigla entre parênteses pela unidade por extenso', () => {
+    expect(spokenFieldLabel('Altura (cm)')).toBe('Altura, em centímetros');
+    expect(spokenFieldLabel('Peso (kg)')).toBe('Peso, em quilos');
+    expect(spokenFieldLabel('Quantidade (g)')).toBe('Quantidade, em gramas');
+    expect(spokenFieldLabel('Outra quantidade (ml)')).toBe('Outra quantidade, em mililitros');
+  });
+
+  it('deixa como está o rótulo sem unidade', () => {
+    expect(spokenFieldLabel('E-mail')).toBe('E-mail');
+    expect(spokenFieldLabel('Glicose (mg/dL)')).toBe('Glicose (mg/dL)');
   });
 });

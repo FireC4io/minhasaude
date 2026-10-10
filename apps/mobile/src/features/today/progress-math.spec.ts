@@ -53,3 +53,19 @@ describe('macroValue', () => {
     expect(macroValue('remaining', 40, null)).toBe('40 g');
   });
 });
+
+// O leitor de tela soletra "kcal" e lê "g" como letra: o rótulo falado usa a
+// unidade por extenso, e a tela continua com a sigla (testes acima).
+describe('unidade falada', () => {
+  it('calorias por extenso, com plural', () => {
+    expect(caloriesStatus(1200.4, 2086, 'spoken')).toBe('Faltam 886 quilocalorias');
+    expect(caloriesStatus(2087, 2086, 'spoken')).toBe('1 quilocaloria acima da meta');
+  });
+
+  it('gramas por extenso em todos os modos', () => {
+    expect(macroValue('remaining', 40, 100, 'spoken')).toBe('60 gramas faltando');
+    expect(macroValue('remaining', 120, 100, 'spoken')).toBe('20 gramas acima');
+    expect(macroValue('consumed', 40.6, 100, 'spoken')).toBe('41 de 100 gramas');
+    expect(macroValue('remaining', 1, null, 'spoken')).toBe('1 grama');
+  });
+});

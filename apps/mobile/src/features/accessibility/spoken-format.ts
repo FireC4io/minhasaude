@@ -10,7 +10,7 @@ import { formatDate, formatNumber, isSingularUnit } from '@/i18n/format';
  * estas funções para dizer a unidade por extenso, no idioma em uso.
  */
 
-type Unit = 'kcal' | 'gram' | 'kilo';
+type Unit = 'kcal' | 'gram' | 'kilo' | 'milliliter' | 'liter';
 
 function withUnit(value: number, formatted: string, unit: Unit): string {
   const word = i18n.t(`units.${unit}.${isSingularUnit(value) ? 'one' : 'other'}`);
@@ -34,6 +34,29 @@ export function spokenGrams(value: number): string {
 export function spokenKg(value: number): string {
   const rounded = Math.round(value * 10) / 10;
   return withUnit(rounded, formatNumber(rounded, 1), 'kilo');
+}
+
+/** "250 mililitros", "1,5 litro" — a tela mostra "250 ml" e "1,5 L". */
+export function spokenMl(ml: number): string {
+  if (ml >= 1000) {
+    const liters = ml / 1000;
+    return withUnit(liters, formatNumber(liters, 2), 'liter');
+  }
+  const rounded = Math.round(ml);
+  return withUnit(rounded, formatNumber(rounded, 0), 'milliliter');
+}
+
+const FIELD_UNIT = /\s*\((g|cm|kg|ml)\)\s*$/;
+
+/**
+ * Rótulo de campo para o leitor de tela: "Altura (cm)" vira "Altura, em
+ * centímetros" — a sigla entre parênteses seria lida como "c m".
+ */
+export function spokenFieldLabel(label: string): string {
+  const match = FIELD_UNIT.exec(label);
+  if (!match) return label;
+  const unit = match[1] as 'g' | 'cm' | 'kg' | 'ml';
+  return `${label.slice(0, match.index)}, ${i18n.t(`units.field.${unit}`)}`;
 }
 
 export function spokenDate(isoDateTime: string): string {

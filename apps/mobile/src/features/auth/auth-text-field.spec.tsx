@@ -10,7 +10,18 @@ describe('AuthTextField', () => {
     // anunciaria só "campo de texto".
     await render(<AuthTextField label="Peso (kg)" value="" onChangeText={jest.fn()} />);
 
-    expect(screen.getByLabelText('Peso (kg)')).toBeTruthy();
+    // A sigla entre parênteses vira unidade por extenso ("k g" soa mal).
+    expect(screen.getByLabelText('Peso, em quilos')).toBeTruthy();
+  });
+
+  it('esconde do leitor de tela o rótulo visível, para não ser lido duas vezes', async () => {
+    await render(<AuthTextField label="E-mail" value="" onChangeText={jest.fn()} />);
+
+    // Fora da árvore acessível (as consultas padrão do RTL nem o encontram)...
+    expect(screen.queryByText('E-mail')).toBeNull();
+    // ...mas continua na tela, e o campo segue anunciado pelo nome.
+    expect(screen.getByText('E-mail', { includeHiddenElements: true })).toBeTruthy();
+    expect(screen.getByLabelText('E-mail')).toBeTruthy();
   });
 
   it('anuncia o erro como alerta, não só pinta de vermelho', async () => {

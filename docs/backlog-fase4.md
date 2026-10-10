@@ -310,7 +310,14 @@ Issues **#30** e **#31** acima.
 
 ### 34. Validação com leitor de tela e com pessoas
 **Contexto**: o TalkBack agora roda no emulador. O VoiceOver exige um iPhone físico ou um Mac (o ambiente de desenvolvimento é Windows); sem aparelho, fica registrado como pendência explícita.
-- [ ] Passar o app inteiro no **TalkBack** (emulador), anotando o que falhar — incluindo a ordem de foco que a #31 só conferiu lendo o código
+- [x] **Auditoria pela árvore de acessibilidade** no emulador (2026-10-10): o TalkBack liga no emulador, mas ignora gestos e teclas injetados pelo `adb` (inclusive pelo console do emulador), então não dá para dirigi-lo daqui. Em vez disso, lida a árvore (`uiautomator dump --compressed`) de cada tela — boas-vindas, cadastro, consentimento, os 4 passos do perfil, peso, meta, Hoje, adicionar alimento, Progresso, Exames (prévia), exame e Perfil — conferindo ordem de leitura, rótulos, papéis e tamanho de alvo. Corrigido:
+  - campos de texto com 44 dp → `MIN_TOUCH_TARGET` (48 dp) no `AuthTextField`, que todas as telas usam;
+  - rótulo do campo lido duas vezes ("E-mail" e "E-mail, caixa de edição") → o texto visível saiu da árvore acessível;
+  - grupo de chips (`SelectChips`) lido duas vezes ("Objetivo", "Objetivo", "Mostrar", "Mostrar") → o grupo perdeu o `accessibilityLabel`;
+  - dias da semana com 40 dp de largura → 48 dp;
+  - siglas no rótulo falado ("kcal", "g", "ml", "out.") → por extenso nos cartões de calorias, nutrientes, média da semana e água; e "Altura (cm)" vira "Altura, em centímetros" no campo (`spokenFieldLabel`).
+- [ ] **Ouvir o TalkBack de verdade** — decisão do usuário (2026-10-10): feito por ele no próprio celular, quando o app estiver na Play Store (Fase 6). Conferir ali o que a árvore não mostra: o que o TalkBack fala num campo preenchido com rótulo (valor + nome?), papéis de aba, e os anúncios (`liveRegion`).
+- [ ] Pendências achadas na auditoria, não corrigidas: unidades de laboratório no exame ("mg/dL", "µU/mL" seriam soletradas — resolver junto com a Fase 5, quando o exame sair da prévia); o "•" no início dos itens do consentimento e o "·" em "Laboratório Exemplo · Conferido" podem ser lidos como "marcador"/"ponto".
 - [ ] **VoiceOver** num iPhone, se houver um disponível; se não, registrar como não validado
 - [ ] Modal: prender o foco dentro dele e esconder a tela de trás do leitor (achado #11)
 - [ ] Teste de usabilidade guiado com 3 a 5 pessoas de perfis diferentes (ex.: pessoa idosa, pessoa com baixa visão, pessoa que nunca usou app de dieta), com tarefas fixas: criar conta, registrar o almoço, registrar o peso

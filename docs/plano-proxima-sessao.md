@@ -91,7 +91,7 @@ migrations com cuidado, testes antes, e avisar o dono antes de publicar mudança
 ### 9. Qualidade
 - ✅ **Maestro** (2026-10-10): criar conta → onboarding → anotar almoço → anotar peso → sair, passando
   normal e com fonte 200% + modo escuro. Ver `apps/mobile/.maestro/README.md`.
-- **TalkBack** de ponta a ponta no emulador; corrigir o que falhar.
+- ✅ **Acessibilidade pela árvore** (2026-10-10), em vez do TalkBack, que não aceita gestos injetados no emulador. Achados corrigidos e pendências na issue #34 de `docs/backlog-fase4.md`. **TalkBack de verdade: o usuário testa no próprio celular, quando o app estiver na Play Store.**
 - Atualizar o **relatório visual** (artifact) com as telas novas.
 
 ### Depois (Fase 5 de verdade)

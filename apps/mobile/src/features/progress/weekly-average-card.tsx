@@ -9,17 +9,21 @@ import { LoadingIndicator } from '@/components/ui/loading-indicator';
 import { TextButton } from '@/components/ui/text-button';
 import { addDaysToIsoDate, localDateFromIso, todayIsoDate, weekOf } from '@/features/diary/date-utils';
 
-import { weeklyAverage } from './weekly-summary';
+import { spokenGrams, spokenKcal } from '@/features/accessibility/spoken-format';
 import { appLocale } from '@/i18n/format';
 
-const shortDay = (date: string): string =>
-  localDateFromIso(date).toLocaleDateString(appLocale(), { day: 'numeric', month: 'short' });
+import { weeklyAverage } from './weekly-summary';
 
+const dayLabel = (date: string, month: 'short' | 'long'): string =>
+  localDateFromIso(date).toLocaleDateString(appLocale(), { day: 'numeric', month });
+
+// Na tela, a sigla; no rótulo falado, a unidade por extenso (o leitor de tela
+// soletra "kcal" e lê "g" como letra).
 const ROWS = [
-  { key: 'kcal', labelKey: 'today.calories', unit: 'kcal' },
-  { key: 'proteinG', labelKey: 'today.protein', unit: 'g' },
-  { key: 'fatG', labelKey: 'today.fat', unit: 'g' },
-  { key: 'carbG', labelKey: 'today.carbs', unit: 'g' },
+  { key: 'kcal', labelKey: 'today.calories', unit: 'kcal', spoken: spokenKcal },
+  { key: 'proteinG', labelKey: 'today.protein', unit: 'g', spoken: spokenGrams },
+  { key: 'fatG', labelKey: 'today.fat', unit: 'g', spoken: spokenGrams },
+  { key: 'carbG', labelKey: 'today.carbs', unit: 'g', spoken: spokenGrams },
 ] as const;
 
 /** Médias da semana, navegando entre semanas (F4-33). */
@@ -36,7 +40,9 @@ export function WeeklyAverageCard() {
   });
   const isLoading = results.some((result) => result.isPending);
   const summary = weeklyAverage(results.map((result) => result.data));
-  const range = t('progress.weekRange', { from: shortDay(firstDay), to: shortDay(lastDay) });
+  const range = t('progress.weekRange', { from: dayLabel(firstDay, 'short'), to: dayLabel(lastDay, 'short') });
+  // "out." seria lido como "out ponto": por extenso para o leitor de tela.
+  const spokenRange = t('progress.weekRange', { from: dayLabel(firstDay, 'long'), to: dayLabel(lastDay, 'long') });
 
   return (
     <View className="gap-3 rounded-2xl bg-superficie p-4">
@@ -53,7 +59,11 @@ export function WeeklyAverageCard() {
           textClassName="text-grafite"
           className="items-center"
         />
-        <AppText variant="bodyStrong" accessibilityLiveRegion="polite" className="text-grafite">
+        <AppText
+          variant="bodyStrong"
+          accessibilityLabel={spokenRange}
+          accessibilityLiveRegion="polite"
+          className="text-grafite">
           {range}
         </AppText>
         <TextButton
@@ -76,16 +86,19 @@ export function WeeklyAverageCard() {
           <AppText variant="caption" className="text-grafite-suave">
             {t('progress.basedOn', { count: summary.daysLogged })}
           </AppText>
-          {ROWS.map(({ key, labelKey, unit }) => {
+          {ROWS.map(({ key, labelKey, unit, spoken }) => {
             const label = t(labelKey);
             const value = Math.round(summary.average?.[key] ?? 0);
             const target = summary.target ? Math.round(summary.target[key]) : null;
             const text = target ? t('progress.valueOf', { value, target, unit }) : `${value} ${unit}`;
+            const spokenText = target
+              ? t('progress.valueOfSpoken', { value, target: spoken(target) })
+              : spoken(value);
             return (
               <View
                 key={key}
                 accessible
-                accessibilityLabel={t('progress.averageSpoken', { label, text })}
+                accessibilityLabel={t('progress.averageSpoken', { label, text: spokenText })}
                 className="flex-row flex-wrap items-baseline justify-between gap-x-3">
                 <AppText className="text-grafite">{label}</AppText>
                 <AppText variant="number" className="text-grafite">

@@ -59,13 +59,11 @@ appId: host.exp.exponent
     text: "Data de nascimento"
     index: 1
 - inputText: "15031992"
-# Rótulo e campo têm o mesmo nome; o campo é o segundo.
+# O campo se anuncia com a unidade por extenso (ver spokenFieldLabel).
 - scrollUntilVisible:
     element: 'Altura \(cm\)'
     centerElement: true
-- tapOn:
-    text: 'Altura \(cm\)'
-    index: 1
+- tapOn: "Altura, em centímetros"
 - inputText: "172"
 - runFlow: subflows/hide-keyboard.yaml
 - scrollUntilVisible:
@@ -108,13 +106,11 @@ appId: host.exp.exponent
 - extendedWaitUntil:
     visible: "Seu peso atual"
     timeout: 20000
-# Rótulo e campo têm o mesmo nome; o campo é o segundo.
+# O campo se anuncia com a unidade por extenso (ver spokenFieldLabel).
 - scrollUntilVisible:
     element: 'Peso \(kg\)'
     centerElement: true
-- tapOn:
-    text: 'Peso \(kg\)'
-    index: 1
+- tapOn: "Peso, em quilos"
 - inputText: "70,5"
 - runFlow: subflows/hide-keyboard.yaml
 - scrollUntilVisible:
@@ -155,13 +151,11 @@ appId: host.exp.exponent
 - tapOn:
     text: ".*kcal em 100 g.*"
     index: 0
-# Rótulo e campo têm o mesmo nome; o campo é o segundo.
+# O campo se anuncia com a unidade por extenso (ver spokenFieldLabel).
 - scrollUntilVisible:
     element: 'Quantidade \(g\)'
     centerElement: true
-- tapOn:
-    text: 'Quantidade \(g\)'
-    index: 1
+- tapOn: "Quantidade, em gramas"
 - eraseText
 - inputText: "150"
 - runFlow: subflows/hide-keyboard.yaml
@@ -178,13 +172,11 @@ appId: host.exp.exponent
 - extendedWaitUntil:
     visible: 'Peso \(kg\)'
     timeout: 20000
-# Rótulo e campo têm o mesmo nome; o campo é o segundo.
+# O campo se anuncia com a unidade por extenso (ver spokenFieldLabel).
 - scrollUntilVisible:
     element: 'Peso \(kg\)'
     centerElement: true
-- tapOn:
-    text: 'Peso \(kg\)'
-    index: 1
+- tapOn: "Peso, em quilos"
 - inputText: "70,2"
 - runFlow: subflows/hide-keyboard.yaml
 - scrollUntilVisible:

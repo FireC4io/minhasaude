@@ -24,12 +24,13 @@ export function CaloriesCard({ consumedKcal, targetKcal }: CaloriesCardProps) {
   const fraction = progressFraction(consumedKcal, targetKcal);
   const consumed = Math.round(consumedKcal);
   const status = caloriesStatus(consumedKcal, targetKcal);
+  const spokenStatus = caloriesStatus(consumedKcal, targetKcal, 'spoken');
   const spokenTarget = targetKcal ? t('today.caloriesSpokenTarget', { target: Math.round(targetKcal) }) : '';
 
   return (
     <View
       accessible
-      accessibilityLabel={t('today.caloriesSpoken', { consumed, target: spokenTarget, status })}
+      accessibilityLabel={t('today.caloriesSpoken', { consumed, target: spokenTarget, status: spokenStatus })}
       className="flex-row items-center gap-4 rounded-2xl bg-superficie p-4">
       <Svg width={SIZE} height={SIZE} accessibilityElementsHidden importantForAccessibility="no">
         <Circle
