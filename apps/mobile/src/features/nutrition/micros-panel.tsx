@@ -47,7 +47,10 @@ export function MicrosPanel({ title, rows, initiallyOpen = false }: MicrosPanelP
               <View key={key} accessible accessibilityLabel={spoken} className="gap-0.5">
                 <View className="flex-row justify-between gap-4">
                   <AppText className="text-grafite">{t(`micros.names.${key}`)}</AppText>
-                  <AppText variant="bodyStrong" className="text-grafite">
+                  {/* flex-1 + text-right: com largura justa ao conteúdo, o Android mede o
+                      seminegrito mais estreito do que desenha e esconde a unidade ("1,6 g"
+                      aparecia como "1,6"). */}
+                  <AppText variant="bodyStrong" className="flex-1 text-right text-grafite">
                     {formatMicro(key, row.amount)}
                   </AppText>
                 </View>
