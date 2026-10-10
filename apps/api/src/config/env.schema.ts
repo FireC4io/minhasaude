@@ -15,6 +15,16 @@ export const envSchema = z.object({
         .filter(Boolean),
     ),
   DATABASE_URL: z.string().min(1, 'DATABASE_URL é obrigatória'),
+  // TLS entre a API e o banco. Em produção a conexão atravessa a internet
+  // (Render → Supabase): sem TLS, senha do banco e dado de saúde vão abertos.
+  // Não pôr `sslmode` na DATABASE_URL: ele passaria por cima desta escolha.
+  DATABASE_SSL: z.enum(['disable', 'require', 'verify-full']).default('disable'),
+  // Certificado da autoridade do Supabase (Settings → Database → SSL). O Render
+  // guarda a variável numa linha só, então "\n" literal vira quebra de linha.
+  DATABASE_SSL_CA: z
+    .string()
+    .optional()
+    .transform((value) => value?.replace(/\\n/g, '\n')),
   JWT_ACCESS_SECRET: z
     .string()
     .min(32, 'JWT_ACCESS_SECRET deve ter pelo menos 32 caracteres'),
@@ -29,10 +39,27 @@ export const envSchema = z.object({
   BETTERSTACK_SOURCE_TOKEN: z.string().optional(),
 });
 
+const checkedEnvSchema = envSchema.superRefine((env, ctx) => {
+  if (env.NODE_ENV === 'production' && env.DATABASE_SSL === 'disable') {
+    ctx.addIssue({
+      code: 'custom',
+      path: ['DATABASE_SSL'],
+      message: 'em produção a conexão com o banco precisa de TLS (use verify-full)',
+    });
+  }
+  if (env.DATABASE_SSL === 'verify-full' && !env.DATABASE_SSL_CA) {
+    ctx.addIssue({
+      code: 'custom',
+      path: ['DATABASE_SSL_CA'],
+      message: 'verify-full precisa do certificado da autoridade do banco',
+    });
+  }
+});
+
 export type Env = z.infer<typeof envSchema>;
 
 export function validateEnv(config: Record<string, unknown>): Env {
-  const parsed = envSchema.safeParse(config);
+  const parsed = checkedEnvSchema.safeParse(config);
   if (!parsed.success) {
     const issues = parsed.error.issues
       .map((issue) => `  - ${issue.path.join('.')}: ${issue.message}`)

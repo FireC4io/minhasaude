@@ -12,6 +12,7 @@ import {
   FoodPortion,
   DiaryEntry,
 } from './entities';
+import { databaseSsl } from './database-ssl';
 
 // Fonte de dados usada pela CLI do TypeORM (migration:generate/run/revert).
 // A NestJS app em si usa DatabaseModule (TypeOrmModule.forRootAsync), que lê
@@ -19,6 +20,10 @@ import {
 const AppDataSource = new DataSource({
   type: 'postgres',
   url: process.env.DATABASE_URL,
+  ssl: databaseSsl(
+    (process.env.DATABASE_SSL as 'disable' | 'require' | 'verify-full' | undefined) ?? 'disable',
+    process.env.DATABASE_SSL_CA?.replace(/\\n/g, '\n'),
+  ),
   entities: [
     User,
     RefreshToken,

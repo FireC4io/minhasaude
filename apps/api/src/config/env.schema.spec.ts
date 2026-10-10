@@ -44,3 +44,25 @@ describe('validateEnv', () => {
     );
   });
 });
+
+describe('TLS do banco', () => {
+  const pem = '-----BEGIN CERTIFICATE-----\nABC\n-----END CERTIFICATE-----';
+
+  it('em desenvolvimento aceita banco local sem TLS', () => {
+    expect(validateEnv(base).DATABASE_SSL).toBe('disable');
+  });
+
+  it('em produção recusa subir sem TLS', () => {
+    expect(() => validateEnv({ ...base, NODE_ENV: 'production' })).toThrow(/DATABASE_SSL/);
+    expect(() => validateEnv({ ...base, NODE_ENV: 'production', DATABASE_SSL: 'disable' })).toThrow(
+      /DATABASE_SSL/,
+    );
+  });
+
+  it('verify-full exige o certificado da autoridade', () => {
+    expect(() => validateEnv({ ...base, DATABASE_SSL: 'verify-full' })).toThrow(/DATABASE_SSL_CA/);
+    const env = validateEnv({ ...base, NODE_ENV: 'production', DATABASE_SSL: 'verify-full', DATABASE_SSL_CA: pem });
+    // O Render guarda a variável numa linha só: "\n" literal vira quebra de linha.
+    expect(env.DATABASE_SSL_CA).toBe('-----BEGIN CERTIFICATE-----\nABC\n-----END CERTIFICATE-----');
+  });
+});

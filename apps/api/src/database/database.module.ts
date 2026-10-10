@@ -15,6 +15,7 @@ import {
   DiaryEntry,
 } from './entities';
 import type { Env } from '../config/env.schema';
+import { databaseSsl } from './database-ssl';
 
 @Module({
   imports: [
@@ -24,6 +25,10 @@ import type { Env } from '../config/env.schema';
       useFactory: (config: ConfigService<Env, true>) => ({
         type: 'postgres' as const,
         url: config.get('DATABASE_URL', { infer: true }),
+        ssl: databaseSsl(
+          config.get('DATABASE_SSL', { infer: true }),
+          config.get('DATABASE_SSL_CA', { infer: true }),
+        ),
         entities: [
           User,
           RefreshToken,

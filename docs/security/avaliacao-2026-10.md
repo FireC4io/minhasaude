@@ -22,6 +22,11 @@ CI com análise de código e busca de segredos; build de produção analisado; p
 | 9 | Média | LGPD: diário e metas aceitavam gravar e calcular dado de saúde sem consentimento (o app sempre pede antes, mas a API não exigia) | Corrigido: criar/alterar/calcular exige consentimento; ler, exportar e apagar o próprio dado continuam livres (direito do titular, e o app usa o 404 da meta para levar ao onboarding) | `test/security-access.e2e-spec.ts` (LGPD) |
 | 10 | Baixa | Algoritmo do JWT não fixado (o `alg: none` já era recusado pela biblioteca) | Corrigido: HS256 fixo ao assinar e ao verificar | `test/security-access.e2e-spec.ts` (token forjado) |
 | 11 | Baixa | O log de cada requisição grava a query string, então o termo buscado (nome de alimento) vai para o BetterStack | **Aberto**, baixo: não é identificador nem dado de exame. Rever quando os exames saírem da prévia | `api.log` |
+| 12 | Alta | A conexão API → banco não configurava TLS em lugar nenhum: só seria cifrada se a `DATABASE_URL` do Render tivesse `sslmode`. Atravessa a internet (Render → Supabase em São Paulo) com senha do banco e dado de saúde | Corrigido no código (`DATABASE_SSL`, e a API se recusa a subir em produção sem TLS); **falta configurar o Render antes do deploy** | `src/config/env.schema.spec.ts`, `src/database/database-ssl.spec.ts` |
+| 13 | Média | Os papéis da API REST automática do Supabase (`anon`, `authenticated`) tinham permissão em todas as tabelas, inclusive `users` e `diary_entries`; só o RLS os barrava, e tabela nova nascia aberta | Corrigido: migration `RevokePublicApiGrants` tira as permissões, inclusive das tabelas futuras | Migration testada no Postgres local com os papéis simulados: antes `anon` lia `users`, depois não; tabela criada depois já nasce fechada |
+| 14 | Baixa | `immutable_unaccent` sem `search_path` fixo (aviso do advisor) | Corrigido na mesma migration | idem |
+| 15 | Baixa | `pg_trgm` e `unaccent` no schema public (aviso do advisor) | **Risco aceito**: mover quebraria os operadores da busca, e nenhum papel não confiável cria objetos no banco | advisor do Supabase |
+| 16 | Média | O plano gratuito do Supabase não tem backup recuperável | **Aberto — decisão do dono**: backup cifrado semanal para um bucket privado, ou aceitar o risco durante o teste fechado | — |
 
 ## Verificado sem achado
 
@@ -31,6 +36,7 @@ CI com análise de código e busca de segredos; build de produção analisado; p
 - **Análise de código**: CodeQL (`security-extended`) passa a rodar a cada push e toda segunda-feira.
 - **Controle de acesso** (`test/security-access.e2e-spec.ts`, 31 testes): as 19 rotas fechadas recusam quem não está logado; token sem assinatura ou com assinatura falsa é recusado; ninguém altera nem apaga alimento da TACO; ninguém anota nem vê o alimento cadastrado por outra pessoa; `userId`, `ownerUserId` e `source` no corpo são recusados; a exportação de uma pessoa não contém nada de outra. O acesso direto de B ao registro de A já estava em `foods`/`diary.e2e-spec`.
 - **Logs**: requisição autenticada real — token de acesso, token de renovação e senha não aparecem nenhuma vez no log; o cabeçalho sai como `[REDACTED]`.
+- **Banco**: RLS ligado nas 12 tabelas (advisor do Supabase); a API usa só conexão direta, nunca a API REST do Supabase.
 - **App real**: fluxo do Maestro (criar conta → onboarding → anotar → peso → sair) passa com as regras novas.
 
 ## Pendente de verificação
@@ -38,11 +44,14 @@ CI com análise de código e busca de segredos; build de produção analisado; p
 - Sessão: token de renovação reusado derruba a sessão; trocar senha invalida tudo (junto com recuperar senha)
 - Recuperar senha e login com Google (novos)
 - Cabeçalhos de segurança em produção; Swagger público em produção
-- Banco: RLS, TLS, 2 avisos do Supabase, backup e restauração
 - APK de produção no MobSF
 - Política de privacidade e plano de incidente
 
 ## Passos do dono
 
 - [x] Render → Environment: `TRUST_PROXY_HOPS=1` (feito em 10/10)
+- [ ] Render → Environment: `DATABASE_SSL=verify-full` e `DATABASE_SSL_CA` (certificado do Supabase em Settings → Database → SSL, numa linha com `
+`) — **antes** de enviar o commit do TLS
+- [ ] Supabase → depois do deploy com TLS no ar: ligar *Enforce SSL*
+- [ ] Decidir o backup (achado 16)
 - [x] Render → Environment: conferido que `JWT_ACCESS_SECRET` é aleatório e longo, e não o `troque…` do exemplo (sondar a produção foi bloqueado, com razão, pelo modo automático)
