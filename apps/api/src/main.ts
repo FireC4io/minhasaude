@@ -1,35 +1,21 @@
 import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import type { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Logger } from 'nestjs-pino';
-import helmet from 'helmet';
 import { AppModule } from './app.module';
+import { configureApp } from './bootstrap/configure-app';
 import type { Env } from './config/env.schema';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { bufferLogs: true });
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, { bufferLogs: true });
 
   app.useLogger(app.get(Logger));
 
   const config = app.get(ConfigService<Env, true>);
 
-  app.use(helmet());
-
-  app.setGlobalPrefix('v1', { exclude: ['health'] });
-
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
-    }),
-  );
-
-  app.enableCors({
-    origin: config.get('CORS_ORIGINS', { infer: true }),
-  });
+  configureApp(app, config);
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Gota Vital API')

@@ -3,6 +3,7 @@ import { useRouter } from 'expo-router';
 import { useRef, useState } from 'react';
 import { View, type TextInput } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import { INPUT_LIMITS } from '@minhasaude/shared';
 
 import { AppText } from '@/components/ui/app-text';
 import { FormError } from '@/components/ui/form-error';
@@ -13,7 +14,7 @@ import { AuthTextField } from '@/features/auth/auth-text-field';
 import { PasswordField } from '@/features/auth/password-field';
 import { PrimaryButton } from '@/features/auth/primary-button';
 
-const MIN_PASSWORD_LENGTH = 8;
+const MIN_PASSWORD_LENGTH = INPUT_LIMITS.passwordMin;
 
 export default function RegisterScreen() {
   const { t } = useTranslation();
@@ -81,6 +82,7 @@ export default function RegisterScreen() {
           onChangeText={setPassword}
           autoComplete="password-new"
           textContentType="newPassword"
+          maxLength={INPUT_LIMITS.passwordNew}
           returnKeyType="go"
           accessibilityHint={t('auth.register.passwordHint', { min: MIN_PASSWORD_LENGTH })}
           onSubmitEditing={() => void handleSubmit()}

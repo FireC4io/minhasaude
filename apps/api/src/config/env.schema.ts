@@ -20,6 +20,11 @@ export const envSchema = z.object({
     .min(32, 'JWT_ACCESS_SECRET deve ter pelo menos 32 caracteres'),
   JWT_ACCESS_EXPIRES_IN: z.string().default('15m'),
   REFRESH_TOKEN_TTL_DAYS: z.coerce.number().int().positive().default(30),
+  // Quantos proxies confiáveis ficam na frente da API. No Render é 1: o proxy
+  // acrescenta o IP real ao fim do X-Forwarded-For. Sem isso, o limite de
+  // tentativas vê o IP do proxy e junta todo mundo num balde só. Nunca usar
+  // `true` (confiar em tudo): aí o cliente forja o próprio IP.
+  TRUST_PROXY_HOPS: z.coerce.number().int().min(0).max(3).default(0),
   // Opcional: sem ela, a API loga normalmente em stdout sem encaminhar pro BetterStack.
   BETTERSTACK_SOURCE_TOKEN: z.string().optional(),
 });

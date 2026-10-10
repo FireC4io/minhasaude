@@ -12,6 +12,7 @@ import {
   useDiaryControllerUpdate,
 } from '@/api/generated/endpoints/diary/diary';
 import { useTranslation } from 'react-i18next';
+import { INPUT_LIMITS } from '@minhasaude/shared';
 import { useFoodsControllerSearch } from '@/api/generated/endpoints/foods/foods';
 import { DiaryQuantityUnit, type FoodResponseDto, type MealType } from '@/api/generated/models';
 import { AppText } from '@/components/ui/app-text';
@@ -145,6 +146,7 @@ export default function DiaryEntryScreen() {
               label={t('diary.search')}
               value={searchTerm}
               onChangeText={setSearchTerm}
+              maxLength={INPUT_LIMITS.foodSearch}
               placeholder={t('misc.foodPlaceholder')}
               returnKeyType="search"
             />

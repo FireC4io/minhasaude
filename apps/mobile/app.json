@@ -8,9 +8,12 @@
     "scheme": "gotavital",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/images/icon.png"
+      "icon": "./assets/images/icon.png",
+      "bundleIdentifier": "br.com.gotavital"
     },
     "android": {
+      "package": "br.com.gotavital",
+      "allowBackup": false,
       "adaptiveIcon": {
         "backgroundColor": "#FBF0E4",
         "foregroundImage": "./assets/images/android-icon-foreground.png",

@@ -12,6 +12,13 @@ describe('validateEnv', () => {
     expect(result.CORS_ORIGINS).toEqual([]);
     expect(result.JWT_ACCESS_EXPIRES_IN).toBe('15m');
     expect(result.REFRESH_TOKEN_TTL_DAYS).toBe(30);
+    expect(result.TRUST_PROXY_HOPS).toBe(0);
+  });
+
+  it('aceita a quantidade de proxies confiáveis e recusa valores fora da faixa', () => {
+    expect(validateEnv({ ...base, TRUST_PROXY_HOPS: '1' }).TRUST_PROXY_HOPS).toBe(1);
+    expect(() => validateEnv({ ...base, TRUST_PROXY_HOPS: '-1' })).toThrow(/Env inválida/);
+    expect(() => validateEnv({ ...base, TRUST_PROXY_HOPS: 'true' })).toThrow(/Env inválida/);
   });
 
   it('faz parse de CORS_ORIGINS separado por vírgula, ignorando espaços', () => {

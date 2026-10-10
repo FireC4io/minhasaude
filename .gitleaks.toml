@@ -1,0 +1,12 @@
+# Busca de segredos (roda no CI a cada push, sobre o histórico inteiro).
+# O repositório é público: qualquer chave que passe por um commit vaza.
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Senhas falsas de teste e o valor de exemplo do .env.example"
+paths = [
+  '''^apps/api/test/.*\.e2e-spec\.ts$''',
+  '''^apps/api/src/.*\.spec\.ts$''',
+  '''(^|/)\.env\.example$''',
+]
