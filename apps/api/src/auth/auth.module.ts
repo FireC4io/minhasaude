@@ -19,7 +19,12 @@ import type { Env } from '../config/env.schema';
       inject: [ConfigService],
       useFactory: (config: ConfigService<Env, true>) => ({
         secret: config.get('JWT_ACCESS_SECRET', { infer: true }),
-        signOptions: { expiresIn: config.get('JWT_ACCESS_EXPIRES_IN', { infer: true }) },
+        // Algoritmo fixo nas duas pontas: o token nunca escolhe como é verificado.
+        signOptions: {
+          algorithm: 'HS256',
+          expiresIn: config.get('JWT_ACCESS_EXPIRES_IN', { infer: true }),
+        },
+        verifyOptions: { algorithms: ['HS256'] },
       }),
     }),
     ThrottlerModule.forRoot({

@@ -24,6 +24,13 @@ describe('Diary (e2e)', () => {
     const login = await request(app.getHttpServer()).post('/v1/auth/login').send({ email, password });
     accessToken = login.body.accessToken;
 
+    // Anotar no diário exige consentimento com a política de privacidade.
+    await request(app.getHttpServer())
+      .post('/v1/consents')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send({ consentType: 'privacy_policy', policyVersion: '2026-01' })
+      .expect(201);
+
     const food = await request(app.getHttpServer())
       .post('/v1/foods')
       .set('Authorization', `Bearer ${accessToken}`)
@@ -83,6 +90,12 @@ describe('Diary (e2e)', () => {
     const otherLogin = await request(app.getHttpServer())
       .post('/v1/auth/login')
       .send({ email: otherEmail, password });
+    // Com consentimento, para a recusa vir da checagem de dono e não do consentimento.
+    await request(app.getHttpServer())
+      .post('/v1/consents')
+      .set('Authorization', `Bearer ${otherLogin.body.accessToken}`)
+      .send({ consentType: 'privacy_policy', policyVersion: '2026-01' })
+      .expect(201);
 
     const day = await request(app.getHttpServer())
       .get('/v1/diary')

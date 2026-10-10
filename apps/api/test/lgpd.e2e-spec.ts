@@ -84,9 +84,15 @@ describe('LGPD - consents, export, delete (e2e)', () => {
   });
 
   it('revogar um consentimento inexistente retorna 404', async () => {
+    // Conta nova: a do teste anterior foi apagada, e o token dela não vale mais.
+    const freshEmail = `lgpd-revoke-${Date.now()}@minhasaude.app`;
+    await request(app.getHttpServer()).post('/v1/auth/register').send({ email: freshEmail, password });
+    const fresh = await request(app.getHttpServer())
+      .post('/v1/auth/login')
+      .send({ email: freshEmail, password });
     await request(app.getHttpServer())
       .delete('/v1/consents/exam_data_processing')
-      .set('Authorization', `Bearer ${accessToken}`)
+      .set('Authorization', `Bearer ${fresh.body.accessToken}`)
       .expect(404);
   });
 });

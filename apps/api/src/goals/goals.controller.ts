@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { GoalsService } from './goals.service';
 import { RecalculateGoalDto } from './dto/recalculate-goal.dto';
@@ -9,6 +9,9 @@ import { toDto } from '../common/serialization/to-dto';
 import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import type { JwtPayload } from '../auth/types/jwt-payload.interface';
+import { RequireConsent } from '../consents/decorators/require-consent.decorator';
+import { RequireConsentGuard } from '../consents/guards/require-consent.guard';
+import { ConsentType } from '../database/entities/consent.entity';
 
 @ApiTags('goals')
 @Controller('goals')
@@ -23,6 +26,8 @@ export class GoalsController {
   }
 
   @Post('recalculate')
+  @UseGuards(RequireConsentGuard)
+  @RequireConsent(ConsentType.PRIVACY_POLICY)
   @ApiOperation({ summary: 'Recalcula a meta a partir do perfil e da medida corporal mais recente' })
   @ApiOkResponse({ type: GoalTargetResponseDto })
   async recalculate(@CurrentUser() user: JwtPayload, @Body() dto: RecalculateGoalDto) {
@@ -30,6 +35,8 @@ export class GoalsController {
   }
 
   @Patch('current')
+  @UseGuards(RequireConsentGuard)
+  @RequireConsent(ConsentType.PRIVACY_POLICY)
   @ApiOperation({ summary: 'Ajuste manual de macros/calorias da meta ativa' })
   @ApiOkResponse({ type: GoalTargetResponseDto })
   async updateManual(@CurrentUser() user: JwtPayload, @Body() dto: UpdateGoalDto) {

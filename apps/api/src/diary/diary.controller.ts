@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiCreatedResponse, ApiNoContentResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { DiaryService } from './diary.service';
 import { CreateDiaryEntryDto } from './dto/create-diary-entry.dto';
@@ -10,6 +10,9 @@ import { DailySummaryResponseDto } from './dto/daily-summary-response.dto';
 import { toDto, toDtoList } from '../common/serialization/to-dto';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import type { JwtPayload } from '../auth/types/jwt-payload.interface';
+import { RequireConsent } from '../consents/decorators/require-consent.decorator';
+import { RequireConsentGuard } from '../consents/guards/require-consent.guard';
+import { ConsentType } from '../database/entities/consent.entity';
 
 @ApiTags('diary')
 @Controller('diary')
@@ -17,6 +20,8 @@ export class DiaryController {
   constructor(private readonly diaryService: DiaryService) {}
 
   @Post()
+  @UseGuards(RequireConsentGuard)
+  @RequireConsent(ConsentType.PRIVACY_POLICY)
   @ApiOperation({ summary: 'Adiciona uma entrada ao diário alimentar' })
   @ApiCreatedResponse({ type: DiaryEntryResponseDto })
   async create(@CurrentUser() user: JwtPayload, @Body() dto: CreateDiaryEntryDto) {
@@ -31,6 +36,8 @@ export class DiaryController {
   }
 
   @Post('copy')
+  @UseGuards(RequireConsentGuard)
+  @RequireConsent(ConsentType.PRIVACY_POLICY)
   @ApiOperation({ summary: 'Duplica todas as entradas de um dia pra outro' })
   @ApiOkResponse({ type: [DiaryEntryResponseDto] })
   async copy(@CurrentUser() user: JwtPayload, @Body() dto: CopyDiaryDto) {
@@ -38,6 +45,8 @@ export class DiaryController {
   }
 
   @Patch(':id')
+  @UseGuards(RequireConsentGuard)
+  @RequireConsent(ConsentType.PRIVACY_POLICY)
   @ApiOperation({ summary: 'Atualiza uma entrada do diário' })
   @ApiOkResponse({ type: DiaryEntryResponseDto })
   async update(@CurrentUser() user: JwtPayload, @Param('id') id: string, @Body() dto: UpdateDiaryEntryDto) {
