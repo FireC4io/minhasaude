@@ -45,7 +45,28 @@ CI com análise de código e busca de segredos; build de produção analisado; p
 
 ## Pendente de verificação
 
-- APK de produção no MobSF
+- Nada do app: o APK passou pelo MobSF (ver abaixo).
+
+## Análise do APK no MobSF (11/10)
+
+MobSF 4.5.4, análise estática do APK `preview` do EAS (`162fab3`, mesmo código do de produção). Nota 52/100: a
+nota soma achados de bibliotecas, então vale a triagem item a item.
+
+- **Corrigido** — permissões sem uso no build de produção bloqueadas (`app.json` → `blockedPermissions`, teste em
+  `app-config.spec.ts`): `CAMERA` (volta com os exames, Fase 6), `READ/WRITE_EXTERNAL_STORAGE` (não voltam: a galeria
+  do Android e o seletor de documentos não pedem permissão) e `MODIFY_AUDIO_SETTINGS` (voz em prévia). Ficam:
+  `INTERNET`, `ACCESS_NETWORK_STATE`, `VIBRATE`, `WAKE_LOCK`, `USE_BIOMETRIC`/`USE_FINGERPRINT` (SecureStore), todas
+  normais.
+- **Falso positivo** — "depuração remota de WebView ligada" (alta): está no LogBox do Expo, que só é registrado em
+  build de desenvolvimento (`ExpoLogBoxPackage`: `if (!BuildConfig.DEBUG ...)`). O outro WebView (`DomWebView`, acesso
+  a arquivo por URL) só serve componentes `"use dom"`, que o app não tem.
+- **Risco aceito** — `minSdk 24` (Android 7, alta no MobSF): padrão do Expo; subir excluiria celulares antigos, e o
+  público inclui celular básico. Rever se a Play passar a exigir.
+- **Bibliotecas, sem ação** — MD5 (nome de arquivo de cache no expo-asset/file-system, não segurança), SQL cru e
+  arquivo temporário (AsyncStorage e recortador de imagem; a cópia do cache já vai cifrada), logs (Glide e afins),
+  `taskAffinity` (navegador do login), receivers protegidos do Google Sign-In e do profileinstaller.
+- **Sem achado** — nenhum segredo real entre os 956 "segredos" (são símbolos nativos; o Client ID do Google é público
+  por natureza), sem tráfego sem HTTPS, sem rastreadores, sem `debuggable`, `allowBackup` desligado, assinado.
 
 ## Reavaliação de 11/10 (ferramentas)
 

@@ -31,7 +31,8 @@ fechada. Plano visual: https://claude.ai/artifact/M3cugePLkCpbjSkbVJq3BB · Acha
    Pendência: `GET /v1/consents` não tem DTO (client gerado tipa `void`; o app usa `ConsentStatusView`).
 4. ✅ **Criptografia da cópia local** (achado 4) — 2026-10-11, `apps/mobile/src/api/encrypted-storage.ts`. Conferido pelo
    dono no APK do EAS: abre offline com a cópia. O teste achou um bug antigo (corrigido em `162fab3`): sem internet, a
-   atualização falhava e o guard raiz/telas mostravam erro mesmo com a cópia em mãos. Falta: análise do APK no MobSF.
+   atualização falhava e o guard raiz/telas mostravam erro mesmo com a cópia em mãos. MobSF feito (11/10): triagem em
+   `docs/security/avaliacao-2026-10.md`; câmera/arquivos/áudio bloqueados até sair da prévia.
 5. **Itens restantes da avaliação**: cabeçalhos de segurança em produção, Swagger público em produção (desligar?),
    plano de incidente curto em `docs/security/`, token de renovação reusado derruba a sessão (teste).
 6. **Loja**: 8 imagens 1080×1920 com frase (sem telas em prévia, sem e-mail de teste), imagem de destaque 1024×500,

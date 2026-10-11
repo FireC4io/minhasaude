@@ -42,4 +42,18 @@ describe('app.json', () => {
       ]),
     );
   });
+
+  it('não pede câmera, arquivos nem ajuste de áudio enquanto exames e voz estão em prévia', () => {
+    // Análise do APK no MobSF (2026-10-11). A câmera volta com os exames
+    // (Fase 6); arquivos não voltam: a galeria do Android e o seletor de
+    // documentos não precisam de permissão.
+    expect(expo.android.blockedPermissions).toEqual(
+      expect.arrayContaining([
+        'android.permission.CAMERA',
+        'android.permission.READ_EXTERNAL_STORAGE',
+        'android.permission.WRITE_EXTERNAL_STORAGE',
+        'android.permission.MODIFY_AUDIO_SETTINGS',
+      ]),
+    );
+  });
 });
