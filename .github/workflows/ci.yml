@@ -59,6 +59,11 @@ jobs:
       # Regras de arquitetura (.dependency-cruiser.cjs): sem ciclos, shared sem
       # depender de app, API e mobile sem import direto entre si. Roda sempre,
       # não só nos workspaces afetados — leva poucos segundos.
+      # O turbo acima só builda os pacotes afetados: sem mudança no shared, o
+      # dist/ dele não existe e o dependency-cruiser acusa import sem resolução.
+      - name: Buildar @minhasaude/shared (para as regras de dependência)
+        run: pnpm --filter @minhasaude/shared build
+
       - name: Regras de dependência entre módulos
         run: pnpm deps:check
 

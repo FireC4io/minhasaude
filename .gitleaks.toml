@@ -4,9 +4,13 @@
 useDefault = true
 
 [allowlist]
-description = "Senhas falsas de teste e o valor de exemplo do .env.example"
+description = "Senhas falsas de teste, o valor de exemplo do .env.example e identificadores públicos"
 paths = [
   '''^apps/api/test/.*\.e2e-spec\.ts$''',
   '''^apps/api/src/.*\.spec\.ts$''',
   '''(^|/)\.env\.example$''',
+]
+# Chave do projeto no SonarQube Cloud: identificador público, não segredo.
+regexes = [
+  '''FireC4io_minhasaude''',
 ]
