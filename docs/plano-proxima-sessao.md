@@ -16,6 +16,26 @@ fechada. Plano visual: https://claude.ai/artifact/M3cugePLkCpbjSkbVJq3BB · Acha
   - Reiniciar o Windows: o WMI está travado e derruba `nest start --watch` (rodar a API compilada até lá).
   - Passar o **Client ID Web** do Google (Google Auth Platform do projeto `gotavital`).
 
+## Plano de melhorias (decidido em 2026-10-11)
+
+Página com as 32 melhorias, as decisões do dono e o progresso: https://claude.ai/artifact/6ECBjX1NJwiLJpn2Lo8HA4
+(ler a coleção `decisoes` e gravar o andamento em `progresso` com `ArtifactData`). Ordem combinada:
+
+1. ✅ **Base** (11/10): Sonar sem falsos alarmes, lint sem aviso travado no CI, hook antes do commit, `withoutRateLimit`
+   nos testes, dependências e Dependabot só com correções/menores, 7 issues fechadas, docs/ arrumada, CLAUDE.md
+   com a arquitetura real, README novo. Pendentes do Dependabot: #50 (CodeQL v4 falha na análise) e #45 (Sonar action
+   8.3, rebase pedido).
+2. **Operação:** manter a API acordada, alerta de queda, ensaio mensal do backup, ZAP no CI, processo de versão para a
+   loja, relatório de travamentos do app (exige linha nova na política).
+3. **App:** ajustes da tela Hoje, exportação com os alimentos da pessoa, testes das telas em erro, medidas caseiras
+   (inclusive medida criada pela pessoa e unidades de outros países), básicos que faltam na TACO (ver licença da TBCA
+   ou USDA), lembretes, Zod no que vem de fora.
+4. **Maiores:** anotar sem internet, auditoria no banco, quebrar as telas complexas, juntar telas repetidas, consultas
+   em paralelo, limpeza de estilo do Sonar.
+
+Depois: TalkBack real (#34), revisão das traduções (o dono vai achar usuários em inglês e espanhol), sequência de dias
+(consultar o público), Play Integrity. Aba Exames fica como está.
+
 ## Ordem sugerida
 
 1. ✅ **Recuperar senha (API + tela)** — feito e testado em produção em 2026-10-11 (código de 6 dígitos por e-mail, Brevo
