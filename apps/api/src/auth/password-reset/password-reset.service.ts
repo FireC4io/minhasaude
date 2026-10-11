@@ -11,7 +11,7 @@ import { Mailer } from '../../mail/mailer';
 import { SecurityNotifier } from '../../mail/security-notifier';
 import type { Env } from '../../config/env.schema';
 import { buildPasswordResetEmail, type EmailLanguage } from './password-reset-email';
-import { generateResetCode, hashResetCode, resetCodeMatches } from './password-reset-code';
+import { deriveResetCodeKey, generateResetCode, hashResetCode, resetCodeMatches } from './password-reset-code';
 import { LoginAttemptLimiter } from '../login-attempts/login-attempt-limiter';
 
 export const RESET_CODE_TTL_MINUTES = PASSWORD_RESET_CODE_TTL_MINUTES;
@@ -136,7 +136,7 @@ export class PasswordResetService {
     return result.affected === 1;
   }
 
-  private secret(): string {
-    return this.config.get('JWT_ACCESS_SECRET', { infer: true });
+  private secret(): Buffer {
+    return deriveResetCodeKey(this.config.get('JWT_ACCESS_SECRET', { infer: true }));
   }
 }

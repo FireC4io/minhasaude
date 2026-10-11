@@ -1,4 +1,4 @@
-import { generateResetCode, hashResetCode, resetCodeMatches } from './password-reset-code';
+import { deriveResetCodeKey, generateResetCode, hashResetCode, resetCodeMatches } from './password-reset-code';
 import { buildPasswordResetEmail } from './password-reset-email';
 
 const SECRET = 's'.repeat(32);
@@ -20,6 +20,14 @@ describe('código de recuperar senha', () => {
     const hash = hashResetCode(SECRET, 'conta-1', '123456');
     expect(resetCodeMatches(SECRET, 'conta-2', '123456', hash)).toBe(false);
     expect(resetCodeMatches('x'.repeat(32), 'conta-1', '123456', hash)).toBe(false);
+  });
+
+  it('a chave dos códigos é derivada, estável e diferente do segredo do servidor', () => {
+    const key = deriveResetCodeKey(SECRET);
+    expect(key).toHaveLength(32);
+    expect(key.equals(deriveResetCodeKey(SECRET))).toBe(true);
+    expect(key.equals(Buffer.from(SECRET))).toBe(false);
+    expect(hashResetCode(key, 'conta-1', '123456')).not.toBe(hashResetCode(SECRET, 'conta-1', '123456'));
   });
 
   it('recusa hash guardado com tamanho diferente sem estourar', () => {
