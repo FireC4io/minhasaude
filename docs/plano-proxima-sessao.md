@@ -36,8 +36,13 @@ fechada. Plano visual: https://claude.ai/artifact/M3cugePLkCpbjSkbVJq3BB · Acha
 5. ✅ **Itens restantes da avaliação** — cabeçalhos conferidos, Swagger desligado em produção, plano de incidente,
    reuso de token derruba a sessão (todos em 11/10) e rotas sem DTO (`/consents`, `/auth/me`). Fica para depois:
    auditoria no banco, ZAP no CI, extensões fora do `public`, Play Integrity.
-6. **Loja**: 8 imagens 1080×1920 com frase (sem telas em prévia, sem e-mail de teste), imagem de destaque 1024×500,
-   ícone 512×512; respostas do formulário de segurança de dados e da declaração de app de saúde.
+6. ✅ **Loja** (11/10) — textos e respostas em `docs/loja/play-console.md` (ficha, segurança dos dados, app de saúde,
+   conteúdo do app); imagens em `apps/mobile/store/play/` (7 capturas, recurso gráfico, ícone). Página pública
+   para apagar a conta sem o app: https://firec4io.github.io/minhasaude/excluir-conta/ (exigência da Play).
+   As capturas acharam e corrigiram: boas-vindas prometendo exames/voz no build de produção, busca ("frango" trazia
+   pão francês; frutas vinham como suco/polpa/doce) e troca de idioma que só valia ao reabrir o app.
+   **Falta (dono):** conta de revisão na produção, segundo cliente OAuth com a SHA-1 da Play App Signing, build
+   `production` (AAB) e preencher a Play Console com o documento — checklist na seção 6 dele.
 7. **Teste fechado**: o dono lista 12–15 testadores (de preferência dos perfis da Fase 4).
 
 Depois (Fase 6, durante os 14 dias): decidir a IA de leitura de exames, tirar exames/voz/água/notas da prévia,
