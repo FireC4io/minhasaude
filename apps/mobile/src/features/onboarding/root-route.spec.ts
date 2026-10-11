@@ -92,6 +92,17 @@ describe('resolveRootRoute', () => {
     expect(route).toBe('goal-unavailable');
   });
 
+  it('abre o app com a meta da cópia no aparelho quando a atualização falha sem internet', () => {
+    // O React Query marca a consulta como erro mesmo com o dado restaurado da
+    // cópia; olhar só isSuccess mostrava "não foi possível carregar" offline.
+    const route = resolveRootRoute({
+      isAuthenticated: true,
+      goal: goalQuery({ hasData: true, error: new Error('Network Error') }),
+    });
+
+    expect(route).toBe('app');
+  });
+
   it('aceita status no formato plano do axios (error.status)', () => {
     const route = resolveRootRoute({
       isAuthenticated: true,
@@ -157,6 +168,15 @@ describe('resolveRootRoute', () => {
       expect(privacyPolicyFromConsents(query({ isPending: true }))).toEqual({ status: 'loading' });
       expect(privacyPolicyFromConsents(query({ isError: true }))).toEqual({ status: 'error' });
       expect(privacyPolicyFromConsents(query({ data: [] }))).toEqual({ status: 'loaded', granted: false, version: null });
+    });
+
+    it('usa a lista da cópia no aparelho mesmo se a atualização falhar', () => {
+      const data = [{ consentType: 'privacy_policy', granted: true, policyVersion: '2026-01' }];
+      expect(privacyPolicyFromConsents(query({ isError: true, data }))).toEqual({
+        status: 'loaded',
+        granted: true,
+        version: '2026-01',
+      });
     });
   });
 });

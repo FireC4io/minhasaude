@@ -15,6 +15,11 @@ export type PrivacyPolicyState =
 export interface GoalQueryState {
   isPending: boolean;
   isSuccess: boolean;
+  /**
+   * Há meta em mãos, inclusive a restaurada da cópia no aparelho. Sem internet
+   * a atualização falha e o React Query marca erro mesmo com esse dado.
+   */
+  hasData?: boolean;
   error: unknown;
 }
 
@@ -60,7 +65,7 @@ export function resolveRootRoute({
     return 'auth';
   }
 
-  if (goal.isSuccess) {
+  if (goal.isSuccess || goal.hasData) {
     return routeForPolicy(privacyPolicy, currentPolicyVersion);
   }
 
@@ -106,8 +111,10 @@ interface ConsentRow {
 }
 
 export function privacyPolicyFromConsents(query: ConsentsQueryState): PrivacyPolicyState {
-  if (query.isPending) return { status: 'loading' };
-  if (query.isError || !Array.isArray(query.data)) return { status: 'error' };
+  // A lista da cópia no aparelho vale mesmo se a atualização falhar.
+  if (!Array.isArray(query.data)) {
+    return query.isPending ? { status: 'loading' } : { status: 'error' };
+  }
   const row = (query.data as ConsentRow[]).find((consent) => consent.consentType === 'privacy_policy');
   return { status: 'loaded', granted: row?.granted ?? false, version: row?.policyVersion ?? null };
 }

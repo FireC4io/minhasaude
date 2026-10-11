@@ -89,12 +89,17 @@ function RootNavigator() {
   const goalQuery = useGoalsControllerGetCurrent({ query: { enabled: isAuthenticated, retry: false } });
   // Só quem já usa o app (tem meta) pode estar com aceite antigo da política.
   const consentsQuery = useConsentsControllerList({
-    query: { enabled: isAuthenticated && goalQuery.isSuccess, retry: false },
+    query: { enabled: isAuthenticated && goalQuery.data !== undefined, retry: false },
   });
   const route = resolveRootRoute({
     isAuthenticated,
     isRestoringSession,
-    goal: { isPending: goalQuery.isPending, isSuccess: goalQuery.isSuccess, error: goalQuery.error },
+    goal: {
+      isPending: goalQuery.isPending,
+      isSuccess: goalQuery.isSuccess,
+      hasData: goalQuery.data !== undefined,
+      error: goalQuery.error,
+    },
     privacyPolicy: privacyPolicyFromConsents(consentsQuery),
     currentPolicyVersion: CURRENT_PRIVACY_POLICY_VERSION,
   });

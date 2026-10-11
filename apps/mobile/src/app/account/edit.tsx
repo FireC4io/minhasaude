@@ -68,7 +68,7 @@ export default function EditProfileScreen() {
 
         {meQuery.isPending ? (
           <LoadingIndicator label={t('account.edit.loading')} />
-        ) : meQuery.isError ? (
+        ) : meQuery.data === undefined ? (
           <FormError message={t('account.edit.loadError')} />
         ) : (
           <ProfileForm

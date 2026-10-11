@@ -24,7 +24,7 @@ export default function PrivacyScreen() {
 
       {consentsQuery.isPending ? (
         <LoadingIndicator label={t('account.privacy.loading')} />
-      ) : consentsQuery.isError ? (
+      ) : consentsQuery.data === undefined ? (
         <FormError message={t('account.privacy.loadError')} />
       ) : (
         <View className="gap-3">

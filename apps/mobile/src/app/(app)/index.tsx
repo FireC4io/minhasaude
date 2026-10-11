@@ -147,7 +147,7 @@ export default function TodayScreen() {
 
         {dayQuery.isPending ? (
           <LoadingIndicator label={t('today.loadingDay')} className="mt-8" />
-        ) : dayQuery.isError || !summary ? (
+        ) : !summary ? (
           <View className="gap-2">
             <FormError message={t('today.loadDayError')} />
             <TextButton

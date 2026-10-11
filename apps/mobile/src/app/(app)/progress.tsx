@@ -46,7 +46,7 @@ export default function ProgressScreen() {
 
             {historyQuery.isPending ? (
               <LoadingIndicator label={t('progress.loadingWeight')} />
-            ) : historyQuery.isError ? (
+            ) : historyQuery.data === undefined ? (
               <FormError message={t('progress.weightError')} />
             ) : (
               <>
