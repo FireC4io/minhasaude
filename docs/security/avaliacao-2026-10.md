@@ -48,7 +48,6 @@ CI com análise de código e busca de segredos; build de produção analisado; p
 - Sessão: token de renovação reusado derruba a sessão
 - APK de produção no MobSF
 - Plano de incidente
-- Swagger público em produção (`/docs`, `/docs-json`): decisão do dono — o repositório já é público
 
 ## Reavaliação de 11/10 (ferramentas)
 
@@ -66,6 +65,7 @@ CI com análise de código e busca de segredos; build de produção analisado; p
   `pnpm audit` e gitleaks já cobrem dependências e segredos.
 - **SonarQube Cloud**: workflow `sonar.yml` + `sonar-project.properties`, com a cobertura dos três pacotes
   (API 37% só de unitários — os e2e não entram na conta; app 79%; shared 81%). Liga quando houver o segredo `SONAR_TOKEN`.
+- **Swagger desligado em produção** (11/10, decisão do dono): `/docs` e `/docs-json` só fora de produção (`bootstrap/swagger.ts`).
 - **Resposta sem DTO** (regra do projeto): `GET /v1/consents` e `GET /v1/auth/me` devolvem objeto cru. Sem campo
   sensível hoje, mas fora do padrão.
 
@@ -76,6 +76,6 @@ CI com análise de código e busca de segredos; build de produção analisado; p
 - [ ] Supabase → depois do deploy com TLS no ar: ligar *Enforce SSL*
 - [x] Backup configurado e ensaiado (10/10)
 - [x] Render → Environment: `BETTERSTACK_INGESTING_HOST` (11/10, região us-west-2)
-- [ ] SonarQube Cloud: importar o repositório, desligar a análise automática e criar o segredo `SONAR_TOKEN` no GitHub
+- [x] SonarQube Cloud: repositório importado, análise automática desligada, segredo `SONAR_TOKEN` no GitHub (11/10)
 - [ ] Guardar a chave privada do age fora deste computador
 - [x] Render → Environment: conferido que `JWT_ACCESS_SECRET` é aleatório e longo, e não o `troque…` do exemplo (sondar a produção foi bloqueado, com razão, pelo modo automático)
