@@ -6,9 +6,11 @@ import { useTranslation } from 'react-i18next';
 import { AppText } from '@/components/ui/app-text';
 import { BrandMark } from '@/components/ui/brand-mark';
 import { TextButton } from '@/components/ui/text-button';
+import { PREVIEW_FEATURES } from '@/config/features';
 import { PrimaryButton } from '@/features/auth/primary-button';
+import { welcomeFeatures } from '@/features/auth/welcome-features';
 
-const FEATURES = ['food', 'weight', 'exams'] as const;
+const FEATURES = welcomeFeatures(PREVIEW_FEATURES);
 
 /**
  * Boas-vindas antes do login (F4-31). Uma tela só, rolável, em vez de painéis
@@ -35,7 +37,7 @@ export default function WelcomeScreen() {
         <View className="gap-3">
           {FEATURES.map((feature, index) => (
             <View
-              key={feature}
+              key={feature.id}
               accessible
               className="flex-row gap-4 rounded-2xl bg-superficie p-4">
               <AppText variant="numberLarge" className="text-mamao-forte">
@@ -43,9 +45,9 @@ export default function WelcomeScreen() {
               </AppText>
               <View className="flex-1 gap-1">
                 <AppText variant="bodyStrong" className="text-grafite">
-                  {t(`auth.welcome.${feature}Title`)}
+                  {t(feature.titleKey)}
                 </AppText>
-                <AppText className="text-grafite">{t(`auth.welcome.${feature}Text`)}</AppText>
+                <AppText className="text-grafite">{t(feature.textKey)}</AppText>
               </View>
             </View>
           ))}
