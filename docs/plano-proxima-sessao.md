@@ -8,7 +8,7 @@ fechada. Plano visual: https://claude.ai/artifact/M3cugePLkCpbjSkbVJq3BB · Acha
 - **Commits locais não enviados** (se ainda estiverem só aqui, perguntar ao dono antes do push): `eee5a1b` (rascunho
   da política) e `0802ac1` (idade mínima 18 + `BETTERSTACK_INGESTING_HOST`). Nada quebra se a variável não existir.
 - **Pendências do dono** (conferir com ele):
-  - Render → `BETTERSTACK_INGESTING_HOST` (Ingesting host da source `minhasaude-api`) e dizer a região → preencher na política.
+  - ✅ Better Stack: `BETTERSTACK_INGESTING_HOST` no Render (2026-10-11, região us-west-2, já na política).
   - Revogar a chave do Brevo que foi colada no chat; chave nova em `BREVO_API_KEY` (Render e `apps/api/.env`).
   - Supabase → ligar **Enforce SSL** (a API já conecta com TLS).
   - Guardar a chave privada do age (`D:\gotavital-backup-chave\age-chave-privada.txt`) fora do computador.
@@ -25,7 +25,7 @@ fechada. Plano visual: https://claude.ai/artifact/M3cugePLkCpbjSkbVJq3BB · Acha
    (pré-sequestro de conta). App: `@react-native-google-signin/google-signin` (não roda no Expo Go — testar no build).
    O cliente Android do OAuth precisa do SHA-1 da chave de assinatura (sai do primeiro build EAS / Play App Signing).
 3. **Publicar a política** — GitHub Pages (Render gratuito dorme e o revisor da Play pode achar o link quebrado);
-   preencher data e região do Better Stack; subir `CURRENT_PRIVACY_POLICY_VERSION` para `2026-10` (todos reaceitam).
+   preencher a data; subir `CURRENT_PRIVACY_POLICY_VERSION` para `2026-10` (todos reaceitam).
 4. **Primeiro build EAS (Android)** + **criptografia da cópia local** (achado 4) + análise do APK no MobSF.
 5. **Itens restantes da avaliação**: cabeçalhos de segurança em produção, Swagger público em produção (desligar?),
    plano de incidente curto em `docs/security/`, token de renovação reusado derruba a sessão (teste).

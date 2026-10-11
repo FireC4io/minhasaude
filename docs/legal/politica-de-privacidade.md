@@ -59,7 +59,7 @@ Só com empresas que operam a infraestrutura do app, e só o necessário para ca
 | Supabase | Banco de dados | Brasil (São Paulo) |
 | Render | Servidor que roda o app | Estados Unidos |
 | Cloudflare (R2) | Cópias de segurança do banco, **cifradas** antes de sair do servidor | Estados Unidos |
-| Better Stack | Registros técnicos (sem dados de saúde, senha ou tokens) | [REGIÃO] |
+| Better Stack | Registros técnicos (sem dados de saúde, senha ou tokens) | Estados Unidos |
 | Brevo | Envio do e-mail de recuperação de senha (recebe só seu e-mail) | União Europeia |
 | Google | Login com Google, se você escolher essa forma de entrar | Estados Unidos |
 | Open Food Facts | Recebe o **termo** que você busca, quando o alimento não está na tabela brasileira. Não recebe nada que identifique você | União Europeia |
