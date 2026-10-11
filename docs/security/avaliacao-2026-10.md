@@ -22,8 +22,8 @@ CI com análise de código e busca de segredos; build de produção analisado; p
 | 9 | Média | LGPD: diário e metas aceitavam gravar e calcular dado de saúde sem consentimento (o app sempre pede antes, mas a API não exigia) | Corrigido: criar/alterar/calcular exige consentimento; ler, exportar e apagar o próprio dado continuam livres (direito do titular, e o app usa o 404 da meta para levar ao onboarding) | `test/security-access.e2e-spec.ts` (LGPD) |
 | 10 | Baixa | Algoritmo do JWT não fixado (o `alg: none` já era recusado pela biblioteca) | Corrigido: HS256 fixo ao assinar e ao verificar | `test/security-access.e2e-spec.ts` (token forjado) |
 | 11 | Baixa | O log de cada requisição grava a query string, então o termo buscado (nome de alimento) vai para o BetterStack | **Aberto**, baixo: não é identificador nem dado de exame. Rever quando os exames saírem da prévia | `api.log` |
-| 12 | Alta | A conexão API → banco não configurava TLS em lugar nenhum: só seria cifrada se a `DATABASE_URL` do Render tivesse `sslmode`. Atravessa a internet (Render → Supabase em São Paulo) com senha do banco e dado de saúde | Corrigido no código (`DATABASE_SSL`, e a API se recusa a subir em produção sem TLS); **falta configurar o Render antes do deploy** | `src/config/env.schema.spec.ts`, `src/database/database-ssl.spec.ts` |
-| 13 | Média | Os papéis da API REST automática do Supabase (`anon`, `authenticated`) tinham permissão em todas as tabelas, inclusive `users` e `diary_entries`; só o RLS os barrava, e tabela nova nascia aberta | Corrigido: migration `RevokePublicApiGrants` tira as permissões, inclusive das tabelas futuras | Migration testada no Postgres local com os papéis simulados: antes `anon` lia `users`, depois não; tabela criada depois já nasce fechada |
+| 12 | Alta | A conexão API → banco não configurava TLS em lugar nenhum: só seria cifrada se a `DATABASE_URL` do Render tivesse `sslmode`. Atravessa a internet (Render → Supabase em São Paulo) com senha do banco e dado de saúde | Corrigido e **no ar desde 11/10** (`DATABASE_SSL=verify-full` + CA no Render). A trava funcionou: o 1º deploy sem a variável foi recusado e o Render manteve a versão anterior | `src/config/env.schema.spec.ts`, `src/database/database-ssl.spec.ts` |
+| 13 | Média | Os papéis da API REST automática do Supabase (`anon`, `authenticated`) tinham permissão em todas as tabelas, inclusive `users` e `diary_entries`; só o RLS os barrava, e tabela nova nascia aberta | Corrigido e conferido na produção (11/10): `anon`/`authenticated` sem acesso; aviso do advisor some | Migration testada no Postgres local com os papéis simulados: antes `anon` lia `users`, depois não; tabela criada depois já nasce fechada |
 | 14 | Baixa | `immutable_unaccent` sem `search_path` fixo (aviso do advisor) | Corrigido na mesma migration | idem |
 | 15 | Baixa | `pg_trgm` e `unaccent` no schema public (aviso do advisor) | **Risco aceito**: mover quebraria os operadores da busca, e nenhum papel não confiável cria objetos no banco | advisor do Supabase |
 | 16 | Média | O plano gratuito do Supabase não tem backup recuperável | Corrigido no código: backup semanal cifrado (age, chave privada só com o dono) para bucket privado no R2; primeiro backup da produção feito e restaurado com contagem idêntica (10/10) | `.github/workflows/backup.yml`, `docs/security/backup.md`; ensaio de restauração com contagem idêntica |
@@ -50,8 +50,7 @@ CI com análise de código e busca de segredos; build de produção analisado; p
 ## Passos do dono
 
 - [x] Render → Environment: `TRUST_PROXY_HOPS=1` (feito em 10/10)
-- [ ] Render → Environment: `DATABASE_SSL=verify-full` e `DATABASE_SSL_CA` (certificado do Supabase em Settings → Database → SSL, numa linha com `
-`) — **antes** de enviar o commit do TLS
+- [x] Render → Environment: `DATABASE_SSL=verify-full` e `DATABASE_SSL_CA` (11/10)
 - [ ] Supabase → depois do deploy com TLS no ar: ligar *Enforce SSL*
 - [x] Backup configurado e ensaiado (10/10)
 - [ ] Guardar a chave privada do age fora deste computador
