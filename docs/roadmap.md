@@ -61,7 +61,20 @@ internet ruim. Backlog completo em `docs/backlog-fase4.md`, organizado em blocos
 - **Entregável**: as tarefas principais concluídas sem ajuda por pessoas de perfis diferentes,
   também com TalkBack e fonte em 200%; nenhum par de cor abaixo de 4,5:1; telas de LGPD no app.
 
-## Fase 5 — Exames e métricas de saúde
+## Fase 5 — Segurança e teste fechado (nova, 2026-10-10)
+> **Reordenação de 2026-10-10 (decisão do usuário):** o teste fechado sai de dentro da publicação e vira fase
+> própria, antes dos exames. Os 14 dias obrigatórios da Play correm enquanto a Fase 6 é desenvolvida. As fases
+> seguintes mudam de número: Exames = 6, Publicação aberta = 7, Evolução = 8.
+- Avaliação de segurança rígida (OWASP API Top 10/ASVS/MASVS + LGPD), cada item verificado por teste ou ferramenta:
+  `docs/security/avaliacao-2026-10.md`. Backup cifrado e ensaiado: `docs/security/backup.md`.
+- Recuperar senha (Brevo), login com Google, política de privacidade publicada (`docs/legal/`).
+- Primeiro build EAS Android, criptografia da cópia local, análise do APK (MobSF), ficha e imagens da loja.
+- Conta Google Play (US$ 25, criada em 10/10). Teste fechado com 12–15 pessoas.
+- **Modelo de negócio proposto** (a confirmar no registro): sem anúncios; uso diário livre; leitura de exame por IA
+  no plano pago (R$ 9,90/mês ou R$ 59,90/ano), lançado na Fase 7. Exportar e apagar dados nunca são pagos (LGPD).
+- **Entregável**: teste fechado no ar com nenhum achado crítico ou alto em aberto.
+
+## Fase 6 — Exames e métricas de saúde (era a Fase 5)
 - Upload de exame (foto/PDF) → storage (R2) → fila (pg-boss) → extração via IA com visão.
 - Tela de revisão obrigatória dos valores extraídos.
 - Normalização de unidades + catálogo de calculadoras (HOMA-IR, TyG, Castelli I/II, FFMI, CKD-EPI 2021, etc.).
@@ -72,7 +85,7 @@ internet ruim. Backlog completo em `docs/backlog-fase4.md`, organizado em blocos
   durar, ou tratar como o segundo portão de orçamento do projeto.
 - **Entregável**: usuário envia exame, revisa, e vê índices calculados com fonte/fórmula visível.
 
-## Fase 6 — Publicação
+## Fase 7 — Publicação aberta e plano pago (era a Fase 6)
 - ~~Decidir o nome~~ — decidido em 2026-10-02: **Gota Vital**. Falta, antes de investir em marca:
   checagem no INPI e nas lojas, e definir o bundle id.
 - Política de privacidade e termos (texto real, não lorem ipsum — LGPD + exigência das lojas),
@@ -84,7 +97,7 @@ internet ruim. Backlog completo em `docs/backlog-fase4.md`, organizado em blocos
 - Submissão e publicação nas duas lojas.
 - **Entregável**: app publicado, baixável publicamente (ou em teste fechado, conforme sua resposta à pergunta 7).
 
-## Fase 7 — Evolução
+## Fase 8 — Evolução (era a Fase 7)
 - Leitor de código de barras (scanner nativo → busca por EAN).
 - Gráficos de evolução mais completos (macros ao longo do tempo, exames).
 - Registro de treinos, com exercícios ilustrados/animados.

@@ -1,4 +1,45 @@
-# Plano da próxima sessão (a partir de 2026-10-07)
+# Plano da próxima sessão (a partir de 2026-10-11) — Fase 5: Segurança e teste fechado
+
+Objetivo da fase: começar o **teste fechado na Google Play** (12+ pessoas por 14 dias) com a avaliação de segurança
+fechada. Plano visual: https://claude.ai/artifact/M3cugePLkCpbjSkbVJq3BB · Achados: `docs/security/avaliacao-2026-10.md`.
+
+## Antes de tudo (estado em que a sessão de 10/10 terminou)
+
+- **Commits locais não enviados** (se ainda estiverem só aqui, perguntar ao dono antes do push): `eee5a1b` (rascunho
+  da política) e `0802ac1` (idade mínima 18 + `BETTERSTACK_INGESTING_HOST`). Nada quebra se a variável não existir.
+- **Pendências do dono** (conferir com ele):
+  - Render → `BETTERSTACK_INGESTING_HOST` (Ingesting host da source `minhasaude-api`) e dizer a região → preencher na política.
+  - Revogar a chave do Brevo que foi colada no chat; chave nova em `BREVO_API_KEY` (Render e `apps/api/.env`).
+  - Supabase → ligar **Enforce SSL** (a API já conecta com TLS).
+  - Guardar a chave privada do age (`D:\gotavital-backup-chave\age-chave-privada.txt`) fora do computador.
+  - Apagar os secrets duplicados `BACKUP_AGE_RECIPIENT` e `BACKUP_BUCKET` (as variáveis de mesmo nome valem).
+  - Reiniciar o Windows: o WMI está travado e derruba `nest start --watch` (rodar a API compilada até lá).
+  - Passar o **Client ID Web** do Google (Google Auth Platform do projeto `gotavital`).
+
+## Ordem sugerida
+
+1. **Recuperar senha (API + tela)** — Brevo já configurado (`BREVO_API_KEY`, `EMAIL_FROM_ADDRESS`, `EMAIL_FROM_NAME`).
+   Link de uso único, 30 min, guardado como hash, mesma resposta exista ou não a conta, limite de pedidos; trocar a
+   senha revoga todos os refresh tokens. Tirar a tela da prévia. Testes e2e na suíte de segurança.
+2. **Login com Google** — `google-auth-library` na API (conferir emissor, `aud` = Client ID Web, validade,
+   `email_verified`); ao ligar a uma conta que nunca confirmou o e-mail, **apagar a senha antiga e revogar sessões**
+   (pré-sequestro de conta). App: `@react-native-google-signin/google-signin` (não roda no Expo Go — testar no build).
+   O cliente Android do OAuth precisa do SHA-1 da chave de assinatura (sai do primeiro build EAS / Play App Signing).
+3. **Publicar a política** — GitHub Pages (Render gratuito dorme e o revisor da Play pode achar o link quebrado);
+   preencher data e região do Better Stack; subir `CURRENT_PRIVACY_POLICY_VERSION` para `2026-10` (todos reaceitam).
+4. **Primeiro build EAS (Android)** + **criptografia da cópia local** (achado 4) + análise do APK no MobSF.
+5. **Itens restantes da avaliação**: cabeçalhos de segurança em produção, Swagger público em produção (desligar?),
+   plano de incidente curto em `docs/security/`, token de renovação reusado derruba a sessão (teste).
+6. **Loja**: 8 imagens 1080×1920 com frase (sem telas em prévia, sem e-mail de teste), imagem de destaque 1024×500,
+   ícone 512×512; respostas do formulário de segurança de dados e da declaração de app de saúde.
+7. **Teste fechado**: o dono lista 12–15 testadores (de preferência dos perfis da Fase 4).
+
+Depois (Fase 6, durante os 14 dias): decidir a IA de leitura de exames, tirar exames/voz/água/notas da prévia,
+unidades de laboratório faladas por extenso.
+
+---
+
+# Plano anterior (a partir de 2026-10-07) — concluído em 2026-10-10
 
 Contexto completo: `docs/noite-2026-10-06.md` (o que foi feito, decisões, achados) e o quadro de status no
 topo do Bloco B em `docs/backlog-fase4.md`. Toda mudança de backend vai para produção no push (Render):
