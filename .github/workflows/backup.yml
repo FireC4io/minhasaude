@@ -31,9 +31,12 @@ jobs:
     env:
       AGE_RECIPIENT: ${{ vars.BACKUP_AGE_RECIPIENT }}
       BUCKET: ${{ vars.BACKUP_BUCKET }}
-      WORK: ${{ runner.temp }}/backup
     steps:
       - uses: actions/checkout@v4
+
+      # O contexto `runner` só existe dentro dos passos, não no env do job.
+      - name: Pasta de trabalho
+        run: echo "WORK=$RUNNER_TEMP/backup" >> "$GITHUB_ENV"
 
       - name: Conferir configuração
         env:
