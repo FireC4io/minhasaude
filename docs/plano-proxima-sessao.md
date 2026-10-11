@@ -25,8 +25,11 @@ Página com as 32 melhorias, as decisões do dono e o progresso: https://claude.
    nos testes, dependências e Dependabot só com correções/menores, 7 issues fechadas, docs/ arrumada, CLAUDE.md
    com a arquitetura real, README novo. Pendentes do Dependabot: #50 (CodeQL v4 falha na análise) e #45 (Sonar action
    8.3, rebase pedido).
-2. **Operação:** manter a API acordada, alerta de queda, ensaio mensal do backup, ZAP no CI, processo de versão para a
-   loja, relatório de travamentos do app (exige linha nova na política).
+2. ✅ **Operação** (11/10): keep-alive a cada 10 min (API acordada + alerta por e-mail), ensaio de restauração em todo
+   backup semanal (conferido na produção), `docs/release.md` com build `autoIncrement`, ZAP autenticado no CI (achou e
+   corrigimos 500 com caractere nulo, `policyVersion` e `barcode` sem formato), relatório de erros do app
+   (`POST /v1/client-errors` → log) e tela "Algo deu errado" no lugar da tela branca. A varredura manual da avaliação
+   tinha rodado sem token de fato: ver a seção "ZAP autenticado" em `docs/security/avaliacao-2026-10.md`.
 3. **App:** ajustes da tela Hoje, exportação com os alimentos da pessoa, testes das telas em erro, medidas caseiras
    (inclusive medida criada pela pessoa e unidades de outros países), básicos que faltam na TACO (ver licença da TBCA
    ou USDA), lembretes, Zod no que vem de fora.
