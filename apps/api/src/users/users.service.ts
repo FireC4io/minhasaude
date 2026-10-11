@@ -4,6 +4,7 @@ import { IsNull, Repository } from 'typeorm';
 import { User, UserStatus } from '../database/entities/user.entity';
 import { Profile } from '../database/entities/profile.entity';
 import { RefreshToken } from '../database/entities/refresh-token.entity';
+import { SecurityNotifier } from '../mail/security-notifier';
 import { AccountDeletionRequest } from '../database/entities/account-deletion-request.entity';
 import { ConsentsService } from '../consents/consents.service';
 import { BodyMeasurementsService } from '../body-measurements/body-measurements.service';
@@ -30,6 +31,7 @@ export class UsersService {
     private readonly goalsService: GoalsService,
     private readonly diaryService: DiaryService,
     private readonly accountPurgeService: AccountPurgeService,
+    private readonly securityNotifier: SecurityNotifier,
   ) {}
 
   private async getUserOrThrow(userId: string): Promise<User> {
@@ -139,6 +141,9 @@ export class UsersService {
         completedAt: null,
       }),
     );
+
+    // O e-mail vem da conta lida antes do apagamento; depois dele não existe mais.
+    this.securityNotifier.notify(user.email, 'account_deleted', userId);
 
     try {
       await this.accountPurgeService.purgeRequest(request, now);

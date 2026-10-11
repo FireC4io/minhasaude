@@ -5,6 +5,7 @@ import { BrevoMailer } from './brevo-mailer';
 import { DisabledMailer } from './disabled-mailer';
 import { LocalOutboxMailer } from './local-outbox-mailer';
 import { Mailer } from './mailer';
+import { SecurityNotifier } from './security-notifier';
 
 export function createMailer(config: ConfigService<Env, true>): Mailer {
   const apiKey = config.get('BREVO_API_KEY', { infer: true });
@@ -24,7 +25,7 @@ export function createMailer(config: ConfigService<Env, true>): Mailer {
 
 @Module({
   imports: [ConfigModule],
-  providers: [{ provide: Mailer, inject: [ConfigService], useFactory: createMailer }],
-  exports: [Mailer],
+  providers: [{ provide: Mailer, inject: [ConfigService], useFactory: createMailer }, SecurityNotifier],
+  exports: [Mailer, SecurityNotifier],
 })
 export class MailModule {}

@@ -12,6 +12,15 @@ import {
   GoogleTokenVerifier,
   type GoogleIdentity,
 } from '../src/auth/google/google-token-verifier';
+import { Mailer, type MailMessage } from '../src/mail/mailer';
+
+class CapturingMailer extends Mailer {
+  readonly sent: MailMessage[] = [];
+  send(message: MailMessage): Promise<void> {
+    this.sent.push(message);
+    return Promise.resolve();
+  }
+}
 
 /** Cada "token" é uma chave para a identidade que o Google devolveria. */
 class FakeGoogleVerifier extends GoogleTokenVerifier {
@@ -27,6 +36,7 @@ const PASSWORD = 'SenhaTeste123!';
 describe('Entrar com o Google (e2e)', () => {
   let app: NestExpressApplication;
   const verifier = new FakeGoogleVerifier();
+  const mailer = new CapturingMailer();
   let ipSeq = 0;
   const nextIp = () => `198.51.100.${++ipSeq}`;
 
@@ -34,6 +44,8 @@ describe('Entrar com o Google (e2e)', () => {
     const moduleFixture = await Test.createTestingModule({ imports: [AppModule] })
       .overrideProvider(GoogleTokenVerifier)
       .useValue(verifier)
+      .overrideProvider(Mailer)
+      .useValue(mailer)
       .compile();
     app = moduleFixture.createNestApplication<NestExpressApplication>();
     configureApp(app, app.get(ConfigService<Env, true>));
@@ -101,6 +113,7 @@ describe('Entrar com o Google (e2e)', () => {
     await signIn(googleToken({ sub: label, email, emailVerified: true })).expect(200);
 
     await passwordLogin(email, PASSWORD).expect(401);
+    expect(mailer.sent.find((m) => m.to === email)?.text).toMatch(/senha antiga foi apagada/);
     await http().post('/v1/auth/refresh').set('X-Forwarded-For', nextIp()).send({ refreshToken: attackerRefresh }).expect(401);
   });
 

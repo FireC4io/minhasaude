@@ -8,6 +8,7 @@ import { User, UserStatus } from '../../database/entities/user.entity';
 import { RefreshToken } from '../../database/entities/refresh-token.entity';
 import { PasswordResetCode } from '../../database/entities/password-reset-code.entity';
 import { Mailer } from '../../mail/mailer';
+import { SecurityNotifier } from '../../mail/security-notifier';
 import type { Env } from '../../config/env.schema';
 import { buildPasswordResetEmail, type EmailLanguage } from './password-reset-email';
 import { generateResetCode, hashResetCode, resetCodeMatches } from './password-reset-code';
@@ -33,6 +34,7 @@ export class PasswordResetService {
     private readonly mailer: Mailer,
     private readonly config: ConfigService<Env, true>,
     private readonly loginAttempts: LoginAttemptLimiter,
+    private readonly securityNotifier: SecurityNotifier,
   ) {}
 
   /**
@@ -84,6 +86,7 @@ export class PasswordResetService {
     });
     // Quem trocou a senha pelo código provou ser a dona: o bloqueio de login acaba.
     this.loginAttempts.recordSuccess(email);
+    this.securityNotifier.notify(user.email, 'password_changed', user.id);
   }
 
   private async issueCode(user: User, language?: EmailLanguage): Promise<void> {

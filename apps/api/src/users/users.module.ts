@@ -9,6 +9,7 @@ import { ConsentsModule } from '../consents/consents.module';
 import { BodyMeasurementsModule } from '../body-measurements/body-measurements.module';
 import { GoalsModule } from '../goals/goals.module';
 import { DiaryModule } from '../diary/diary.module';
+import { MailModule } from '../mail/mail.module';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { AccountPurgeService } from './account-purge.service';
@@ -24,6 +25,7 @@ import { AccountPurgeScheduler } from './account-purge.scheduler';
     BodyMeasurementsModule,
     GoalsModule,
     DiaryModule,
+    MailModule,
   ],
   controllers: [UsersController],
   providers: [UsersService, AccountPurgeService, AccountPurgeScheduler],

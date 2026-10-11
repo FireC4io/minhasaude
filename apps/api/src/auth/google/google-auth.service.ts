@@ -4,6 +4,7 @@ import { DataSource, IsNull, Repository } from 'typeorm';
 import { User, UserStatus } from '../../database/entities/user.entity';
 import { RefreshToken } from '../../database/entities/refresh-token.entity';
 import { AuthService } from '../auth.service';
+import { SecurityNotifier } from '../../mail/security-notifier';
 import type { TokensDto } from '../dto/tokens.dto';
 import { GoogleTokenVerifier, type GoogleIdentity } from './google-token-verifier';
 
@@ -18,6 +19,7 @@ export class GoogleAuthService {
     @InjectDataSource() private readonly dataSource: DataSource,
     private readonly verifier: GoogleTokenVerifier,
     private readonly authService: AuthService,
+    private readonly securityNotifier: SecurityNotifier,
   ) {}
 
   /**
@@ -84,6 +86,7 @@ export class GoogleAuthService {
         await manager.update(RefreshToken, { userId: user.id, revokedAt: IsNull() }, { revokedAt: now });
       }
     });
+    this.securityNotifier.notify(user.email, unverified ? 'google_linked_password_removed' : 'google_linked', user.id);
     if (unverified) {
       this.logger.warn(`Google ligado à conta ${user.id} sem e-mail confirmado: senha antiga apagada`);
     }

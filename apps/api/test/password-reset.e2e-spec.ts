@@ -97,6 +97,8 @@ describe('Recuperar senha (e2e)', () => {
     const code = codeFrom(await mailer.waitFor(email));
 
     await confirm({ email, code, newPassword: NEW_PASSWORD }).expect(204);
+    // Aviso de segurança: a dona da conta fica sabendo da troca.
+    expect((await mailer.waitFor(email, 2)).subject).toBe('Sua senha do Gota Vital foi trocada');
     const [row] = await app.get(DataSource).query('SELECT email_verified_at FROM users WHERE email = $1', [email]);
     expect(row.email_verified_at).not.toBeNull();
 

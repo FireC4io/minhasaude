@@ -6,7 +6,7 @@ import { UsersService } from './users.service';
 const firstArg = (mock: jest.Mock): any => mock.mock.calls[0]![0];
 
 function setup(options: { status?: UserStatus; purgeFails?: boolean } = {}) {
-  const user = { id: 'user-1', status: options.status ?? UserStatus.ACTIVE };
+  const user = { id: 'user-1', email: 'maria@exemplo.com', status: options.status ?? UserStatus.ACTIVE };
   const users = {
     findOne: jest.fn(async () => user),
     save: jest.fn(async (entity) => entity),
@@ -21,6 +21,7 @@ function setup(options: { status?: UserStatus; purgeFails?: boolean } = {}) {
       if (options.purgeFails) throw new Error('banco fora do ar');
     }),
   };
+  const notifier = { notify: jest.fn() };
   const service = new UsersService(
     users as never,
     {} as never,
@@ -31,8 +32,9 @@ function setup(options: { status?: UserStatus; purgeFails?: boolean } = {}) {
     {} as never,
     {} as never,
     purge as never,
+    notifier as never,
   );
-  return { service, user, users, refreshTokens, deletionRequests, purge };
+  return { service, user, users, refreshTokens, deletionRequests, purge, notifier };
 }
 
 describe('UsersService.requestDeletion', () => {
@@ -69,6 +71,14 @@ describe('UsersService.requestDeletion', () => {
 
     expect(result).toEqual({ status: 'pending_retry' });
     expect(firstArg(users.save).status).toBe(UserStatus.PENDING_DELETION);
+  });
+
+  it('avisa por e-mail que a conta foi apagada, com o endereço lido antes de apagar', async () => {
+    const { service, notifier } = setup();
+
+    await service.requestDeletion('user-1');
+
+    expect(notifier.notify).toHaveBeenCalledWith('maria@exemplo.com', 'account_deleted', 'user-1');
   });
 
   it('recusa um segundo pedido para conta já em exclusão', async () => {
