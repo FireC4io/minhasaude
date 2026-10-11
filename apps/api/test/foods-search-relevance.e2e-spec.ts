@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import request from 'supertest';
 import { AppModule } from '../src/app.module';
+import { withoutRateLimit } from './support/without-rate-limit';
 
 /**
  * Ordem da busca com casos reais da TACO. Antes, tudo que continha o termo
@@ -34,9 +35,9 @@ describe('Foods search - relevância (e2e)', () => {
     list.indexOf(a) !== -1 && (list.indexOf(b) === -1 || list.indexOf(a) < list.indexOf(b));
 
   beforeAll(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
+    const moduleFixture: TestingModule = await withoutRateLimit(
+      Test.createTestingModule({ imports: [AppModule] }),
+    ).compile();
     app = moduleFixture.createNestApplication();
     app.setGlobalPrefix('v1', { exclude: ['health'] });
     app.useGlobalPipes(
@@ -133,6 +134,18 @@ describe('Foods search - relevância (e2e)', () => {
 
     expect((await names('frango'))[0]).toBe('Frango, peito, sem pele, grelhado');
     expect((await names('pão'))[0]).toBe('Pão, trigo, francês');
+  });
+
+  it.each([
+    ['mamão', 'Mamão, Papaia, cru'],
+    ['laranja', 'Laranja, pêra, crua'],
+    ['abacaxi', 'Abacaxi, cru'],
+    ['manga', 'Manga, Tommy Atkins, crua'],
+    ['uva', 'Uva, Itália, crua'],
+    ['goiaba', 'Goiaba, vermelha, com casca, crua'],
+  ])('"%s": a fruta, não suco, polpa ou doce', async (q, fruta) => {
+    // "cozido antes de cru" punha suco, polpa ou doce na frente da fruta.
+    expect((await names(q))[0]).toBe(fruta);
   });
 
   it('paginação mantém a mesma ordem e o total', async () => {
