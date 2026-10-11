@@ -26,7 +26,7 @@ CI com análise de código e busca de segredos; build de produção analisado; p
 | 13 | Média | Os papéis da API REST automática do Supabase (`anon`, `authenticated`) tinham permissão em todas as tabelas, inclusive `users` e `diary_entries`; só o RLS os barrava, e tabela nova nascia aberta | Corrigido: migration `RevokePublicApiGrants` tira as permissões, inclusive das tabelas futuras | Migration testada no Postgres local com os papéis simulados: antes `anon` lia `users`, depois não; tabela criada depois já nasce fechada |
 | 14 | Baixa | `immutable_unaccent` sem `search_path` fixo (aviso do advisor) | Corrigido na mesma migration | idem |
 | 15 | Baixa | `pg_trgm` e `unaccent` no schema public (aviso do advisor) | **Risco aceito**: mover quebraria os operadores da busca, e nenhum papel não confiável cria objetos no banco | advisor do Supabase |
-| 16 | Média | O plano gratuito do Supabase não tem backup recuperável | Corrigido no código: backup semanal cifrado (age, chave privada só com o dono) para bucket privado no R2; **falta o dono configurar R2 e secrets** | `.github/workflows/backup.yml`, `docs/security/backup.md`; ensaio de restauração com contagem idêntica |
+| 16 | Média | O plano gratuito do Supabase não tem backup recuperável | Corrigido no código: backup semanal cifrado (age, chave privada só com o dono) para bucket privado no R2; primeiro backup da produção feito e restaurado com contagem idêntica (10/10) | `.github/workflows/backup.yml`, `docs/security/backup.md`; ensaio de restauração com contagem idêntica |
 
 ## Verificado sem achado
 
@@ -53,5 +53,6 @@ CI com análise de código e busca de segredos; build de produção analisado; p
 - [ ] Render → Environment: `DATABASE_SSL=verify-full` e `DATABASE_SSL_CA` (certificado do Supabase em Settings → Database → SSL, numa linha com `
 `) — **antes** de enviar o commit do TLS
 - [ ] Supabase → depois do deploy com TLS no ar: ligar *Enforce SSL*
-- [ ] Backup: bucket `gotavital-backups` no R2, secrets e variáveis no GitHub (ver `docs/security/backup.md`); guardar a chave privada fora deste computador
+- [x] Backup configurado e ensaiado (10/10)
+- [ ] Guardar a chave privada do age fora deste computador
 - [x] Render → Environment: conferido que `JWT_ACCESS_SECRET` é aleatório e longo, e não o `troque…` do exemplo (sondar a produção foi bloqueado, com razão, pelo modo automático)

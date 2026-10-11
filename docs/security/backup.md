@@ -68,3 +68,4 @@ mesmo schema da origem (na produção, `uuid-ossp` fica em `extensions`; `pg_trg
 | Data | Origem | Resultado |
 |---|---|---|
 | 10/10/2026 | Banco local (docker) | Contagem idêntica nas 7 tabelas; busca por trigramas funcionando. O primeiro ensaio falhou porque as extensões não vêm no dump do schema `public` — o script passou a criá-las antes. |
+| 10/10/2026 | **Produção** (`2026-10-11T0014Z.dump.age`, 84 KB, baixado do R2) | Contagem idêntica à produção nas 7 tabelas; `uuid-ossp` detectado em `extensions`; busca funcionando. |
