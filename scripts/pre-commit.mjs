@@ -15,9 +15,11 @@ for (const pkg of PACKAGES) {
   const files = staged.filter((file) => file.startsWith(`${pkg}/`)).map((file) => file.slice(pkg.length + 1));
   if (files.length === 0) continue;
   const cwd = join(process.cwd(), pkg);
+  // Comando como texto único: com `shell: true`, argumentos soltos são só
+  // concatenados (aviso DEP0190). Os nomes vêm do próprio git, entre aspas.
   const run = (label, args) => {
     console.log(`› ${pkg}: ${label}`);
-    const result = spawnSync('npx', args, { cwd, stdio: 'inherit', shell: true });
+    const result = spawnSync(['npx', ...args].join(' '), { cwd, stdio: 'inherit', shell: true });
     if (result.status !== 0) failed = true;
   };
   run('lint', ['eslint', '--max-warnings', '0', ...files.map((file) => `"${file}"`)]);
