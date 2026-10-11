@@ -25,6 +25,7 @@ function setup(options: { status?: UserStatus; purgeFails?: boolean } = {}) {
   const service = new UsersService(
     users as never,
     {} as never,
+    {} as never,
     refreshTokens as never,
     deletionRequests as never,
     {} as never,

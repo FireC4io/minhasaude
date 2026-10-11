@@ -2,6 +2,7 @@ import { ConflictException, Injectable, Logger, NotFoundException } from '@nestj
 import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Repository } from 'typeorm';
 import { User, UserStatus } from '../database/entities/user.entity';
+import { Food } from '../database/entities/food.entity';
 import { Profile } from '../database/entities/profile.entity';
 import { RefreshToken } from '../database/entities/refresh-token.entity';
 import { SecurityNotifier } from '../mail/security-notifier';
@@ -23,6 +24,7 @@ export class UsersService {
   constructor(
     @InjectRepository(User) private readonly users: Repository<User>,
     @InjectRepository(Profile) private readonly profiles: Repository<Profile>,
+    @InjectRepository(Food) private readonly foods: Repository<Food>,
     @InjectRepository(RefreshToken) private readonly refreshTokens: Repository<RefreshToken>,
     @InjectRepository(AccountDeletionRequest)
     private readonly deletionRequests: Repository<AccountDeletionRequest>,
@@ -70,11 +72,16 @@ export class UsersService {
   // usuário (ver CLAUDE.md).
   async exportData(userId: string) {
     const user = await this.getUserOrThrow(userId);
-    const profile = await this.profiles.findOne({ where: { userId } });
-    const consents = await this.consentsService.listHistory(userId);
-    const bodyMeasurements = await this.bodyMeasurementsService.listAll(userId);
-    const goals = await this.goalsService.listAll(userId);
-    const diaryEntries = await this.diaryService.listAll(userId);
+    // Leituras independentes: em paralelo.
+    const [profile, consents, bodyMeasurements, goals, diaryEntries, customFoods] = await Promise.all([
+      this.profiles.findOne({ where: { userId } }),
+      this.consentsService.listHistory(userId),
+      this.bodyMeasurementsService.listAll(userId),
+      this.goalsService.listAll(userId),
+      this.diaryService.listAll(userId),
+      // Alimentos que a pessoa cadastrou também são dado dela (portabilidade, LGPD art. 18).
+      this.foods.find({ where: { ownerUserId: userId }, order: { name: 'ASC' } }),
+    ]);
     const { passwordHash: _passwordHash, ...safeUser } = user;
 
     return {
@@ -85,6 +92,7 @@ export class UsersService {
       bodyMeasurements,
       goals,
       diaryEntries,
+      customFoods,
     };
   }
 

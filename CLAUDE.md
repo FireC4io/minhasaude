@@ -61,7 +61,7 @@ turbo run lint test build             # pipeline completo (usado no CI)
 - Modelo **sem anúncios**: uso diário livre; leitura de exame por IA no plano pago (R$ 9,90/mês ou R$ 59,90/ano — ainda não registrado no roadmap como final). Teste fechado na Play antes dos exames.
 - Público amplo (idoso, baixa visão, pouca familiaridade com tecnologia, celular básico, internet ruim): acessibilidade é requisito (referência ABNT NBR 17060:2022). Idade mínima 18 (`isAdult` no shared).
 - App em **pt-BR, inglês e espanhol** (interface; nomes da TACO seguem em português).
-- Exclusão de conta é **imediata e permanente** (`DELETE /v1/me` → `{ status: 'deleted' | 'pending_retry' }`), com aviso e oferta do relatório de progresso antes. Export LGPD ainda não inclui alimentos cadastrados pela pessoa (dono vai discutir).
+- Exclusão de conta é **imediata e permanente** (`DELETE /v1/me` → `{ status: 'deleted' | 'pending_retry' }`), com aviso e oferta do relatório de progresso antes. Export LGPD inclui os alimentos cadastrados pela pessoa (`customFoods`).
 - E-mail transacional via **Brevo** (remetente Gmail). MyFitnessPal é referência de **funcionamento**, nunca de visual ou texto (`docs/referencia-mfp.md`).
 - Contas do dono: Google Play, Expo (`@caio_cesar_dev/gota-vital`), Google Cloud (projeto `gotavital`), Brevo, R2. Fechar issues no GitHub e fazer push com deploy fica com o dono quando o modo automático bloquear.
 - **Exames pessoais do dono em `docs/` (pdf/jpeg): nunca commitar, nunca trabalhar neles sem pedido.** O repo é público; `.gitignore` bloqueia pdf/imagens em `docs/`.

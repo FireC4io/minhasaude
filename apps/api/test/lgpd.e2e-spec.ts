@@ -70,6 +70,19 @@ describe('LGPD - consents, export, delete (e2e)', () => {
     expect(response.body.consents.length).toBeGreaterThan(0);
   });
 
+  it('GET /v1/me/export inclui os alimentos cadastrados pela pessoa', async () => {
+    const auth = { Authorization: `Bearer ${accessToken}` };
+    await request(app.getHttpServer())
+      .post('/v1/foods')
+      .set(auth)
+      .send({ name: 'Bolo da vó', kcalPer100g: 320, proteinGPer100g: 5, fatGPer100g: 12, carbGPer100g: 48 })
+      .expect(201);
+
+    const response = await request(app.getHttpServer()).get('/v1/me/export').set(auth).expect(200);
+
+    expect(response.body.customFoods.map((food: { name: string }) => food.name)).toContain('Bolo da vó');
+  });
+
   it('DELETE /v1/me apaga a conta e bloqueia login em seguida', async () => {
     const response = await request(app.getHttpServer())
       .delete('/v1/me')

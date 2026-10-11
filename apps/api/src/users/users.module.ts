@@ -15,12 +15,13 @@ import { UsersService } from './users.service';
 import { AccountPurgeService } from './account-purge.service';
 import { AccountPurgeScheduler } from './account-purge.scheduler';
 
+import { Food } from '../database/entities/food.entity';
 @Module({
   imports: [
     // Consent também é registrado aqui (além de em ConsentsModule) porque
     // RequireConsentGuard é usado via @UseGuards() direto no UsersController,
     // e Nest resolve as dependências do guard no contexto do módulo que o usa.
-    TypeOrmModule.forFeature([User, Profile, RefreshToken, AccountDeletionRequest, Consent]),
+    TypeOrmModule.forFeature([User, Profile, RefreshToken, AccountDeletionRequest, Consent, Food]),
     ConsentsModule,
     BodyMeasurementsModule,
     GoalsModule,
