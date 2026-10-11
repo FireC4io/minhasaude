@@ -91,7 +91,7 @@ Issues **#30** e **#31** acima.
 
 ---
 
-## Status em 2026-10-07 (noite de trabalho autônomo — detalhes em `docs/noite-2026-10-06.md`)
+## Status em 2026-10-07 (noite de trabalho autônomo — detalhes em `docs/historico/noite-2026-10-06.md`)
 
 | Item | Status |
 |---|---|

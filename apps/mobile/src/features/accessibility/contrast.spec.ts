@@ -10,7 +10,7 @@ type ColorName = keyof (typeof GotaVitalColors)['light'];
 /**
  * Todo par texto/fundo que o app usa de verdade. Ao usar uma cor nova como
  * texto ou como fundo de botão, adicione o par aqui — se ele reprovar, a cor
- * precisa de uma variante `-forte` (ver F4-07 em docs/backlog-fase4.md).
+ * precisa de uma variante `-forte` (ver F4-07 em docs/historico/backlog-fase4.md).
  */
 const TEXT_PAIRS: readonly (readonly [text: ColorName, background: ColorName])[] = [
   ['grafite', 'areia'],

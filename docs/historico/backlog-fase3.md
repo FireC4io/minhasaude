@@ -13,7 +13,7 @@
 
 - [ ] `pnpm create expo-app` dentro de `apps/mobile` (ou adaptar de um template de referência encontrado na pesquisa), TypeScript, Expo Router habilitado
 - [ ] Integração com o monorepo: `apps/mobile` consome `packages/config` (`tsconfig.base.json`, `eslint-preset.cjs`, `.prettierrc.json`) do mesmo jeito que `apps/api` — nada de config duplicada
-- [ ] `apps/mobile` consegue importar `@minhasaude/shared` (enums, calculadoras, schemas Zod) — validar que o Metro bundler resolve pacotes do workspace corretamente (ponto que já causou um bug real no backend com `packages/shared`, ver `docs/backlog-fase2.md` issue #14 — testar de verdade, não assumir)
+- [ ] `apps/mobile` consegue importar `@minhasaude/shared` (enums, calculadoras, schemas Zod) — validar que o Metro bundler resolve pacotes do workspace corretamente (ponto que já causou um bug real no backend com `packages/shared`, ver `docs/historico/backlog-fase2.md` issue #14 — testar de verdade, não assumir)
 - [ ] NativeWind configurado (tailwind.config, babel/metro plugin) — uma tela de exemplo prova que uma className aplica estilo real
 - [ ] EAS Build configurado (`eas.json` com profile `development` no mínimo) — build de desenvolvimento instalável em device real via Expo Go ou dev build
 - [ ] `turbo.json` atualizado: `apps/mobile` participa dos pipelines `lint`/`test`/`build` do monorepo (troca os placeholders de `echo` do `package.json` atual por comandos reais)

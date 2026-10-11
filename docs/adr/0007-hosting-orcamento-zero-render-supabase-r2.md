@@ -19,7 +19,7 @@ ADR-0005 recomendava Railway para API+Postgres. Pesquisa atualizada (set/2026) m
 - Manter Postgres e Storage em provedores desacoplados do compute evita lock-in e facilita trocar só a peça que doer primeiro.
 
 ## Trade-off assumido (documentar para o usuário, não decidir sozinho)
-Rodar um app de saúde real com dados sensíveis (exames) em infraestrutura free-tier é aceitável tecnicamente, mas **a responsabilidade de segurança não pode depender do tier pago** — motivo pelo qual a Fase 1 já inclui rate limiting, hardening de headers, auditoria de dependências e LGPD funcional (não stub) desde o início, independente do custo de hosting. Ver `CLAUDE.md` e `docs/backlog-fase1.md`.
+Rodar um app de saúde real com dados sensíveis (exames) em infraestrutura free-tier é aceitável tecnicamente, mas **a responsabilidade de segurança não pode depender do tier pago** — motivo pelo qual a Fase 1 já inclui rate limiting, hardening de headers, auditoria de dependências e LGPD funcional (não stub) desde o início, independente do custo de hosting. Ver `CLAUDE.md` e `docs/historico/backlog-fase1.md`.
 
 ## Alternativa descartada: Railway (ADR-0005 original)
 Sem tier gratuito perene em 2026 — quebra a restrição de orçamento zero atual. Reavaliar quando o orçamento for liberado; continua sendo uma boa opção paga (melhor DX que Render pago, segundo comparações de mercado).

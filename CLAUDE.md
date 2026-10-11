@@ -4,7 +4,7 @@ App mobile de nutrição e acompanhamento de saúde (inspirado no MyFitnessPal, 
 
 ## Arquitetura
 - Monorepo: pnpm workspaces + Turborepo (`apps/api`, `apps/mobile`, `packages/shared`, `packages/config`).
-- Backend: NestJS + TypeORM + PostgreSQL, padrão Repository (domínio desacoplado do ORM).
+- Backend: NestJS + TypeORM + PostgreSQL em camadas (controller → service → `Repository` do TypeORM injetado direto; não há interface própria de repositório). Interface própria (porta + adaptador) só onde o fornecedor pode mudar: e-mail (`mail/mailer.ts`) e, na Fase 6, IA de leitura de exames e arquivos no R2.
 - Mobile: React Native com Expo (Expo Router, EAS Build).
 - Tipos compartilhados: OpenAPI como fonte da verdade do contrato HTTP + codegen de client para o mobile; `packages/shared` para enums/schemas Zod de domínio.
 - Hosting (orçamento zero, ver ADR-0007): API no Render free tier, Postgres no Supabase free tier, arquivos de exame no Cloudflare R2 free tier. Tudo atrás de env vars — trocar de provedor pago não deve exigir mudança de código.
@@ -36,7 +36,7 @@ turbo run lint test build             # pipeline completo (usado no CI)
 - Endpoints de exportação (`GET /v1/me/export`) e exclusão (`DELETE /v1/me`) de conta precisam ser **funcionais de verdade na Fase 1**, não stub — há usuários reais desde o início.
 
 ## Convenções de código
-- Seguir `rules/common/coding-style.md`: imutabilidade, arquivos pequenos (200-400 linhas típico, 800 máximo), Repository pattern, validação em toda borda do sistema com Zod/class-validator.
+- Seguir `rules/common/coding-style.md`: imutabilidade, arquivos pequenos (200-400 linhas típico, 800 máximo), Repository pattern, validação em toda borda do sistema: `class-validator` nos DTOs de entrada da API (gera o Swagger), Zod no `shared`, nas variáveis de ambiente e em dado que vem de fora (Open Food Facts, resposta de IA).
 - Nomes de entidades/variáveis em inglês; textos de UI em português (pt-BR).
 - Migrations do TypeORM sempre geradas, nunca `synchronize: true` fora de teste local isolado.
 - Testes: TDD para lógica de negócio crítica (cálculo de metas, normalização de exames, calculadoras de índices) — não exigir 80% de cobertura em CRUD trivial, priorizar qualidade sobre número.
@@ -69,14 +69,14 @@ turbo run lint test build             # pipeline completo (usado no CI)
 ## Regras de código vigentes
 
 ### API (NestJS)
-- App montado por `configureApp`; testes de segurança usam `test/support/security-app.ts`.
+- App montado por `configureApp`; testes de segurança usam `test/support/security-app.ts`. Suíte que faz muitos pedidos sobre outra coisa usa `withoutRateLimit` (`test/support/without-rate-limit.ts`); os testes do próprio limite, nunca.
 - Todo texto de entrada tem teto em `INPUT_LIMITS` (shared). Criar/alterar/calcular dado de saúde exige `@RequireConsent`; ler/exportar/apagar não. Guard JWT confere conta ativa; HS256 fixo.
 - **Resposta sempre por DTO**: `@Expose()` em cada campo, `@Type(() => Dto)` em aninhado, e o controller devolve `toDto(...)`/`toDtoList(...)` (`common/serialization/to-dto.ts`). Campo não declarado não sai. Exceção consciente: `GET /v1/me/export` (portabilidade LGPD; só o hash de senha fica fora). Regressão em `test/response-leak.e2e-spec.ts`.
 - Swagger: `@ApiOkResponse`/`@ApiCreatedResponse`/`@ApiNoContentResponse` explícitos; **nunca** ligar o plugin `@nestjs/swagger` no `nest-cli.json` (quebra em runtime com path de `src/`). Campo nullable primitivo: `{ type: String, nullable: true }` explícito, senão o orval gera tipo inútil.
 - TypeORM: `relations` em forma de objeto (`{ food: true }`). Coluna `numeric` volta `string`.
 - **Migrations rodam no boot** (`migrationsRun: true`) e a TACO é a migration `SeedTacoFoods`. Por isso: parar o `start:dev` antes de gerar/editar migration (matar o pai `nest start --watch`, senão ele religa; PowerShell: `Get-CimInstance Win32_Process -Filter "Name='node.exe'"`); **sempre revisar o que o `migration:generate` gera** (ele tenta apagar índices feitos à mão — declarados com `synchronize: false` em `Food`); timestamp de migration manual não pode ficar à frente do relógio. **Tabela nova entra na lista de RLS** (`EnableRowLevelSecurity`).
 - Busca de alimento (`foods/search/`): SQL cru devolve ids em ordem + `findBy` para hidratar; forma padrão nova vai em `PREFERRED_FOODS`.
-- Versões travadas: `@nestjs/*` em 11.x e `@nestjs/schedule` em 5.x (as mais novas são ESM-only e quebram o Jest). Conferir antes de atualizar.
+- Versões travadas: `@nestjs/*` em 11.x e `@nestjs/schedule` em 5.x (as mais novas são ESM-only e quebram o Jest). Conferir antes de atualizar. O Dependabot só propõe correções e versões menores (`.github/dependabot.yml`); versão principal é migração planejada.
 - `reflect-metadata` é `setupFiles` do Jest da API.
 
 ### App (Expo)
@@ -98,6 +98,7 @@ turbo run lint test build             # pipeline completo (usado no CI)
 ## Ambiente e armadilhas vigentes
 - **pnpm 12.4.2** (global e `packageManager`). Config só em `pnpm-workspace.yaml` (`nodeLinker: hoisted` — obrigatório pro Expo —, `overrides`, `allowBuilds`, `minimumReleaseAgeExclude`). Pacote publicado há pouco é recusado (`minimumReleaseAge`); script de build de dependência nova precisa entrar em `allowBuilds`.
 - `turbo run lint test build` às vezes crasha por disputa de recursos: rodar com `--concurrency=1` antes de suspeitar de regressão.
+- Lint com `--max-warnings 0` nos três pacotes. Hook `.githooks/pre-commit` (ligado pelo `prepare` no `pnpm install`) roda lint e tipos do que está no commit. Pacotes do Expo sobem com `npx expo install --fix`, nunca soltos; `@react-native/metro-config` fixado em `overrides` junto do React Native. `turbo.json` com `agentGuidance: false` (senão o turbo cria um `AGENTS.md`).
 - **Stack local**: `docker compose up -d postgres` → `pnpm --filter api start:dev` (aplica migrations) → `cd apps/mobile && npx expo start --web --port 8081`. Validar web **só contra a API local** (CORS de produção bloqueia `:8081` e o erro parece de rede). Token fica no `localStorage` de `:8081` e sobrevive à troca de API.
 - Contas de teste locais: `e2e-1790272811@local.test`, `sweep-ui-01@local.test`, `relatorio-01@local.test`, senha `SenhaTeste123!`.
 - **Emulador Android**: AVD `Medium_Phone_API_37.0` em `D:\Android\avd` (`ANDROID_AVD_HOME=D:\Android\avd`; o C: não tem espaço), subir com `-memory 4096 -gpu swiftshader_indirect`; depois `adb reverse tcp:3000 tcp:3000` e `tcp:8081`. Git Bash: `MSYS_NO_PATHCONV=1` para `adb shell` com `/sdcard`; `uiautomator dump` sai em UTF-8; ESC volta à home do Expo Go (fechar teclado com `keyevent 4` só se `mInputShown=true`). No Expo Go: desligar "Tools button"; "isn't responding" na primeira carga → "Wait".
@@ -108,6 +109,6 @@ turbo run lint test build             # pipeline completo (usado no CI)
 
 ## Referências
 - Plano completo: `docs/product-plan.md` · Roadmap: `docs/roadmap.md` · ADRs: `docs/adr/`
-- Backlogs: `docs/backlog-fase1.md` a `docs/backlog-fase4.md`
+- Backlogs: `docs/historico/backlog-fase1.md` a `docs/historico/backlog-fase4.md`
 - Banco: `docs/database-schema.md` · Contrato de API: `docs/api-contract.md`
 - Histórico: `docs/historico/`

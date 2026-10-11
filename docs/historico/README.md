@@ -7,9 +7,11 @@ decisão, do contexto de um incidente ou de como um problema antigo foi resolvid
 | Arquivo | O que tem |
 | --- | --- |
 | [`contexto-ate-2026-10-10.md`](contexto-ate-2026-10-10.md) | O antigo bloco "Active Context" do CLAUDE.md, das Fases 1 a 5: issues concluídas, incidente de produção de 07/10, diagnósticos (inclusive os que se revelaram errados), validações visuais, troca do pnpm, reordenação do roadmap. |
-| [`../noite-2026-10-06.md`](../noite-2026-10-06.md) | Noite autônoma de 06→07/10 e as decisões do dono da manhã de 07/10. |
+| [`noite-2026-10-06.md`](noite-2026-10-06.md) | Noite autônoma de 06→07/10 e as decisões do dono da manhã de 07/10. |
 | [`../referencia-mfp.md`](../referencia-mfp.md) | Percurso comentado pelo dono no MyFitnessPal e as decisões que saíram dele. |
-| Backlogs `../backlog-fase1.md` a `../backlog-fase4.md` | Detalhe por issue de cada fase. |
+| Backlogs [`backlog-fase1.md`](backlog-fase1.md) a [`backlog-fase4.md`](backlog-fase4.md) | Detalhe por issue de cada fase. |
+| [`plano-2026-10-07.md`](plano-2026-10-07.md) | Plano de 07 a 10/10 (exclusão de conta, relatório, busca, idiomas, qualidade), concluído. |
+| [`estrutura-pastas.md`](estrutura-pastas.md) | Proposta inicial de pastas do monorepo (Fase 1). O código seguiu outro desenho; vale como registro. |
 
 ## Como registrar daqui pra frente
 

@@ -40,7 +40,7 @@ Prazos omitidos de propósito — dependem da sua resposta sobre dedicação (pe
 ## Fase 4 — Refundação da interface (ampliada em 2026-10-02)
 Objetivo: **um app bom e eficiente para todos os públicos** — não só acessível, mas confortável
 para pessoa idosa, com baixa visão, com pouca familiaridade com tecnologia, com celular básico e
-internet ruim. Backlog completo em `docs/backlog-fase4.md`, organizado em blocos:
+internet ruim. Backlog completo em `docs/historico/backlog-fase4.md`, organizado em blocos:
 - **A. Fundação acessível** ✅ — componentes base com papel/rótulo/estado e alvo de 48 dp (#30, #31).
 - **B. Ambiente de validação real** — emulador Android (já funcionando) e fluxos ponta a ponta com Maestro.
 - **C. Identidade Gota Vital** — fontes, ícone e splash próprios, barra de abas na paleta, e

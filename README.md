@@ -47,4 +47,4 @@ Cada workspace individual roda via `pnpm --filter <nome> <script>`, ex.: `pnpm -
 
 ## Status
 
-Fase 1 (Fundação) em andamento — ver [`docs/backlog-fase1.md`](docs/backlog-fase1.md) e [`docs/roadmap.md`](docs/roadmap.md).
+Fase 1 (Fundação) em andamento — ver [`docs/historico/backlog-fase1.md`](docs/historico/backlog-fase1.md) e [`docs/roadmap.md`](docs/roadmap.md).
