@@ -65,7 +65,8 @@ jobs:
           mkdir -p "$WORK"
           # Só o schema public: é onde estão todos os dados do app. Os schemas
           # internos do Supabase não são nossos (e o dono não tem acesso a todos).
-          docker run --rm --network host \
+          # Mesmo usuário do runner: senão o arquivo nasce do root e não dá para apagar.
+          docker run --rm --network host --user "$(id -u):$(id -g)" \
             -e DATABASE_URL -e PGSSLMODE=verify-full -e PGSSLROOTCERT=/ca/supabase-root-2021.crt \
             -v "$PWD/infra:/ca:ro" -v "$WORK:/out" \
             postgres:17 \
@@ -103,3 +104,11 @@ jobs:
           aws s3api head-object --bucket "$BUCKET" --key "$key" --endpoint-url "$endpoint" > /dev/null
           echo "Backup guardado: $key ($(du -h "$WORK/db.dump.age" | cut -f1))"
           rm -f "$WORK/db.dump.age"
+
+      - name: Apagar qualquer cópia aberta que tenha sobrado
+        if: always()
+        run: |
+          if [ -n "${WORK:-}" ] && [ -d "$WORK" ]; then
+            sudo find "$WORK" -type f -exec shred -u {} +
+            sudo rm -rf "$WORK"
+          fi
