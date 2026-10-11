@@ -116,6 +116,25 @@ describe('Foods search - relevância (e2e)', () => {
     expect((await names('arroz', otherAuth))[0]).toBe('Arroz, tipo 1, cozido');
   });
 
+  it('o hábito não puxa alimento que só se parece com o termo', async () => {
+    // Caso real: quem anotou pão francês buscava "frango" e via o pão em
+    // primeiro ("fran-go" e "fran-cês" são parecidos para o trigrama).
+    const server = app.getHttpServer();
+    const search = await request(server).get('/v1/foods/search').query({ q: 'pão francês' }).set(auth);
+    const pao = search.body.data.find((f: { name: string }) => f.name === 'Pão, trigo, francês');
+    const hoje = new Date().toISOString().slice(0, 10);
+    for (const mealType of ['breakfast', 'snack', 'dinner']) {
+      await request(server)
+        .post('/v1/diary')
+        .set(auth)
+        .send({ foodId: pao.id, date: hoje, mealType, quantity: 50, unit: 'grams' })
+        .expect(201);
+    }
+
+    expect((await names('frango'))[0]).toBe('Frango, peito, sem pele, grelhado');
+    expect((await names('pão'))[0]).toBe('Pão, trigo, francês');
+  });
+
   it('paginação mantém a mesma ordem e o total', async () => {
     const server = app.getHttpServer();
     const page1 = await request(server).get('/v1/foods/search').query({ q: 'feijao', limit: 3, page: 1 }).set(otherAuth);

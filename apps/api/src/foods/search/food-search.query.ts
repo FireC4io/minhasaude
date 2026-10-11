@@ -13,7 +13,9 @@ export interface FoodSearchQuery {
  * Busca de alimento ordenada por relevância. O filtro continua sendo trigrama
  * + unaccent (ADR-0004); o que mudou é a ordem, em camadas:
  *
- * 1. o que a pessoa registrou nos últimos 180 dias (mais vezes primeiro);
+ * 1. o que a pessoa registrou nos últimos 180 dias (mais vezes primeiro), se o
+ *    nome tiver todas as palavras do termo: só parecer não basta ("frango"
+ *    puxava o pão francês de quem o anotou);
  * 2. a forma padrão do termo (`PREFERRED_FOODS`), na ordem da lista;
  * 3. nome-base igual ao termo: "Arroz, tipo 1, cozido" para "arroz";
  * 4. nome-base começando pela primeira palavra e contendo as outras:
@@ -61,7 +63,7 @@ export function buildFoodSearchQuery(
       from scored s
       left join habits h on h.food_id = s.id
      order by
-       coalesce(h.uses, 0) desc,
+       case when s.has_all_tokens then coalesce(h.uses, 0) else 0 end desc,
        coalesce(array_position($5::text[], s.name), 2147483647),
        case
          when s.head = $3 then 0

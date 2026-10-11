@@ -44,6 +44,13 @@ export const PREFERRED_FOODS: Record<string, string[]> = {
   queijo: ['Queijo, minas, frescal', 'Queijo, mozarela'],
   iogurte: ['Iogurte, natural'],
   tomate: ['Tomate, com semente, cru'],
+  // Frutas: sem isto, "cozido antes de cru" punha suco, polpa ou doce na frente da fruta.
+  mamao: ['Mamão, Papaia, cru', 'Mamão, Formosa, cru'],
+  laranja: ['Laranja, pêra, crua', 'Laranja, pêra, suco'],
+  abacaxi: ['Abacaxi, cru'],
+  manga: ['Manga, Tommy Atkins, crua', 'Manga, Palmer, crua'],
+  uva: ['Uva, Itália, crua', 'Uva, Rubi, crua'],
+  goiaba: ['Goiaba, vermelha, com casca, crua', 'Goiaba, branca, com casca, crua'],
 };
 
 export function normalizeSearchText(text: string): string {
