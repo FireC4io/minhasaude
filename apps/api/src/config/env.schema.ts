@@ -35,6 +35,12 @@ export const envSchema = z.object({
   // tentativas vê o IP do proxy e junta todo mundo num balde só. Nunca usar
   // `true` (confiar em tudo): aí o cliente forja o próprio IP.
   TRUST_PROXY_HOPS: z.coerce.number().int().min(0).max(3).default(0),
+  // Desliga o limite de pedidos. Só para a varredura do ZAP no CI, que manda
+  // milhares de pedidos por minuto; em produção a API recusa subir com isto.
+  RATE_LIMIT_DISABLED: z
+    .enum(['true', 'false'])
+    .default('false')
+    .transform((value) => value === 'true'),
   // Opcional: sem ela, a API loga normalmente em stdout sem encaminhar pro BetterStack.
   BETTERSTACK_SOURCE_TOKEN: z.string().optional(),
   // "Ingesting host" da source no Better Stack (ex.: s123.eu-nbg-2.betterstackdata.com).
@@ -64,6 +70,13 @@ const checkedEnvSchema = envSchema.superRefine((env, ctx) => {
       code: 'custom',
       path: ['DATABASE_SSL'],
       message: 'em produção a conexão com o banco precisa de TLS (use verify-full)',
+    });
+  }
+  if (env.NODE_ENV === 'production' && env.RATE_LIMIT_DISABLED) {
+    ctx.addIssue({
+      code: 'custom',
+      path: ['RATE_LIMIT_DISABLED'],
+      message: 'em produção o limite de pedidos não pode ser desligado',
     });
   }
   if (env.DATABASE_SSL === 'verify-full' && !env.DATABASE_SSL_CA) {

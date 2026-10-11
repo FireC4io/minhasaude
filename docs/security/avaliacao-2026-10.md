@@ -103,7 +103,24 @@ nota soma achados de bibliotecas, então vale a triagem item a item.
   privado de vulnerabilidades ligado; `SECURITY.md`.
 - **SonarQube Cloud** com cobertura dos e2e e Quality Gate obrigatório.
 - **Plano de resposta a incidentes**: `docs/security/plano-de-incidente.md`.
-- Fica para depois: registro de auditoria no banco, ZAP automático no CI, extensões fora do `public`, Play Integrity.
+- Fica para depois: registro de auditoria no banco, extensões fora do `public`, Play Integrity. (ZAP no CI: feito, ver abaixo.)
+
+## ZAP autenticado no CI (11/10, noite)
+
+A varredura de 11/10 à tarde rodou **sem autenticação de fato**: o token passado pela opção `-z` perdia o espaço de
+"Bearer <token>", e 2 mil das respostas foram 401. Ela só testou a porta de entrada. Refeita com o token pelo
+`ZAP_AUTH_HEADER_VALUE` e, de passagem, descobriu-se que o próprio ZAP chamava `DELETE /v1/me` e apagava o usuário
+de teste no meio da varredura. Agora roda no CI (`.github/workflows/zap.yml`) a cada mudança na API e toda semana,
+sem as duas rotas destrutivas, e falha se a varredura não estiver autenticada.
+
+| # | Risco | Achado | Situação | Teste |
+|---|---|---|---|---|
+| 19 | Média | Caractere nulo (` `) em qualquer texto derrubava a rota com **500** (o Postgres recusa o caractere): visto em `POST /v1/foods` e `POST /v1/consents`, valia para todo campo de texto | Corrigido: `RejectNullBytesPipe` global, antes da validação, responde 400 (corpo, query e parâmetros) | `security-input-limits.e2e-spec.ts`, `reject-null-bytes.pipe.spec.ts` |
+| 20 | Baixa | `policyVersion` aceitava qualquer texto, e ele volta na exportação LGPD (ZAP: XSS persistente em JSON, confiança baixa) | Corrigido: só `AAAA-MM` | `security-input-limits.e2e-spec.ts` |
+| 21 | Baixa | `barcode` aceitava qualquer texto (ZAP: path traversal, falso positivo) | Corrigido: só 8 a 14 dígitos (GTIN/EAN) | `security-input-limits.e2e-spec.ts` |
+
+Para a varredura caber no CI, a API aceita `RATE_LIMIT_DISABLED=true`, **recusado pelo schema em produção**
+(`env.schema.spec.ts`, `rate-limit-disabled.e2e-spec.ts`). Varredura final: 113 regras aprovadas, nenhuma falha.
 
 ## Passos do dono
 

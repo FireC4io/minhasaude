@@ -79,3 +79,20 @@ describe('TLS do banco', () => {
     expect(env.DATABASE_SSL_CA).toBe('-----BEGIN CERTIFICATE-----\nABC\n-----END CERTIFICATE-----');
   });
 });
+
+describe('limite de pedidos desligado (só varredura de segurança)', () => {
+  const prod = { ...base, NODE_ENV: 'production', DATABASE_SSL: 'verify-full', DATABASE_SSL_CA: 'pem' };
+
+  it('fica ligado por padrão', () => {
+    expect(validateEnv(base).RATE_LIMIT_DISABLED).toBe(false);
+  });
+
+  it('pode ser desligado fora de produção, para o ZAP do CI', () => {
+    expect(validateEnv({ ...base, NODE_ENV: 'test', RATE_LIMIT_DISABLED: 'true' }).RATE_LIMIT_DISABLED).toBe(true);
+  });
+
+  it('em produção a API recusa subir com o limite desligado', () => {
+    expect(() => validateEnv({ ...prod, RATE_LIMIT_DISABLED: 'true' })).toThrow(/RATE_LIMIT_DISABLED/);
+    expect(validateEnv({ ...prod, RATE_LIMIT_DISABLED: 'false' }).RATE_LIMIT_DISABLED).toBe(false);
+  });
+});

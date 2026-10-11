@@ -62,4 +62,37 @@ describe('Tamanho máximo dos textos de entrada (e2e)', () => {
       .send({ consentType: 'privacy_policy', policyVersion: long(33) })
       .expect(400);
   });
+
+  it('texto com caractere nulo vira 400, nunca 500 (achado do ZAP autenticado)', async () => {
+    // O Postgres recusa "\u0000" em texto: antes, qualquer campo com ele derrubava a rota com 500.
+    const food = { kcalPer100g: 95, proteinGPer100g: 2, fatGPer100g: 1, carbGPer100g: 18 };
+    await http().post('/v1/foods').set(auth()).send({ ...food, name: 'Pão\u0000' }).expect(400);
+    await http().post('/v1/foods').set(auth()).send({ ...food, name: 'Ok', barcode: '789\u0000' }).expect(400);
+    await http()
+      .post('/v1/consents')
+      .set(auth())
+      .send({ consentType: 'privacy_policy', policyVersion: '2026-10\u0000' })
+      .expect(400);
+    await http().get('/v1/foods/search').query({ q: 'arroz\u0000' }).set(auth()).expect(400);
+  });
+
+  it('código de barras só com 8 a 14 dígitos (GTIN/EAN)', async () => {
+    const food = { kcalPer100g: 95, proteinGPer100g: 2, fatGPer100g: 1, carbGPer100g: 18 };
+    await http().post('/v1/foods').set(auth()).send({ ...food, name: 'Ok', barcode: 'foods' }).expect(400);
+    await http().post('/v1/foods').set(auth()).send({ ...food, name: 'Ok', barcode: '12345' }).expect(400);
+    await http().post('/v1/foods').set(auth()).send({ ...food, name: 'Ok', barcode: '7891000100103' }).expect(201);
+  });
+
+  it('versão de política só no formato AAAA-MM (ela volta na exportação)', async () => {
+    await http()
+      .post('/v1/consents')
+      .set(auth())
+      .send({ consentType: 'privacy_policy', policyVersion: '<script>alert(1);</script>' })
+      .expect(400);
+    await http()
+      .post('/v1/consents')
+      .set(auth())
+      .send({ consentType: 'privacy_policy', policyVersion: '2026-10' })
+      .expect(201);
+  });
 });

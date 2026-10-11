@@ -34,8 +34,14 @@ import type { Env } from '../config/env.schema';
         verifyOptions: { algorithms: ['HS256'] },
       }),
     }),
-    ThrottlerModule.forRoot({
-      throttlers: [{ ttl: 60_000, limit: 60 }],
+    ThrottlerModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService<Env, true>) => {
+        // Só a varredura do ZAP no CI desliga (o schema recusa em produção).
+        const disabled = config.get('RATE_LIMIT_DISABLED', { infer: true });
+        return { throttlers: [{ ttl: 60_000, limit: 60 }], skipIf: () => disabled };
+      },
     }),
   ],
   controllers: [AuthController],

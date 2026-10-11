@@ -69,8 +69,8 @@ turbo run lint test build             # pipeline completo (usado no CI)
 ## Regras de código vigentes
 
 ### API (NestJS)
-- App montado por `configureApp`; testes de segurança usam `test/support/security-app.ts`. Suíte que faz muitos pedidos sobre outra coisa usa `withoutRateLimit` (`test/support/without-rate-limit.ts`); os testes do próprio limite, nunca.
-- Todo texto de entrada tem teto em `INPUT_LIMITS` (shared). Criar/alterar/calcular dado de saúde exige `@RequireConsent`; ler/exportar/apagar não. Guard JWT confere conta ativa; HS256 fixo.
+- App montado por `configureApp`; testes de segurança usam `test/support/security-app.ts`. `RATE_LIMIT_DISABLED=true` só existe para o ZAP do CI (`zap.yml`) e o schema recusa em produção. Suíte que faz muitos pedidos sobre outra coisa usa `withoutRateLimit` (`test/support/without-rate-limit.ts`); os testes do próprio limite, nunca.
+- Todo texto de entrada tem teto em `INPUT_LIMITS` (shared); caractere nulo é recusado com 400 pelo `RejectNullBytesPipe` global (o Postgres não aceita e virava 500). Criar/alterar/calcular dado de saúde exige `@RequireConsent`; ler/exportar/apagar não. Guard JWT confere conta ativa; HS256 fixo.
 - **Resposta sempre por DTO**: `@Expose()` em cada campo, `@Type(() => Dto)` em aninhado, e o controller devolve `toDto(...)`/`toDtoList(...)` (`common/serialization/to-dto.ts`). Campo não declarado não sai. Exceção consciente: `GET /v1/me/export` (portabilidade LGPD; só o hash de senha fica fora). Regressão em `test/response-leak.e2e-spec.ts`.
 - Swagger: `@ApiOkResponse`/`@ApiCreatedResponse`/`@ApiNoContentResponse` explícitos; **nunca** ligar o plugin `@nestjs/swagger` no `nest-cli.json` (quebra em runtime com path de `src/`). Campo nullable primitivo: `{ type: String, nullable: true }` explícito, senão o orval gera tipo inútil.
 - TypeORM: `relations` em forma de objeto (`{ food: true }`). Coluna `numeric` volta `string`.

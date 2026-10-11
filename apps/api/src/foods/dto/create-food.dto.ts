@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNumber, IsOptional, IsString, Max, Min, MinLength, MaxLength } from 'class-validator';
+import { IsNumber, IsOptional, IsString, Matches, Max, MaxLength, Min, MinLength } from 'class-validator';
 import { INPUT_LIMITS } from '@minhasaude/shared';
 
 export class CreateFoodDto {
@@ -15,10 +15,12 @@ export class CreateFoodDto {
   @MaxLength(INPUT_LIMITS.foodBrand)
   brand?: string;
 
-  @ApiPropertyOptional()
+  // GTIN/EAN: só dígitos, de 8 a 14.
+  @ApiPropertyOptional({ example: '7891000100103', pattern: String.raw`^\d{8,14}$` })
   @IsOptional()
   @IsString()
   @MaxLength(INPUT_LIMITS.barcode)
+  @Matches(/^\d{8,14}$/, { message: 'barcode deve ter de 8 a 14 dígitos' })
   barcode?: string;
 
   @ApiProperty()

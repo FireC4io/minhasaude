@@ -4,6 +4,7 @@ import type { NestExpressApplication } from '@nestjs/platform-express';
 import helmet from 'helmet';
 
 import type { Env } from '../config/env.schema';
+import { RejectNullBytesPipe } from '../common/validation/reject-null-bytes.pipe';
 
 /**
  * Tudo o que protege a API na borda, num lugar só: o `main.ts` e os testes de
@@ -18,6 +19,8 @@ export function configureApp(app: NestExpressApplication, config: ConfigService<
   app.setGlobalPrefix('v1', { exclude: ['health'] });
 
   app.useGlobalPipes(
+    // Antes da validação: caractere nulo em texto derrubava o Postgres com 500.
+    new RejectNullBytesPipe(),
     new ValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true,
