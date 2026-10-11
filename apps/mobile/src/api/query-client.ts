@@ -4,6 +4,9 @@ import { QueryClient, type Query } from '@tanstack/react-query';
 
 import { MAX_OFFLINE_COPY_MS } from '@/features/preferences/offline-copy-preference';
 
+import { createEncryptedStorage } from './encrypted-storage';
+import { cacheKeyStore } from './token-storage';
+
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -19,14 +22,16 @@ export const queryClient = new QueryClient({
  * Cópia do cache no aparelho (F4-18): o que já foi carregado continua visível
  * sem internet ou enquanto o servidor gratuito acorda.
  *
- * Contém dado de saúde (diário, peso) sem criptografia no armazenamento do
- * app — por isso a pessoa escolhe por quanto tempo ela fica sem abrir o app
- * (1, 7 ou 30 dias, padrão 1; ver `offline-copy-preference`), e ela é apagada
- * ao sair da conta, ao expirar a sessão e ao excluir a conta
- * (`clearPersistedCache`).
+ * Contém dado de saúde (diário, peso), então é gravada cifrada com chave no
+ * Keystore (`encrypted-storage`, achado 4 da avaliação de segurança). A pessoa
+ * escolhe por quanto tempo ela fica sem abrir o app (1, 7 ou 30 dias, padrão 1;
+ * ver `offline-copy-preference`), e cópia e chave são apagadas ao sair da
+ * conta, ao expirar a sessão e ao excluir a conta (`clearPersistedCache`).
  */
+const encryptedStorage = createEncryptedStorage(AsyncStorage, cacheKeyStore);
+
 export const queryPersister = createAsyncStoragePersister({
-  storage: AsyncStorage,
+  storage: encryptedStorage,
   key: 'gota-vital:query-cache',
   throttleTime: 2000,
 });
@@ -45,5 +50,11 @@ export async function clearPersistedCache(): Promise<void> {
     await queryPersister.removeClient();
   } catch {
     // Sem armazenamento não há cópia a apagar.
+  }
+  try {
+    // Sem a chave, qualquer resto da cópia fica ilegível.
+    await encryptedStorage.forgetKey();
+  } catch {
+    // Sem Keystore não há chave a apagar.
   }
 }

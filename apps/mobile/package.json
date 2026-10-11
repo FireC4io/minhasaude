@@ -23,6 +23,7 @@
     "@expo-google-fonts/work-sans": "^0.4.2",
     "@expo/ui": "~57.0.19",
     "@minhasaude/shared": "workspace:^",
+    "@noble/ciphers": "^2.4.0",
     "@react-native-async-storage/async-storage": "2.2.0",
     "@react-native-google-signin/google-signin": "^16.1.5",
     "@tanstack/query-async-storage-persister": "^5.104.1",
@@ -32,6 +33,7 @@
     "expo": "~57.0.24",
     "expo-audio": "~57.0.5",
     "expo-constants": "~57.0.19",
+    "expo-crypto": "~57.0.3",
     "expo-device": "~57.0.2",
     "expo-document-picker": "~57.0.3",
     "expo-file-system": "~57.0.7",
@@ -90,6 +92,11 @@
     "setupFiles": [
       "<rootDir>/../jest.setup.js"
     ],
-    "coverageDirectory": "<rootDir>/../coverage"
+    "coverageDirectory": "<rootDir>/../coverage",
+    "transformIgnorePatterns": [
+      "/node_modules/(?!(.pnpm|react-native|@react-native|@react-native-community|expo|@expo|@expo-google-fonts|react-navigation|@react-navigation|@sentry/react-native|native-base|standard-navigation|@noble))",
+      "/node_modules/react-native-reanimated/plugin/",
+      "/node_modules/@react-native/babel-preset/"
+    ]
   }
 }

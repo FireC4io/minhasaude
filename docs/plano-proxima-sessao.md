@@ -29,7 +29,8 @@ fechada. Plano visual: https://claude.ai/artifact/M3cugePLkCpbjSkbVJq3BB · Acha
    gera a página de `docs/legal/politica-de-privacidade.md` a cada mudança). Versão `2026-10`; quem aceitou a antiga
    cai na tela `policy-update` (pode baixar dados, apagar a conta ou sair sem aceitar). Usar esse endereço na Play Console.
    Pendência: `GET /v1/consents` não tem DTO (client gerado tipa `void`; o app usa `ConsentStatusView`).
-4. **Primeiro build EAS (Android)** + **criptografia da cópia local** (achado 4) + análise do APK no MobSF.
+4. ✅ **Criptografia da cópia local** (achado 4) — 2026-10-11, `apps/mobile/src/api/encrypted-storage.ts`. Falta conferir
+   num build EAS (cópia sobrevive a fechar/abrir o app; some ao sair) + análise do APK no MobSF.
 5. **Itens restantes da avaliação**: cabeçalhos de segurança em produção, Swagger público em produção (desligar?),
    plano de incidente curto em `docs/security/`, token de renovação reusado derruba a sessão (teste).
 6. **Loja**: 8 imagens 1080×1920 com frase (sem telas em prévia, sem e-mail de teste), imagem de destaque 1024×500,

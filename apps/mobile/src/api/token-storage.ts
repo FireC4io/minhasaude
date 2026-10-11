@@ -1,6 +1,8 @@
 import { Platform } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 
+import type { KeyStore } from './encrypted-storage';
+
 const ACCESS_TOKEN_KEY = 'minhasaude.accessToken';
 const REFRESH_TOKEN_KEY = 'minhasaude.refreshToken';
 
@@ -59,3 +61,12 @@ export async function setStoredTokens(tokens: StoredTokens): Promise<void> {
 export async function clearStoredTokens(): Promise<void> {
   await Promise.all([deleteItem(ACCESS_TOKEN_KEY), deleteItem(REFRESH_TOKEN_KEY)]);
 }
+
+const CACHE_KEY_KEY = 'minhasaude.cacheKey';
+
+/** Chave da cópia local cifrada (`encrypted-storage`), no Keystore/Keychain. */
+export const cacheKeyStore: KeyStore = {
+  get: () => getItem(CACHE_KEY_KEY),
+  set: (hexKey) => setItem(CACHE_KEY_KEY, hexKey),
+  remove: () => deleteItem(CACHE_KEY_KEY),
+};
