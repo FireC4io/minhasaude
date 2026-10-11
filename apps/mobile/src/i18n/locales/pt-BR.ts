@@ -17,6 +17,10 @@ export const ptBR = {
     hidePassword: 'Esconder senha',
   },
   tabs: { today: 'Hoje', progress: 'Progresso', exams: 'Exames', profile: 'Perfil' },
+  screenError: {
+    title: 'Algo deu errado nesta tela',
+    body: 'Seus dados continuam guardados. Tente de novo. Se não resolver, feche e abra o app.',
+  },
   goalUnavailable: {
     title: 'Não foi possível carregar',
     body: 'Não conseguimos buscar sua meta agora. Seus dados continuam salvos. Tente de novo quando a internet voltar.',

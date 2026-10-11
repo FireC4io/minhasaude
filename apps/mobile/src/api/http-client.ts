@@ -2,7 +2,7 @@ import axios from 'axios';
 import type { AxiosError, AxiosRequestConfig, InternalAxiosRequestConfig } from 'axios';
 import { clearStoredTokens, getStoredTokens, setStoredTokens } from './token-storage';
 
-const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL ?? 'https://minhasaude-api.onrender.com';
+export const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL ?? 'https://minhasaude-api.onrender.com';
 
 // Endpoints públicos: um 401 aqui é credencial inválida/refresh token
 // expirado de verdade, não motivo pra tentar renovar e repetir a chamada.

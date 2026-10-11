@@ -100,6 +100,7 @@ só o termo buscado, sem nada que identifique a pessoa.
 | Saúde e fitness → Informações de saúde | Peso, altura, diário alimentar, metas calculadas, alimentos cadastrados | Obrigatório | Funcionalidade do app |
 | Saúde e fitness → Informações de condicionamento físico | Nível de atividade física e objetivo | Obrigatório | Funcionalidade do app |
 | Informações e desempenho do app → Outros dados de desempenho | Registros técnicos de cada requisição (rota, resultado, IP), sem dado de saúde | Obrigatório | Prevenção contra fraudes, segurança e conformidade |
+| Informações e desempenho do app → Registros de falhas | Quando o app dá erro: mensagem técnica, tela e versão do app (`POST /v1/client-errors`, só no log, sem dado de saúde) | Obrigatório | Análise |
 
 **Não coletados:** localização, contatos, fotos e vídeos, áudio, arquivos, agenda, mensagens, navegação na web,
 compras, informações financeiras, identificadores do aparelho, histórico de apps.

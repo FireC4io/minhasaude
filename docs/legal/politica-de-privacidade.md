@@ -23,7 +23,7 @@ Contato para qualquer assunto de privacidade, inclusive como encarregado (art. 4
 | Metas | Metas calculadas, a fórmula e a versão do cálculo | Manter o histórico sem mudar o passado se a fórmula for corrigida |
 | Alimentos cadastrados por você | Nome, marca e valores nutricionais | Você reutilizar nos próximos registros. Só você vê |
 | Consentimentos | Qual autorização, versão desta política, data, endereço IP e aparelho usado | Provar que você autorizou, como a LGPD exige |
-| Registros técnicos | Data, endereço IP, tela acessada e resultado de cada requisição. **Nunca** senha, tokens de acesso ou o conteúdo dos seus dados de saúde | Segurança, prevenção de abuso e correção de erros |
+| Registros técnicos | Data, endereço IP, tela acessada e resultado de cada requisição. Se o app der erro, a mensagem técnica do erro, a tela em que ele aconteceu e a versão do app. **Nunca** senha, tokens de acesso ou o conteúdo dos seus dados de saúde | Segurança, prevenção de abuso e correção de erros |
 
 **Exames de sangue e bioimpedância:** quando esse recurso estiver disponível, ele terá uma autorização própria,
 pedida antes do primeiro envio. Até lá, nenhum exame é recebido.

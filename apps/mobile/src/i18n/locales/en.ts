@@ -11,6 +11,10 @@ export const en: Translations = {
     hidePassword: 'Hide password',
   },
   tabs: { today: 'Today', progress: 'Progress', exams: 'Tests', profile: 'Profile' },
+  screenError: {
+    title: 'Something went wrong on this screen',
+    body: 'Your data is still saved. Try again. If that does not help, close and reopen the app.',
+  },
   goalUnavailable: {
     title: "Couldn't load",
     body: "We couldn't get your goal right now. Your data is still saved. Try again when your internet is back.",

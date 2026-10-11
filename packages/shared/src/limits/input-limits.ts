@@ -19,4 +19,9 @@ export const INPUT_LIMITS = {
   foodBrand: 120,
   barcode: 32,
   policyVersion: 32,
+  /** Relatório de erro do app (`POST /v1/client-errors`): o app corta antes de enviar. */
+  clientErrorMessage: 300,
+  clientErrorStack: 2000,
+  clientErrorScreen: 120,
+  appVersion: 32,
 } as const;

@@ -11,6 +11,10 @@ export const es: Translations = {
     hidePassword: 'Ocultar contraseña',
   },
   tabs: { today: 'Hoy', progress: 'Progreso', exams: 'Análisis', profile: 'Perfil' },
+  screenError: {
+    title: 'Algo salió mal en esta pantalla',
+    body: 'Tus datos siguen guardados. Inténtalo de nuevo. Si no se soluciona, cierra y abre la app.',
+  },
   goalUnavailable: {
     title: 'No se pudo cargar',
     body: 'No pudimos obtener tu meta ahora. Tus datos siguen guardados. Intenta de nuevo cuando vuelva internet.',

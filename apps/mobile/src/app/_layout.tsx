@@ -1,6 +1,6 @@
 import '@/global.css';
 
-import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
+import { DarkTheme, DefaultTheme, Stack, ThemeProvider, usePathname, type ErrorBoundaryProps } from 'expo-router';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
@@ -28,11 +28,24 @@ import { CURRENT_PRIVACY_POLICY_VERSION } from '@minhasaude/shared';
 import { useConsentsControllerList } from '@/api/generated/endpoints/consents/consents';
 import { useGoalsControllerGetCurrent } from '@/api/generated/endpoints/goals/goals';
 import { AuthProvider, useAuth } from '@/features/auth/auth-context';
+import {
+  appErrorReporter,
+  installGlobalErrorHandler,
+  setCurrentScreen,
+} from '@/features/errors/app-error-reporter';
+import { ErrorScreen } from '@/features/errors/error-screen';
 import { GoalUnavailableView } from '@/features/onboarding/goal-unavailable-view';
 import { privacyPolicyFromConsents, resolveRootRoute } from '@/features/onboarding/root-route';
 
 // Falha aqui (splash já escondida) não pode derrubar o app: segue sem segurar a splash.
 void SplashScreen.preventAutoHideAsync().catch(() => undefined);
+
+installGlobalErrorHandler();
+
+/** O expo-router mostra isto no lugar da tela branca quando uma tela quebra ao desenhar. */
+export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
+  return <ErrorScreen error={error} retry={retry} reporter={appErrorReporter} />;
+}
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -84,6 +97,8 @@ export default function RootLayout() {
 
 function RootNavigator() {
   const { isAuthenticated, isLoading: isRestoringSession } = useAuth();
+  const pathname = usePathname();
+  useEffect(() => setCurrentScreen(pathname), [pathname]);
   // 404 = usuário autenticado ainda sem meta calculada -> onboarding. Qualquer
   // outra falha NÃO significa isso (ver resolveRootRoute).
   const goalQuery = useGoalsControllerGetCurrent({ query: { enabled: isAuthenticated, retry: false } });

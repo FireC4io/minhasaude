@@ -3,6 +3,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { LoggerModule } from 'nestjs-pino';
 import { AuthModule } from './auth/auth.module';
 import { BodyMeasurementsModule } from './body-measurements/body-measurements.module';
+import { ClientErrorsModule } from './client-errors/client-errors.module';
 import { ConfigurationModule } from './config/configuration.module';
 import { buildPinoTransport } from './config/pino-transport';
 import { ConsentsModule } from './consents/consents.module';
@@ -46,6 +47,7 @@ import { UsersModule } from './users/users.module';
       },
     }),
     HealthModule,
+    ClientErrorsModule,
   ],
 })
 export class AppModule {}
