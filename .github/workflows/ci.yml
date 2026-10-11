@@ -52,6 +52,12 @@ jobs:
       - name: Lint, test e build (apenas workspaces afetados)
         run: pnpm exec turbo run lint test build --filter="...[${{ steps.turbo-filter.outputs.ref }}]"
 
+      # Regras de arquitetura (.dependency-cruiser.cjs): sem ciclos, shared sem
+      # depender de app, API e mobile sem import direto entre si. Roda sempre,
+      # não só nos workspaces afetados — leva poucos segundos.
+      - name: Regras de dependência entre módulos
+        run: pnpm deps:check
+
   audit:
     name: pnpm audit (vulnerabilidades alta/crítica)
     runs-on: ubuntu-latest

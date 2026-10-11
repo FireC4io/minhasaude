@@ -1,0 +1,13 @@
+{
+  "//": "Só para o dependency-cruiser: o tsconfig.json herda de dois arquivos (extends em array) e ele não lê os paths nesse formato.",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "jsx": "react-jsx",
+    "allowJs": true,
+    "paths": {
+      "@/assets/*": ["./assets/*"],
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
+}

@@ -1,0 +1,208 @@
+<title>Mapa Gota Vital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: documento de uma coluna; o diagrama do sistema abre a página, depois regras, catálogo e mapas detalhados. */
+:root {
+  --areia: #fbf0e4; --superficie: #ffffff; --linha: #e3d5c6;
+  --grafite: #2b3a34; --grafite-suave: #5f6e67;
+  --mamao: #ff6f4d; --mamao-forte: #b8481f; --couve: #3e8e5b;
+  --jabuticaba: #8c2f4b; --maracuja: #c98a12; --maracuja-forte: #91630d;
+  --display: "Fredoka", "Trebuchet MS", system-ui, sans-serif;
+  --body: "Work Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "Cascadia Code", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --areia: #1e1712; --superficie: #2a211b; --linha: #45382f;
+  --grafite: #f5eae0; --grafite-suave: #a39a90;
+  --mamao: #ff8264; --mamao-forte: #ff8264; --couve: #63bf87;
+  --jabuticaba: #e0839a; --maracuja: #f0bb4e; --maracuja-forte: #f0bb4e; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --areia: #1e1712; --superficie: #2a211b; --linha: #45382f;
+  --grafite: #f5eae0; --grafite-suave: #a39a90;
+  --mamao: #ff8264; --mamao-forte: #ff8264; --couve: #63bf87;
+  --jabuticaba: #e0839a; --maracuja: #f0bb4e; --maracuja-forte: #f0bb4e; color-scheme: dark; }
+
+body { background: var(--areia); color: var(--grafite); font-family: var(--body); font-size: 16px; line-height: 1.6; }
+.wrap { max-width: 1040px; margin: 0 auto; padding-inline: 20px; padding-block: 40px 64px; display: grid; gap: 56px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; line-height: 1.15; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(2rem, 5vw, 2.8rem); }
+h2 { font-size: 1.6rem; }
+h3 { font-size: 1.15rem; font-weight: 500; }
+p { margin: 0; max-width: 68ch; }
+code, .mono { font-family: var(--mono); font-size: .86em; }
+.eyebrow { font-family: var(--mono); font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; color: var(--mamao-forte); }
+.muted { color: var(--grafite-suave); }
+section { display: grid; gap: 18px; min-width: 0; }
+header { display: grid; gap: 12px; }
+
+.diagram { background: var(--superficie); border: 1px solid var(--linha); border-radius: 14px; padding: 16px; overflow-x: auto; }
+.diagram svg { display: block; width: 100%; min-width: 640px; height: auto; }
+.box { fill: var(--superficie); stroke: var(--linha); stroke-width: 1.5; }
+.box-app { stroke: var(--mamao); stroke-width: 2; }
+.box-api { stroke: var(--couve); stroke-width: 2; }
+.box-shared { stroke: var(--maracuja); stroke-width: 2; }
+.box-ext { fill: var(--areia); stroke: var(--linha); stroke-dasharray: 4 3; }
+.t-title { font-family: var(--display); font-size: 17px; font-weight: 600; fill: var(--grafite); }
+.t-sub { font-family: var(--body); font-size: 12.5px; fill: var(--grafite-suave); }
+.t-mono { font-family: var(--mono); font-size: 11.5px; fill: var(--grafite-suave); }
+.edge { stroke: var(--grafite-suave); stroke-width: 1.5; fill: none; }
+.edge-ok { stroke: var(--couve); stroke-width: 1.8; fill: none; }
+.edge-no { stroke: var(--jabuticaba); stroke-width: 1.8; fill: none; stroke-dasharray: 5 4; }
+.arrow { fill: var(--grafite-suave); }
+.arrow-ok { fill: var(--couve); }
+.lbl { font-family: var(--body); font-size: 11.5px; fill: var(--grafite-suave); }
+.lbl-no { font-family: var(--body); font-size: 11.5px; fill: var(--jabuticaba); }
+
+.rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+.rule { background: var(--superficie); border: 1px solid var(--linha); border-radius: 12px; padding: 16px; display: grid; gap: 6px; align-content: start; }
+.rule .pill { justify-self: start; font-family: var(--mono); font-size: .72rem; padding: 2px 8px; border-radius: 999px; background: color-mix(in srgb, var(--couve) 16%, transparent); color: var(--couve); }
+
+.catalog { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 20px; }
+.col { display: grid; gap: 10px; align-content: start; min-width: 0; }
+.col h3 { display: flex; align-items: baseline; gap: 8px; }
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; }
+table { border-collapse: collapse; width: 100%; font-size: .92rem; }
+th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--linha); vertical-align: top; }
+th { font-family: var(--mono); font-weight: 500; font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--grafite-suave); }
+td.n { text-align: right; font-variant-numeric: tabular-nums; font-family: var(--mono); font-size: .85rem; color: var(--grafite-suave); white-space: nowrap; }
+td code { color: var(--grafite); }
+
+details.graph { background: var(--superficie); border: 1px solid var(--linha); border-radius: 12px; }
+details.graph summary { cursor: pointer; padding: 14px 16px; font-family: var(--display); font-size: 1.05rem; font-weight: 500; }
+details.graph summary:focus-visible { outline: 2px solid var(--mamao-forte); outline-offset: 2px; border-radius: 12px; }
+.graph-body { overflow-x: auto; padding: 0 16px 16px; }
+.graph-body pre.mermaid { margin: 0; min-width: 720px; background: transparent; }
+
+.howto { display: grid; gap: 8px; background: var(--superficie); border: 1px solid var(--linha); border-radius: 12px; padding: 18px; }
+.howto ul { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
+footer { font-size: .85rem; }
+@media (max-width: 480px) { .wrap { padding-block: 28px 48px; gap: 44px; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">Monorepo pnpm + Turborepo · gerado em __DATA__</span>
+    <h1>Mapa Gota Vital</h1>
+    <p class="muted">Como as partes do projeto se encaixam: o app no celular, a API, o pacote compartilhado e os serviços de fora. As regras de arquitetura no meio da página são verificadas no CI a cada push.</p>
+  </header>
+
+  <section aria-labelledby="sistema">
+    <h2 id="sistema">O sistema</h2>
+    <div class="diagram" role="img" aria-label="Diagrama: o app Expo fala com a API NestJS por HTTP usando o contrato OpenAPI; a API grava no Postgres do Supabase e no Cloudflare R2; o pacote shared é usado pelo app e pela API; serviços externos: TACO, Open Food Facts, Brevo e Better Stack.">
+      <svg viewBox="0 0 960 470" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="arrow"/></marker>
+          <marker id="aok" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="arrow-ok"/></marker>
+        </defs>
+
+        <!-- App -->
+        <rect x="20" y="40" width="250" height="150" rx="14" class="box box-app"/>
+        <text x="40" y="72" class="t-title">App (Expo)</text>
+        <text x="40" y="94" class="t-mono">apps/mobile</text>
+        <text x="40" y="120" class="t-sub">Expo Router · NativeWind</text>
+        <text x="40" y="140" class="t-sub">client gerado pelo orval</text>
+        <text x="40" y="160" class="t-sub">pt-BR · en · es</text>
+        <text x="40" y="180" class="t-mono">__MOBILE_MOD__ módulos</text>
+
+        <!-- API -->
+        <rect x="370" y="40" width="250" height="150" rx="14" class="box box-api"/>
+        <text x="390" y="72" class="t-title">API (NestJS)</text>
+        <text x="390" y="94" class="t-mono">apps/api · Render</text>
+        <text x="390" y="120" class="t-sub">TypeORM · Repository</text>
+        <text x="390" y="140" class="t-sub">JWT + refresh · consentimento</text>
+        <text x="390" y="160" class="t-sub">migrations no boot</text>
+        <text x="390" y="180" class="t-mono">__API_MOD__ módulos</text>
+
+        <!-- Shared -->
+        <rect x="195" y="300" width="250" height="130" rx="14" class="box box-shared"/>
+        <text x="215" y="332" class="t-title">Shared</text>
+        <text x="215" y="354" class="t-mono">packages/shared</text>
+        <text x="215" y="380" class="t-sub">calculadoras com versão</text>
+        <text x="215" y="400" class="t-sub">schemas Zod · INPUT_LIMITS</text>
+        <text x="215" y="420" class="t-mono">__SHARED_MOD__ módulos</text>
+
+        <!-- Storage -->
+        <rect x="720" y="30" width="220" height="74" rx="12" class="box"/>
+        <text x="738" y="60" class="t-title">Postgres</text>
+        <text x="738" y="82" class="t-sub">Supabase sa-east-1 · RLS</text>
+        <rect x="720" y="124" width="220" height="74" rx="12" class="box"/>
+        <text x="738" y="154" class="t-title">Cloudflare R2</text>
+        <text x="738" y="176" class="t-sub">exames · backup cifrado</text>
+
+        <!-- Externals (um grupo, uma seta) -->
+        <rect x="560" y="236" width="380" height="196" rx="14" class="box box-ext"/>
+        <text x="578" y="260" class="t-mono">serviços de fora</text>
+        <rect x="578" y="274" width="170" height="64" rx="10" class="box"/>
+        <text x="594" y="300" class="t-sub" style="font-weight:600">TACO / Unicamp</text>
+        <text x="594" y="320" class="t-mono">seed na migration</text>
+        <rect x="756" y="274" width="170" height="64" rx="10" class="box"/>
+        <text x="772" y="300" class="t-sub" style="font-weight:600">Open Food Facts</text>
+        <text x="772" y="320" class="t-mono">busca sob demanda</text>
+        <rect x="578" y="352" width="170" height="64" rx="10" class="box"/>
+        <text x="594" y="378" class="t-sub" style="font-weight:600">Brevo</text>
+        <text x="594" y="398" class="t-mono">e-mail transacional</text>
+        <rect x="756" y="352" width="170" height="64" rx="10" class="box"/>
+        <text x="772" y="378" class="t-sub" style="font-weight:600">Better Stack</text>
+        <text x="772" y="398" class="t-mono">logs com redact</text>
+
+        <!-- App <-> API -->
+        <path d="M270 115 L368 115" class="edge" marker-end="url(#a)" marker-start="url(#a)"/>
+        <text x="319" y="104" class="lbl" text-anchor="middle">HTTP</text>
+        <text x="319" y="136" class="lbl" text-anchor="middle">OpenAPI</text>
+        <!-- API -> storage -->
+        <path d="M620 80 L718 67" class="edge" marker-end="url(#a)"/>
+        <path d="M620 150 L718 160" class="edge" marker-end="url(#a)"/>
+        <!-- API -> externals -->
+        <path d="M560 190 L640 234" class="edge" marker-end="url(#a)"/>
+        <!-- shared used by both -->
+        <path d="M145 192 L260 298" class="edge-ok" marker-start="url(#aok)"/>
+        <path d="M495 192 L380 298" class="edge-ok" marker-start="url(#aok)"/>
+        <text x="110" y="262" class="lbl">importa</text>
+        <text x="455" y="262" class="lbl">importa</text>
+        <!-- forbidden: app <-> api direct import -->
+        <path d="M200 40 C 260 -6, 430 -6, 490 40" class="edge-no"/>
+        <text x="500" y="26" class="lbl-no">import direto proibido</text>
+      </svg>
+    </div>
+  </section>
+
+  <section aria-labelledby="regras">
+    <h2 id="regras">Regras que o CI garante</h2>
+    <p class="muted">Arquivo <code>.dependency-cruiser.cjs</code>, rodado por <code>pnpm deps:check</code> em todo push. Hoje: __MODULOS__ arquivos e __DEPS__ imports conferidos, nenhuma violação.</p>
+    <div class="rules">
+      <div class="rule"><span class="pill">erro</span><h3>Sem ciclos</h3><p class="muted">Nenhum módulo importa, direta ou indiretamente, quem importa ele.</p></div>
+      <div class="rule"><span class="pill">erro</span><h3>Shared não conhece os apps</h3><p class="muted"><code>packages/shared</code> nunca importa de <code>apps/</code>. Ele serve aos dois lados.</p></div>
+      <div class="rule"><span class="pill">erro</span><h3>App e API separados</h3><p class="muted">Conversam só pelo contrato HTTP e pelo shared, nunca por import de arquivo.</p></div>
+      <div class="rule"><span class="pill">erro</span><h3>Todo import resolve</h3><p class="muted">Caminho quebrado ou pacote não instalado falha o CI.</p></div>
+      <div class="rule"><span class="pill">aviso</span><h3>Produção sem teste</h3><p class="muted">Código de produção não importa arquivo <code>.spec</code>.</p></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="catalogo">
+    <h2 id="catalogo">Catálogo de módulos</h2>
+    <p class="muted">Contagem de arquivos de código e de testes unitários por pasta. Os testes e2e da API ficam em <code>apps/api/test</code>.</p>
+    <div class="catalog">
+      __CATALOG__
+    </div>
+  </section>
+
+  <section aria-labelledby="detalhe">
+    <h2 id="detalhe">Quem importa quem</h2>
+    <p class="muted">Gerado pelo dependency-cruiser. Cada caixa é uma pasta; cada seta quer dizer "importa de". Testes ficam de fora. Arraste para o lado nos gráficos largos.</p>
+    __GRAPHS__
+  </section>
+
+  <section aria-labelledby="atualizar">
+    <h2 id="atualizar">Como manter</h2>
+    <div class="howto">
+      <ul>
+        <li><code>pnpm deps:check</code>: confere as regras (também roda no CI).</li>
+        <li><code>pnpm deps:graph</code>: regenera <code>docs/arquitetura/dependencias.md</code>. O GitHub desenha os mesmos gráficos.</li>
+        <li>Esta página é refeita a partir desse arquivo quando a estrutura muda (módulo novo, pasta nova).</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer class="muted">Gota Vital · dados nutricionais TACO/Unicamp e Open Food Facts (ODbL).</footer>
+</div>
