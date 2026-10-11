@@ -7,6 +7,7 @@ dist/
 build/
 .turbo/
 coverage/
+coverage-e2e/
 
 # env
 .env
