@@ -11,7 +11,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "build": "expo export",
-    "lint": "eslint \"src/**/*.{ts,tsx}\"",
+    "lint": "eslint \"src/**/*.{ts,tsx}\" --max-warnings 0",
     "test": "jest",
     "generate:api": "orval --config orval.config.ts",
     "reset-project": "node ./scripts/reset-project.js",

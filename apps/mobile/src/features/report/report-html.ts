@@ -1,4 +1,4 @@
-import i18n from 'i18next';
+import { t } from 'i18next';
 import { localDateFromIso } from '@/features/diary/date-utils';
 import { displayNumber } from '@/features/accessibility/spoken-format';
 import { buildWeightChart } from '@/features/weight/chart-geometry';
@@ -46,12 +46,12 @@ function dateTimeLabel(isoDateTime: string): string {
 }
 
 function signedKg(value: number): string {
-  if (Math.abs(value) < 0.05) return i18n.t('pdf.noChange');
+  if (Math.abs(value) < 0.05) return t('pdf.noChange');
   return `${value > 0 ? '+' : '−'}${formatKg(Math.abs(value))}`;
 }
 
 function weightSection(weight: WeightSection | null): string {
-  if (!weight) return `<p class="vazio">${i18n.t('pdf.noWeight')}</p>`;
+  if (!weight) return `<p class="vazio">${t('pdf.noWeight')}</p>`;
 
   const chart = buildWeightChart(
     weight.entries.map((e) => ({ measuredAt: e.measuredAt, weightKg: String(e.weightKg) })),
@@ -67,23 +67,23 @@ function weightSection(weight: WeightSection | null): string {
 
   return `
     <div class="cards">
-      <div class="card"><span>${i18n.t('pdf.first')}</span><strong>${formatKg(weight.firstKg)}</strong></div>
-      <div class="card"><span>${i18n.t('pdf.last')}</span><strong>${formatKg(weight.lastKg)}</strong></div>
-      <div class="card"><span>${i18n.t('pdf.difference')}</span><strong>${signedKg(weight.changeKg)}</strong></div>
+      <div class="card"><span>${t('pdf.first')}</span><strong>${formatKg(weight.firstKg)}</strong></div>
+      <div class="card"><span>${t('pdf.last')}</span><strong>${formatKg(weight.lastKg)}</strong></div>
+      <div class="card"><span>${t('pdf.difference')}</span><strong>${signedKg(weight.changeKg)}</strong></div>
     </div>
-    <svg viewBox="0 0 ${CHART.width} ${CHART.height}" class="grafico" role="img" aria-label="${i18n.t('pdf.chartAria')}">
+    <svg viewBox="0 0 ${CHART.width} ${CHART.height}" class="grafico" role="img" aria-label="${t('pdf.chartAria')}">
       <polyline points="${chart.polyline}" fill="none" stroke="#3e8e5b" stroke-width="2.5" />
       ${dots}
     </svg>
-    <p class="nota">${i18n.t('pdf.scale', { min: formatKg(chart.min), max: formatKg(chart.max) })}
-    ${i18n.t('pdf.scaleOnly')}</p>
-    <table><thead><tr><th>${i18n.t('pdf.date')}</th><th class="num">${i18n.t('pdf.weight')}</th></tr></thead><tbody>${rows}</tbody></table>`;
+    <p class="nota">${t('pdf.scale', { min: formatKg(chart.min), max: formatKg(chart.max) })}
+    ${t('pdf.scaleOnly')}</p>
+    <table><thead><tr><th>${t('pdf.date')}</th><th class="num">${t('pdf.weight')}</th></tr></thead><tbody>${rows}</tbody></table>`;
 }
 
 function weekRow(week: WeekRow): string {
   const target = week.targetKcal === null ? '—' : kcal(week.targetKcal);
   return `<tr>
-    <td>${i18n.t('pdf.weekRange', { from: dateLabel(week.weekStart), to: dateLabel(week.weekEnd) })}</td>
+    <td>${t('pdf.weekRange', { from: dateLabel(week.weekStart), to: dateLabel(week.weekEnd) })}</td>
     <td class="num">${week.daysLogged}</td>
     <td class="num">${kcal(week.average.kcal)}</td>
     <td class="num">${target}</td>
@@ -94,18 +94,18 @@ function weekRow(week: WeekRow): string {
 }
 
 function weeksSection(weeks: readonly WeekRow[]): string {
-  if (weeks.length === 0) return `<p class="vazio">${i18n.t('pdf.noDays')}</p>`;
+  if (weeks.length === 0) return `<p class="vazio">${t('pdf.noDays')}</p>`;
   return `
-    <p class="nota">${i18n.t('pdf.weekNote')}</p>
+    <p class="nota">${t('pdf.weekNote')}</p>
     <table>
-      <thead><tr><th>${i18n.t('pdf.week')}</th><th class="num">${i18n.t('pdf.days')}</th><th class="num">${i18n.t('pdf.average')}</th><th class="num">${i18n.t('pdf.goal')}</th>
-      <th class="num">${i18n.t('pdf.protein')}</th><th class="num">${i18n.t('pdf.carbs')}</th><th class="num">${i18n.t('pdf.fat')}</th></tr></thead>
+      <thead><tr><th>${t('pdf.week')}</th><th class="num">${t('pdf.days')}</th><th class="num">${t('pdf.average')}</th><th class="num">${t('pdf.goal')}</th>
+      <th class="num">${t('pdf.protein')}</th><th class="num">${t('pdf.carbs')}</th><th class="num">${t('pdf.fat')}</th></tr></thead>
       <tbody>${weeks.map(weekRow).join('')}</tbody>
     </table>`;
 }
 
 function goalRow(goal: GoalRow): string {
-  const origin = goal.isManualOverride ? i18n.t('pdf.manual') : i18n.t('pdf.calculated');
+  const origin = goal.isManualOverride ? t('pdf.manual') : t('pdf.calculated');
   return `<tr>
     <td>${dateTimeLabel(goal.activeFrom)}</td>
     <td class="num">${kcal(goal.kcal)}</td>
@@ -117,17 +117,17 @@ function goalRow(goal: GoalRow): string {
 }
 
 function goalsSection(goals: readonly GoalRow[]): string {
-  if (goals.length === 0) return `<p class="vazio">${i18n.t('pdf.noGoals')}</p>`;
+  if (goals.length === 0) return `<p class="vazio">${t('pdf.noGoals')}</p>`;
   return `<table>
-    <thead><tr><th>${i18n.t('pdf.since')}</th><th class="num">${i18n.t('pdf.calories')}</th><th class="num">${i18n.t('pdf.protein')}</th>
-    <th class="num">${i18n.t('pdf.carbs')}</th><th class="num">${i18n.t('pdf.fat')}</th><th>${i18n.t('pdf.origin')}</th></tr></thead>
+    <thead><tr><th>${t('pdf.since')}</th><th class="num">${t('pdf.calories')}</th><th class="num">${t('pdf.protein')}</th>
+    <th class="num">${t('pdf.carbs')}</th><th class="num">${t('pdf.fat')}</th><th>${t('pdf.origin')}</th></tr></thead>
     <tbody>${goals.map(goalRow).join('')}</tbody>
   </table>`;
 }
 
 function quantityLabel(item: DayRow['meals'][number]['items'][number]): string {
   const value = displayNumber(Number(item.quantity), 1);
-  return item.unit === 'grams' ? `${value} g` : i18n.t('pdf.portion', { count: Number(item.quantity), value });
+  return item.unit === 'grams' ? `${value} g` : t('pdf.portion', { count: Number(item.quantity), value });
 }
 
 function daySection(day: DayRow): string {
@@ -149,7 +149,7 @@ function daySection(day: DayRow): string {
 }
 
 function diarySection(days: readonly DayRow[]): string {
-  if (days.length === 0) return `<p class="vazio">${i18n.t('pdf.noDays')}</p>`;
+  if (days.length === 0) return `<p class="vazio">${t('pdf.noDays')}</p>`;
   return days.map(daySection).join('');
 }
 
@@ -177,26 +177,26 @@ const STYLE = `
 export function renderReportHtml(report: ProgressReport): string {
   return `<!doctype html>
 <html lang="${appLocale()}">
-<head><meta charset="utf-8" /><title>${i18n.t('pdf.docTitle')}</title><style>${STYLE}</style></head>
+<head><meta charset="utf-8" /><title>${t('pdf.docTitle')}</title><style>${STYLE}</style></head>
 <body>
-  <h1>${i18n.t('pdf.title')}</h1>
-  <p class="sub">${i18n.t('pdf.generated', { date: dateTimeLabel(report.generatedAt) })}</p>
+  <h1>${t('pdf.title')}</h1>
+  <p class="sub">${t('pdf.generated', { date: dateTimeLabel(report.generatedAt) })}</p>
 
-  <h2>${i18n.t('pdf.weight')}</h2>
+  <h2>${t('pdf.weight')}</h2>
   ${weightSection(report.weight)}
 
-  <h2>${i18n.t('pdf.weeks')}</h2>
+  <h2>${t('pdf.weeks')}</h2>
   ${weeksSection(report.weeks)}
 
-  <h2>${i18n.t('pdf.goals')}</h2>
+  <h2>${t('pdf.goals')}</h2>
   ${goalsSection(report.goals)}
 
-  <h2>${i18n.t('pdf.diary')}</h2>
+  <h2>${t('pdf.diary')}</h2>
   ${diarySection(report.days)}
 
   <footer>
-    ${i18n.t('pdf.footer')}<br />
-    ${i18n.t('pdf.credits')}
+    ${t('pdf.footer')}<br />
+    ${t('pdf.credits')}
   </footer>
 </body>
 </html>`;

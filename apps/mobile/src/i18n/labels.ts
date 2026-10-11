@@ -1,4 +1,4 @@
-import i18n, { type ParseKeys } from 'i18next';
+import { t, type ParseKeys } from 'i18next';
 
 /**
  * Mapa de rótulos que traduz na hora da leitura: `GOAL_LABELS.lose` devolve o
@@ -10,7 +10,7 @@ export function translatedLabels<K extends string>(keys: Record<K, ParseKeys>): 
   return new Proxy(keys, {
     get(target, property) {
       const key = target[property as K];
-      return typeof key === 'string' ? i18n.t(key) : undefined;
+      return typeof key === 'string' ? t(key) : undefined;
     },
   }) as unknown as Record<K, string>;
 }

@@ -2,7 +2,7 @@ import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Image, ScrollView, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import i18n from 'i18next';
+import { t as translate } from 'i18next';
 
 import { AppText } from '@/components/ui/app-text';
 import { FormError } from '@/components/ui/form-error';
@@ -33,7 +33,7 @@ const TYPE_OPTIONS = [
       return EXAM_TYPE_LABELS.blood_panel;
     },
     get description() {
-      return i18n.t('exams.upload.bloodHint');
+      return translate('exams.upload.bloodHint');
     },
   },
   {
@@ -42,7 +42,7 @@ const TYPE_OPTIONS = [
       return EXAM_TYPE_LABELS.bioimpedance;
     },
     get description() {
-      return i18n.t('exams.upload.bioHint');
+      return translate('exams.upload.bioHint');
     },
   },
 ];

@@ -1,4 +1,4 @@
-import i18n from 'i18next';
+import { t } from 'i18next';
 import { appLocale } from '@/i18n/format';
 
 export const GLASS_ML = 250;
@@ -24,7 +24,7 @@ export function glassesFilled(totalMl: number, glassesDrawn: number): number {
 }
 
 export function spokenWater(totalMl: number, goalMl: number): string {
-  return i18n.t('water.spoken', {
+  return t('water.spoken', {
     total: numberFormat().format(totalMl),
     goal: numberFormat().format(goalMl),
   });

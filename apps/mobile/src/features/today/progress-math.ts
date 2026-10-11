@@ -1,4 +1,4 @@
-import i18n from 'i18next';
+import { t } from 'i18next';
 
 import { spokenGrams, spokenKcal } from '@/features/accessibility/spoken-format';
 
@@ -28,12 +28,12 @@ export function caloriesStatus(
   target: number | null,
   style: UnitStyle = 'visual',
 ): string {
-  if (!target) return i18n.t('today.noGoal');
+  if (!target) return t('today.noGoal');
 
   const difference = Math.round(target - consumed);
-  if (difference > 0) return i18n.t('today.left', { kcal: kcalText(difference, style) });
-  if (difference < 0) return i18n.t('today.over', { kcal: kcalText(-difference, style) });
-  return i18n.t('today.reached');
+  if (difference > 0) return t('today.left', { kcal: kcalText(difference, style) });
+  if (difference < 0) return t('today.over', { kcal: kcalText(-difference, style) });
+  return t('today.reached');
 }
 
 export function macroValue(
@@ -50,11 +50,11 @@ export function macroValue(
     case 'remaining': {
       const left = targetG - consumedG;
       return left >= 0
-        ? i18n.t('today.gramsLeft', { grams: gramsText(left, style) })
-        : i18n.t('today.gramsOver', { grams: gramsText(-left, style) });
+        ? t('today.gramsLeft', { grams: gramsText(left, style) })
+        : t('today.gramsOver', { grams: gramsText(-left, style) });
     }
     case 'consumed':
-      return i18n.t('today.gramsOf', { consumed: consumedG, target: gramsText(targetG, style) });
+      return t('today.gramsOf', { consumed: consumedG, target: gramsText(targetG, style) });
     case 'percent':
       return `${Math.round((consumed / target) * 100)}%`;
   }

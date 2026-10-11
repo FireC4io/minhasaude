@@ -1,7 +1,7 @@
 import { File, Paths } from 'expo-file-system';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
-import i18n from 'i18next';
+import { t } from 'i18next';
 
 import { reportFileName } from './report-file-name';
 
@@ -16,7 +16,7 @@ export async function shareReport(html: string, dialogTitle: string): Promise<vo
   await new File(uri).move(destination, { overwrite: true });
 
   if (!(await Sharing.isAvailableAsync())) {
-    throw new Error(i18n.t('account.shareUnavailable'));
+    throw new Error(t('account.shareUnavailable'));
   }
   await Sharing.shareAsync(destination.uri, {
     mimeType: 'application/pdf',

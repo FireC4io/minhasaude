@@ -1,6 +1,6 @@
 import { File, Paths } from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
-import i18n from 'i18next';
+import { t } from 'i18next';
 
 /**
  * Grava o JSON no cache do app e abre a folha de compartilhar do sistema — de
@@ -12,7 +12,7 @@ export async function saveExportFile(fileName: string, content: string, dialogTi
   file.write(content);
 
   if (!(await Sharing.isAvailableAsync())) {
-    throw new Error(i18n.t('account.shareUnavailable'));
+    throw new Error(t('account.shareUnavailable'));
   }
   await Sharing.shareAsync(file.uri, {
     mimeType: 'application/json',

@@ -1,4 +1,4 @@
-import i18n from 'i18next';
+import { t } from 'i18next';
 import { spokenGrams, spokenKcal } from '@/features/accessibility/spoken-format';
 
 interface DiaryEntryLike {
@@ -14,9 +14,9 @@ export function describeDiaryEntry({ foodName, quantity, kcal }: DiaryEntryLike)
 
 export function describeMealHeader(mealLabel: string, entryCount: number, kcalTotal: number): string {
   if (entryCount === 0) {
-    return i18n.t('diary.mealEmptySpoken', { meal: mealLabel });
+    return t('diary.mealEmptySpoken', { meal: mealLabel });
   }
-  const items = i18n.t('diary.mealCount', { count: entryCount });
+  const items = t('diary.mealCount', { count: entryCount });
   return `${mealLabel}, ${items}, ${spokenKcal(kcalTotal)}`;
 }
 
@@ -24,5 +24,5 @@ export function describeMealHeader(mealLabel: string, entryCount: number, kcalTo
 export function describeSearchStatus(term: string, isFetching: boolean, count: number): string | null {
   if (term.trim().length < 2 || isFetching) return null;
   // `_zero` explícito: "Nenhum alimento", não "0 alimentos encontrados".
-  return count === 0 ? i18n.t('diary.found_zero') : i18n.t('diary.found', { count });
+  return count === 0 ? t('diary.found_zero') : t('diary.found', { count });
 }

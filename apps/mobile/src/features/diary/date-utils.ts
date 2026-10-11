@@ -1,4 +1,4 @@
-import i18n from 'i18next';
+import { t } from 'i18next';
 import { appLocale } from '@/i18n/format';
 
 /**
@@ -32,9 +32,9 @@ export function addDaysToIsoDate(date: string, days: number): string {
 
 export function formatIsoDateLabel(date: string, now: Date = new Date()): string {
   const today = todayIsoDate(now);
-  if (date === today) return i18n.t('today.today');
-  if (date === addDaysToIsoDate(today, -1)) return i18n.t('today.yesterday');
-  if (date === addDaysToIsoDate(today, 1)) return i18n.t('today.tomorrow');
+  if (date === today) return t('today.today');
+  if (date === addDaysToIsoDate(today, -1)) return t('today.yesterday');
+  if (date === addDaysToIsoDate(today, 1)) return t('today.tomorrow');
 
   return localDateFromIso(date).toLocaleDateString(appLocale(), { day: 'numeric', month: 'long' });
 }

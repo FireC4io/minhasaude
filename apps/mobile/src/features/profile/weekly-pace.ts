@@ -1,5 +1,5 @@
 import { DEFAULT_WEEKLY_PACE_KG, WEEKLY_PACES_KG, type Goal } from '@minhasaude/shared';
-import i18n from 'i18next';
+import { t } from 'i18next';
 
 import type { GoalTargetResponseDto } from '@/api/generated/models';
 import type { RadioOption } from '@/components/ui/radio-list';
@@ -30,7 +30,7 @@ export function paceOptionsFor(goal: Goal): readonly RadioOption<PaceOption>[] {
     const value = String(pace) as PaceOption;
     return {
       value,
-      label: i18n.t(goal === 'lose' ? 'weeklyPace.lose' : 'weeklyPace.gain', { amount: displayNumber(pace, 2) }),
+      label: t(goal === 'lose' ? 'weeklyPace.lose' : 'weeklyPace.gain', { amount: displayNumber(pace, 2) }),
       description: DESCRIPTIONS[value],
     };
   });
@@ -56,8 +56,8 @@ export function describeWeeklyPace(
   const option = paceKgToOption(weeklyPaceKg);
   if (goal === 'maintain' || !option) return null;
   const amount = displayNumber(Number(option), 2);
-  const base = i18n.t(goal === 'lose' ? 'weeklyPace.chosenLose' : 'weeklyPace.chosenGain', { amount });
-  return limitedByBmr ? `${base} ${i18n.t('weeklyPace.limited')}` : base;
+  const base = t(goal === 'lose' ? 'weeklyPace.chosenLose' : 'weeklyPace.chosenGain', { amount });
+  return limitedByBmr ? `${base} ${t('weeklyPace.limited')}` : base;
 }
 
 type GoalTargetPace = Pick<

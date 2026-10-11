@@ -1,4 +1,4 @@
-import i18n from 'i18next';
+import { t } from 'i18next';
 
 import { formatDate, formatNumber, isSingularUnit } from '@/i18n/format';
 
@@ -13,7 +13,7 @@ import { formatDate, formatNumber, isSingularUnit } from '@/i18n/format';
 type Unit = 'kcal' | 'gram' | 'kilo' | 'milliliter' | 'liter';
 
 function withUnit(value: number, formatted: string, unit: Unit): string {
-  const word = i18n.t(`units.${unit}.${isSingularUnit(value) ? 'one' : 'other'}`);
+  const word = t(`units.${unit}.${isSingularUnit(value) ? 'one' : 'other'}`);
   return `${formatted} ${word}`;
 }
 
@@ -56,7 +56,7 @@ export function spokenFieldLabel(label: string): string {
   const match = FIELD_UNIT.exec(label);
   if (!match) return label;
   const unit = match[1] as 'g' | 'cm' | 'kg' | 'ml';
-  return `${label.slice(0, match.index)}, ${i18n.t(`units.field.${unit}`)}`;
+  return `${label.slice(0, match.index)}, ${t(`units.field.${unit}`)}`;
 }
 
 export function spokenDate(isoDateTime: string): string {

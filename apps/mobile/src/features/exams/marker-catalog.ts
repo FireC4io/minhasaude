@@ -1,4 +1,4 @@
-import i18n from 'i18next';
+import { t } from 'i18next';
 
 import { translatedLabels } from '@/i18n/labels';
 
@@ -36,10 +36,10 @@ function marker(code: KnownMarker, category: MarkerCategory, canonicalUnit: stri
     category,
     canonicalUnit,
     get displayName() {
-      return i18n.t(`exams.markers.${code}.name`);
+      return t(`exams.markers.${code}.name`);
     },
     get whatItMeasures() {
-      return i18n.t(`exams.markers.${code}.what`);
+      return t(`exams.markers.${code}.what`);
     },
   };
 }

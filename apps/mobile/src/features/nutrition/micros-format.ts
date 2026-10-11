@@ -1,5 +1,5 @@
 import { MICRONUTRIENTS, type MicronutrientKey, type MicroTotal } from '@minhasaude/shared';
-import i18n from 'i18next';
+import { t } from 'i18next';
 import { appLocale } from '@/i18n/format';
 
 
@@ -14,19 +14,19 @@ function formatNumber(value: number): string {
 
 /** "2,6 mg"; null vira "sem dado", nunca zero. */
 export function formatMicro(key: MicronutrientKey, amount: number | null): string {
-  if (amount === null) return i18n.t('micros.noData');
+  if (amount === null) return t('micros.noData');
   return `${formatNumber(amount)} ${MICRONUTRIENTS[key].unit}`;
 }
 
 export function spokenMicro(key: MicronutrientKey, amount: number | null): string {
-  const label = i18n.t(`micros.names.${key}`);
-  if (amount === null) return `${label}: ${i18n.t('micros.noData')}`;
-  return `${label}: ${formatNumber(amount)} ${i18n.t(`micros.spokenUnits.${MICRONUTRIENTS[key].unit}`)}`;
+  const label = t(`micros.names.${key}`);
+  if (amount === null) return `${label}: ${t('micros.noData')}`;
+  return `${label}: ${formatNumber(amount)} ${t(`micros.spokenUnits.${MICRONUTRIENTS[key].unit}`)}`;
 }
 
 /** Total do dia incompleto: diz de quantos alimentos veio o número. */
 export function partialNote(total: MicroTotal): string | null {
   if (total.items === 0 || total.itemsWithData === total.items) return null;
-  if (total.itemsWithData === 0) return i18n.t('micros.noneHave');
-  return i18n.t('micros.someHave', { with: total.itemsWithData, total: total.items });
+  if (total.itemsWithData === 0) return t('micros.noneHave');
+  return t('micros.someHave', { with: total.itemsWithData, total: total.items });
 }

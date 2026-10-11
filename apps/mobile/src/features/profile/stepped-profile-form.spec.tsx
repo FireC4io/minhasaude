@@ -1,5 +1,5 @@
 import { render, screen, userEvent } from '@testing-library/react-native';
-import i18n from 'i18next';
+import { changeLanguage } from 'i18next';
 
 import { SteppedProfileForm } from './stepped-profile-form';
 
@@ -113,14 +113,14 @@ describe('SteppedProfileForm', () => {
   });
 
   it('segue o idioma escolhido (inglês)', async () => {
-    await i18n.changeLanguage('en');
+    await changeLanguage('en');
     try {
       await render(<SteppedProfileForm isSubmitting={false} onSubmit={jest.fn()} />);
       expect(screen.getByText('Step 1 of 4')).toBeTruthy();
       expect(screen.getByLabelText('Date of birth')).toBeTruthy();
       expect(screen.getByRole('button', { name: 'Continue' })).toBeTruthy();
     } finally {
-      await i18n.changeLanguage('pt-BR');
+      await changeLanguage('pt-BR');
     }
   });
 });

@@ -1,4 +1,4 @@
-import { MICRONUTRIENT_KEYS, MICRONUTRIENTS, type MicronutrientKey } from '@minhasaude/shared';
+import { MICRONUTRIENT_KEYS, type MicronutrientKey } from '@minhasaude/shared';
 import { useState } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';

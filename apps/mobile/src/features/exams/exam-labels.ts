@@ -1,4 +1,4 @@
-import i18n from 'i18next';
+import { t } from 'i18next';
 import type { DeviceSource, ExamStatus, ExamType } from './types';
 import { appLocale } from '@/i18n/format';
 import { translatedLabels } from '@/i18n/labels';
@@ -26,7 +26,7 @@ export const DEVICE_LABELS: Record<DeviceSource, string> = translatedLabels({
 });
 
 export function formatExamDate(isoDate: string | null): string {
-  if (!isoDate) return i18n.t('exams.noDate');
+  if (!isoDate) return t('exams.noDate');
   return new Date(`${isoDate.slice(0, 10)}T12:00:00`).toLocaleDateString(appLocale(), {
     day: 'numeric',
     month: 'long',
