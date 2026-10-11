@@ -33,6 +33,7 @@ import { dayHasEntries, useWeekEntries } from '@/features/today/use-week-entries
 import { WeekStrip } from '@/features/today/week-strip';
 import { WaterCard } from '@/features/water/water-card';
 import { LastWeightCard } from '@/features/weight/last-weight-card';
+import { queryView } from '@/features/network/query-view';
 
 /** Tela Hoje (F4-30): data, semana, calorias, nutrientes, refeições, água, peso e notas. */
 export default function TodayScreen() {
@@ -145,9 +146,9 @@ export default function TodayScreen() {
           onSelect={showDate}
         />
 
-        {dayQuery.isPending ? (
+        {queryView(dayQuery) === 'loading' ? (
           <LoadingIndicator label={t('today.loadingDay')} className="mt-8" />
-        ) : !summary ? (
+        ) : queryView(dayQuery) === 'error' || !summary ? (
           <View className="gap-2">
             <FormError message={t('today.loadDayError')} />
             <TextButton

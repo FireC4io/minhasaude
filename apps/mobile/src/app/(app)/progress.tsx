@@ -14,6 +14,7 @@ import { WeeklyAverageCard } from '@/features/progress/weekly-average-card';
 import { WeightChart } from '@/features/weight/weight-chart';
 import { WeightEntryForm } from '@/features/weight/weight-entry-form';
 import { WeightHistoryList } from '@/features/weight/weight-history-list';
+import { queryView } from '@/features/network/query-view';
 
 // Só medidas registradas na mão: o app nunca mistura fontes no mesmo gráfico,
 // porque bioimpedância de aparelhos diferentes não é comparável (CLAUDE.md).
@@ -44,9 +45,9 @@ export default function ProgressScreen() {
             </AppText>
             <WeightEntryForm />
 
-            {historyQuery.isPending ? (
+            {queryView(historyQuery) === 'loading' ? (
               <LoadingIndicator label={t('progress.loadingWeight')} />
-            ) : historyQuery.data === undefined ? (
+            ) : queryView(historyQuery) === 'error' ? (
               <FormError message={t('progress.weightError')} />
             ) : (
               <>

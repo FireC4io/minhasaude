@@ -6,6 +6,7 @@ import { AppText } from '@/components/ui/app-text';
 import { FormError } from '@/components/ui/form-error';
 import { LoadingIndicator } from '@/components/ui/loading-indicator';
 import { CONSENT_LABELS, formatConsentDate } from '@/features/account/consent-labels';
+import { queryView } from '@/features/network/query-view';
 
 export default function PrivacyScreen() {
   const { t } = useTranslation();
@@ -18,9 +19,9 @@ export default function PrivacyScreen() {
         {t('account.privacy.intro')}
       </AppText>
 
-      {consentsQuery.isPending ? (
+      {queryView(consentsQuery) === 'loading' ? (
         <LoadingIndicator label={t('account.privacy.loading')} />
-      ) : consentsQuery.data === undefined ? (
+      ) : queryView(consentsQuery) === 'error' ? (
         <FormError message={t('account.privacy.loadError')} />
       ) : (
         <View className="gap-3">

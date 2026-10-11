@@ -20,6 +20,7 @@ import { LoadingIndicator } from '@/components/ui/loading-indicator';
 import { useAnnounce } from '@/features/accessibility/use-announce';
 import { GoalCard } from '@/features/profile/goal-card';
 import { ProfileForm } from '@/features/profile/profile-form';
+import { queryView } from '@/features/network/query-view';
 
 export default function EditProfileScreen() {
   const { t } = useTranslation();
@@ -66,9 +67,9 @@ export default function EditProfileScreen() {
           </View>
         ) : null}
 
-        {meQuery.isPending ? (
+        {queryView(meQuery) === 'loading' ? (
           <LoadingIndicator label={t('account.edit.loading')} />
-        ) : meQuery.data === undefined ? (
+        ) : queryView(meQuery) === 'error' ? (
           <FormError message={t('account.edit.loadError')} />
         ) : (
           <ProfileForm
