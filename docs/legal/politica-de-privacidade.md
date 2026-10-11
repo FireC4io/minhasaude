@@ -87,7 +87,7 @@ A LGPD (art. 18) garante, e o app oferece direto, sem precisar pedir a ninguém:
 |---|---|
 | Ver e corrigir seus dados | Perfil → Seus dados e sua meta |
 | Baixar tudo o que guardamos (portabilidade) | Perfil → Baixar todos os meus dados |
-| Apagar sua conta e seus dados | Perfil → Apagar minha conta |
+| Apagar sua conta e seus dados | Perfil → Apagar minha conta. Sem o app: [como apagar sua conta](../excluir-conta/) |
 | Revogar consentimentos | Perfil → Privacidade e consentimentos |
 | Saber com quem compartilhamos | Seção 5 desta política |
 

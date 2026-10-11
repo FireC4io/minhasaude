@@ -1,6 +1,6 @@
 name: Política de privacidade (GitHub Pages)
 
-# Publica só a página da política, gerada de docs/legal/politica-de-privacidade.md.
+# Publica a política e a página de exclusão de conta, geradas de docs/legal/*.md.
 # Fica no GitHub Pages e não no Render porque o plano gratuito do Render dorme:
 # o revisor da Play acharia o link quebrado.
 on:
@@ -8,6 +8,7 @@ on:
     branches: [main]
     paths:
       - docs/legal/politica-de-privacidade.md
+      - docs/legal/excluir-conta.md
       - scripts/build-privacy-page.mjs
       - .github/workflows/privacy-page.yml
   workflow_dispatch:
