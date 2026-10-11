@@ -1,3 +1,5 @@
+import type { ConsentStatusResponseDto } from '@/api/generated/models';
+
 /**
  * Decide qual grupo de rotas o app deve montar na raiz.
  *
@@ -100,14 +102,8 @@ function routeForPolicy(policy: PrivacyPolicyState | undefined, current: string 
 interface ConsentsQueryState {
   isPending: boolean;
   isError: boolean;
-  /** Corpo de `GET /v1/consents` (o client gerado tipa como `void`). */
-  data: unknown;
-}
-
-interface ConsentRow {
-  consentType: string;
-  granted: boolean;
-  policyVersion: string | null;
+  /** Corpo de `GET /v1/consents`. */
+  data: readonly Pick<ConsentStatusResponseDto, 'consentType' | 'granted' | 'policyVersion'>[] | undefined;
 }
 
 export function privacyPolicyFromConsents(query: ConsentsQueryState): PrivacyPolicyState {
@@ -115,6 +111,6 @@ export function privacyPolicyFromConsents(query: ConsentsQueryState): PrivacyPol
   if (!Array.isArray(query.data)) {
     return query.isPending ? { status: 'loading' } : { status: 'error' };
   }
-  const row = (query.data as ConsentRow[]).find((consent) => consent.consentType === 'privacy_policy');
+  const row = query.data.find((consent) => consent.consentType === 'privacy_policy');
   return { status: 'loaded', granted: row?.granted ?? false, version: row?.policyVersion ?? null };
 }

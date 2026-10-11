@@ -26,6 +26,7 @@ import type {
 
 import type {
   ConfirmPasswordResetDto,
+  CurrentUserResponseDto,
   GoogleSignInDto,
   LoginDto,
   RefreshDto,
@@ -536,7 +537,7 @@ export const authControllerMe = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<CurrentUserResponseDto>(
       {url: `/v1/auth/me`, method: 'GET', signal
     },
       );

@@ -5,16 +5,12 @@ import { useConsentsControllerList } from '@/api/generated/endpoints/consents/co
 import { AppText } from '@/components/ui/app-text';
 import { FormError } from '@/components/ui/form-error';
 import { LoadingIndicator } from '@/components/ui/loading-indicator';
-import {
-  CONSENT_LABELS,
-  formatConsentDate,
-  type ConsentStatusView,
-} from '@/features/account/consent-labels';
+import { CONSENT_LABELS, formatConsentDate } from '@/features/account/consent-labels';
 
 export default function PrivacyScreen() {
   const { t } = useTranslation();
   const consentsQuery = useConsentsControllerList();
-  const consents = (consentsQuery.data ?? []) as unknown as ConsentStatusView[];
+  const consents = consentsQuery.data ?? [];
 
   return (
     <ScrollView className="flex-1 bg-areia" contentContainerClassName="gap-6 px-6 py-6">

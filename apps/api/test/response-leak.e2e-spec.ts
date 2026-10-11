@@ -28,6 +28,9 @@ const CAMPOS_INTERNOS = [
   // jsonb cru dos micronutrientes: o cliente recebe `micros`, já montado.
   'microsPer100g',
   'deletedAt',
+  // Registro de auditoria do aceite (consents): fica no banco, não volta ao app.
+  'ipAddress',
+  'userAgent',
 ];
 
 function coletarChaves(valor: unknown, caminho = '', encontradas: string[] = []): string[] {
@@ -130,6 +133,26 @@ describe('Vazamento de campos internos nas respostas (e2e)', () => {
     const res = await get(url).expect(200);
 
     expect(coletarChaves(res.body)).toEqual([]);
+  });
+
+  it('POST /v1/consents devolve o aceite sem o registro de auditoria', async () => {
+    const res = await request(app.getHttpServer())
+      .post('/v1/consents')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .set('User-Agent', 'teste-vazamento')
+      .send({ consentType: 'terms_of_service', policyVersion: '2026-01' })
+      .expect(201);
+
+    expect(coletarChaves(res.body)).toEqual([]);
+    expect(Object.keys(res.body).sort()).toEqual(
+      ['consentType', 'grantedAt', 'id', 'policyVersion', 'revokedAt'].sort(),
+    );
+  });
+
+  it('GET /v1/auth/me devolve só quem é a pessoa, sem os horários do token', async () => {
+    const res = await get('/v1/auth/me').expect(200);
+
+    expect(res.body).toEqual({ sub: expect.any(String), email });
   });
 
   it('GET /v1/diary não expõe campo interno, nem dentro do alimento aninhado', async () => {

@@ -158,8 +158,8 @@ describe('resolveRootRoute', () => {
 
     it('acha o aceite da política na lista de consentimentos', () => {
       const data = [
-        { consentType: 'exam_data_processing', granted: false, policyVersion: null },
-        { consentType: 'privacy_policy', granted: true, policyVersion: '2026-01' },
+        { consentType: 'exam_data_processing' as const, granted: false, policyVersion: null },
+        { consentType: 'privacy_policy' as const, granted: true, policyVersion: '2026-01' },
       ];
       expect(privacyPolicyFromConsents(query({ data }))).toEqual({ status: 'loaded', granted: true, version: '2026-01' });
     });
@@ -171,7 +171,7 @@ describe('resolveRootRoute', () => {
     });
 
     it('usa a lista da cópia no aparelho mesmo se a atualização falhar', () => {
-      const data = [{ consentType: 'privacy_policy', granted: true, policyVersion: '2026-01' }];
+      const data = [{ consentType: 'privacy_policy' as const, granted: true, policyVersion: '2026-01' }];
       expect(privacyPolicyFromConsents(query({ isError: true, data }))).toEqual({
         status: 'loaded',
         granted: true,

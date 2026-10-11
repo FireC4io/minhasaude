@@ -25,6 +25,8 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  ConsentResponseDto,
+  ConsentStatusResponseDto,
   GrantConsentDto
 } from '../../models';
 
@@ -57,7 +59,7 @@ export const consentsControllerList = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<ConsentStatusResponseDto[]>(
       {url: `/v1/consents`, method: 'GET', signal
     },
       );
@@ -149,7 +151,7 @@ export const consentsControllerGrant = (
 ) => {
 
 
-      return customInstance<void>(
+      return customInstance<ConsentResponseDto>(
       {url: `/v1/consents`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: grantConsentDto, signal

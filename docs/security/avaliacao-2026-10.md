@@ -85,8 +85,10 @@ nota soma achados de bibliotecas, então vale a triagem item a item.
 - **SonarQube Cloud**: workflow `sonar.yml` + `sonar-project.properties`, com a cobertura dos três pacotes
   (API 37% só de unitários — os e2e não entram na conta; app 79%; shared 81%). Liga quando houver o segredo `SONAR_TOKEN`.
 - **Swagger desligado em produção** (11/10, decisão do dono): `/docs` e `/docs-json` só fora de produção (`bootstrap/swagger.ts`).
-- **Resposta sem DTO** (regra do projeto): `GET /v1/consents` e `GET /v1/auth/me` devolvem objeto cru. Sem campo
-  sensível hoje, mas fora do padrão.
+- **Resposta sem DTO** (regra do projeto): `GET /v1/consents` e `GET /v1/auth/me` devolviam objeto cru, e
+  `POST /v1/consents` devolvia a entidade inteira, com `userId`, IP e navegador do aceite. Corrigido (11/10): DTOs
+  próprios; IP e navegador ficam só no banco, `/auth/me` não repete os horários do token. Regressão em
+  `test/response-leak.e2e-spec.ts`; o app passou a usar os tipos gerados (sai o `ConsentStatusView`).
 
 ## Reforços de 11/10 (depois da reavaliação)
 
@@ -101,8 +103,7 @@ nota soma achados de bibliotecas, então vale a triagem item a item.
   privado de vulnerabilidades ligado; `SECURITY.md`.
 - **SonarQube Cloud** com cobertura dos e2e e Quality Gate obrigatório.
 - **Plano de resposta a incidentes**: `docs/security/plano-de-incidente.md`.
-- Fica para depois: registro de auditoria no banco, ZAP automático no CI, MobSF no APK, extensões fora do `public`,
-  rotas sem DTO, Play Integrity.
+- Fica para depois: registro de auditoria no banco, ZAP automático no CI, extensões fora do `public`, Play Integrity.
 
 ## Passos do dono
 

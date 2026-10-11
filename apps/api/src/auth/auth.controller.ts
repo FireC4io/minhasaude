@@ -9,12 +9,14 @@ import { RegisterResponseDto } from './dto/register-response.dto';
 import { LoginDto } from './dto/login.dto';
 import { RefreshDto } from './dto/refresh.dto';
 import { TokensDto } from './dto/tokens.dto';
+import { CurrentUserResponseDto } from './dto/current-user-response.dto';
 import { RequestPasswordResetDto } from './dto/request-password-reset.dto';
 import { ConfirmPasswordResetDto } from './dto/confirm-password-reset.dto';
 import { PasswordResetService } from './password-reset/password-reset.service';
 import { GoogleSignInDto } from './dto/google-sign-in.dto';
 import { GoogleAuthService } from './google/google-auth.service';
 import type { JwtPayload } from './types/jwt-payload.interface';
+import { toDto } from '../common/serialization/to-dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -103,7 +105,8 @@ export class AuthController {
 
   @Get('me')
   @ApiOperation({ summary: 'Retorna o usuário autenticado a partir do access token' })
-  me(@CurrentUser() user: JwtPayload): JwtPayload {
-    return user;
+  @ApiOkResponse({ type: CurrentUserResponseDto })
+  me(@CurrentUser() user: JwtPayload): CurrentUserResponseDto {
+    return toDto(CurrentUserResponseDto, user);
   }
 }
