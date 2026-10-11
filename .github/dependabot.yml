@@ -5,6 +5,24 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 10
+    # Só correções e versões menores. Versão principal (NestJS 12 só ESM, TypeScript 7,
+    # ESLint 10, Tailwind 4...) quebra o projeto e vira migração planejada, uma por vez.
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+      # O Expo fixa estas versões por SDK: sobem juntas com `npx expo install --fix`,
+      # nunca soltas (React Native 0.87 não roda no Expo 57).
+      - dependency-name: "expo"
+      - dependency-name: "expo-*"
+      - dependency-name: "@expo/*"
+      - dependency-name: "react"
+      - dependency-name: "react-dom"
+      - dependency-name: "react-native"
+      - dependency-name: "react-native-*"
+      - dependency-name: "@react-native/*"
+      - dependency-name: "@react-native-async-storage/*"
+      - dependency-name: "babel-preset-expo"
+      - dependency-name: "jest-expo"
     groups:
       dev-dependencies:
         dependency-type: "development"
