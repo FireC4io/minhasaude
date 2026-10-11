@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query, ParseUUIDPipe } from '@nestjs/common';
 import { ApiCreatedResponse, ApiNoContentResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 import { FoodsService } from './foods.service';
@@ -38,14 +38,14 @@ export class FoodsController {
   @Get(':id')
   @ApiOperation({ summary: 'Detalhe de um alimento (TACO/OFF públicos, custom só pro dono)' })
   @ApiOkResponse({ type: FoodResponseDto })
-  async findById(@CurrentUser() user: JwtPayload, @Param('id') id: string) {
+  async findById(@CurrentUser() user: JwtPayload, @Param('id', ParseUUIDPipe) id: string) {
     return toDto(FoodResponseDto, await this.foodsService.findById(id, user.sub));
   }
 
   @Patch(':id')
   @ApiOperation({ summary: 'Atualiza um alimento personalizado - só o dono pode editar' })
   @ApiOkResponse({ type: FoodResponseDto })
-  async update(@CurrentUser() user: JwtPayload, @Param('id') id: string, @Body() dto: UpdateFoodDto) {
+  async update(@CurrentUser() user: JwtPayload, @Param('id', ParseUUIDPipe) id: string, @Body() dto: UpdateFoodDto) {
     return toDto(FoodResponseDto, await this.foodsService.update(id, user.sub, dto));
   }
 
@@ -53,7 +53,7 @@ export class FoodsController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Remove um alimento personalizado - só o dono pode remover' })
   @ApiNoContentResponse()
-  async remove(@CurrentUser() user: JwtPayload, @Param('id') id: string): Promise<void> {
+  async remove(@CurrentUser() user: JwtPayload, @Param('id', ParseUUIDPipe) id: string): Promise<void> {
     await this.foodsService.remove(id, user.sub);
   }
 }

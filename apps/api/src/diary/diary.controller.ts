@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query, UseGuards, ParseUUIDPipe } from '@nestjs/common';
 import { ApiCreatedResponse, ApiNoContentResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { DiaryService } from './diary.service';
 import { CreateDiaryEntryDto } from './dto/create-diary-entry.dto';
@@ -49,7 +49,7 @@ export class DiaryController {
   @RequireConsent(ConsentType.PRIVACY_POLICY)
   @ApiOperation({ summary: 'Atualiza uma entrada do diário' })
   @ApiOkResponse({ type: DiaryEntryResponseDto })
-  async update(@CurrentUser() user: JwtPayload, @Param('id') id: string, @Body() dto: UpdateDiaryEntryDto) {
+  async update(@CurrentUser() user: JwtPayload, @Param('id', ParseUUIDPipe) id: string, @Body() dto: UpdateDiaryEntryDto) {
     return toDto(DiaryEntryResponseDto, await this.diaryService.update(id, user.sub, dto));
   }
 
@@ -57,7 +57,7 @@ export class DiaryController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Remove uma entrada do diário' })
   @ApiNoContentResponse()
-  async remove(@CurrentUser() user: JwtPayload, @Param('id') id: string): Promise<void> {
+  async remove(@CurrentUser() user: JwtPayload, @Param('id', ParseUUIDPipe) id: string): Promise<void> {
     await this.diaryService.remove(id, user.sub);
   }
 }

@@ -1,0 +1,60 @@
+name: SonarQube Cloud
+
+# Qualidade e segurança do código (bugs, vulnerabilidades, pontos sensíveis de
+# segurança, duplicação) com a cobertura dos testes unitários dos três pacotes.
+# Configuração em sonar-project.properties. Sem o segredo SONAR_TOKEN, o job
+# pula a análise em vez de falhar.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: sonar-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  sonar:
+    name: análise SonarQube Cloud
+    runs-on: ubuntu-latest
+    env:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Histórico completo: o Sonar usa o blame para saber o que é código novo.
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Instalar dependências
+        run: pnpm install --frozen-lockfile
+
+      # A API e o app importam o dist/ do shared.
+      - name: Buildar @minhasaude/shared
+        run: pnpm --filter @minhasaude/shared build
+
+      - name: Testes unitários com cobertura
+        run: |
+          pnpm --filter @minhasaude/shared test --coverage
+          pnpm --filter @minhasaude/api test --coverage
+          pnpm --filter @minhasaude/mobile test --coverage
+
+      - name: Análise
+        if: env.SONAR_TOKEN != ''
+        uses: SonarSource/sonarqube-scan-action@v5
+
+      - name: Aviso sem token
+        if: env.SONAR_TOKEN == ''
+        run: echo "::warning::SONAR_TOKEN não configurado; análise do SonarQube Cloud pulada."

@@ -46,10 +46,28 @@ CI com análise de código e busca de segredos; build de produção analisado; p
 ## Pendente de verificação
 
 - Sessão: token de renovação reusado derruba a sessão
-- Login com Google no build real (e2e com verificador falso em `test/google-sign-in.e2e-spec.ts`: conta nova, pré-sequestro, e-mail não confirmado, maiúsculas)
-- Cabeçalhos de segurança em produção; Swagger público em produção
 - APK de produção no MobSF
-- Política de privacidade e plano de incidente
+- Plano de incidente
+- Swagger público em produção (`/docs`, `/docs-json`): decisão do dono — o repositório já é público
+
+## Reavaliação de 11/10 (ferramentas)
+
+- **OWASP ZAP** (`zaproxy/zap-stable:2.16.1`, varredura de API pelo OpenAPI, com token, contra a API **local**):
+  achou **500 em `DELETE /v1/consents/:type`** com tipo inválido (ia direto ao banco). Corrigido com `ParseEnumPipe`;
+  ids de diário e alimento ganharam `ParseUUIDPipe` (mesmo problema). Regressão em
+  `test/security-path-params.e2e-spec.ts`. Segunda varredura: 113 aprovadas, 0 falhas; sobra só "timestamp" no
+  `/v1/auth/me` (iat/exp do próprio token, sem risco).
+- **Cabeçalhos em produção** (leitura simples, sem ataque): HSTS, CSP, `nosniff`, `X-Frame-Options`,
+  `Referrer-Policy: no-referrer`, sem `X-Powered-By`. OK.
+- **Dependências** (`pnpm audit`): 3 moderadas, todas em ferramenta de build do app (`uuid` no plugin iOS do Expo,
+  `postcss-selector-parser` no Tailwind, `decode-uri-component` no expo-router — no aparelho, só travaria o próprio app
+  com link malformado). Nenhuma na API. As 2 altas ignoradas seguem justificadas em `pnpm-workspace.yaml`.
+- **Trivy** (`aquasec/trivy`): descartado — a versão fixada não lê o lockfile do pnpm 12 e saía vazio sem erro;
+  `pnpm audit` e gitleaks já cobrem dependências e segredos.
+- **SonarQube Cloud**: workflow `sonar.yml` + `sonar-project.properties`, com a cobertura dos três pacotes
+  (API 37% só de unitários — os e2e não entram na conta; app 79%; shared 81%). Liga quando houver o segredo `SONAR_TOKEN`.
+- **Resposta sem DTO** (regra do projeto): `GET /v1/consents` e `GET /v1/auth/me` devolvem objeto cru. Sem campo
+  sensível hoje, mas fora do padrão.
 
 ## Passos do dono
 
@@ -57,6 +75,7 @@ CI com análise de código e busca de segredos; build de produção analisado; p
 - [x] Render → Environment: `DATABASE_SSL=verify-full` e `DATABASE_SSL_CA` (11/10)
 - [ ] Supabase → depois do deploy com TLS no ar: ligar *Enforce SSL*
 - [x] Backup configurado e ensaiado (10/10)
-- [ ] Render → Environment: `BETTERSTACK_INGESTING_HOST` (copiar o *Ingesting host* da source `minhasaude-api`)
+- [x] Render → Environment: `BETTERSTACK_INGESTING_HOST` (11/10, região us-west-2)
+- [ ] SonarQube Cloud: importar o repositório, desligar a análise automática e criar o segredo `SONAR_TOKEN` no GitHub
 - [ ] Guardar a chave privada do age fora deste computador
 - [x] Render → Environment: conferido que `JWT_ACCESS_SECRET` é aleatório e longo, e não o `troque…` do exemplo (sondar a produção foi bloqueado, com razão, pelo modo automático)

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Req } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Req, ParseEnumPipe } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import type { Request } from 'express';
 import { ConsentsService } from './consents.service';
@@ -29,7 +29,7 @@ export class ConsentsController {
   @Delete(':type')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Revoga o consentimento ativo de um tipo' })
-  async revoke(@CurrentUser() user: JwtPayload, @Param('type') type: ConsentType): Promise<void> {
+  async revoke(@CurrentUser() user: JwtPayload, @Param('type', new ParseEnumPipe(ConsentType)) type: ConsentType): Promise<void> {
     await this.consentsService.revoke(user.sub, type);
   }
 }
