@@ -22,7 +22,7 @@ fechada. Plano visual: https://claude.ai/artifact/M3cugePLkCpbjSkbVJq3BB · Acha
    configurado no Render; e-mail chegou e a troca funcionou no emulador).
 2. 🟡 **Login com Google** — API e botão prontos em 2026-10-11 (Client ID Web `637195029476-pfdh…` em `GOOGLE_WEB_CLIENT_ID` na API e
    `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` no `eas.json`). Falta: `GOOGLE_WEB_CLIENT_ID` no Render; keystore no EAS
-   (`eas credentials -p android`) → SHA-1 → cliente Android do OAuth (`br.com.gotavital`); testar no build EAS; depois
+   (`eas credentials -p android`) → SHA-1 → cliente Android do OAuth (`br.com.gotavital`, criado em 2026-10-11: `637195029476-j8to…`); testar no build EAS; depois
    um segundo cliente Android com a SHA-1 da Play App Signing. iOS: cliente próprio + `iosUrlScheme` no plugin.
 3. **Publicar a política** — GitHub Pages (Render gratuito dorme e o revisor da Play pode achar o link quebrado);
    preencher a data; subir `CURRENT_PRIVACY_POLICY_VERSION` para `2026-10` (todos reaceitam).
