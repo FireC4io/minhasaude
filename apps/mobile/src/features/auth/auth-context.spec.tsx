@@ -92,7 +92,7 @@ describe('AuthProvider', () => {
       expiresInSeconds: 900,
     });
 
-    renderAuthProbe();
+    await renderAuthProbe();
 
     await waitFor(() => expect(screen.getByTestId('isLoading').props.children).toBe('false'));
     expect(screen.getByTestId('isAuthenticated').props.children).toBe('false');
@@ -109,7 +109,7 @@ describe('AuthProvider', () => {
   it('mantém isAuthenticated false e mostra erro em credencial inválida', async () => {
     loginMutateAsync.mockRejectedValue(new Error('credenciais inválidas'));
 
-    renderAuthProbe();
+    await renderAuthProbe();
     await waitFor(() => expect(screen.getByTestId('isLoading').props.children).toBe('false'));
 
     fireEvent.press(screen.getByTestId('loginErrado'));
@@ -125,7 +125,7 @@ describe('AuthProvider', () => {
       refreshToken: 'refresh-1',
     });
 
-    renderAuthProbe();
+    await renderAuthProbe();
 
     await waitFor(() => expect(screen.getByTestId('isAuthenticated').props.children).toBe('true'));
   });
@@ -138,7 +138,7 @@ describe('AuthProvider', () => {
       expiresInSeconds: 900,
     });
 
-    renderAuthProbe();
+    await renderAuthProbe();
     await waitFor(() => expect(screen.getByTestId('isLoading').props.children).toBe('false'));
 
     fireEvent.press(screen.getByTestId('register'));
@@ -156,7 +156,7 @@ describe('AuthProvider', () => {
     });
     logoutMutateAsync.mockResolvedValue(undefined);
 
-    renderAuthProbe();
+    await renderAuthProbe();
     await waitFor(() => expect(screen.getByTestId('isAuthenticated').props.children).toBe('true'));
 
     fireEvent.press(screen.getByTestId('logout'));

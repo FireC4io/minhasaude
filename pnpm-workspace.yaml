@@ -13,6 +13,9 @@ overrides:
   # 2026-10-07: alertas do audit em ferramentas de build (react-devtools-core e terser).
   shell-quote: ">=1.11.0 <2"
   source-map-js: ">=1.2.2 <2"
+  # 2026-10-11: duas críticas no handlebars (GHSA-8r5x-fm3f-whwj, GHSA-p8wg-vrv2-v86f),
+  # só em teste da API (via ts-jest).
+  handlebars: ">=4.7.10 <5"
 # Alertas sem versão corrigida publicada (2026-10-07). Os dois só existem em
 # ferramenta de desenvolvimento do Expo (assinatura de código do CLI e o
 # file-map do Metro), nunca no bundle do app nem na API. Revisar quando sair
