@@ -2,6 +2,8 @@
 # FAIL quebra o CI: injeções, XSS, path traversal, inclusão remota, XXE, redirect
 # externo, vazamento de código/erro e resposta 500 (o achado da varredura de 11/10).
 # WARN só aparece no relatório. IGNORE: aviso de versão do próprio ZAP.
+# OUTOFSCOPE: o campo `screen` de /v1/client-errors é uma rota do app por natureza e só
+# vai para o log, nunca toca arquivo; o ZAP sempre o confundiria com path traversal.
 0	WARN	(Directory Browsing - Active/release)
 10003	WARN	(Vulnerable JS Library (Powered by Retire.js) - Passive/release)
 10009	WARN	(In Page Banner Information Leak - Passive/beta)
@@ -117,3 +119,4 @@
 90035	FAIL	(Server Side Template Injection - Active/release)
 90036	FAIL	(Server Side Template Injection (Blind) - Active/release)
 90037	FAIL	(Remote OS Command Injection (Time Based) - Active/release)
+6	OUTOFSCOPE	http://localhost:3000/v1/client-errors.*
