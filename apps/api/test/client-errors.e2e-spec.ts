@@ -42,6 +42,13 @@ describe('Relatório de erro do app (e2e)', () => {
     await http().post('/v1/client-errors').send({ ...report, platform: 'windows' }).expect(400);
   });
 
+  it('versão e tela só nos formatos que o app manda', async () => {
+    await http().post('/v1/client-errors').send({ ...report, appVersion: 'client-errors' }).expect(400);
+    await http().post('/v1/client-errors').send({ ...report, appVersion: '1.0.0' }).expect(204);
+    await http().post('/v1/client-errors').send({ ...report, screen: '../../etc/passwd;' }).expect(400);
+    await http().post('/v1/client-errors').send({ ...report, screen: '/exam/[id]' }).expect(204);
+  });
+
   it('para de aceitar depois de 10 relatórios por minuto do mesmo aparelho', async () => {
     const statuses: number[] = [];
     for (let i = 0; i < 12; i++) statuses.push((await http().post('/v1/client-errors').send(report)).status);

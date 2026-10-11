@@ -40,7 +40,8 @@ export const appErrorReporter = createErrorReporter({
   },
   context: () => ({
     screen: currentScreen,
-    appVersion: formatAppVersion(Constants.expoConfig?.version, Application.nativeBuildVersion),
+    // A API só aceita "1.0.0" ou "1.0.0 (2)": sem versão, "0.0.0" em vez do traço da tela Sobre.
+    appVersion: formatAppVersion(Constants.expoConfig?.version ?? '0.0.0', Application.nativeBuildVersion),
     platform: platform(),
   }),
 });
