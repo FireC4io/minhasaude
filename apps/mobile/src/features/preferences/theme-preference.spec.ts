@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colorScheme } from 'nativewind';
+import { Platform } from 'react-native';
 
 import { applyThemePreference, loadThemePreference, saveThemePreference } from './theme-preference';
 
@@ -31,5 +32,16 @@ describe('preferência de tema', () => {
     applyThemePreference('light');
 
     expect(colorScheme.set).toHaveBeenCalledWith('light');
+  });
+
+  it('na web não força o tema: o CSS segue o navegador, e forçar lança erro', () => {
+    const original = Platform.OS;
+    Object.defineProperty(Platform, 'OS', { value: 'web', configurable: true });
+    try {
+      expect(() => applyThemePreference('dark')).not.toThrow();
+      expect(colorScheme.set).not.toHaveBeenCalled();
+    } finally {
+      Object.defineProperty(Platform, 'OS', { value: original, configurable: true });
+    }
   });
 });

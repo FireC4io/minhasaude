@@ -25,8 +25,6 @@ fechada. Plano visual: https://claude.ai/artifact/M3cugePLkCpbjSkbVJq3BB · Acha
    chave do EAS (`637195029476-j8to…`). Falta: segundo cliente Android com a SHA-1 da Play App Signing quando subir na Play;
    iOS (cliente próprio + `iosUrlScheme` no plugin). O primeiro build EAS também saiu (precisou compilar o shared no
    `eas-build-post-install`).
-   Pendências vistas no teste: erro do tema na web
-   (`theme-preference.ts:43`).
 3. ✅ **Publicar a política** — 2026-10-11: https://firec4io.github.io/minhasaude/privacidade/ (workflow `privacy-page.yml`
    gera a página de `docs/legal/politica-de-privacidade.md` a cada mudança). Versão `2026-10`; quem aceitou a antiga
    cai na tela `policy-update` (pode baixar dados, apagar a conta ou sair sem aceitar). Usar esse endereço na Play Console.

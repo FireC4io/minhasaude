@@ -17,6 +17,7 @@ import {
   THEME_PREFERENCES,
   THEME_PREFERENCE_LABELS,
   applyThemePreference,
+  THEME_PREFERENCE_SUPPORTED,
   loadThemePreference,
   saveThemePreference,
   type ThemePreference,
@@ -74,16 +75,21 @@ export default function PreferencesScreen() {
       <AppText variant="caption" className="text-grafite-suave">
         {t('language.hint')}
       </AppText>
-      <SelectChips
-        label={t('preferences.theme')}
-        options={THEME_PREFERENCES}
-        optionLabels={THEME_PREFERENCE_LABELS}
-        value={theme}
-        onChange={chooseTheme}
-      />
-      <AppText variant="caption" className="text-grafite-suave">
-        {t('preferences.themeHint')}
-      </AppText>
+      {/* Na web o tema segue o navegador: o controle não faria nada lá. */}
+      {THEME_PREFERENCE_SUPPORTED ? (
+        <>
+          <SelectChips
+            label={t('preferences.theme')}
+            options={THEME_PREFERENCES}
+            optionLabels={THEME_PREFERENCE_LABELS}
+            value={theme}
+            onChange={chooseTheme}
+          />
+          <AppText variant="caption" className="text-grafite-suave">
+            {t('preferences.themeHint')}
+          </AppText>
+        </>
+      ) : null}
       <AppText variant="caption" className="text-grafite-suave">
         {t('preferences.fontHint')}
       </AppText>

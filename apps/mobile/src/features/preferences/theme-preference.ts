@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colorScheme } from 'nativewind';
+import { Platform } from 'react-native';
 
 import { translatedLabels } from '@/i18n/labels';
 
@@ -35,10 +36,19 @@ export async function saveThemePreference(preference: ThemePreference): Promise<
   }
 }
 
+/** A escolha de tema só existe no celular (ver `applyThemePreference`). */
+export const THEME_PREFERENCE_SUPPORTED = Platform.OS !== 'web';
+
 /**
  * No celular, o NativeWind repassa ao `Appearance` do sistema, então o
  * `useColorScheme` do React Native (usado nas abas e no gráfico) acompanha.
+ * Na web as cores vêm de `@media (prefers-color-scheme)` no global.css e
+ * seguem o navegador; o NativeWind recusa troca manual nesse modo (lançava
+ * erro na abertura). A web serve só para validar o app, então não força.
  */
 export function applyThemePreference(preference: ThemePreference): void {
+  if (Platform.OS === 'web') {
+    return;
+  }
   colorScheme.set(preference);
 }
