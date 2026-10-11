@@ -23,7 +23,7 @@ export default function ProfileScreen() {
       <ScrollView contentContainerClassName="gap-6 px-6 py-8">
         <View className="gap-1">
           <AppText variant="title" accessibilityRole="header" className="text-grafite">
-            Perfil
+            {t('tabs.profile')}
           </AppText>
           {meQuery.data ? (
             <AppText className="text-grafite-suave">{meQuery.data.user.email}</AppText>
