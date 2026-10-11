@@ -118,7 +118,7 @@ Conferir contra `docs/legal/politica-de-privacidade.md` seção 2 antes de envia
 
 ## 5. Materiais gráficos
 
-Gerados por `docs/loja/imagens/` (ver o README de lá). Regras da Play: ícone 512×512 PNG (até 1 MB), recurso gráfico
+Gerados em `apps/mobile/store/play/` (ver `apps/mobile/store/README.md`). Regras da Play: ícone 512×512 PNG (até 1 MB), recurso gráfico
 1024×500 PNG/JPG sem transparência, de 2 a 8 capturas de celular (aqui 1080×1920). Sem tela em prévia, sem e-mail de
 teste visível, sem texto que prometa resultado.
 
