@@ -99,8 +99,9 @@ docs/              ADRs, banco, contrato de API, roadmap, segurança, textos leg
 
 ## Produção
 
-- API: https://minhasaude-api.onrender.com (deploy automático a cada push na `main`; o plano gratuito dorme após 15
-  minutos sem uso). A documentação Swagger só existe fora de produção.
+- API: https://minhasaude-api.onrender.com (deploy automático a cada push na `main`). Um workflow consulta `/health` a
+  cada 10 minutos: mantém o plano gratuito acordado e avisa por e-mail se a API cair. A documentação Swagger só existe
+  fora de produção.
 - Política de privacidade: https://firec4io.github.io/minhasaude/privacidade/
 - Como apagar a conta sem o app: https://firec4io.github.io/minhasaude/excluir-conta/
 

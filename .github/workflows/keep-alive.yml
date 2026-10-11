@@ -1,27 +1,47 @@
 name: Keep-alive (Supabase + Render)
 
+# A cada 10 minutos, GET /health (que faz SELECT 1 no Postgres). Três funções:
+# - mantém a API acordada: o plano gratuito do Render dorme após 15 min sem
+#   tráfego, e a primeira abertura do app esperava ~50 s. Um serviço ligado o mês
+#   todo dá 744 h, dentro das 750 h grátis;
+# - evita a pausa do Supabase gratuito por inatividade (ver ADR-0007);
+# - é o alerta de queda: se /health não responder 200 nem na segunda tentativa, o
+#   job falha e o GitHub manda e-mail para o dono (falha de workflow agendado).
+# O GitHub pode atrasar execuções agendadas em horário de pico; uma falta isolada
+# só faz a API dormir até o próximo ping.
+
 on:
   schedule:
-    # 1x/dia - consulta o Postgres via /health para evitar a pausa do projeto
-    # Supabase free tier por inatividade (ver ADR-0007). Também acorda o Render
-    # free tier, embora este volte a "dormir" após 15 min sem tráfego real.
-    - cron: "17 12 * * *"
+    - cron: "*/10 * * * *"
   workflow_dispatch: {}
 
 # Permissão mínima: o job só lê o repositório (OpenSSF Scorecard, Token-Permissions).
 permissions:
   contents: read
 
+concurrency:
+  group: keep-alive
+  cancel-in-progress: false
+
 jobs:
   ping-health:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - name: GET /health
         run: |
-          status=$(curl -s -o /dev/stdout -w "\n%{http_code}" https://minhasaude-api.onrender.com/health)
-          echo "$status"
-          code=$(echo "$status" | tail -n1)
+          check() {
+            # 90 s: se a API tiver dormido mesmo assim, acordar leva uns 50 s.
+            curl -s -o /dev/null -w "%{http_code}" --max-time 90 https://minhasaude-api.onrender.com/health || echo "000"
+          }
+          code=$(check)
           if [ "$code" != "200" ]; then
-            echo "Health check falhou com status $code"
+            echo "Primeira tentativa: $code. Tentando de novo em 60 s."
+            sleep 60
+            code=$(check)
+          fi
+          echo "/health respondeu $code"
+          if [ "$code" != "200" ]; then
+            echo "::error::API fora do ar: /health respondeu $code duas vezes seguidas"
             exit 1
           fi
