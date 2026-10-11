@@ -24,10 +24,12 @@ import {
   queryPersister,
   shouldPersistQuery,
 } from '@/api/query-client';
+import { CURRENT_PRIVACY_POLICY_VERSION } from '@minhasaude/shared';
+import { useConsentsControllerList } from '@/api/generated/endpoints/consents/consents';
 import { useGoalsControllerGetCurrent } from '@/api/generated/endpoints/goals/goals';
 import { AuthProvider, useAuth } from '@/features/auth/auth-context';
 import { GoalUnavailableView } from '@/features/onboarding/goal-unavailable-view';
-import { resolveRootRoute } from '@/features/onboarding/root-route';
+import { privacyPolicyFromConsents, resolveRootRoute } from '@/features/onboarding/root-route';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -84,10 +86,16 @@ function RootNavigator() {
   // 404 = usuário autenticado ainda sem meta calculada -> onboarding. Qualquer
   // outra falha NÃO significa isso (ver resolveRootRoute).
   const goalQuery = useGoalsControllerGetCurrent({ query: { enabled: isAuthenticated, retry: false } });
+  // Só quem já usa o app (tem meta) pode estar com aceite antigo da política.
+  const consentsQuery = useConsentsControllerList({
+    query: { enabled: isAuthenticated && goalQuery.isSuccess, retry: false },
+  });
   const route = resolveRootRoute({
     isAuthenticated,
     isRestoringSession,
     goal: { isPending: goalQuery.isPending, isSuccess: goalQuery.isSuccess, error: goalQuery.error },
+    privacyPolicy: privacyPolicyFromConsents(consentsQuery),
+    currentPolicyVersion: CURRENT_PRIVACY_POLICY_VERSION,
   });
 
   if (route === 'loading') {
@@ -108,12 +116,19 @@ function RootNavigator() {
       <Stack.Protected guard={route === 'app'}>
         <Stack.Screen name="(app)" options={{ headerShown: false }} />
         <Stack.Screen name="diary-entry" options={{ presentation: 'modal', headerShown: false }} />
-        <Stack.Screen name="account" options={{ headerShown: false }} />
         <Stack.Screen name="exam" options={{ headerShown: false }} />
         <Stack.Screen name="quick-add" options={{ presentation: 'modal', headerShown: false }} />
         <Stack.Screen name="weight-entry" options={{ presentation: 'modal', headerShown: false }} />
         <Stack.Screen name="water" options={{ presentation: 'modal', headerShown: false }} />
         <Stack.Screen name="voice-entry" options={{ presentation: 'modal', headerShown: false }} />
+      </Stack.Protected>
+      <Stack.Protected guard={route === 'policy-update'}>
+        <Stack.Screen name="policy-update" options={{ headerShown: false }} />
+      </Stack.Protected>
+      {/* Conta (baixar dados, apagar, sair) fica aberta também para quem ainda
+          não aceitou a política nova: nenhum desses direitos depende do aceite. */}
+      <Stack.Protected guard={route === 'app' || route === 'policy-update'}>
+        <Stack.Screen name="account" options={{ headerShown: false }} />
       </Stack.Protected>
       <Stack.Protected guard={route === 'onboarding'}>
         <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />

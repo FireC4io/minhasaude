@@ -27,8 +27,10 @@ fechada. Plano visual: https://claude.ai/artifact/M3cugePLkCpbjSkbVJq3BB · Acha
    `eas-build-post-install`).
    Pendências vistas no teste: erro do tema na web
    (`theme-preference.ts:43`).
-3. **Publicar a política** — GitHub Pages (Render gratuito dorme e o revisor da Play pode achar o link quebrado);
-   preencher a data; subir `CURRENT_PRIVACY_POLICY_VERSION` para `2026-10` (todos reaceitam).
+3. ✅ **Publicar a política** — 2026-10-11: https://firec4io.github.io/minhasaude/privacidade/ (workflow `privacy-page.yml`
+   gera a página de `docs/legal/politica-de-privacidade.md` a cada mudança). Versão `2026-10`; quem aceitou a antiga
+   cai na tela `policy-update` (pode baixar dados, apagar a conta ou sair sem aceitar). Usar esse endereço na Play Console.
+   Pendência: `GET /v1/consents` não tem DTO (client gerado tipa `void`; o app usa `ConsentStatusView`).
 4. **Primeiro build EAS (Android)** + **criptografia da cópia local** (achado 4) + análise do APK no MobSF.
 5. **Itens restantes da avaliação**: cabeçalhos de segurança em produção, Swagger público em produção (desligar?),
    plano de incidente curto em `docs/security/`, token de renovação reusado derruba a sessão (teste).

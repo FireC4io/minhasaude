@@ -85,6 +85,15 @@ export const ptBR = {
       or: 'ou',
     },
   },
+  policyUpdate: {
+    title: 'A política de privacidade mudou',
+    intro: 'Atualizamos nossa política de privacidade (versão {{version}}). Leia o resumo e aceite para continuar usando o app.',
+    accept: 'Aceito, quero continuar',
+    declineIntro: 'Se não quiser aceitar, você ainda pode:',
+    export: 'Baixar todos os meus dados',
+    delete: 'Apagar minha conta',
+    logout: 'Sair da conta',
+  },
   labels: {
     sex: { male: 'Masculino', female: 'Feminino' },
     activity: {
@@ -167,6 +176,7 @@ export const ptBR = {
     consentNoSale: '• Seus dados não são vendidos nem passados para outras empresas fazerem propaganda.',
     consentRights: '• Você pode baixar todos os seus dados ou apagar sua conta quando quiser, na aba Perfil.',
     consentVersion: '• Este aceite vale para a versão {{version}} da nossa política de privacidade.',
+    readFullPolicy: 'Ler a política completa',
     accept: 'Aceito, quero continuar',
     acceptError: 'Não foi possível registrar seu aceite. Confira sua internet e tente de novo.',
     profileTitle: 'Seu perfil',

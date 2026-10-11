@@ -79,6 +79,15 @@ export const es: Translations = {
       or: 'o',
     },
   },
+  policyUpdate: {
+    title: 'Nuestra política de privacidad cambió',
+    intro: 'Actualizamos nuestra política de privacidad (versión {{version}}). Lee el resumen y acepta para seguir usando la app.',
+    accept: 'Acepto, quiero continuar',
+    declineIntro: 'Si no quieres aceptar, todavía puedes:',
+    export: 'Descargar todos mis datos',
+    delete: 'Eliminar mi cuenta',
+    logout: 'Cerrar sesión',
+  },
   labels: {
     sex: { male: 'Masculino', female: 'Femenino' },
     activity: {
@@ -161,6 +170,7 @@ export const es: Translations = {
     consentNoSale: '• Tus datos no se venden ni se pasan a otras empresas para publicidad.',
     consentRights: '• Puedes descargar todos tus datos o borrar tu cuenta cuando quieras, en la pestaña Perfil.',
     consentVersion: '• Esta aceptación vale para la versión {{version}} de nuestra política de privacidad.',
+    readFullPolicy: 'Leer la política completa',
     accept: 'Acepto, quiero continuar',
     acceptError: 'No se pudo registrar tu aceptación. Revisa tu internet e intenta de nuevo.',
     profileTitle: 'Tu perfil',

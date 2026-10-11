@@ -1,0 +1,56 @@
+name: Política de privacidade (GitHub Pages)
+
+# Publica só a página da política, gerada de docs/legal/politica-de-privacidade.md.
+# Fica no GitHub Pages e não no Render porque o plano gratuito do Render dorme:
+# o revisor da Play acharia o link quebrado.
+on:
+  push:
+    branches: [main]
+    paths:
+      - docs/legal/politica-de-privacidade.md
+      - scripts/build-privacy-page.mjs
+      - .github/workflows/privacy-page.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: privacy-page
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      # Só o pacote raiz (markdown-it); o resto do monorepo não é necessário.
+      - name: Instalar dependências da raiz
+        run: pnpm install --frozen-lockfile --filter minha-saude
+
+      - name: Gerar a página
+        run: node scripts/build-privacy-page.mjs _site
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}privacidade/
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

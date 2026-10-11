@@ -9,6 +9,7 @@ import { useConsentsControllerGrant } from '@/api/generated/endpoints/consents/c
 import { FormError } from '@/components/ui/form-error';
 import { PrimaryButton } from '@/features/auth/primary-button';
 import { AppText } from '@/components/ui/app-text';
+import { PrivacySummaryCard } from '@/features/onboarding/privacy-summary-card';
 
 export default function ConsentScreen() {
   const { t } = useTranslation();
@@ -38,20 +39,7 @@ export default function ConsentScreen() {
           </AppText>
         </View>
 
-        <View className="gap-3 rounded-2xl border border-grafite bg-superficie p-4">
-          <AppText className="text-grafite">
-            {t('onboarding.consentUse')}
-          </AppText>
-          <AppText className="text-grafite">
-            {t('onboarding.consentNoSale')}
-          </AppText>
-          <AppText className="text-grafite">
-            {t('onboarding.consentRights')}
-          </AppText>
-          <AppText className="text-grafite">
-            {t('onboarding.consentVersion', { version: CURRENT_PRIVACY_POLICY_VERSION })}
-          </AppText>
-        </View>
+        <PrivacySummaryCard />
 
         <FormError message={error} />
 

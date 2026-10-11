@@ -79,6 +79,15 @@ export const en: Translations = {
       or: 'or',
     },
   },
+  policyUpdate: {
+    title: 'Our privacy policy changed',
+    intro: 'We updated our privacy policy (version {{version}}). Read the summary and accept to keep using the app.',
+    accept: 'I accept, continue',
+    declineIntro: "If you don't want to accept, you can still:",
+    export: 'Download all my data',
+    delete: 'Delete my account',
+    logout: 'Sign out',
+  },
   labels: {
     sex: { male: 'Male', female: 'Female' },
     activity: {
@@ -161,6 +170,7 @@ export const en: Translations = {
     consentNoSale: '• Your data is not sold or given to other companies for advertising.',
     consentRights: '• You can download all your data or delete your account whenever you want, in the Profile tab.',
     consentVersion: '• This consent applies to version {{version}} of our privacy policy.',
+    readFullPolicy: 'Read the full policy',
     accept: 'I agree, continue',
     acceptError: "Couldn't save your consent. Check your internet and try again.",
     profileTitle: 'Your profile',

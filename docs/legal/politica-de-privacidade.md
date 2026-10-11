@@ -1,8 +1,6 @@
 # Política de Privacidade do Gota Vital
 
-**Versão 2026-10** · em vigor a partir de [DATA DE PUBLICAÇÃO]
-
-> Rascunho em revisão. Itens entre colchetes dependem de decisão do responsável antes de publicar.
+**Versão 2026-10** · em vigor a partir de 11 de outubro de 2026
 
 O Gota Vital é um app de alimentação e acompanhamento de saúde. Para funcionar, ele guarda informações sobre você,
 algumas delas **dados pessoais sensíveis**, porque dizem respeito à sua saúde. Este texto explica, em linguagem
@@ -18,7 +16,7 @@ Contato para qualquer assunto de privacidade, inclusive como encarregado (art. 4
 
 | O quê | Exemplos | Para quê |
 |---|---|---|
-| Conta | E-mail e senha (guardamos só um código irreversível da senha, nunca a senha) | Você entrar no app e recuperar o acesso |
+| Conta | E-mail e senha (guardamos só um código irreversível da senha, nunca a senha). Se você entrar com o Google, o identificador da sua conta Google no lugar da senha. Ao recuperar a senha, um código de 6 números que vale 15 minutos | Você entrar no app e recuperar o acesso |
 | Perfil | Data de nascimento, sexo, altura, nível de atividade, objetivo e ritmo semanal | Calcular sua meta de calorias e nutrientes |
 | Medidas | Peso e a data de cada medida | Mostrar sua evolução e recalcular a meta |
 | Diário alimentar | Alimentos, quantidades, refeição e data; calorias, macronutrientes e micronutrientes calculados | Mostrar o que você comeu e quanto falta para a meta |
