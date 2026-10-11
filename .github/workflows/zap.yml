@@ -1,0 +1,158 @@
+name: ZAP (varredura da API)
+
+# Varredura ativa do OWASP ZAP em todas as rotas da API, pelo OpenAPI e com um
+# usuário autenticado, contra uma API de teste com Postgres efêmero (nunca contra
+# produção). Quebra o CI em injeção, XSS, path traversal e afins (infra/zap/regras.tsv)
+# e em qualquer resposta 500, que foi o achado da varredura manual de 11/10/2026.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - apps/api/**
+      - packages/shared/**
+      - infra/zap/**
+      - .github/workflows/zap.yml
+  pull_request:
+    paths:
+      - apps/api/**
+      - packages/shared/**
+      - infra/zap/**
+      - .github/workflows/zap.yml
+  schedule:
+    # Segunda, 04:23 em Brasília: pega regra nova do ZAP mesmo sem mudança no código.
+    - cron: "23 7 * * 1"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: zap-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  zap:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: minhasaude
+          POSTGRES_PASSWORD: minhasaude
+          POSTGRES_DB: minhasaude
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U minhasaude -d minhasaude"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      # `test`: o Swagger (de onde o ZAP lê as rotas) só existe fora de produção.
+      NODE_ENV: test
+      DATABASE_URL: postgresql://minhasaude:minhasaude@localhost:5432/minhasaude
+      # Segredo só para a vida do job, contra um Postgres efêmero - nunca usado em produção.
+      JWT_ACCESS_SECRET: ci-zap-only-secret-nunca-usado-em-producao-0000000
+      CORS_ORIGINS: ""
+      # A varredura leva vários minutos e manda milhares de pedidos: token longo e
+      # limite de pedidos desligado (a API recusa isto com NODE_ENV=production).
+      JWT_ACCESS_EXPIRES_IN: 2h
+      RATE_LIMIT_DISABLED: "true"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Instalar dependências
+        run: pnpm install --frozen-lockfile
+
+      - name: Buildar a API (e o shared)
+        run: pnpm exec turbo run build --filter=@minhasaude/api
+
+      - name: Subir a API (migrations e TACO rodam no boot)
+        run: |
+          node apps/api/dist/main.js > "$RUNNER_TEMP/api.log" 2>&1 &
+          for _ in $(seq 1 60); do
+            curl -sf -o /dev/null http://localhost:3000/docs-json && exit 0
+            sleep 2
+          done
+          echo "::error::a API não subiu"; tail -50 "$RUNNER_TEMP/api.log"; exit 1
+
+      - name: Usuário de teste com consentimento e perfil
+        run: |
+          token=$(node -e '
+            const api = "http://localhost:3000/v1";
+            const call = async (method, path, body, token) => {
+              const res = await fetch(api + path, { method, headers: { "content-type": "application/json", ...(token ? { authorization: "Bearer " + token } : {}) }, body: body && JSON.stringify(body) });
+              if (!res.ok) throw new Error(method + " " + path + " " + res.status);
+              return res.status === 204 ? null : res.json();
+            };
+            (async () => {
+              const user = { email: "zap@ci.test", password: "SenhaZap123!" };
+              await call("POST", "/auth/register", user);
+              const { accessToken } = await call("POST", "/auth/login", user);
+              await call("POST", "/consents", { consentType: "privacy_policy", policyVersion: "2026-10" }, accessToken);
+              await call("PATCH", "/me/profile", { birthDate: "1990-01-01", sex: "female", heightCm: 165, activityLevel: "light", goal: "maintain" }, accessToken);
+              await call("POST", "/body-measurements", { measuredAt: new Date().toISOString(), source: "manual", weightKg: 68 }, accessToken);
+              await call("POST", "/goals/recalculate", {}, accessToken);
+              process.stdout.write(accessToken);
+            })().catch((e) => { console.error(e.message); process.exit(1); });
+          ')
+          echo "::add-mask::$token"
+          echo "ZAP_TOKEN=$token" >> "$GITHUB_ENV"
+
+      # Fora da varredura só o que sabotaria o resto dela: apagar a conta (tudo
+      # vira 401) e revogar o consentimento (toda escrita vira 403). As duas rotas
+      # têm testes e2e de segurança próprios.
+      - name: OpenAPI sem as rotas que apagam o usuário de teste
+        run: |
+          mkdir -p zap-out && cp infra/zap/regras.tsv zap-out/
+          curl -sf http://localhost:3000/docs-json             | jq 'del(.paths["/v1/me"].delete) | del(.paths["/v1/consents/{type}"].delete)' > zap-out/openapi.json
+          chmod -R a+rw zap-out
+
+      - name: Varredura do ZAP
+        run: |
+          set +e
+          # zap-stable 2.16.1, fixada por digest. O token vai pelo ZAP_AUTH_HEADER_VALUE:
+          # pela opção -z o espaço de "Bearer <token>" se perdia e tudo virava 401.
+          docker run --rm --network host -e ZAP_AUTH_HEADER_VALUE="Bearer $ZAP_TOKEN"             -v "$PWD/zap-out:/zap/wrk:rw"             zaproxy/zap-stable@sha256:7840969c7c9fead565bf9734b12f49f6886db90b1d35b1f74d79710bbd081dab             zap-api-scan.py -t /zap/wrk/openapi.json -f openapi -O http://localhost:3000               -c regras.tsv -r relatorio.html -J relatorio.json
+          code=$?
+          set -e
+          # 0 = tudo passou, 2 = só avisos; 1 = alguma regra FAIL, 3 = o ZAP falhou.
+          if [ "$code" = "1" ]; then echo "::error::o ZAP achou um problema grave (ver o relatório)"; exit 1; fi
+          if [ "$code" != "0" ] && [ "$code" != "2" ]; then echo "::error::o ZAP não terminou (código $code)"; exit 1; fi
+
+      # A varredura só vale autenticada: se quase tudo voltou 401, o token não foi.
+      - name: Conferir que a varredura foi autenticada
+        run: |
+          unauthorized=$(jq '[.site[].alerts[] | select(.name | test("Client Error")) | .instances[] | select(.evidence == "401")] | length' zap-out/relatorio.json)
+          echo "Respostas 401: $unauthorized"
+          if [ "$unauthorized" -gt 100 ]; then echo "::error::a varredura não usou o token ($unauthorized respostas 401)"; exit 1; fi
+
+      - name: Nenhuma resposta 500
+        run: |
+          # O ZAP junta 4xx e 5xx na mesma regra (100000); 4xx é esperado numa
+          # varredura (validação, 401), 500 nunca.
+          errors=$(jq '[.site[].alerts[] | select(.name | test("Server Error"))] | length' zap-out/relatorio.json)
+          if [ "$errors" != "0" ]; then
+            jq -r '.site[].alerts[] | select(.name | test("Server Error")) | .instances[] | "\(.method) \(.uri)"' zap-out/relatorio.json
+            echo "::error::a API respondeu 500 em $errors tipo(s) de pedido"
+            exit 1
+          fi
+
+      # Só dados do usuário de teste deste job: pode virar artefato.
+      - name: Guardar o relatório
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: relatorio-zap
+          path: zap-out/relatorio.html
+          retention-days: 14
+          if-no-files-found: ignore
