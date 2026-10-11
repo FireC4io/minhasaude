@@ -1,8 +1,8 @@
-import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 import * as argon2 from 'argon2';
 import { randomBytes, createHash } from 'node:crypto';
 import { User, UserStatus } from '../database/entities/user.entity';
@@ -16,9 +16,17 @@ import type { JwtPayload } from './types/jwt-payload.interface';
 
 const GENERIC_CREDENTIALS_ERROR = 'Credenciais inválidas';
 const GENERIC_TOKEN_ERROR = 'Refresh token inválido ou expirado';
+/**
+ * Reuso de um refresh token já trocado logo depois da troca costuma ser
+ * resposta perdida (internet ruim): só recusa. Depois disso é sinal de cópia
+ * roubada, e todas as sessões da pessoa caem.
+ */
+export const REFRESH_REUSE_GRACE_MS = 60_000;
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     @InjectRepository(User) private readonly users: Repository<User>,
     @InjectRepository(RefreshToken) private readonly refreshTokens: Repository<RefreshToken>,
@@ -68,13 +76,23 @@ export class AuthService {
     const tokenHash = this.hashToken(rawRefreshToken);
     const stored = await this.refreshTokens.findOne({ where: { tokenHash } });
 
-    if (!stored || stored.revokedAt || stored.expiresAt < new Date()) {
+    if (!stored || stored.expiresAt < new Date()) {
+      throw new UnauthorizedException(GENERIC_TOKEN_ERROR);
+    }
+    if (stored.revokedAt) {
+      await this.handleReuse({ ...stored, revokedAt: stored.revokedAt });
       throw new UnauthorizedException(GENERIC_TOKEN_ERROR);
     }
 
-    // Rotação: o token usado é revogado imediatamente, mesmo que a emissão do novo falhe depois.
-    stored.revokedAt = new Date();
-    await this.refreshTokens.save(stored);
+    // Rotação atômica: o token usado é revogado já, mesmo que a emissão do novo
+    // falhe depois, e de dois pedidos simultâneos com ele só um passa daqui.
+    const rotated = await this.refreshTokens.update(
+      { id: stored.id, revokedAt: IsNull() },
+      { revokedAt: new Date() },
+    );
+    if (rotated.affected !== 1) {
+      throw new UnauthorizedException(GENERIC_TOKEN_ERROR);
+    }
 
     const user = await this.users.findOne({ where: { id: stored.userId } });
     if (!user) {
@@ -96,6 +114,14 @@ export class AuthService {
       stored.revokedAt = new Date();
       await this.refreshTokens.save(stored);
     }
+  }
+
+  private async handleReuse(stored: RefreshToken & { revokedAt: Date }): Promise<void> {
+    if (Date.now() - stored.revokedAt.getTime() <= REFRESH_REUSE_GRACE_MS) {
+      return;
+    }
+    await this.refreshTokens.update({ userId: stored.userId, revokedAt: IsNull() }, { revokedAt: new Date() });
+    this.logger.warn(`Refresh token reusado na conta ${stored.userId}: todas as sessões encerradas`);
   }
 
   /** Par de tokens para quem já provou quem é (senha ou Google). */

@@ -8,6 +8,7 @@ type MockRepo<T> = {
   findOne: jest.Mock;
   create: jest.Mock;
   save: jest.Mock;
+  update: jest.Mock;
 } & Partial<T>;
 
 function mockRepo<T>(): MockRepo<T> {
@@ -15,6 +16,7 @@ function mockRepo<T>(): MockRepo<T> {
     findOne: jest.fn(),
     create: jest.fn((entity) => entity),
     save: jest.fn(async (entity) => entity),
+    update: jest.fn(async () => ({ affected: 1 })),
   } as unknown as MockRepo<T>;
 }
 
@@ -164,9 +166,38 @@ describe('AuthService', () => {
 
       const result = await service.refresh('token-valido');
 
-      expect(stored.revokedAt).not.toBeNull();
+      // Revoga só se ainda estiver ativo: de dois pedidos simultâneos, um só ganha.
+      expect(refreshTokens.update).toHaveBeenCalledWith(
+        { id: 'rt-1', revokedAt: expect.anything() },
+        { revokedAt: expect.any(Date) },
+      );
       expect(result.accessToken).toBe('signed.jwt.token');
       expect(result.refreshToken).toHaveLength(128);
+    });
+  });
+
+  describe('refresh com token já trocado', () => {
+    const revoked = (msAgo: number) => ({
+      id: 'rt-1',
+      userId: existingUser.id,
+      tokenHash: 'hash',
+      revokedAt: new Date(Date.now() - msAgo),
+      expiresAt: new Date(Date.now() + 86_400_000),
+    });
+
+    it('logo depois da troca (resposta perdida), só recusa', async () => {
+      refreshTokens.findOne.mockResolvedValue(revoked(5_000));
+      await expect(service.refresh('token-velho')).rejects.toThrow(UnauthorizedException);
+      expect(refreshTokens.update).not.toHaveBeenCalled();
+    });
+
+    it('depois da janela, encerra todas as sessões da pessoa', async () => {
+      refreshTokens.findOne.mockResolvedValue(revoked(10 * 60_000));
+      await expect(service.refresh('token-roubado')).rejects.toThrow(UnauthorizedException);
+      expect(refreshTokens.update).toHaveBeenCalledWith(
+        { userId: existingUser.id, revokedAt: expect.anything() },
+        { revokedAt: expect.any(Date) },
+      );
     });
   });
 
