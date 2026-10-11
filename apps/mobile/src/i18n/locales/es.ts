@@ -17,7 +17,7 @@ export const es: Translations = {
   },
   auth: {
     email: 'Correo electrónico',
-    password: 'Contraseña',
+    password: 'Contraseña', // NOSONAR: rótulo do campo na tela, não é uma senha
     signIn: 'Entrar',
     createAccount: 'Crear cuenta',
     forgotPassword: 'Olvidé mi contraseña',

@@ -31,7 +31,8 @@ import { AuthProvider, useAuth } from '@/features/auth/auth-context';
 import { GoalUnavailableView } from '@/features/onboarding/goal-unavailable-view';
 import { privacyPolicyFromConsents, resolveRootRoute } from '@/features/onboarding/root-route';
 
-SplashScreen.preventAutoHideAsync();
+// Falha aqui (splash já escondida) não pode derrubar o app: segue sem segurar a splash.
+void SplashScreen.preventAutoHideAsync().catch(() => undefined);
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();

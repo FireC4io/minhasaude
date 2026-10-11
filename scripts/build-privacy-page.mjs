@@ -3,15 +3,22 @@
 // O workflow `privacy-page.yml` roda isto e publica no GitHub Pages; o texto
 // continua tendo uma fonte só: docs/legal/politica-de-privacidade.md.
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
-import { dirname, join } from 'node:path';
+import { dirname, join, relative, resolve, isAbsolute } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import MarkdownIt from 'markdown-it';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const SOURCE = join(ROOT, 'docs', 'legal', 'politica-de-privacidade.md');
-const outDir = process.argv[2];
-if (!outDir) {
+const outArg = process.argv[2];
+if (!outArg) {
   console.error('Uso: node scripts/build-privacy-page.mjs <pasta de saída>');
+  process.exit(1);
+}
+// A saída fica sempre dentro da pasta atual: um argumento como ../../etc não escreve fora dela.
+const outDir = resolve(outArg);
+const fromCwd = relative(process.cwd(), outDir);
+if (fromCwd.startsWith('..') || isAbsolute(fromCwd)) {
+  console.error(`A pasta de saída precisa ficar dentro de ${process.cwd()}`);
   process.exit(1);
 }
 

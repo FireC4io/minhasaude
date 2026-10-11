@@ -110,7 +110,7 @@ function buildDay(date: string, entries: readonly DiaryEntryResponseDto[]): DayR
       .map((e) => ({ name: e.food.name, quantity: e.quantity, unit: e.unit, kcal: Number(e.kcalSnapshot) })),
   })).filter((meal) => meal.items.length > 0);
 
-  return { date, meals, totals: entries.map(entryMacros).reduce(sum, ZERO) };
+  return { date, meals, totals: entries.map(entryMacros).reduce((total, macros) => sum(total, macros), ZERO) };
 }
 
 /** Meta que valia no fim da semana: a mais recente com início até aquele dia. */
@@ -130,7 +130,7 @@ function buildWeeks(days: readonly DayRow[], goals: readonly GoalTargetResponseD
   return [...byWeek.entries()].map(([weekStart, weekDays]) => {
     const weekEnd = weekOf(weekStart)[6] ?? weekStart;
     // Média sobre os dias com registro: dia esquecido não conta como zero.
-    const total = weekDays.map((d) => d.totals).reduce(sum, ZERO);
+    const total = weekDays.map((d) => d.totals).reduce((total, macros) => sum(total, macros), ZERO);
     return {
       weekStart,
       weekEnd,
