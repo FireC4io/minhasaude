@@ -45,9 +45,7 @@ CI com análise de código e busca de segredos; build de produção analisado; p
 
 ## Pendente de verificação
 
-- Sessão: token de renovação reusado derruba a sessão
 - APK de produção no MobSF
-- Plano de incidente
 
 ## Reavaliação de 11/10 (ferramentas)
 
@@ -69,6 +67,22 @@ CI com análise de código e busca de segredos; build de produção analisado; p
 - **Resposta sem DTO** (regra do projeto): `GET /v1/consents` e `GET /v1/auth/me` devolvem objeto cru. Sem campo
   sensível hoje, mas fora do padrão.
 
+## Reforços de 11/10 (depois da reavaliação)
+
+- **Reuso de refresh token** derruba todas as sessões (janela de 60 s para resposta perdida); rotação atômica
+  (`test/security-session.e2e-spec.ts`).
+- **Limite de senhas erradas por e-mail**: 10 em 15 min bloqueiam 15 min, exista a conta ou não; recuperar a senha
+  desbloqueia (`test/security-login-lockout.e2e-spec.ts`).
+- **Avisos de segurança por e-mail**: senha trocada, Google ligado, conta apagada (`mail/security-notifier.ts`).
+- **Chave própria (HKDF) para o código de recuperar senha**, separada do segredo do JWT.
+- **GitHub**: `main` sem force-push nem exclusão (vale para admin), histórico linear; actions fixadas por hash;
+  `permissions: contents: read` em todo workflow; OpenSSF Scorecard; Dependabot alerts e security updates; reporte
+  privado de vulnerabilidades ligado; `SECURITY.md`.
+- **SonarQube Cloud** com cobertura dos e2e e Quality Gate obrigatório.
+- **Plano de resposta a incidentes**: `docs/security/plano-de-incidente.md`.
+- Fica para depois: registro de auditoria no banco, ZAP automático no CI, MobSF no APK, extensões fora do `public`,
+  rotas sem DTO, Play Integrity.
+
 ## Passos do dono
 
 - [x] Render → Environment: `TRUST_PROXY_HOPS=1` (feito em 10/10)
@@ -78,4 +92,5 @@ CI com análise de código e busca de segredos; build de produção analisado; p
 - [x] Render → Environment: `BETTERSTACK_INGESTING_HOST` (11/10, região us-west-2)
 - [x] SonarQube Cloud: repositório importado, análise automática desligada, segredo `SONAR_TOKEN` no GitHub (11/10)
 - [ ] Guardar a chave privada do age fora deste computador
+- [ ] 2FA em todas as contas do projeto (GitHub, Render, Supabase, Expo, Google Cloud, Brevo, Cloudflare, Better Stack, SonarQube)
 - [x] Render → Environment: conferido que `JWT_ACCESS_SECRET` é aleatório e longo, e não o `troque…` do exemplo (sondar a produção foi bloqueado, com razão, pelo modo automático)
