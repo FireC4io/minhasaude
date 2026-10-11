@@ -43,3 +43,4 @@ docs/**/*.jpg
 docs/**/*.jpeg
 docs/**/*.png
 docs/**/*.heic
+_site/

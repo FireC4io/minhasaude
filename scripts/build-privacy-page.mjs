@@ -1,9 +1,10 @@
 // Gera as páginas públicas (política de privacidade e como apagar a conta) a
-// partir do Markdown. Uso: node scripts/build-privacy-page.mjs <pasta de saída>
+// partir do Markdown, sempre em `_site/` na raiz do repo.
+// Uso: node scripts/build-privacy-page.mjs
 // O workflow `privacy-page.yml` roda isto e publica no GitHub Pages; cada texto
 // continua tendo uma fonte só, em docs/legal/.
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
-import { dirname, join, relative, resolve, isAbsolute } from 'node:path';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import MarkdownIt from 'markdown-it';
 
@@ -23,18 +24,9 @@ const PAGES = [
     description: 'Como apagar sua conta do Gota Vital e o que acontece com seus dados.',
   },
 ];
-const outArg = process.argv[2];
-if (!outArg) {
-  console.error('Uso: node scripts/build-privacy-page.mjs <pasta de saída>');
-  process.exit(1);
-}
-// A saída fica sempre dentro da pasta atual: um argumento como ../../etc não escreve fora dela.
-const outDir = resolve(outArg);
-const fromCwd = relative(process.cwd(), outDir);
-if (fromCwd.startsWith('..') || isAbsolute(fromCwd)) {
-  console.error(`A pasta de saída precisa ficar dentro de ${process.cwd()}`);
-  process.exit(1);
-}
+// Pasta fixa: o script não aceita caminho de fora, então não há como escrever
+// fora do repositório.
+const outDir = join(ROOT, '_site');
 
 // html: false — o Markdown é nosso, mas a página não precisa aceitar HTML cru.
 const md = new MarkdownIt({ html: false, linkify: true, typographer: false });
