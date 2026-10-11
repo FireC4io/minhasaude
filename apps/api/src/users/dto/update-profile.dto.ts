@@ -1,5 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsDateString, IsEnum, IsIn, IsOptional, IsNumber, Max, Min } from 'class-validator';
+import { IsDateString, IsEnum, IsIn, IsOptional, IsNumber, Max, Min, ValidateBy } from 'class-validator';
+import { isAdult, MIN_AGE_YEARS } from '@minhasaude/shared';
 import { WEEKLY_PACES_KG } from '@minhasaude/shared';
 import { ActivityLevel, Goal, Sex } from '../../database/entities/profile.entity';
 
@@ -7,6 +8,14 @@ export class UpdateProfileDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsDateString()
+  // Política de privacidade, seção 9: o app não guarda dados de menores de 18.
+  @ValidateBy({
+    name: 'isAdultBirthDate',
+    validator: {
+      validate: (value: unknown) => typeof value === 'string' && isAdult(value.slice(0, 10)),
+      defaultMessage: () => `birthDate: é preciso ter ${MIN_AGE_YEARS} anos ou mais`,
+    },
+  })
   birthDate?: string;
 
   @ApiPropertyOptional({ enum: Sex })

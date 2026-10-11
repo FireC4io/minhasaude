@@ -11,8 +11,8 @@ a Lei Geral de Proteção de Dados (Lei 13.709/2018, a LGPD).
 
 ## 1. Quem é o responsável pelos seus dados
 
-O controlador dos dados é **[NOME COMPLETO]**, pessoa física, desenvolvedor do Gota Vital.
-Contato para qualquer assunto de privacidade, inclusive como encarregado (art. 41 da LGPD): **[E-MAIL DE CONTATO]**.
+O controlador dos dados é **Caio Cesar Martins de Lima**, pessoa física, desenvolvedor do Gota Vital.
+Contato para qualquer assunto de privacidade, inclusive como encarregado (art. 41 da LGPD): **euacaio14@gmail.com**.
 
 ## 2. O que guardamos
 
@@ -78,7 +78,7 @@ Também podemos ter de entregar dados por ordem judicial ou exigência legal.
 | Ao apagar a conta | **Apagados na hora** do banco de dados |
 | Cópias de segurança | Cifradas, apagadas automaticamente em até **60 dias**. Um dado apagado pode continuar numa cópia até ela expirar, sem uso nenhum |
 | Registro de consentimento | Mantido **sem dados que identifiquem você** (sem IP nem aparelho) depois que a conta é apagada, como prova exigida pela LGPD |
-| Registros técnicos | Até [PRAZO, no máximo 30 dias] |
+| Registros técnicos | No máximo 30 dias |
 | Cópia no seu celular | O prazo que você escolher (1, 7 ou 30 dias sem abrir o app). Apagada ao sair da conta ou apagar a conta |
 
 ## 7. Seus direitos e como exercê-los no app
@@ -93,7 +93,7 @@ A LGPD (art. 18) garante, e o app oferece direto, sem precisar pedir a ninguém:
 | Revogar consentimentos | Perfil → Privacidade e consentimentos |
 | Saber com quem compartilhamos | Seção 5 desta política |
 
-Para qualquer outro pedido, escreva para **[E-MAIL DE CONTATO]**. Respondemos em até 15 dias.
+Para qualquer outro pedido, escreva para **euacaio14@gmail.com**. Respondemos em até 15 dias.
 Você também pode reclamar à Autoridade Nacional de Proteção de Dados (ANPD), em gov.br/anpd.
 
 ## 8. Segurança
@@ -105,8 +105,8 @@ você, avisaremos você e a ANPD, como manda a LGPD (art. 48).
 
 ## 9. Idade
 
-O Gota Vital é destinado a [MAIORES DE 18 ANOS]. [Se a decisão for 18+: Não guardamos dados de quem tem menos de 18 anos;
-se descobrirmos uma conta assim, ela será apagada.]
+O Gota Vital é destinado a **maiores de 18 anos**. O app não aceita data de nascimento de quem tem menos de 18 anos, e,
+se descobrirmos uma conta assim, ela será apagada.
 
 ## 10. Mudanças nesta política
 

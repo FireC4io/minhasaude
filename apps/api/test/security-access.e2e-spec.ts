@@ -141,6 +141,13 @@ describe('Controle de acesso (e2e)', () => {
       semConsentimento = await newSession(app, 'sem-consent');
     });
 
+    it('perfil recusa quem tem menos de 18 anos (política de privacidade, seção 9)', async () => {
+      const today = new Date();
+      const seventeen = `${today.getFullYear() - 17}-01-01`;
+      await http().patch('/v1/me/profile').set(as(ana)).send({ birthDate: seventeen }).expect(400);
+      await http().patch('/v1/me/profile').set(as(ana)).send({ birthDate: '1992-03-15' }).expect(200);
+    });
+
     it('perfil (sexo, nascimento, altura) exige consentimento', async () => {
       await http()
         .patch('/v1/me/profile')

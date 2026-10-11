@@ -37,6 +37,9 @@ export const envSchema = z.object({
   TRUST_PROXY_HOPS: z.coerce.number().int().min(0).max(3).default(0),
   // Opcional: sem ela, a API loga normalmente em stdout sem encaminhar pro BetterStack.
   BETTERSTACK_SOURCE_TOKEN: z.string().optional(),
+  // "Ingesting host" da source no Better Stack (ex.: s123.eu-nbg-2.betterstackdata.com).
+  // Sources novas só recebem nesse endereço; sem ele, os logs somem sem erro.
+  BETTERSTACK_INGESTING_HOST: z.string().optional(),
 });
 
 const checkedEnvSchema = envSchema.superRefine((env, ctx) => {

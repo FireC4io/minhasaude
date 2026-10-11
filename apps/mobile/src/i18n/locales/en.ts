@@ -89,6 +89,7 @@ export const en: Translations = {
     birthDatePlaceholder: 'DD/MM/YYYY',
     birthDateHint: 'Type day, month and year. The slashes are added for you.',
     birthDateError: 'Check the date of birth: day, month and year, like 20/05/1996.',
+    underAge: 'Gota Vital is for people aged 18 or over.',
     height: 'Height (cm)',
     heightPlaceholder: 'e.g.: 165',
     heightError: 'Enter your height in centimeters, for example 165.',

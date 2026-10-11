@@ -27,6 +27,8 @@ CI com análise de código e busca de segredos; build de produção analisado; p
 | 14 | Baixa | `immutable_unaccent` sem `search_path` fixo (aviso do advisor) | Corrigido na mesma migration | idem |
 | 15 | Baixa | `pg_trgm` e `unaccent` no schema public (aviso do advisor) | **Risco aceito**: mover quebraria os operadores da busca, e nenhum papel não confiável cria objetos no banco | advisor do Supabase |
 | 16 | Média | O plano gratuito do Supabase não tem backup recuperável | Corrigido no código: backup semanal cifrado (age, chave privada só com o dono) para bucket privado no R2; primeiro backup da produção feito e restaurado com contagem idêntica (10/10) | `.github/workflows/backup.yml`, `docs/security/backup.md`; ensaio de restauração com contagem idêntica |
+| 17 | Média | Os logs de produção não chegam ao Better Stack: o código usava o endereço padrão da biblioteca, e sources novas só recebem no próprio *ingesting host*. Sem logs, um incidente não pode ser investigado | Corrigido no código (`BETTERSTACK_INGESTING_HOST`); **falta a variável no Render** | `src/config/pino-transport.spec.ts` |
+| 18 | Média | LGPD: o app aceitava data de nascimento de menores de 18 (dado de saúde de criança exige consentimento dos pais) | Corrigido: regra `isAdult` no shared, recusada pela API e avisada no app | `security-access.e2e-spec.ts`, `stepped-profile-form.spec.tsx`, `age.spec.ts` |
 
 ## Verificado sem achado
 
@@ -53,5 +55,6 @@ CI com análise de código e busca de segredos; build de produção analisado; p
 - [x] Render → Environment: `DATABASE_SSL=verify-full` e `DATABASE_SSL_CA` (11/10)
 - [ ] Supabase → depois do deploy com TLS no ar: ligar *Enforce SSL*
 - [x] Backup configurado e ensaiado (10/10)
+- [ ] Render → Environment: `BETTERSTACK_INGESTING_HOST` (copiar o *Ingesting host* da source `minhasaude-api`)
 - [ ] Guardar a chave privada do age fora deste computador
 - [x] Render → Environment: conferido que `JWT_ACCESS_SECRET` é aleatório e longo, e não o `troque…` do exemplo (sondar a produção foi bloqueado, com razão, pelo modo automático)

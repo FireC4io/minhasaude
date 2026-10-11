@@ -1,10 +1,14 @@
 import { z } from 'zod';
 import { ACTIVITY_LEVELS, GOALS, SEXES } from './enums';
 import { WEEKLY_PACES_KG } from '../calculators/target-kcal';
+import { isAdult } from './age';
 
 // Limites espelham as validações de apps/api/src/users/dto/update-profile.dto.ts.
 export const profileFormSchema = z.object({
-  birthDate: z.string().date('Data inválida'),
+  birthDate: z
+    .string()
+    .date('Data inválida')
+    .refine((value) => isAdult(value), 'É preciso ter 18 anos ou mais'),
   sex: z.enum(SEXES),
   heightCm: z.number().min(50).max(272),
   activityLevel: z.enum(ACTIVITY_LEVELS),

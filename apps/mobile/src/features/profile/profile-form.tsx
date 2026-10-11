@@ -5,6 +5,7 @@ import {
   profileFormSchema,
   type Goal,
   type Sex,
+  isAdult,
 } from '@minhasaude/shared';
 import { useState } from 'react';
 import { View } from 'react-native';
@@ -84,6 +85,10 @@ export function ProfileForm({
     const isoBirthDate = brDateToIso(birthDate);
     if (!isoBirthDate) {
       setError(t('profileForm.birthDateError'));
+      return;
+    }
+    if (!isAdult(isoBirthDate)) {
+      setError(t('profileForm.underAge'));
       return;
     }
 

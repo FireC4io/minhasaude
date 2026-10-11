@@ -21,6 +21,20 @@ describe('SteppedProfileForm', () => {
     expect(screen.getByRole('alert')).toHaveTextContent(/data de nascimento/i);
   });
 
+  it('não deixa seguir quem tem menos de 18 anos', async () => {
+    const onSubmit = jest.fn();
+    await render(<SteppedProfileForm isSubmitting={false} onSubmit={onSubmit} />);
+
+    const seventeen = `0101${new Date().getFullYear() - 17}`;
+    await userEvent.type(screen.getByLabelText('Data de nascimento'), seventeen);
+    await userEvent.type(screen.getByLabelText('Altura, em centímetros'), '165');
+    await userEvent.press(screen.getByRole('button', { name: 'Continuar' }));
+
+    expect(screen.getByText('Passo 1 de 4')).toBeTruthy();
+    expect(screen.getByRole('alert')).toHaveTextContent('O Gota Vital é para maiores de 18 anos.');
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
+
   it('percorre os passos e envia o perfil completo no final', async () => {
     const onSubmit = jest.fn();
     await render(<SteppedProfileForm isSubmitting={false} onSubmit={onSubmit} />);

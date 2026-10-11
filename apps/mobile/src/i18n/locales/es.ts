@@ -89,6 +89,7 @@ export const es: Translations = {
     birthDatePlaceholder: 'DD/MM/AAAA',
     birthDateHint: 'Escribe día, mes y año. Las barras se ponen solas.',
     birthDateError: 'Revisa la fecha de nacimiento: día, mes y año, como 20/05/1996.',
+    underAge: 'Gota Vital es para mayores de 18 años.',
     height: 'Altura (cm)',
     heightPlaceholder: 'ej.: 165',
     heightError: 'Escribe la altura en centímetros, por ejemplo 165.',

@@ -16,6 +16,7 @@ import { FormError } from '@/components/ui/form-error';
 import { RadioList } from '@/components/ui/radio-list';
 import { TextButton } from '@/components/ui/text-button';
 import { useAnnounce } from '@/features/accessibility/use-announce';
+import { isAdult } from '@minhasaude/shared';
 import { AuthTextField } from '@/features/auth/auth-text-field';
 import { PrimaryButton } from '@/features/auth/primary-button';
 import { brDateToIso, maskBrDate } from '@/features/forms/br-date';
@@ -62,8 +63,11 @@ export function SteppedProfileForm({
 
   function stepError(): string | null {
     if (step === 0) {
-      if (!brDateToIso(birthDate))
+      const isoBirthDate = brDateToIso(birthDate);
+      if (!isoBirthDate)
         return t('profileForm.birthDateError');
+      if (!isAdult(isoBirthDate))
+        return t('profileForm.underAge');
       const height = parseDecimal(heightCm);
       if (!(height >= 50 && height <= 272))
         return t('profileForm.heightError');

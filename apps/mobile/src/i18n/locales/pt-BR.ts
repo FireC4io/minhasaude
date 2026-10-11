@@ -95,6 +95,7 @@ export const ptBR = {
     birthDatePlaceholder: 'DD/MM/AAAA',
     birthDateHint: 'Digite dia, mês e ano. As barras entram sozinhas.',
     birthDateError: 'Confira a data de nascimento: dia, mês e ano, como 20/05/1996.',
+    underAge: 'O Gota Vital é para maiores de 18 anos.',
     height: 'Altura (cm)',
     heightPlaceholder: 'ex.: 165',
     heightError: 'Digite a altura em centímetros, por exemplo 165.',
