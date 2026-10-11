@@ -81,11 +81,31 @@ jobs:
           done
           echo "Itens na cópia: $(wc -l < "$WORK/indice.txt")"
 
+      # Ensaio de restauração toda semana, antes de cifrar: a cópia aberta já está
+      # no runner. Restaura num Postgres com os dados só na memória e compara a
+      # contagem de linhas com a produção. No log só aparecem números.
+      - name: Contar linhas na produção
+        env:
+          DATABASE_URL: ${{ secrets.BACKUP_DATABASE_URL }}
+        run: |
+          set -euo pipefail
+          : > "$WORK/contagens.txt"
+          for table in users profiles consents diary_entries body_measurements goal_targets foods; do
+            count=$(docker run --rm --network host \
+              -e DATABASE_URL -e PGSSLMODE=verify-full -e PGSSLROOTCERT=/ca/supabase-root-2021.crt \
+              -e TABLE="$table" -v "$PWD/infra:/ca:ro" postgres:17 \
+              sh -c 'psql "$DATABASE_URL" -tAc "SELECT count(*) FROM public.$TABLE"')
+            echo "$table|$count" >> "$WORK/contagens.txt"
+          done
+
+      - name: Ensaio de restauração
+        run: bash scripts/ensaio-restauracao.sh "$WORK" "$WORK/contagens.txt"
+
       - name: Cifrar e apagar a cópia aberta
         run: |
           set -euo pipefail
           age --recipient "$AGE_RECIPIENT" --output "$WORK/db.dump.age" "$WORK/db.dump"
-          shred -u "$WORK/db.dump" "$WORK/indice.txt"
+          shred -u "$WORK/db.dump" "$WORK/indice.txt" "$WORK/contagens.txt"
 
       - name: Enviar ao bucket privado (Cloudflare R2)
         env:

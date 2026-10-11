@@ -8,8 +8,11 @@ ela é restaurável, **cifra com age** e guarda num bucket privado do Cloudflare
 
 1. `pg_dump` 17 do schema `public`, com TLS conferindo o certificado do Supabase (`infra/supabase-root-2021.crt`).
 2. `pg_restore --list` confere que a cópia tem os dados das tabelas principais.
-3. A cópia é cifrada com a **chave pública** do age e a versão aberta é apagada (`shred`).
-4. O arquivo `.dump.age` vai para `s3://gotavital-backups/gotavital/<data>.dump.age` no R2.
+3. **Ensaio de restauração** (`scripts/ensaio-restauracao.sh`, desde 11/10/2026): a cópia é restaurada num Postgres 17
+   temporário, com os dados só na memória, pelo mesmo método do `restore-backup.sh`, e a contagem de linhas de cada
+   tabela é comparada com a da produção (tolerância de 1% ou 5 linhas). No log só aparecem números.
+4. A cópia é cifrada com a **chave pública** do age e a versão aberta é apagada (`shred`).
+5. O arquivo `.dump.age` vai para `s3://gotavital-backups/gotavital/<data>.dump.age` no R2.
 
 O GitHub só tem a chave pública: quem invadir o workflow ou o repositório não abre os backups.
 A cópia aberta nunca sai do runner e **nunca** vira artefato do GitHub — o repositório é público.
@@ -69,3 +72,10 @@ mesmo schema da origem (na produção, `uuid-ossp` fica em `extensions`; `pg_trg
 |---|---|---|
 | 10/10/2026 | Banco local (docker) | Contagem idêntica nas 7 tabelas; busca por trigramas funcionando. O primeiro ensaio falhou porque as extensões não vêm no dump do schema `public` — o script passou a criá-las antes. |
 | 10/10/2026 | **Produção** (`2026-10-11T0014Z.dump.age`, 84 KB, baixado do R2) | Contagem idêntica à produção nas 7 tabelas; `uuid-ossp` detectado em `extensions`; busca funcionando. |
+
+## O que o ensaio automático não cobre
+
+O ensaio semanal prova que a cópia restaura, mas roda antes da cifra. Que **a chave privada abre o arquivo cifrado**
+só o dono pode conferir: uma vez por trimestre, rodar `scripts/restore-backup.sh` com o backup mais recente do R2 e a
+chave de `D:\gotavital-backup-chave` (passo a passo acima).
+
