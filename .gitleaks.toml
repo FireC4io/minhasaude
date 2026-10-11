@@ -13,4 +13,6 @@ paths = [
 # Chave do projeto no SonarQube Cloud: identificador público, não segredo.
 regexes = [
   '''FireC4io_minhasaude''',
+  # Nome de campo público da API do Open Food Facts (off-product.schema.ts).
+  '''energy-kcal_100g''',
 ]

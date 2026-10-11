@@ -2,17 +2,20 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsNumber, IsOptional, IsString, Matches, Max, MaxLength, Min, MinLength } from 'class-validator';
 import { INPUT_LIMITS } from '@minhasaude/shared';
 
+// Nome e marca voltam na exportação LGPD: sem < e >, que nenhum nome de alimento usa.
 export class CreateFoodDto {
   @ApiProperty()
   @IsString()
   @MinLength(1)
   @MaxLength(INPUT_LIMITS.foodName)
+  @Matches(/^[^<>]*$/, { message: 'sem < ou >' })
   name!: string;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
   @MaxLength(INPUT_LIMITS.foodBrand)
+  @Matches(/^[^<>]*$/, { message: 'sem < ou >' })
   brand?: string;
 
   // GTIN/EAN: só dígitos, de 8 a 14.

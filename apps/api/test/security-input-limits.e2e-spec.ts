@@ -76,6 +76,13 @@ describe('Tamanho máximo dos textos de entrada (e2e)', () => {
     await http().get('/v1/foods/search').query({ q: 'arroz\u0000' }).set(auth()).expect(400);
   });
 
+  it('nome e marca de alimento sem < e > (voltam na exportação)', async () => {
+    const food = { kcalPer100g: 95, proteinGPer100g: 2, fatGPer100g: 1, carbGPer100g: 18 };
+    await http().post('/v1/foods').set(auth()).send({ ...food, name: '<script>alert(1);</script>' }).expect(400);
+    await http().post('/v1/foods').set(auth()).send({ ...food, name: 'Ok', brand: '<b>x</b>' }).expect(400);
+    await http().post('/v1/foods').set(auth()).send({ ...food, name: 'Pão de queijo (caseiro) & cia', brand: "D'Ávila" }).expect(201);
+  });
+
   it('código de barras só com 8 a 14 dígitos (GTIN/EAN)', async () => {
     const food = { kcalPer100g: 95, proteinGPer100g: 2, fatGPer100g: 1, carbGPer100g: 18 };
     await http().post('/v1/foods').set(auth()).send({ ...food, name: 'Ok', barcode: 'foods' }).expect(400);

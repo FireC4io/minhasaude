@@ -46,7 +46,8 @@ const NUTRIENT_KEYS: (keyof OffNutriments)[] = [
 
 const amount = (max: number) => z.coerce.number().finite().min(0).max(max);
 const text = (max: number) =>
-  z.string().transform((value) => value.trim().slice(0, max)).pipe(z.string().min(1));
+  // Sem < e >, como no cadastro manual: o nome volta na exportação LGPD.
+  z.string().transform((value) => value.replace(/[<>]/g, '').trim().slice(0, max)).pipe(z.string().min(1));
 const gtin = z.string().regex(/^\d{8,14}$/);
 const productShape = z.object({ code: z.unknown(), product_name: z.unknown(), brands: z.unknown(), nutriments: z.unknown() }).partial();
 
