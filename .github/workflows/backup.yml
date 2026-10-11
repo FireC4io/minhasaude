@@ -32,7 +32,7 @@ jobs:
       AGE_RECIPIENT: ${{ vars.BACKUP_AGE_RECIPIENT }}
       BUCKET: ${{ vars.BACKUP_BUCKET }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
 
       # O contexto `runner` só existe dentro dos passos, não no env do job.
       - name: Pasta de trabalho

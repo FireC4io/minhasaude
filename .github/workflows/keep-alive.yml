@@ -8,6 +8,10 @@ on:
     - cron: "17 12 * * *"
   workflow_dispatch: {}
 
+# Permissão mínima: o job só lê o repositório (OpenSSF Scorecard, Token-Permissions).
+permissions:
+  contents: read
+
 jobs:
   ping-health:
     runs-on: ubuntu-latest

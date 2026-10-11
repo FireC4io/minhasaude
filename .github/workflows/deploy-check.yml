@@ -13,6 +13,10 @@ on:
     branches: [main]
   workflow_dispatch: {}
 
+# Permissão mínima: o job só lê o repositório (OpenSSF Scorecard, Token-Permissions).
+permissions:
+  contents: read
+
 concurrency:
   # Push novo cancela a conferência do anterior: só o último commit importa.
   group: deploy-check
