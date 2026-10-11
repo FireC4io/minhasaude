@@ -99,7 +99,13 @@ jobs:
         run: |
           set -euo pipefail
           key="gotavital/$(date -u +%Y-%m-%dT%H%MZ).dump.age"
-          endpoint="https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
+          # Espaço ou quebra de linha colados no secret quebram o TLS do R2.
+          account="$(printf '%s' "$R2_ACCOUNT_ID" | tr -d '[:space:]')"
+          if ! printf '%s' "$account" | grep -Eq '^[0-9a-f]{32}$'; then
+            echo "::error::R2_ACCOUNT_ID deve ser o Account ID da Cloudflare: 32 caracteres de 0-9 e a-f (está com ${#account})"
+            exit 1
+          fi
+          endpoint="https://${account}.r2.cloudflarestorage.com"
           aws s3 cp "$WORK/db.dump.age" "s3://$BUCKET/$key" --endpoint-url "$endpoint" --only-show-errors
           aws s3api head-object --bucket "$BUCKET" --key "$key" --endpoint-url "$endpoint" > /dev/null
           echo "Backup guardado: $key ($(du -h "$WORK/db.dump.age" | cut -f1))"
