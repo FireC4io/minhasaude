@@ -75,7 +75,8 @@ export class PasswordResetService {
       if (claimed.affected !== 1) {
         throw new BadRequestException(GENERIC_CODE_ERROR);
       }
-      await manager.update(User, { id: user.id }, { passwordHash });
+      // Quem recebeu o código prova que lê os e-mails deste endereço.
+      await manager.update(User, { id: user.id }, { passwordHash, emailVerifiedAt: user.emailVerifiedAt ?? now });
       // Senha nova derruba todas as sessões abertas, inclusive a de quem roubou a antiga.
       await manager.update(RefreshToken, { userId: user.id, revokedAt: IsNull() }, { revokedAt: now });
     });

@@ -35,6 +35,7 @@ export * from './foodSource';
 export * from './goal';
 export * from './goalsControllerHistoryParams';
 export * from './goalTargetResponseDto';
+export * from './googleSignInDto';
 export * from './grantConsentDto';
 export * from './grantConsentDtoConsentType';
 export * from './loginDto';

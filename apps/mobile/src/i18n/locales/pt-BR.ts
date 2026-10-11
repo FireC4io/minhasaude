@@ -79,6 +79,11 @@ export const ptBR = {
       otherEmail: 'Usar outro e-mail',
       back: 'Voltar para entrar',
     },
+    google: {
+      continue: 'Continuar com o Google',
+      failed: 'Não foi possível entrar com o Google. Confira sua internet e tente de novo, ou use e-mail e senha.',
+      or: 'ou',
+    },
   },
   labels: {
     sex: { male: 'Masculino', female: 'Feminino' },

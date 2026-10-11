@@ -10,6 +10,7 @@ import { FormError } from '@/components/ui/form-error';
 import { FormScreen } from '@/components/ui/form-screen';
 import { TextButton } from '@/components/ui/text-button';
 import { useAuth } from '@/features/auth/auth-context';
+import { GoogleSignInSection } from '@/features/auth/google/google-sign-in-section';
 import { AuthTextField } from '@/features/auth/auth-text-field';
 import { PasswordField } from '@/features/auth/password-field';
 import { PrimaryButton } from '@/features/auth/primary-button';
@@ -100,6 +101,8 @@ export default function RegisterScreen() {
           isLoading={isSubmitting}
         />
       </View>
+
+      <GoogleSignInSection />
 
       <View className="flex-row flex-wrap items-center justify-center gap-1">
         <AppText className="text-grafite">{t('auth.register.hasAccount')}</AppText>

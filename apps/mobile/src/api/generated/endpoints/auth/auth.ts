@@ -26,6 +26,7 @@ import type {
 
 import type {
   ConfirmPasswordResetDto,
+  GoogleSignInDto,
   LoginDto,
   RefreshDto,
   RegisterDto,
@@ -187,6 +188,74 @@ export const useAuthControllerLogin = <TError = unknown,
         TContext
       > => {
       return useMutation(getAuthControllerLoginMutationOptions(options), queryClient);
+    }
+    /**
+ * Recebe o ID token do aparelho. Token inválido ou e-mail não confirmado no Google: 401.
+ * @summary Entra com o Google (cria a conta na primeira vez)
+ */
+export const authControllerGoogle = (
+    googleSignInDto: GoogleSignInDto,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<TokensDto>(
+      {url: `/v1/auth/google`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: googleSignInDto, signal
+    },
+      );
+    }
+
+
+
+
+export const getAuthControllerGoogleMutationKey = () => ['authControllerGoogle'] as const;
+
+export const getAuthControllerGoogleMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authControllerGoogle>>, TError,AuthControllerGoogleMutationVariables, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof authControllerGoogle>>, TError,AuthControllerGoogleMutationVariables, TContext> => {
+
+const mutationKey = getAuthControllerGoogleMutationKey();
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof authControllerGoogle>>, AuthControllerGoogleMutationVariables> = (props) => {
+          const {data} = props ?? {};
+
+          return  authControllerGoogle(data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type AuthControllerGoogleMutationResult = NonNullable<Awaited<ReturnType<typeof authControllerGoogle>>>
+    export type AuthControllerGoogleMutationBody = GoogleSignInDto
+    export type AuthControllerGoogleMutationError = unknown
+    export type AuthControllerGoogleMutationVariables = {data: GoogleSignInDto}
+
+    /**
+ * @summary Entra com o Google (cria a conta na primeira vez)
+ */
+export const useAuthControllerGoogle = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authControllerGoogle>>, TError,AuthControllerGoogleMutationVariables, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof authControllerGoogle>>,
+        TError,
+        AuthControllerGoogleMutationVariables,
+        TContext
+      > => {
+      return useMutation(getAuthControllerGoogleMutationOptions(options), queryClient);
     }
     /**
  * @summary Rotaciona o refresh token e emite um novo par de tokens

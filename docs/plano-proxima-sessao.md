@@ -20,10 +20,10 @@ fechada. Plano visual: https://claude.ai/artifact/M3cugePLkCpbjSkbVJq3BB · Acha
 
 1. ✅ **Recuperar senha (API + tela)** — feito e testado em produção em 2026-10-11 (código de 6 dígitos por e-mail, Brevo
    configurado no Render; e-mail chegou e a troca funcionou no emulador).
-2. **Login com Google** — `google-auth-library` na API (conferir emissor, `aud` = Client ID Web, validade,
-   `email_verified`); ao ligar a uma conta que nunca confirmou o e-mail, **apagar a senha antiga e revogar sessões**
-   (pré-sequestro de conta). App: `@react-native-google-signin/google-signin` (não roda no Expo Go — testar no build).
-   O cliente Android do OAuth precisa do SHA-1 da chave de assinatura (sai do primeiro build EAS / Play App Signing).
+2. 🟡 **Login com Google** — API e botão prontos em 2026-10-11 (Client ID Web `637195029476-pfdh…` em `GOOGLE_WEB_CLIENT_ID` na API e
+   `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` no `eas.json`). Falta: `GOOGLE_WEB_CLIENT_ID` no Render; keystore no EAS
+   (`eas credentials -p android`) → SHA-1 → cliente Android do OAuth (`br.com.gotavital`); testar no build EAS; depois
+   um segundo cliente Android com a SHA-1 da Play App Signing. iOS: cliente próprio + `iosUrlScheme` no plugin.
 3. **Publicar a política** — GitHub Pages (Render gratuito dorme e o revisor da Play pode achar o link quebrado);
    preencher a data; subir `CURRENT_PRIVACY_POLICY_VERSION` para `2026-10` (todos reaceitam).
 4. **Primeiro build EAS (Android)** + **criptografia da cópia local** (achado 4) + análise do APK no MobSF.

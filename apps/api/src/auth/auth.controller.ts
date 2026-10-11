@@ -12,6 +12,8 @@ import { TokensDto } from './dto/tokens.dto';
 import { RequestPasswordResetDto } from './dto/request-password-reset.dto';
 import { ConfirmPasswordResetDto } from './dto/confirm-password-reset.dto';
 import { PasswordResetService } from './password-reset/password-reset.service';
+import { GoogleSignInDto } from './dto/google-sign-in.dto';
+import { GoogleAuthService } from './google/google-auth.service';
 import type { JwtPayload } from './types/jwt-payload.interface';
 
 @ApiTags('auth')
@@ -20,6 +22,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly passwordReset: PasswordResetService,
+    private readonly googleAuth: GoogleAuthService,
   ) {}
 
   @Public()
@@ -39,6 +42,19 @@ export class AuthController {
   @ApiOkResponse({ type: TokensDto })
   login(@Body() dto: LoginDto) {
     return this.authService.login(dto);
+  }
+
+  @Public()
+  @Throttle({ default: { limit: 10, ttl: 60_000 } })
+  @HttpCode(HttpStatus.OK)
+  @Post('google')
+  @ApiOperation({
+    summary: 'Entra com o Google (cria a conta na primeira vez)',
+    description: 'Recebe o ID token do aparelho. Token inválido ou e-mail não confirmado no Google: 401.',
+  })
+  @ApiOkResponse({ type: TokensDto })
+  google(@Body() dto: GoogleSignInDto) {
+    return this.googleAuth.signIn(dto.idToken);
   }
 
   @Public()

@@ -50,6 +50,12 @@ export const envSchema = z.object({
     z.string().email().optional(),
   ),
   EMAIL_FROM_NAME: z.string().default('Gota Vital'),
+  // Client ID "Aplicativo da Web" do Google (não é segredo): o token do login
+  // com Google precisa ter sido emitido para ele. Sem a variável, a rota recusa.
+  GOOGLE_WEB_CLIENT_ID: z.preprocess(
+    (value) => (value === '' ? undefined : value),
+    z.string().endsWith('.apps.googleusercontent.com').optional(),
+  ),
 });
 
 const checkedEnvSchema = envSchema.superRefine((env, ctx) => {

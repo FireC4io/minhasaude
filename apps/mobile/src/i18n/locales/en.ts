@@ -73,6 +73,11 @@ export const en: Translations = {
       otherEmail: 'Use another email',
       back: 'Back to sign in',
     },
+    google: {
+      continue: 'Continue with Google',
+      failed: "Couldn't sign in with Google. Check your internet and try again, or use email and password.",
+      or: 'or',
+    },
   },
   labels: {
     sex: { male: 'Male', female: 'Female' },

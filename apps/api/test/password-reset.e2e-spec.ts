@@ -2,6 +2,7 @@ import { Test } from '@nestjs/testing';
 import type { NestExpressApplication } from '@nestjs/platform-express';
 import { ConfigService } from '@nestjs/config';
 import request from 'supertest';
+import { DataSource } from 'typeorm';
 
 import './support/behind-render-proxy';
 import { AppModule } from '../src/app.module';
@@ -96,6 +97,8 @@ describe('Recuperar senha (e2e)', () => {
     const code = codeFrom(await mailer.waitFor(email));
 
     await confirm({ email, code, newPassword: NEW_PASSWORD }).expect(204);
+    const [row] = await app.get(DataSource).query('SELECT email_verified_at FROM users WHERE email = $1', [email]);
+    expect(row.email_verified_at).not.toBeNull();
 
     await http().post('/v1/auth/login').set('X-Forwarded-For', nextIp()).send({ email, password: PASSWORD }).expect(401);
     await http().post('/v1/auth/login').set('X-Forwarded-For', nextIp()).send({ email, password: NEW_PASSWORD }).expect(200);

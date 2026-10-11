@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 
 import {
+  useAuthControllerGoogle,
   useAuthControllerLogin,
   useAuthControllerLogout,
   useAuthControllerRegister,
@@ -14,6 +15,8 @@ interface AuthContextValue {
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string) => Promise<void>;
+  /** Entra (ou cria a conta) com o ID token do Google. */
+  loginWithGoogle: (idToken: string) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -25,6 +28,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const loginMutation = useAuthControllerLogin();
   const registerMutation = useAuthControllerRegister();
+  const googleMutation = useAuthControllerGoogle();
   const logoutMutation = useAuthControllerLogout();
 
   useEffect(() => {
@@ -54,6 +58,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsAuthenticated(true);
   }
 
+  async function loginWithGoogle(idToken: string) {
+    const tokens = await googleMutation.mutateAsync({ data: { idToken } });
+    await setStoredTokens({ accessToken: tokens.accessToken, refreshToken: tokens.refreshToken });
+    setIsAuthenticated(true);
+  }
+
   async function register(email: string, password: string) {
     await registerMutation.mutateAsync({ data: { email, password } });
     await login(email, password);
@@ -74,7 +84,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, isLoading, login, register, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, isLoading, login, register, loginWithGoogle, logout }}>
       {children}
     </AuthContext.Provider>
   );

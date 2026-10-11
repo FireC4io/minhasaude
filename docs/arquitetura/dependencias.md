@@ -154,7 +154,6 @@ apps_mobile_src_app__auth_-->apps_mobile_src_api
 apps_mobile_src_app__auth_-->apps_mobile_src_components_ui
 apps_mobile_src_app__auth_-->apps_mobile_src_features_auth
 apps_mobile_src_app__auth_-->apps_mobile_src_i18n
-apps_mobile_src_app__auth_-->apps_mobile_src_config
 apps_mobile_src_app__onboarding_-->apps_mobile_src_api
 apps_mobile_src_app__onboarding_-->apps_mobile_src_components_ui
 apps_mobile_src_app__onboarding_-->apps_mobile_src_features_auth

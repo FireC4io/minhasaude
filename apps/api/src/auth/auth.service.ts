@@ -48,6 +48,10 @@ export class AuthService {
       throw new UnauthorizedException(GENERIC_CREDENTIALS_ERROR);
     }
 
+    // Conta criada pelo Google não tem senha: mesma resposta de senha errada.
+    if (!user.passwordHash) {
+      throw new UnauthorizedException(GENERIC_CREDENTIALS_ERROR);
+    }
     const passwordMatches = await argon2.verify(user.passwordHash, dto.password);
     if (!passwordMatches) {
       throw new UnauthorizedException(GENERIC_CREDENTIALS_ERROR);
@@ -94,7 +98,8 @@ export class AuthService {
     }
   }
 
-  private async issueTokens(user: User): Promise<TokensDto> {
+  /** Par de tokens para quem já provou quem é (senha ou Google). */
+  async issueTokens(user: User): Promise<TokensDto> {
     const payload: JwtPayload = { sub: user.id, email: user.email };
     const accessToken = await this.jwtService.signAsync(payload);
     const decoded = this.jwtService.decode<{ iat: number; exp: number }>(accessToken);

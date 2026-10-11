@@ -5,7 +5,8 @@
 ## Núcleo — usuário e nutrição
 
 **users**
-- id, email (unique), password_hash, email_verified_at, created_at
+- id, email (unique), password_hash (nulo em conta criada pelo Google), google_sub (unique, nulo), email_verified_at, created_at
+- email_verified_at: preenchido ao entrar com o Google ou usar o código de recuperar senha; sem ele, ligar o Google apaga a senha antiga
 - status (active | suspended | pending_deletion)
 
 **refresh_tokens**

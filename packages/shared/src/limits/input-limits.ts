@@ -11,6 +11,8 @@ export const INPUT_LIMITS = {
   passwordMin: 8,
   /** Código de recuperar senha mandado por e-mail: exatamente estes dígitos. */
   passwordResetCode: 6,
+  /** ID token do login com Google (um JWT de ~1 KB; folga sem abrir espaço para abuso). */
+  googleIdToken: 4096,
   /** Termo de busca de alimento (trigramas no banco + Open Food Facts). */
   foodSearch: 100,
   foodName: 200,

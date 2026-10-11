@@ -8,8 +8,8 @@ import { AppText } from '@/components/ui/app-text';
 import { FormError } from '@/components/ui/form-error';
 import { FormScreen } from '@/components/ui/form-screen';
 import { TextButton } from '@/components/ui/text-button';
-import { PREVIEW_FEATURES } from '@/config/features';
 import { useAuth } from '@/features/auth/auth-context';
+import { GoogleSignInSection } from '@/features/auth/google/google-sign-in-section';
 import { AuthTextField } from '@/features/auth/auth-text-field';
 import { PasswordField } from '@/features/auth/password-field';
 import { PrimaryButton } from '@/features/auth/primary-button';
@@ -82,16 +82,16 @@ export default function LoginScreen() {
           onPress={() => void handleSubmit()}
           isLoading={isSubmitting}
         />
-        {PREVIEW_FEATURES ? (
-          <TextButton
-            label={t('auth.forgotPassword')}
-            onPress={() => router.push('/forgot-password')}
-            textVariant="bodyStrong"
-            textClassName="text-mamao-forte"
-            className="self-center"
-          />
-        ) : null}
+        <TextButton
+          label={t('auth.forgotPassword')}
+          onPress={() => router.push('/forgot-password')}
+          textVariant="bodyStrong"
+          textClassName="text-mamao-forte"
+          className="self-center"
+        />
       </View>
+
+      <GoogleSignInSection />
 
       <View className="flex-row flex-wrap items-center justify-center gap-1">
         <AppText className="text-grafite">{t('auth.login.noAccount')}</AppText>

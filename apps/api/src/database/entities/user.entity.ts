@@ -14,10 +14,18 @@ export class User extends BaseEntity {
   @Column({ type: 'varchar', length: 320 })
   email!: string;
 
-  // Sempre argon2 (ver CLAUDE.md) - nunca logar este campo.
-  @Column({ type: 'varchar', name: 'password_hash' })
-  passwordHash!: string;
+  // Sempre argon2 (ver CLAUDE.md) - nunca logar este campo. Nulo em conta
+  // criada pelo Google (até a pessoa criar uma senha em "Esqueci minha senha").
+  @Column({ type: 'varchar', name: 'password_hash', nullable: true })
+  passwordHash!: string | null;
 
+  /** Identificador da pessoa no Google (`sub` do token), quando entra com o Google. */
+  @Index({ unique: true })
+  @Column({ type: 'varchar', name: 'google_sub', length: 255, nullable: true })
+  googleSub!: string | null;
+
+  // Quando a pessoa provou que recebe os e-mails deste endereço (Google ou
+  // código de recuperar senha). Sem isso, ligar o Google apaga a senha antiga.
   @Column({ type: 'timestamptz', name: 'email_verified_at', nullable: true })
   emailVerifiedAt!: Date | null;
 

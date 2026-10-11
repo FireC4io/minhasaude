@@ -12,6 +12,8 @@ import { RefreshToken } from '../database/entities/refresh-token.entity';
 import { PasswordResetCode } from '../database/entities/password-reset-code.entity';
 import { MailModule } from '../mail/mail.module';
 import { PasswordResetService } from './password-reset/password-reset.service';
+import { GoogleAuthService } from './google/google-auth.service';
+import { GoogleAuthLibraryVerifier, GoogleTokenVerifier } from './google/google-token-verifier';
 import type { Env } from '../config/env.schema';
 
 @Module({
@@ -39,6 +41,8 @@ import type { Env } from '../config/env.schema';
   providers: [
     AuthService,
     PasswordResetService,
+    GoogleAuthService,
+    { provide: GoogleTokenVerifier, useClass: GoogleAuthLibraryVerifier },
     // JwtAuthGuard é global: toda rota exige access token por padrão, salvo @Public().
     { provide: APP_GUARD, useClass: JwtAuthGuard },
     { provide: APP_GUARD, useClass: ThrottlerGuard },

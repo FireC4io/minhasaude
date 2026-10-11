@@ -46,7 +46,7 @@ CI com análise de código e busca de segredos; build de produção analisado; p
 ## Pendente de verificação
 
 - Sessão: token de renovação reusado derruba a sessão
-- Login com Google (novo)
+- Login com Google no build real (e2e com verificador falso em `test/google-sign-in.e2e-spec.ts`: conta nova, pré-sequestro, e-mail não confirmado, maiúsculas)
 - Cabeçalhos de segurança em produção; Swagger público em produção
 - APK de produção no MobSF
 - Política de privacidade e plano de incidente

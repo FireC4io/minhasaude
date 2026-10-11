@@ -29,6 +29,7 @@ describe('AuthService', () => {
     id: 'user-1',
     email: 'existente@teste.com',
     passwordHash: '',
+    googleSub: null,
     emailVerifiedAt: null,
     status: UserStatus.ACTIVE,
     createdAt: new Date(),
@@ -93,6 +94,14 @@ describe('AuthService', () => {
 
       await expect(
         service.login({ email: existingUser.email, password: 'senhaErrada' }),
+      ).rejects.toThrow('Credenciais inválidas');
+    });
+
+    it('conta criada pelo Google, sem senha, recebe a mesma mensagem genérica', async () => {
+      users.findOne.mockResolvedValue({ ...existingUser, passwordHash: null, googleSub: 'google-1' });
+
+      await expect(
+        service.login({ email: existingUser.email, password: 'qualquer123' }),
       ).rejects.toThrow('Credenciais inválidas');
     });
 
