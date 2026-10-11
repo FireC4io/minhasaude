@@ -349,7 +349,7 @@ export const ptBR = {
     reached: 'Meta do dia atingida',
     nutrients: 'Nutrientes',
     show: 'Mostrar',
-    modes: { remaining: 'O que falta', consumed: 'O que comi', percent: 'Porcentagem' },
+    modes: { remaining: 'Falta', consumed: 'Comi', percent: 'Em %' },
     gramsLeft: '{{grams}} faltando',
     gramsOver: '{{grams}} acima',
     gramsOf: '{{consumed}} de {{target}}',

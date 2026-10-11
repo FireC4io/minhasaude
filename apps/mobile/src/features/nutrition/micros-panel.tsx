@@ -30,7 +30,8 @@ export function MicrosPanel({ title, rows, initiallyOpen = false }: MicrosPanelP
   const [open, setOpen] = useState(initiallyOpen);
 
   return (
-    <View className="gap-2 rounded-2xl bg-superficie p-4">
+    // Fechado, o botão já tem 48 de altura (área de toque): o cartão não soma mais 32 de folga.
+    <View className={`gap-2 rounded-2xl bg-superficie px-4 ${open ? 'py-4' : 'py-1'}`}>
       <TextButton
         label={open ? t('micros.hide', { title: title.toLowerCase() }) : t('micros.show', { title: title.toLowerCase() })}
         hint={open ? undefined : t('micros.showHint')}

@@ -343,7 +343,7 @@ export const en: Translations = {
     reached: 'Daily goal reached',
     nutrients: 'Nutrients',
     show: 'Show',
-    modes: { remaining: "What's left", consumed: 'What I ate', percent: 'Percentage' },
+    modes: { remaining: 'Left', consumed: 'Eaten', percent: 'In %' },
     gramsLeft: '{{grams}} to go',
     gramsOver: '{{grams}} over',
     gramsOf: '{{consumed}} of {{target}}',
