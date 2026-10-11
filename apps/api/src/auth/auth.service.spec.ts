@@ -3,6 +3,7 @@ import * as argon2 from 'argon2';
 import { AuthService } from './auth.service';
 import { User, UserStatus } from '../database/entities/user.entity';
 import { RefreshToken } from '../database/entities/refresh-token.entity';
+import { LOGIN_MAX_FAILURES, LoginAttemptLimiter } from './login-attempts/login-attempt-limiter';
 
 type MockRepo<T> = {
   findOne: jest.Mock;
@@ -58,6 +59,7 @@ describe('AuthService', () => {
       refreshTokens as never,
       jwtService as never,
       config as never,
+      new LoginAttemptLimiter(),
     );
   });
 
@@ -105,6 +107,29 @@ describe('AuthService', () => {
       await expect(
         service.login({ email: existingUser.email, password: 'qualquer123' }),
       ).rejects.toThrow('Credenciais inválidas');
+    });
+
+    it(`depois de ${LOGIN_MAX_FAILURES} senhas erradas, recusa até a certa (429) sem rodar o argon2`, async () => {
+      users.findOne.mockResolvedValue(existingUser);
+      for (let i = 0; i < LOGIN_MAX_FAILURES; i++) {
+        await expect(service.login({ email: existingUser.email, password: 'senhaErrada' })).rejects.toThrow(
+          UnauthorizedException,
+        );
+      }
+      users.findOne.mockClear();
+
+      await expect(
+        service.login({ email: existingUser.email, password: 'senhaCorreta123' }),
+      ).rejects.toMatchObject({ status: 429 });
+      expect(users.findOne).not.toHaveBeenCalled();
+    });
+
+    it('e-mail sem conta também conta tentativas (não revela quem tem cadastro)', async () => {
+      users.findOne.mockResolvedValue(null);
+      for (let i = 0; i < LOGIN_MAX_FAILURES; i++) {
+        await expect(service.login({ email: 'ninguem@teste.com', password: 'x' })).rejects.toThrow(UnauthorizedException);
+      }
+      await expect(service.login({ email: 'ninguem@teste.com', password: 'x' })).rejects.toMatchObject({ status: 429 });
     });
 
     it('emite tokens quando as credenciais estão corretas', async () => {

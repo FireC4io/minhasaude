@@ -12,6 +12,7 @@ import { RefreshToken } from '../database/entities/refresh-token.entity';
 import { PasswordResetCode } from '../database/entities/password-reset-code.entity';
 import { MailModule } from '../mail/mail.module';
 import { PasswordResetService } from './password-reset/password-reset.service';
+import { LoginAttemptLimiter } from './login-attempts/login-attempt-limiter';
 import { GoogleAuthService } from './google/google-auth.service';
 import { GoogleAuthLibraryVerifier, GoogleTokenVerifier } from './google/google-token-verifier';
 import type { Env } from '../config/env.schema';
@@ -41,6 +42,8 @@ import type { Env } from '../config/env.schema';
   providers: [
     AuthService,
     PasswordResetService,
+    // Fábrica: o construtor recebe o relógio, que o Nest não sabe injetar.
+    { provide: LoginAttemptLimiter, useFactory: () => new LoginAttemptLimiter() },
     GoogleAuthService,
     { provide: GoogleTokenVerifier, useClass: GoogleAuthLibraryVerifier },
     // JwtAuthGuard é global: toda rota exige access token por padrão, salvo @Public().

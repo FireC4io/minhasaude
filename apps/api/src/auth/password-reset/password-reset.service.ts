@@ -11,6 +11,7 @@ import { Mailer } from '../../mail/mailer';
 import type { Env } from '../../config/env.schema';
 import { buildPasswordResetEmail, type EmailLanguage } from './password-reset-email';
 import { generateResetCode, hashResetCode, resetCodeMatches } from './password-reset-code';
+import { LoginAttemptLimiter } from '../login-attempts/login-attempt-limiter';
 
 export const RESET_CODE_TTL_MINUTES = PASSWORD_RESET_CODE_TTL_MINUTES;
 /** Erros permitidos por código; com 3 códigos por hora, são 15 palpites em 10^6 por hora. */
@@ -31,6 +32,7 @@ export class PasswordResetService {
     @InjectDataSource() private readonly dataSource: DataSource,
     private readonly mailer: Mailer,
     private readonly config: ConfigService<Env, true>,
+    private readonly loginAttempts: LoginAttemptLimiter,
   ) {}
 
   /**
@@ -80,6 +82,8 @@ export class PasswordResetService {
       // Senha nova derruba todas as sessões abertas, inclusive a de quem roubou a antiga.
       await manager.update(RefreshToken, { userId: user.id, revokedAt: IsNull() }, { revokedAt: now });
     });
+    // Quem trocou a senha pelo código provou ser a dona: o bloqueio de login acaba.
+    this.loginAttempts.recordSuccess(email);
   }
 
   private async issueCode(user: User, language?: EmailLanguage): Promise<void> {

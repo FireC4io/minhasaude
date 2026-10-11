@@ -39,6 +39,7 @@ export const es: Translations = {
       fillBoth: 'Completa el correo y la contraseña.',
       wrong: 'Correo o contraseña incorrectos. Revisa e intenta de nuevo. Usa “Mostrar contraseña” para ver lo que escribiste.',
       failed: 'No se pudo entrar. Revisa tu internet e intenta de nuevo.',
+      tooMany: 'Demasiados intentos seguidos. Espera unos minutos e inténtalo de nuevo, o toca “Olvidé mi contraseña”.',
       intro: 'Entra para seguir con tu seguimiento.',
       noAccount: '¿No tienes cuenta?',
     },

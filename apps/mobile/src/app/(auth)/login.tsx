@@ -35,10 +35,13 @@ export default function LoginScreen() {
     try {
       await login(email.trim(), password);
     } catch (err) {
+      const status = isAxiosError(err) ? err.response?.status : undefined;
       setError(
-        isAxiosError(err) && err.response?.status === 401
+        status === 401
           ? t('auth.login.wrong')
-          : t('auth.login.failed'),
+          : status === 429
+            ? t('auth.login.tooMany')
+            : t('auth.login.failed'),
       );
     } finally {
       setIsSubmitting(false);

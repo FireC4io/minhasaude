@@ -39,6 +39,7 @@ export const en: Translations = {
       fillBoth: 'Fill in your email and password.',
       wrong: 'Wrong email or password. Check and try again. Use “Show password” to see what you typed.',
       failed: "Couldn't sign in. Check your internet and try again.",
+      tooMany: 'Too many attempts in a row. Wait a few minutes and try again, or tap “I forgot my password”.',
       intro: 'Sign in to keep tracking.',
       noAccount: "Don't have an account?",
     },

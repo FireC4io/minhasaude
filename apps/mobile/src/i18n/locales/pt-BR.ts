@@ -45,6 +45,7 @@ export const ptBR = {
       fillBoth: 'Preencha o e-mail e a senha.',
       wrong: 'E-mail ou senha incorretos. Confira e tente de novo. Use “Mostrar senha” para ver o que digitou.',
       failed: 'Não foi possível entrar. Confira sua internet e tente de novo.',
+      tooMany: 'Muitas tentativas seguidas. Espere alguns minutos e tente de novo, ou toque em “Esqueci minha senha”.',
       intro: 'Entre para continuar seu acompanhamento.',
       noAccount: 'Não tem conta?',
     },

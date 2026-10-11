@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, HttpException, HttpStatus, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
@@ -13,9 +13,12 @@ import type { RegisterResponseDto } from './dto/register-response.dto';
 import type { LoginDto } from './dto/login.dto';
 import type { TokensDto } from './dto/tokens.dto';
 import type { JwtPayload } from './types/jwt-payload.interface';
+import { LoginAttemptLimiter } from './login-attempts/login-attempt-limiter';
 
 const GENERIC_CREDENTIALS_ERROR = 'Credenciais inválidas';
 const GENERIC_TOKEN_ERROR = 'Refresh token inválido ou expirado';
+const TOO_MANY_ATTEMPTS_ERROR =
+  'Muitas tentativas com este e-mail. Espere alguns minutos ou use "Esqueci minha senha".';
 /**
  * Reuso de um refresh token já trocado logo depois da troca costuma ser
  * resposta perdida (internet ruim): só recusa. Depois disso é sinal de cópia
@@ -32,6 +35,7 @@ export class AuthService {
     @InjectRepository(RefreshToken) private readonly refreshTokens: Repository<RefreshToken>,
     private readonly jwtService: JwtService,
     private readonly config: ConfigService<Env, true>,
+    private readonly loginAttempts: LoginAttemptLimiter,
   ) {}
 
   async register(dto: RegisterDto): Promise<RegisterResponseDto> {
@@ -51,19 +55,23 @@ export class AuthService {
   }
 
   async login(dto: LoginDto): Promise<TokensDto> {
+    // Antes do argon2: e-mail sob ataque nem gasta processamento.
+    if (this.loginAttempts.isBlocked(dto.email)) {
+      throw new HttpException(TOO_MANY_ATTEMPTS_ERROR, HttpStatus.TOO_MANY_REQUESTS);
+    }
     const user = await this.users.findOne({ where: { email: dto.email } });
     if (!user) {
+      this.loginAttempts.recordFailure(dto.email);
       throw new UnauthorizedException(GENERIC_CREDENTIALS_ERROR);
     }
 
     // Conta criada pelo Google não tem senha: mesma resposta de senha errada.
-    if (!user.passwordHash) {
-      throw new UnauthorizedException(GENERIC_CREDENTIALS_ERROR);
-    }
-    const passwordMatches = await argon2.verify(user.passwordHash, dto.password);
+    const passwordMatches = user.passwordHash ? await argon2.verify(user.passwordHash, dto.password) : false;
     if (!passwordMatches) {
+      this.loginAttempts.recordFailure(dto.email);
       throw new UnauthorizedException(GENERIC_CREDENTIALS_ERROR);
     }
+    this.loginAttempts.recordSuccess(dto.email);
 
     if (user.status !== UserStatus.ACTIVE) {
       throw new UnauthorizedException('Conta suspensa ou em processo de exclusão.');
