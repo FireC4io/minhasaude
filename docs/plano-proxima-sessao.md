@@ -20,10 +20,13 @@ fechada. Plano visual: https://claude.ai/artifact/M3cugePLkCpbjSkbVJq3BB · Acha
 
 1. ✅ **Recuperar senha (API + tela)** — feito e testado em produção em 2026-10-11 (código de 6 dígitos por e-mail, Brevo
    configurado no Render; e-mail chegou e a troca funcionou no emulador).
-2. 🟡 **Login com Google** — API e botão prontos em 2026-10-11 (Client ID Web `637195029476-pfdh…` em `GOOGLE_WEB_CLIENT_ID` na API e
-   `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` no `eas.json`). Falta: `GOOGLE_WEB_CLIENT_ID` no Render; keystore no EAS
-   (`eas credentials -p android`) → SHA-1 → cliente Android do OAuth (`br.com.gotavital`, criado em 2026-10-11: `637195029476-j8to…`); testar no build EAS; depois
-   um segundo cliente Android com a SHA-1 da Play App Signing. iOS: cliente próprio + `iosUrlScheme` no plugin.
+2. ✅ **Login com Google** — feito e testado em 2026-10-11 no APK do EAS (`preview`) contra produção. Configurado: Client ID Web
+   (`637195029476-pfdh…`) em `GOOGLE_WEB_CLIENT_ID` (Render) e no `eas.json`; cliente Android `br.com.gotavital` com a SHA-1 da
+   chave do EAS (`637195029476-j8to…`). Falta: segundo cliente Android com a SHA-1 da Play App Signing quando subir na Play;
+   iOS (cliente próprio + `iosUrlScheme` no plugin). O primeiro build EAS também saiu (precisou compilar o shared no
+   `eas-build-post-install`).
+   Pendências vistas no teste: ícones da barra de status brancos sobre fundo claro; erro do tema na web
+   (`theme-preference.ts:43`).
 3. **Publicar a política** — GitHub Pages (Render gratuito dorme e o revisor da Play pode achar o link quebrado);
    preencher a data; subir `CURRENT_PRIVACY_POLICY_VERSION` para `2026-10` (todos reaceitam).
 4. **Primeiro build EAS (Android)** + **criptografia da cópia local** (achado 4) + análise do APK no MobSF.

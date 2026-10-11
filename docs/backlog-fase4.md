@@ -256,7 +256,8 @@ Issues **#30** e **#31** acima.
 - [x] **Recuperar senha por e-mail** (2026-10-11): código de 6 dígitos digitado no app (link que abre o app é bloqueado pelo Gmail), 15 min, 5 tentativas, guardado como HMAC; revoga as sessões ao trocar a senha; resposta igual exista a conta ou não; limite por IP e por conta
 - [x] Serviço de e-mail: Brevo, atrás de `BREVO_API_KEY`/`EMAIL_FROM_ADDRESS`/`EMAIL_FROM_NAME` (sem chave: pasta local em dev, erro no log em produção)
 - [x] **Entrar com Google** (2026-10-11, API + botão no app): token conferido pela `google-auth-library` contra o Client ID Web; conta nova sem senha; ligar a conta sem e-mail confirmado apaga a senha e derruba sessões. Só no app instalado (build EAS), não no Expo Go
-- [ ] Testar o Google no build EAS (precisa do cliente Android com a SHA-1) e criar o segundo cliente Android com a SHA-1 da Play App Signing
+- [x] Testado no build EAS (APK `preview`) contra produção em 2026-10-11: conta nova criada sem senha, e-mail confirmado
+- [ ] Segundo cliente Android com a SHA-1 da Play App Signing (quando o app subir na Play)
 
 ### F4-33. Aba Progresso (estrutura)
 - [ ] Peso com gráfico e período selecionável (absorve F4-17)
