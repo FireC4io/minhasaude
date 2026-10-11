@@ -1,0 +1,4 @@
+#!/bin/sh
+# Antes do commit: lint dos arquivos alterados e tipos dos pacotes afetados.
+# Pular só em emergência: git commit --no-verify.
+exec node scripts/pre-commit.mjs
