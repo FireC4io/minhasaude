@@ -1,4 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { parseOffProducts, type OffProduct } from './off-product.schema';
+
+export type { OffNutriments, OffProduct } from './off-product.schema';
 
 // API pública do Open Food Facts (licença ODbL - crédito obrigatório, ver
 // CLAUDE.md). Só a busca por termo livre (v1, `cgi/search.pl`) suporta
@@ -6,33 +9,6 @@ import { Injectable, Logger } from '@nestjs/common';
 const SEARCH_URL = 'https://world.openfoodfacts.org/cgi/search.pl';
 const REQUEST_TIMEOUT_MS = 5000;
 const MAX_RESULTS = 20;
-
-export interface OffNutriments {
-  'energy-kcal_100g'?: number;
-  proteins_100g?: number;
-  fat_100g?: number;
-  carbohydrates_100g?: number;
-  fiber_100g?: number;
-  // Minerais e vitamina C vêm em gramas por 100 g no OFF.
-  sodium_100g?: number;
-  potassium_100g?: number;
-  calcium_100g?: number;
-  iron_100g?: number;
-  magnesium_100g?: number;
-  zinc_100g?: number;
-  'vitamin-c_100g'?: number;
-}
-
-export interface OffProduct {
-  code?: string;
-  product_name?: string;
-  brands?: string;
-  nutriments?: OffNutriments;
-}
-
-interface OffSearchResponse {
-  products?: OffProduct[];
-}
 
 @Injectable()
 export class OpenFoodFactsClient {
@@ -63,7 +39,12 @@ export class OpenFoodFactsClient {
       return [];
     }
 
-    const body = (await response.json()) as OffSearchResponse;
-    return body.products ?? [];
+    try {
+      // Dado de fora: validado campo a campo antes de virar alimento (off-product.schema).
+      return parseOffProducts(await response.json());
+    } catch {
+      this.logger.warn('Open Food Facts respondeu algo que não é JSON');
+      return [];
+    }
   }
 }
