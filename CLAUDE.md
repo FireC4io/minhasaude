@@ -111,4 +111,5 @@ turbo run lint test build             # pipeline completo (usado no CI)
 - Plano completo: `docs/product-plan.md` · Roadmap: `docs/roadmap.md` · ADRs: `docs/adr/`
 - Backlogs: `docs/historico/backlog-fase1.md` a `docs/historico/backlog-fase4.md`
 - Banco: `docs/database-schema.md` · Contrato de API: `docs/api-contract.md`
+- Versão do app para a loja: `docs/release.md` (build `production` com `autoIncrement`; a Play recusa build repetido) · Loja: `docs/loja/play-console.md`
 - Histórico: `docs/historico/`

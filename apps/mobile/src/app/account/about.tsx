@@ -1,3 +1,4 @@
+import * as Application from 'expo-application';
 import Constants from 'expo-constants';
 import * as Linking from 'expo-linking';
 import { ScrollView, View } from 'react-native';
@@ -5,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { AppText } from '@/components/ui/app-text';
 import { TextButton } from '@/components/ui/text-button';
+import { formatAppVersion } from '@/features/account/app-version';
 
 const REPOSITORY_URL = 'https://github.com/FireC4io/minhasaude';
 
@@ -14,7 +16,7 @@ const REPOSITORY_URL = 'https://github.com/FireC4io/minhasaude';
  */
 export default function AboutScreen() {
   const { t } = useTranslation();
-  const version = Constants.expoConfig?.version ?? '—';
+  const version = formatAppVersion(Constants.expoConfig?.version, Application.nativeBuildVersion);
 
   return (
     <ScrollView className="flex-1 bg-areia" contentContainerClassName="gap-6 px-6 py-6">

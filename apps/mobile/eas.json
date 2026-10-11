@@ -23,10 +23,16 @@
     "production": {
       "env": {
         "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID": "637195029476-pfdhr6re17gd4ptirfkft2bmst3v8cal.apps.googleusercontent.com"
-      }
+      },
+      "autoIncrement": true
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "android": {
+        "track": "internal",
+        "releaseStatus": "draft"
+      }
+    }
   }
 }
