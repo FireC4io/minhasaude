@@ -9,12 +9,18 @@ import { RegisterResponseDto } from './dto/register-response.dto';
 import { LoginDto } from './dto/login.dto';
 import { RefreshDto } from './dto/refresh.dto';
 import { TokensDto } from './dto/tokens.dto';
+import { RequestPasswordResetDto } from './dto/request-password-reset.dto';
+import { ConfirmPasswordResetDto } from './dto/confirm-password-reset.dto';
+import { PasswordResetService } from './password-reset/password-reset.service';
 import type { JwtPayload } from './types/jwt-payload.interface';
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly passwordReset: PasswordResetService,
+  ) {}
 
   @Public()
   @Throttle({ default: { limit: 5, ttl: 60_000 } })
@@ -43,6 +49,32 @@ export class AuthController {
   @ApiOkResponse({ type: TokensDto })
   refresh(@Body() dto: RefreshDto) {
     return this.authService.refresh(dto.refreshToken);
+  }
+
+  @Public()
+  @Throttle({ default: { limit: 3, ttl: 60_000 } })
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Post('password-reset/request')
+  @ApiOperation({
+    summary: 'Manda por e-mail um código para criar senha nova',
+    description: 'Responde 204 exista a conta ou não, para não revelar quem tem cadastro.',
+  })
+  @ApiNoContentResponse()
+  async requestPasswordReset(@Body() dto: RequestPasswordResetDto): Promise<void> {
+    await this.passwordReset.request(dto.email, dto.language);
+  }
+
+  @Public()
+  @Throttle({ default: { limit: 5, ttl: 60_000 } })
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Post('password-reset/confirm')
+  @ApiOperation({
+    summary: 'Troca a senha usando o código do e-mail',
+    description: 'Encerra todas as sessões abertas. Código errado, vencido ou já usado: 400.',
+  })
+  @ApiNoContentResponse()
+  async confirmPasswordReset(@Body() dto: ConfirmPasswordResetDto): Promise<void> {
+    await this.passwordReset.confirm(dto.email, dto.code, dto.newPassword);
   }
 
   @HttpCode(HttpStatus.NO_CONTENT)

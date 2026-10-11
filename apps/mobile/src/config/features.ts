@@ -1,5 +1,5 @@
 /**
- * Telas cuja API ainda não existe (exames, voz, água, notas, recuperar senha)
+ * Telas cuja API ainda não existe (exames, voz, água, notas)
  * funcionam com dados de demonstração e um aviso visível. Ficam ligadas no
  * desenvolvimento e **desligadas no build de produção**: há usuários reais, e
  * nada inventado pode chegar a eles como se fosse dado de verdade.

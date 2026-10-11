@@ -11,6 +11,7 @@ import {
   Food,
   FoodPortion,
   DiaryEntry,
+  PasswordResetCode,
 } from './entities';
 import { databaseSsl } from './database-ssl';
 
@@ -35,6 +36,7 @@ const AppDataSource = new DataSource({
     Food,
     FoodPortion,
     DiaryEntry,
+    PasswordResetCode,
   ],
   migrations: ['src/database/migrations/*.ts'],
   synchronize: false,

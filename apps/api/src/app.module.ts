@@ -35,6 +35,8 @@ import { UsersModule } from './users/users.module';
             'req.headers.authorization',
             'req.headers.cookie',
             'req.body.password',
+            'req.body.newPassword',
+            'req.body.code',
             'req.body.token',
             'req.body.refreshToken',
           ],

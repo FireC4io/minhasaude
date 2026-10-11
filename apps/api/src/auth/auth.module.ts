@@ -9,11 +9,15 @@ import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { User } from '../database/entities/user.entity';
 import { RefreshToken } from '../database/entities/refresh-token.entity';
+import { PasswordResetCode } from '../database/entities/password-reset-code.entity';
+import { MailModule } from '../mail/mail.module';
+import { PasswordResetService } from './password-reset/password-reset.service';
 import type { Env } from '../config/env.schema';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, RefreshToken]),
+    TypeOrmModule.forFeature([User, RefreshToken, PasswordResetCode]),
+    MailModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -34,6 +38,7 @@ import type { Env } from '../config/env.schema';
   controllers: [AuthController],
   providers: [
     AuthService,
+    PasswordResetService,
     // JwtAuthGuard é global: toda rota exige access token por padrão, salvo @Public().
     { provide: APP_GUARD, useClass: JwtAuthGuard },
     { provide: APP_GUARD, useClass: ThrottlerGuard },

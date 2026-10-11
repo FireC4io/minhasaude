@@ -9,6 +9,8 @@ export const INPUT_LIMITS = {
   /** Senha no login: mais folgado, porque o cadastro já aceitou senhas sem teto. */
   passwordLogin: 1024,
   passwordMin: 8,
+  /** Código de recuperar senha mandado por e-mail: exatamente estes dígitos. */
+  passwordResetCode: 6,
   /** Termo de busca de alimento (trigramas no banco + Open Food Facts). */
   foodSearch: 100,
   foodName: 200,

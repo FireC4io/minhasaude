@@ -41,10 +41,12 @@ CI com análise de código e busca de segredos; build de produção analisado; p
 - **Banco**: RLS ligado nas 12 tabelas (advisor do Supabase); a API usa só conexão direta, nunca a API REST do Supabase.
 - **App real**: fluxo do Maestro (criar conta → onboarding → anotar → peso → sair) passa com as regras novas.
 
+- **Recuperar senha** (2026-10-11, `test/password-reset.e2e-spec.ts`): resposta igual para e-mail sem conta, código de uso único, 5 erros matam o código, só o mais novo vale, 3 códigos/hora por conta, 3 pedidos/min por IP; trocar a senha revoga todos os tokens de renovação. Código e senha nova fora do log (redact). Risco aceito por ora: quem sabe o e-mail de alguém pode gastar as 5 tentativas do código dela (atrapalha, não invade); se acontecer, limitar também por e-mail.
+
 ## Pendente de verificação
 
-- Sessão: token de renovação reusado derruba a sessão; trocar senha invalida tudo (junto com recuperar senha)
-- Recuperar senha e login com Google (novos)
+- Sessão: token de renovação reusado derruba a sessão
+- Login com Google (novo)
 - Cabeçalhos de segurança em produção; Swagger público em produção
 - APK de produção no MobSF
 - Política de privacidade e plano de incidente

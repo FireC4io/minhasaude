@@ -45,6 +45,18 @@ describe('validateEnv', () => {
   });
 });
 
+describe('e-mail transacional', () => {
+  it('é opcional, e remetente vazio conta como ausente', () => {
+    const result = validateEnv({ ...base, BREVO_API_KEY: '', EMAIL_FROM_ADDRESS: '' });
+    expect(result.EMAIL_FROM_ADDRESS).toBeUndefined();
+    expect(result.EMAIL_FROM_NAME).toBe('Gota Vital');
+  });
+
+  it('recusa remetente que não é e-mail', () => {
+    expect(() => validateEnv({ ...base, EMAIL_FROM_ADDRESS: 'gotavital' })).toThrow(/EMAIL_FROM_ADDRESS/);
+  });
+});
+
 describe('TLS do banco', () => {
   // Como o Render guarda: barra invertida + n, numa linha só.
   const pem = '-----BEGIN CERTIFICATE-----\\nABC\\n-----END CERTIFICATE-----';

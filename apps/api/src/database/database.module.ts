@@ -13,6 +13,7 @@ import {
   Food,
   FoodPortion,
   DiaryEntry,
+  PasswordResetCode,
 } from './entities';
 import type { Env } from '../config/env.schema';
 import { databaseSsl } from './database-ssl';
@@ -40,6 +41,7 @@ import { databaseSsl } from './database-ssl';
           Food,
           FoodPortion,
           DiaryEntry,
+          PasswordResetCode,
         ],
         // Migrations aplicadas no boot: antes dependiam de `migration:run` à mão,
         // e as da Fase 2 em diante nunca chegaram à produção (descoberto em

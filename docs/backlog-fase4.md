@@ -253,8 +253,8 @@ Issues **#30** e **#31** acima.
 
 ### F4-32. Recuperar senha e entrar com Google
 **Contexto**: a API não tem recuperação de senha, e há usuários reais — quem esquece a senha perde a conta.
-- [ ] **Recuperar senha por e-mail**: token de uso único com validade curta, guardado com hash, que revoga as sessões abertas ao trocar a senha; resposta igual para e-mail existente ou não (não revela quem tem conta); rate limit próprio
-- [ ] Escolher serviço de envio de e-mail com nível gratuito, atrás de env var
+- [x] **Recuperar senha por e-mail** (2026-10-11): código de 6 dígitos digitado no app (link que abre o app é bloqueado pelo Gmail), 15 min, 5 tentativas, guardado como HMAC; revoga as sessões ao trocar a senha; resposta igual exista a conta ou não; limite por IP e por conta
+- [x] Serviço de e-mail: Brevo, atrás de `BREVO_API_KEY`/`EMAIL_FROM_ADDRESS`/`EMAIL_FROM_NAME` (sem chave: pasta local em dev, erro no log em produção)
 - [ ] ⚠️ **Entrar com Google** (OAuth): precisa de projeto no Google Cloud e tela de consentimento — confirmar com o dono do projeto antes de começar
 
 ### F4-33. Aba Progresso (estrutura)

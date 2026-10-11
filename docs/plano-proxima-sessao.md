@@ -18,9 +18,9 @@ fechada. Plano visual: https://claude.ai/artifact/M3cugePLkCpbjSkbVJq3BB · Acha
 
 ## Ordem sugerida
 
-1. **Recuperar senha (API + tela)** — Brevo já configurado (`BREVO_API_KEY`, `EMAIL_FROM_ADDRESS`, `EMAIL_FROM_NAME`).
-   Link de uso único, 30 min, guardado como hash, mesma resposta exista ou não a conta, limite de pedidos; trocar a
-   senha revoga todos os refresh tokens. Tirar a tela da prévia. Testes e2e na suíte de segurança.
+1. ✅ **Recuperar senha (API + tela)** — feito em 2026-10-11 (código de 6 dígitos por e-mail, não link). **Falta o dono**:
+   pôr no Render `BREVO_API_KEY`, `EMAIL_FROM_ADDRESS` (remetente verificado no Brevo) e, se quiser, `EMAIL_FROM_NAME`;
+   sem elas a API sobe, mas o e-mail não sai (erro no log). Depois do deploy, testar com uma conta real e ver se cai no spam.
 2. **Login com Google** — `google-auth-library` na API (conferir emissor, `aud` = Client ID Web, validade,
    `email_verified`); ao ligar a uma conta que nunca confirmou o e-mail, **apagar a senha antiga e revogar sessões**
    (pré-sequestro de conta). App: `@react-native-google-signin/google-signin` (não roda no Expo Go — testar no build).

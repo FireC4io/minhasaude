@@ -24,6 +24,7 @@ subgraph apps["apps"]
       apps_api_src_foods["foods"]
       apps_api_src_goals["goals"]
       apps_api_src_health["health"]
+      apps_api_src_mail["mail"]
       apps_api_src_main_ts["main.ts"]
       apps_api_src_users["users"]
     end
@@ -41,6 +42,7 @@ apps_api_src_app_module_ts-->apps_api_src_health
 apps_api_src_app_module_ts-->apps_api_src_users
 apps_api_src_auth-->apps_api_src_config
 apps_api_src_auth-->apps_api_src_database
+apps_api_src_auth-->apps_api_src_mail
 apps_api_src_body_measurements-->apps_api_src_consents
 apps_api_src_body_measurements-->apps_api_src_database
 apps_api_src_body_measurements-->apps_api_src_auth
@@ -64,6 +66,7 @@ apps_api_src_goals-->apps_api_src_database
 apps_api_src_goals-->apps_api_src_auth
 apps_api_src_goals-->apps_api_src_common
 apps_api_src_health-->apps_api_src_auth
+apps_api_src_mail-->apps_api_src_config
 apps_api_src_main_ts-->apps_api_src_app_module_ts
 apps_api_src_main_ts-->apps_api_src_bootstrap
 apps_api_src_main_ts-->apps_api_src_config
@@ -147,9 +150,10 @@ apps_mobile_src_app__app_-->apps_mobile_src_features_water
 apps_mobile_src_app__app_-->apps_mobile_src_features_weight
 apps_mobile_src_app__app_-->apps_mobile_src_features_onboarding
 apps_mobile_src_app__app_-->apps_mobile_src_features_progress
+apps_mobile_src_app__auth_-->apps_mobile_src_api
 apps_mobile_src_app__auth_-->apps_mobile_src_components_ui
-apps_mobile_src_app__auth_-->apps_mobile_src_features_accessibility
 apps_mobile_src_app__auth_-->apps_mobile_src_features_auth
+apps_mobile_src_app__auth_-->apps_mobile_src_i18n
 apps_mobile_src_app__auth_-->apps_mobile_src_config
 apps_mobile_src_app__onboarding_-->apps_mobile_src_api
 apps_mobile_src_app__onboarding_-->apps_mobile_src_components_ui

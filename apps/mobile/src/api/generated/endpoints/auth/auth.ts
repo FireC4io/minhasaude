@@ -25,10 +25,12 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  ConfirmPasswordResetDto,
   LoginDto,
   RefreshDto,
   RegisterDto,
   RegisterResponseDto,
+  RequestPasswordResetDto,
   TokensDto
 } from '../../models';
 
@@ -252,6 +254,142 @@ export const useAuthControllerRefresh = <TError = unknown,
         TContext
       > => {
       return useMutation(getAuthControllerRefreshMutationOptions(options), queryClient);
+    }
+    /**
+ * Responde 204 exista a conta ou não, para não revelar quem tem cadastro.
+ * @summary Manda por e-mail um código para criar senha nova
+ */
+export const authControllerRequestPasswordReset = (
+    requestPasswordResetDto: RequestPasswordResetDto,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<void>(
+      {url: `/v1/auth/password-reset/request`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: requestPasswordResetDto, signal
+    },
+      );
+    }
+
+
+
+
+export const getAuthControllerRequestPasswordResetMutationKey = () => ['authControllerRequestPasswordReset'] as const;
+
+export const getAuthControllerRequestPasswordResetMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authControllerRequestPasswordReset>>, TError,AuthControllerRequestPasswordResetMutationVariables, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof authControllerRequestPasswordReset>>, TError,AuthControllerRequestPasswordResetMutationVariables, TContext> => {
+
+const mutationKey = getAuthControllerRequestPasswordResetMutationKey();
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof authControllerRequestPasswordReset>>, AuthControllerRequestPasswordResetMutationVariables> = (props) => {
+          const {data} = props ?? {};
+
+          return  authControllerRequestPasswordReset(data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type AuthControllerRequestPasswordResetMutationResult = NonNullable<Awaited<ReturnType<typeof authControllerRequestPasswordReset>>>
+    export type AuthControllerRequestPasswordResetMutationBody = RequestPasswordResetDto
+    export type AuthControllerRequestPasswordResetMutationError = unknown
+    export type AuthControllerRequestPasswordResetMutationVariables = {data: RequestPasswordResetDto}
+
+    /**
+ * @summary Manda por e-mail um código para criar senha nova
+ */
+export const useAuthControllerRequestPasswordReset = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authControllerRequestPasswordReset>>, TError,AuthControllerRequestPasswordResetMutationVariables, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof authControllerRequestPasswordReset>>,
+        TError,
+        AuthControllerRequestPasswordResetMutationVariables,
+        TContext
+      > => {
+      return useMutation(getAuthControllerRequestPasswordResetMutationOptions(options), queryClient);
+    }
+    /**
+ * Encerra todas as sessões abertas. Código errado, vencido ou já usado: 400.
+ * @summary Troca a senha usando o código do e-mail
+ */
+export const authControllerConfirmPasswordReset = (
+    confirmPasswordResetDto: ConfirmPasswordResetDto,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<void>(
+      {url: `/v1/auth/password-reset/confirm`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: confirmPasswordResetDto, signal
+    },
+      );
+    }
+
+
+
+
+export const getAuthControllerConfirmPasswordResetMutationKey = () => ['authControllerConfirmPasswordReset'] as const;
+
+export const getAuthControllerConfirmPasswordResetMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authControllerConfirmPasswordReset>>, TError,AuthControllerConfirmPasswordResetMutationVariables, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof authControllerConfirmPasswordReset>>, TError,AuthControllerConfirmPasswordResetMutationVariables, TContext> => {
+
+const mutationKey = getAuthControllerConfirmPasswordResetMutationKey();
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof authControllerConfirmPasswordReset>>, AuthControllerConfirmPasswordResetMutationVariables> = (props) => {
+          const {data} = props ?? {};
+
+          return  authControllerConfirmPasswordReset(data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type AuthControllerConfirmPasswordResetMutationResult = NonNullable<Awaited<ReturnType<typeof authControllerConfirmPasswordReset>>>
+    export type AuthControllerConfirmPasswordResetMutationBody = ConfirmPasswordResetDto
+    export type AuthControllerConfirmPasswordResetMutationError = unknown
+    export type AuthControllerConfirmPasswordResetMutationVariables = {data: ConfirmPasswordResetDto}
+
+    /**
+ * @summary Troca a senha usando o código do e-mail
+ */
+export const useAuthControllerConfirmPasswordReset = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof authControllerConfirmPasswordReset>>, TError,AuthControllerConfirmPasswordResetMutationVariables, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof authControllerConfirmPasswordReset>>,
+        TError,
+        AuthControllerConfirmPasswordResetMutationVariables,
+        TContext
+      > => {
+      return useMutation(getAuthControllerConfirmPasswordResetMutationOptions(options), queryClient);
     }
     /**
  * @summary Revoga o refresh token informado

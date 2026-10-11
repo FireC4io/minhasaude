@@ -40,6 +40,16 @@ export const envSchema = z.object({
   // "Ingesting host" da source no Better Stack (ex.: s123.eu-nbg-2.betterstackdata.com).
   // Sources novas só recebem nesse endereço; sem ele, os logs somem sem erro.
   BETTERSTACK_INGESTING_HOST: z.string().optional(),
+  // E-mail transacional (código de recuperar senha). Sem a chave, em
+  // desenvolvimento o e-mail vai para uma pasta local; em produção o envio
+  // falha com erro no log — a API sobe mesmo assim, para não derrubar o resto.
+  BREVO_API_KEY: z.string().optional(),
+  // Vazio (como no .env.example) conta como ausente, não como e-mail inválido.
+  EMAIL_FROM_ADDRESS: z.preprocess(
+    (value) => (value === '' ? undefined : value),
+    z.string().email().optional(),
+  ),
+  EMAIL_FROM_NAME: z.string().default('Gota Vital'),
 });
 
 const checkedEnvSchema = envSchema.superRefine((env, ctx) => {

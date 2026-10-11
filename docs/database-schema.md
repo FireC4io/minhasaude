@@ -11,6 +11,10 @@
 **refresh_tokens**
 - id, user_id → users, token_hash, device_info, expires_at, revoked_at
 
+**password_reset_codes** (recuperar senha)
+- id, user_id → users (cascade), code_hash (HMAC-SHA256 com segredo do servidor, amarrado à conta), expires_at, attempts, used_at
+- Só o código mais novo vale (pedir outro marca os anteriores como usados); linhas com mais de 24 h são apagadas no pedido seguinte. Fora do export LGPD, como os refresh tokens.
+
 **profiles** (1:1 com users)
 - user_id → users, birth_date, sex (male | female), height_cm
 - activity_level (sedentary | light | moderate | active | very_active)

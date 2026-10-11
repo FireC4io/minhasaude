@@ -14,7 +14,7 @@ ROOT = pathlib.Path(sys.argv[1])
 HERE = pathlib.Path(__file__).parent
 
 API = {
-    "auth": "login, registro, refresh rotacionado, guard JWT",
+    "auth": "login, registro, refresh rotacionado, guard JWT, recuperar senha",
     "body-measurements": "peso e medidas (fonte nunca misturada)",
     "bootstrap": "configureApp: helmet, throttler, pipes",
     "common": "toDto e utilitários de resposta",
@@ -25,6 +25,7 @@ API = {
     "foods": "catálogo, busca por relevância, Open Food Facts",
     "goals": "metas (TMB, TDEE, macros), histórico",
     "health": "/health",
+    "mail": "envio de e-mail (Brevo; pasta local em dev)",
     "users": "/me, export LGPD, exclusão, relatório",
 }
 MOBILE = {

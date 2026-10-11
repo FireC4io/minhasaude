@@ -7,6 +7,8 @@ Convenções: prefixo `/v1`, respostas no envelope padrão (`success`, `data`, `
 - `POST /v1/auth/login` — retorna access + refresh token
 - `POST /v1/auth/refresh` — rotaciona refresh token
 - `POST /v1/auth/logout` — revoga refresh token atual
+- `POST /v1/auth/password-reset/request` (público) — `{ email, language? }`; manda por e-mail um código de 6 dígitos (15 min). Sempre 204, exista a conta ou não; até 3 códigos/hora por conta e 3 pedidos/min por IP
+- `POST /v1/auth/password-reset/confirm` (público) — `{ email, code, newPassword }`; 204 troca a senha e revoga todos os refresh tokens; 400 genérico para código errado, vencido ou usado (5 erros matam o código); 5 pedidos/min por IP
 - `POST /v1/auth/verify-email` (público, via token)
 
 ## users / profile

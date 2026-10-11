@@ -3,75 +3,65 @@ import { useState } from 'react';
 import { View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
+import {
+  useAuthControllerConfirmPasswordReset,
+  useAuthControllerRequestPasswordReset,
+} from '@/api/generated/endpoints/auth/auth';
 import { AppText } from '@/components/ui/app-text';
-import { FormError } from '@/components/ui/form-error';
 import { FormScreen } from '@/components/ui/form-screen';
 import { TextButton } from '@/components/ui/text-button';
-import { PreviewBanner } from '@/components/ui/preview-banner';
-import { useAnnounce } from '@/features/accessibility/use-announce';
-import { AuthTextField } from '@/features/auth/auth-text-field';
-import { PrimaryButton } from '@/features/auth/primary-button';
+import { useAuth } from '@/features/auth/auth-context';
+import { NewPasswordForm } from '@/features/auth/password-reset/new-password-form';
+import { RequestCodeForm } from '@/features/auth/password-reset/request-code-form';
+import { currentLanguage } from '@/i18n';
 
 /**
- * Recuperar senha (F4-32) — prévia: a API ainda não envia e-mail. A tela já
- * segue a regra do backlog: a resposta é a mesma exista o e-mail ou não, para
- * não revelar quem tem conta.
+ * Recuperar senha (F4-32): o e-mail traz um código de 6 números, digitado aqui
+ * mesmo — funciona com o e-mail aberto em outro aparelho e sem link que o
+ * Gmail bloqueia. Trocar a senha encerra as outras sessões e já entra no app.
  */
 export default function ForgotPasswordScreen() {
   const { t } = useTranslation();
   // `Link` do expo-router ignora o className do NativeWind: o texto saía preto e na fonte do sistema.
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [error, setError] = useState<string | null>(null);
-  const [sent, setSent] = useState(false);
-  useAnnounce(sent ? t('auth.forgot.sentAnnounce') : null);
+  const { login } = useAuth();
+  const requestCode = useAuthControllerRequestPasswordReset();
+  const confirmReset = useAuthControllerConfirmPasswordReset();
+  const [email, setEmail] = useState<string | null>(null);
 
-  function handleSubmit() {
-    if (!email.includes('@')) {
-      setError(t('auth.forgot.invalidEmail'));
-      return;
+  async function sendCode(address: string) {
+    await requestCode.mutateAsync({ data: { email: address, language: currentLanguage() } });
+    setEmail(address);
+  }
+
+  async function saveNewPassword(address: string, code: string, newPassword: string) {
+    await confirmReset.mutateAsync({ data: { email: address, code, newPassword } });
+    try {
+      await login(address, newPassword);
+    } catch {
+      // A senha já mudou; se entrar falhar (internet), a pessoa entra pela tela de login.
+      router.replace('/login');
     }
-    setError(null);
-    setSent(true);
   }
 
   return (
     <FormScreen centered>
-      <PreviewBanner missing={t('auth.forgot.preview')} />
-
       <View className="gap-1">
         <AppText variant="title" accessibilityRole="header" className="text-grafite">
           {t('auth.forgotPassword')}
         </AppText>
-        <AppText className="text-grafite">
-          {t('auth.forgot.intro')}
-        </AppText>
+        {email === null ? <AppText className="text-grafite">{t('auth.forgot.intro')}</AppText> : null}
       </View>
 
-      {sent ? (
-        <View className="gap-3 rounded-2xl bg-superficie p-4">
-          <AppText variant="bodyStrong" className="text-grafite">
-            {t('auth.forgot.sentTitle')}
-          </AppText>
-          <AppText className="text-grafite">
-            {t('auth.forgot.sentBody', { email: email.trim() })}
-          </AppText>
-        </View>
+      {email === null ? (
+        <RequestCodeForm onSubmit={sendCode} />
       ) : (
-        <View className="gap-4">
-          <AuthTextField
-            label={t('auth.email')}
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
-            autoComplete="email"
-            textContentType="emailAddress"
-            returnKeyType="send"
-            onSubmitEditing={handleSubmit}
-          />
-          <FormError message={error} />
-          <PrimaryButton label={t('auth.forgot.send')} onPress={handleSubmit} isLoading={false} />
-        </View>
+        <NewPasswordForm
+          email={email}
+          onSubmit={(code, newPassword) => saveNewPassword(email, code, newPassword)}
+          onResend={() => sendCode(email)}
+          onChangeEmail={() => setEmail(null)}
+        />
       )}
 
       <TextButton
