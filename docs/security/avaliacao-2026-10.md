@@ -87,7 +87,7 @@ CI com análise de código e busca de segredos; build de produção analisado; p
 
 - [x] Render → Environment: `TRUST_PROXY_HOPS=1` (feito em 10/10)
 - [x] Render → Environment: `DATABASE_SSL=verify-full` e `DATABASE_SSL_CA` (11/10)
-- [ ] Supabase → depois do deploy com TLS no ar: ligar *Enforce SSL*
+- [x] Supabase → *Enforce SSL* ligado (11/10); API e backup conferidos depois
 - [x] Backup configurado e ensaiado (10/10)
 - [x] Render → Environment: `BETTERSTACK_INGESTING_HOST` (11/10, região us-west-2)
 - [x] SonarQube Cloud: repositório importado, análise automática desligada, segredo `SONAR_TOKEN` no GitHub (11/10)
