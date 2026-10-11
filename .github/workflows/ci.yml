@@ -19,7 +19,7 @@ jobs:
     name: lint, test, build (workspaces afetados)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           # Necessário para o turbo comparar contra HEAD^1 / base do PR
           # (--filter=...[<ref>]) e rodar só nos workspaces afetados.
@@ -66,7 +66,7 @@ jobs:
     name: pnpm audit (vulnerabilidades alta/crítica)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4.3.0
 
@@ -105,7 +105,7 @@ jobs:
       JWT_ACCESS_SECRET: ci-test-only-secret-nunca-usado-em-producao-000000
       CORS_ORIGINS: ""
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4.3.0
 
