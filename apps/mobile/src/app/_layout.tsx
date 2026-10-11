@@ -3,6 +3,7 @@ import '@/global.css';
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
+import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { useColorScheme } from 'react-native';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
@@ -67,6 +68,9 @@ export default function RootLayout() {
       }}>
       <AuthProvider>
         <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          {/* Sem isto, o app instalado (edge-to-edge) deixava hora e bateria
+              brancas sobre o fundo claro. Segue o tema do app, não o do aparelho. */}
+          <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
           <RootNavigator />
           <SlowNetworkBanner />
         </ThemeProvider>

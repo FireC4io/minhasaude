@@ -25,7 +25,7 @@ fechada. Plano visual: https://claude.ai/artifact/M3cugePLkCpbjSkbVJq3BB · Acha
    chave do EAS (`637195029476-j8to…`). Falta: segundo cliente Android com a SHA-1 da Play App Signing quando subir na Play;
    iOS (cliente próprio + `iosUrlScheme` no plugin). O primeiro build EAS também saiu (precisou compilar o shared no
    `eas-build-post-install`).
-   Pendências vistas no teste: ícones da barra de status brancos sobre fundo claro; erro do tema na web
+   Pendências vistas no teste: erro do tema na web
    (`theme-preference.ts:43`).
 3. **Publicar a política** — GitHub Pages (Render gratuito dorme e o revisor da Play pode achar o link quebrado);
    preencher a data; subir `CURRENT_PRIVACY_POLICY_VERSION` para `2026-10` (todos reaceitam).
