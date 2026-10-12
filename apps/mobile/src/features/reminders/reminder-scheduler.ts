@@ -1,5 +1,5 @@
 import { t } from 'i18next';
-import * as Notifications from 'expo-notifications';
+import type * as NotificationTypes from 'expo-notifications';
 import { Platform } from 'react-native';
 
 import { todayIsoDate } from '@/features/diary/date-utils';
@@ -7,9 +7,9 @@ import { todayIsoDate } from '@/features/diary/date-utils';
 import { reminderMessage } from './reminder-messages';
 import { REMINDER_ID_PREFIX, planReminders, type PlannedReminder, type ReminderKind } from './reminder-plan';
 import type { ReminderAlert, ReminderMeal, ReminderSettings } from './reminder-settings';
+import { Notifications, REMINDERS_SUPPORTED } from './notifications-module';
 
-/** Notificação local não existe na web: lá a tela de lembretes só explica isso. */
-export const REMINDERS_SUPPORTED = Platform.OS === 'android' || Platform.OS === 'ios';
+export { REMINDERS_SUPPORTED };
 
 // Um canal por jeito de avisar: no Android, som e vibração ficam no canal e não
 // mudam depois de criado. Prefixo próprio para nunca mexer em outro canal.
@@ -85,7 +85,7 @@ function content(
   message: { title: string; body: string },
   data: ReminderData,
   settings: ReminderSettings,
-): Notifications.NotificationContentInput {
+): NotificationTypes.NotificationContentInput {
   return {
     title: message.title,
     body: message.body,
@@ -160,7 +160,7 @@ export async function sendTestReminder(settings: ReminderSettings): Promise<void
 }
 
 /** "Lembrar em 30 min": a mesma notificação, de novo, mais tarde. */
-export async function snoozeReminder(request: Notifications.NotificationRequest, settings: ReminderSettings): Promise<void> {
+export async function snoozeReminder(request: NotificationTypes.NotificationRequest, settings: ReminderSettings): Promise<void> {
   const { title, body, data } = request.content;
   await Notifications.scheduleNotificationAsync({
     identifier: `${REMINDER_ID_PREFIX}snooze-${Date.now()}`,

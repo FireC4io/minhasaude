@@ -1,4 +1,3 @@
-import * as Notifications from 'expo-notifications';
 import { useRouter } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import { AppState } from 'react-native';
@@ -15,6 +14,7 @@ import {
   type ReminderData,
 } from './reminder-scheduler';
 import { getReminderSettings, initReminderStore, useReminderSettings } from './reminder-store';
+import { Notifications } from './notifications-module';
 
 // Com o app aberto, a notificação aparece mesmo assim (é o horário que a pessoa escolheu).
 if (REMINDERS_SUPPORTED) {
@@ -28,7 +28,7 @@ if (REMINDERS_SUPPORTED) {
   });
 }
 
-// Na web o expo-notifications não tem a última resposta e lança erro: a tela Hoje quebrava.
+// Sem notificação (web, Expo Go) o módulo está vazio e não há última resposta.
 const useLastNotificationResponse = REMINDERS_SUPPORTED
   ? Notifications.useLastNotificationResponse
   : () => null;
