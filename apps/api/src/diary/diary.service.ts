@@ -52,18 +52,22 @@ export class DiaryService {
     quantity: number,
     unit: DiaryQuantityUnit,
     portionId: string | null,
-  ): Promise<MacroTotals & { grams: number; food: Food; micros: Micros }> {
+  ): Promise<MacroTotals & { grams: number; food: Food; micros: Micros; portion: FoodPortion | null }> {
     const food = await this.foodsService.findById(foodId, userId);
 
     let grams: number;
+    let portion: FoodPortion | null = null;
     if (unit === DiaryQuantityUnit.GRAMS) {
       grams = quantity;
     } else {
       if (!portionId) {
         throw new BadRequestException('portionId é obrigatório quando unit=portion.');
       }
-      const portion = await this.portions.findOne({ where: { id: portionId } });
-      if (!portion || portion.foodId !== foodId) {
+      portion = await this.portions.findOne({ where: { id: portionId } });
+      // Medida do sistema (sem dono) ou da própria pessoa; a de outra pessoa
+      // responde igual a uma inexistente.
+      const ownerOk = portion?.userId == null || portion.userId === userId;
+      if (!portion || portion.foodId !== foodId || !ownerOk) {
         throw new BadRequestException('Porção inválida para este alimento.');
       }
       grams = quantity * Number(portion.grams);
@@ -77,6 +81,7 @@ export class DiaryService {
       carbG: round2(Number(food.carbGPer100g) * multiplier),
       grams,
       food,
+      portion,
       micros: scaleMicros(foodMicrosPer100g(food), grams),
     };
   }
@@ -100,6 +105,7 @@ export class DiaryService {
       microsSnapshot: snap.micros,
     });
     entry.food = snap.food;
+    entry.portion = snap.portion;
     return this.entries.save(entry);
   }
 
@@ -124,6 +130,7 @@ export class DiaryService {
       entry.carbGSnapshot = snap.carbG.toString();
       entry.microsSnapshot = snap.micros;
       entry.food = snap.food;
+      entry.portion = snap.portion;
     }
 
     entry.foodId = foodId;
@@ -142,7 +149,7 @@ export class DiaryService {
   }
 
   private async findOwnedOrThrow(id: string, userId: string): Promise<DiaryEntry> {
-    const entry = await this.entries.findOne({ where: { id }, relations: { food: true } });
+    const entry = await this.entries.findOne({ where: { id }, relations: { food: true, portion: true } });
     if (!entry || entry.userId !== userId) {
       throw new NotFoundException('Entrada de diário não encontrada.');
     }
@@ -152,7 +159,7 @@ export class DiaryService {
   async getByDate(userId: string, date: string): Promise<DailySummary> {
     const dayEntries = await this.entries.find({
       where: { userId, entryDate: date },
-      relations: { food: true },
+      relations: { food: true, portion: true },
       order: { createdAt: 'ASC' },
     });
 
@@ -240,6 +247,7 @@ export class DiaryService {
         microsSnapshot: snap.micros,
       });
       entry.food = snap.food;
+      entry.portion = snap.portion;
       created.push(await this.entries.save(entry));
     }
     return created;

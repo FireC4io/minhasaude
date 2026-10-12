@@ -3,6 +3,7 @@ import { Expose, Type } from 'class-transformer';
 import { MealType, DiaryQuantityUnit } from '../../database/entities/diary-entry.entity';
 import { FoodResponseDto } from '../../foods/dto/food-response.dto';
 import { MicrosDto } from '../../foods/dto/micros.dto';
+import { PortionResponseDto } from '../../foods/portions/dto/portion-response.dto';
 
 export class DiaryEntryResponseDto {
   @ApiProperty()
@@ -39,6 +40,12 @@ export class DiaryEntryResponseDto {
   @ApiProperty({ type: String, nullable: true })
   @Expose()
   portionId!: string | null;
+
+  // A medida usada, para a tela mostrar "2 colheres de sopa (50 g)".
+  @ApiProperty({ type: PortionResponseDto, nullable: true })
+  @Expose()
+  @Type(() => PortionResponseDto)
+  portion!: PortionResponseDto | null;
 
   @ApiProperty()
   @Expose()

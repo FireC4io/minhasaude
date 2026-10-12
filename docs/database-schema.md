@@ -41,8 +41,11 @@
 - kcal_per_100g, protein_g_per_100g, fat_g_per_100g, carb_g_per_100g, fiber_g_per_100g (nullable)
 - search_vector (tsvector, gerado) — índice GIN + pg_trgm no `name`
 
-**food_portions** (unidades customizadas por alimento, ex. "1 fatia = 25g")
-- id, food_id → foods, label, grams
+**food_portions** (medidas caseiras por alimento, ex. "1 colher de sopa = 25 g")
+- id, food_id → foods, kind (nullable), user_id (nullable → users, cascade), label (nullable), grams
+- Do sistema: `kind` preenchido (código de `PORTION_KINDS` no shared; o app traduz), sem dono. Vêm do IBGE — ver `docs/dados/medidas-caseiras.md`. Único por (food_id, kind).
+- Da pessoa: `user_id` + `label` livres ("minha caneca"), visível só para ela. CHECK garante um dos dois formatos.
+- Apagar uma medida da pessoa passa para gramas as anotações que a usavam (mesmo snapshot).
 
 **diary_entries**
 - id, user_id, food_id → foods, entry_date, meal_type (breakfast | lunch | dinner | snack)

@@ -30,6 +30,9 @@ Convenções: prefixo `/v1`, respostas no envelope padrão (`success`, `data`, `
 - `POST /v1/foods` — cadastro de alimento personalizado (owner = usuário atual)
 - `PATCH /v1/foods/:id` — só se owner
 - `DELETE /v1/foods/:id` — só se owner
+- `GET /v1/foods/:id/portions` — medidas caseiras: as do sistema (IBGE, `kind`) e as da pessoa (`custom: true`)
+- `POST /v1/foods/:id/portions` — `{ label, grams }`, medida própria (até 10 por alimento)
+- `DELETE /v1/portions/:id` — só a dona; anotações com ela viram gramas
 
 ## diary
 - `GET /v1/diary?date=YYYY-MM-DD` — entradas do dia agrupadas por refeição + resumo (kcal/macros vs meta)

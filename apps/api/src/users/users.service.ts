@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Repository } from 'typeorm';
 import { User, UserStatus } from '../database/entities/user.entity';
 import { Food } from '../database/entities/food.entity';
+import { FoodPortion } from '../database/entities/food-portion.entity';
 import { Profile } from '../database/entities/profile.entity';
 import { RefreshToken } from '../database/entities/refresh-token.entity';
 import { SecurityNotifier } from '../mail/security-notifier';
@@ -34,6 +35,7 @@ export class UsersService {
     private readonly diaryService: DiaryService,
     private readonly accountPurgeService: AccountPurgeService,
     private readonly securityNotifier: SecurityNotifier,
+    @InjectRepository(FoodPortion) private readonly portions: Repository<FoodPortion>,
   ) {}
 
   private async getUserOrThrow(userId: string): Promise<User> {
@@ -73,7 +75,7 @@ export class UsersService {
   async exportData(userId: string) {
     const user = await this.getUserOrThrow(userId);
     // Leituras independentes: em paralelo.
-    const [profile, consents, bodyMeasurements, goals, diaryEntries, customFoods] = await Promise.all([
+    const [profile, consents, bodyMeasurements, goals, diaryEntries, customFoods, customPortions] = await Promise.all([
       this.profiles.findOne({ where: { userId } }),
       this.consentsService.listHistory(userId),
       this.bodyMeasurementsService.listAll(userId),
@@ -81,6 +83,8 @@ export class UsersService {
       this.diaryService.listAll(userId),
       // Alimentos que a pessoa cadastrou também são dado dela (portabilidade, LGPD art. 18).
       this.foods.find({ where: { ownerUserId: userId }, order: { name: 'ASC' } }),
+      // Medidas que a pessoa criou ("minha caneca = 180 g").
+      this.portions.find({ where: { userId }, order: { createdAt: 'ASC' } }),
     ]);
     const { passwordHash: _passwordHash, ...safeUser } = user;
 
@@ -93,6 +97,7 @@ export class UsersService {
       goals,
       diaryEntries,
       customFoods,
+      customPortions,
     };
   }
 

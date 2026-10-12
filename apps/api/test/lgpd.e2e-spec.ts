@@ -83,6 +83,26 @@ describe('LGPD - consents, export, delete (e2e)', () => {
     expect(response.body.customFoods.map((food: { name: string }) => food.name)).toContain('Bolo da vó');
   });
 
+  it('GET /v1/me/export inclui as medidas criadas pela pessoa', async () => {
+    const auth = { Authorization: `Bearer ${accessToken}` };
+    const food = await request(app.getHttpServer())
+      .post('/v1/foods')
+      .set(auth)
+      .send({ name: 'Cuscuz da casa', kcalPer100g: 110, proteinGPer100g: 3, fatGPer100g: 1, carbGPer100g: 24 })
+      .expect(201);
+    await request(app.getHttpServer())
+      .post(`/v1/foods/${food.body.id}/portions`)
+      .set(auth)
+      .send({ label: 'Meu prato fundo', grams: 230 })
+      .expect(201);
+
+    const response = await request(app.getHttpServer()).get('/v1/me/export').set(auth).expect(200);
+
+    expect(response.body.customPortions).toEqual([
+      expect.objectContaining({ label: 'Meu prato fundo', grams: '230.00', foodId: food.body.id }),
+    ]);
+  });
+
   it('DELETE /v1/me apaga a conta e bloqueia login em seguida', async () => {
     const response = await request(app.getHttpServer())
       .delete('/v1/me')

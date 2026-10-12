@@ -1,0 +1,731 @@
+taco_id,taco_name,kind,grams,ibge_food,ibge_prep,ibge_measure,ibge_source
+1,"Arroz, integral, cozido",serving_spoon,63.0,6300201,99,12,1 Arroz integral cozido - colher de arroz cheia
+1,"Arroz, integral, cozido",tablespoon,20.0,6300201,99,16,1 Arroz integral cozido - colher de sopa cheia
+1,"Arroz, integral, cozido",ladle,117.0,6300201,99,17,1 Arroz integral cozido - concha média cheia
+1,"Arroz, integral, cozido",skimmer,59.0,6300201,99,28,1 Arroz integral cozido - escumadeira média cheia
+3,"Arroz, tipo 1, cozido",serving_spoon,45.0,6300101,99,12,1 Arroz cozido - colher de arroz cheia
+3,"Arroz, tipo 1, cozido",tablespoon,25.0,6300101,99,16,1 Arroz cozido - colher de sopa cheia
+3,"Arroz, tipo 1, cozido",ladle,100.0,6300101,99,17,1 Arroz cozido - concha média cheia
+3,"Arroz, tipo 1, cozido",skimmer,85.0,6300101,99,28,1 Arroz cozido - escumadeira média cheia
+5,"Arroz, tipo 2, cozido",serving_spoon,45.0,6300101,99,12,1 Arroz cozido - colher de arroz cheia
+5,"Arroz, tipo 2, cozido",tablespoon,25.0,6300101,99,16,1 Arroz cozido - colher de sopa cheia
+5,"Arroz, tipo 2, cozido",ladle,100.0,6300101,99,17,1 Arroz cozido - concha média cheia
+5,"Arroz, tipo 2, cozido",skimmer,85.0,6300101,99,28,1 Arroz cozido - escumadeira média cheia
+7,"Aveia, flocos, crua",teaspoon,2.0,6500401,99,14,1 Aveia flocos - colher de chá cheia
+7,"Aveia, flocos, crua",dessert_spoon,7.0,6500401,99,15,1 Aveia flocos - colher de sobremesa cheia
+7,"Aveia, flocos, crua",tablespoon,15.0,6500401,99,16,1 Aveia flocos - colher de sopa cheia
+8,"Biscoito, doce, maisena",package,200.0,8002301,99,80,1 Biscoito maisena - pacote
+8,"Biscoito, doce, maisena",unit,5.0,8002301,99,103,1 Biscoito maisena - unidade
+9,"Biscoito, doce, recheado com chocolate",package,200.0,8004801,99,80,1 Biscoito recheado chocolate - pacote
+9,"Biscoito, doce, recheado com chocolate",unit,13.0,8004801,99,103,1 Biscoito recheado chocolate - unidade
+10,"Biscoito, doce, recheado com morango",package,200.0,8004801,99,80,1 Biscoito recheado chocolate - pacote
+10,"Biscoito, doce, recheado com morango",unit,13.0,8004801,99,103,1 Biscoito recheado chocolate - unidade
+11,"Biscoito, doce, wafer, recheado de chocolate",package,160.0,8004807,99,80,1 Biscoito waffer  chocolate - pacote grande
+11,"Biscoito, doce, wafer, recheado de chocolate",unit,7.5,8004807,99,103,1 Biscoito waffer  chocolate - unidade
+12,"Biscoito, doce, wafer, recheado de morango",package,160.0,8004807,99,80,1 Biscoito waffer  chocolate - pacote grande
+12,"Biscoito, doce, wafer, recheado de morango",unit,7.5,8004807,99,103,1 Biscoito waffer  chocolate - unidade
+13,"Biscoito, salgado, cream cracker",package,200.0,8002201,99,80,5 Biscoito cream cracker Bauducco  - pacote
+13,"Biscoito, salgado, cream cracker",unit,5.0,8002201,99,103,1 Biscoito cream cracker  - unidade
+15,"Bolo, pronto, aipim",slice,80.0,8002701,99,32,1 Bolo de aipim com coco - fatia média
+16,"Bolo, pronto, chocolate",slice,60.0,8003801,99,32,1 Bolo de chocolate simples - fatia média
+17,"Bolo, pronto, coco",slice,60.0,8004101,99,32,1 Bolo branco simples - fatia média
+18,"Bolo, pronto, milho",slice,60.0,8002601,99,32,1 Bolo de milho simples - fatia média
+20,"Canjica, com leite integral",tablespoon,25.0,8501903,99,16,1 Canjica - colher de sopa cheia
+20,"Canjica, com leite integral",ladle,120.0,8501903,99,17,1 Canjica - concha média cheia
+20,"Canjica, com leite integral",large_glass,240.0,8501903,99,21,1 Canjica - copo duplo cheio
+21,"Cereais, milho, flocos, com sal",tablespoon,4.0,6500903,99,16,1 Cereal matinal Corn Flakes Kellogg's  - colher de sopa cheia
+21,"Cereais, milho, flocos, com sal",package,20.0,6500903,99,80,1 Cereal matinal Corn Flakes Kellogg's  - pacote pequeno
+21,"Cereais, milho, flocos, com sal",handful,9.0,6500903,99,88,1 Cereal matinal Corn Flakes Kellogg's  - punhado
+21,"Cereais, milho, flocos, com sal",cup,30.0,6500903,99,106,1 Cereal matinal Corn Flakes Kellogg's  - xícara
+22,"Cereais, milho, flocos, sem sal",tablespoon,4.0,6500903,99,16,1 Cereal matinal Corn Flakes Kellogg's  - colher de sopa cheia
+22,"Cereais, milho, flocos, sem sal",package,20.0,6500903,99,80,1 Cereal matinal Corn Flakes Kellogg's  - pacote pequeno
+22,"Cereais, milho, flocos, sem sal",handful,9.0,6500903,99,88,1 Cereal matinal Corn Flakes Kellogg's  - punhado
+22,"Cereais, milho, flocos, sem sal",cup,30.0,6500903,99,106,1 Cereal matinal Corn Flakes Kellogg's  - xícara
+25,"Cereal matinal, milho",tablespoon,4.0,6500903,99,16,1 Cereal matinal Corn Flakes Kellogg's  - colher de sopa cheia
+25,"Cereal matinal, milho",package,20.0,6500903,99,80,1 Cereal matinal Corn Flakes Kellogg's  - pacote pequeno
+25,"Cereal matinal, milho",handful,9.0,6500903,99,88,1 Cereal matinal Corn Flakes Kellogg's  - punhado
+25,"Cereal matinal, milho",cup,30.0,6500903,99,106,1 Cereal matinal Corn Flakes Kellogg's  - xícara
+26,"Cereal matinal, milho, açúcar",tablespoon,4.0,6500903,99,16,1 Cereal matinal Corn Flakes Kellogg's  - colher de sopa cheia
+26,"Cereal matinal, milho, açúcar",package,20.0,6500903,99,80,1 Cereal matinal Corn Flakes Kellogg's  - pacote pequeno
+26,"Cereal matinal, milho, açúcar",handful,9.0,6500903,99,88,1 Cereal matinal Corn Flakes Kellogg's  - punhado
+26,"Cereal matinal, milho, açúcar",cup,30.0,6500903,99,106,1 Cereal matinal Corn Flakes Kellogg's  - xícara
+33,"Farinha, de milho, amarela",tablespoon,12.0,6500603,99,16,2 Farinha de milho - colher de sopa
+36,"Farinha, láctea, de cereais",tablespoon,20.0,6502001,99,16,1 Farinha láctea Nestlé  - colher de sopa cheia
+39,"Macarrão, instantâneo",serving_spoon,50.0,6504801,99,12,1 Macarrão cozido - colher de arroz cheia
+39,"Macarrão, instantâneo",tablespoon,25.0,6504801,99,16,1 Macarrão cozido - colher de sopa cheia
+45,"Milho, verde, enlatado, drenado",serving_spoon,38.0,7700401,99,12,1 Ervilha enlatada - colher de arroz cheia
+45,"Milho, verde, enlatado, drenado",dessert_spoon,17.0,7700401,99,15,1 Milho verde enlatado - colher de sobremesa cheia
+45,"Milho, verde, enlatado, drenado",tablespoon,24.0,7700401,99,16,1 Milho verde enlatado - colher de sopa
+47,"Pamonha, barra para cozimento, pré-cozida",unit,160.0,6905101,99,103,1 Pamonha - unidade
+53,"Pão, trigo, francês",unit,50.0,8000105,99,103,1 Pão francês - unidade
+56,"Pastel, de carne, frito",unit,32.0,8500202,99,103,1 Pastel de carne - unidade média
+58,"Pastel, de queijo, frito",unit,32.0,8500202,99,103,1 Pastel de carne - unidade média
+61,"Pipoca, com óleo de soja, sem sal",serving_spoon,3.0,8501202,99,12,14 Pipoca - colher de arroz
+61,"Pipoca, com óleo de soja, sem sal",ladle,6.0,8501202,99,17,14 Pipoca - concha
+61,"Pipoca, com óleo de soja, sem sal",large_glass,11.0,8501202,99,21,14 Pipoca - copo grande
+61,"Pipoca, com óleo de soja, sem sal",package,20.0,8501202,99,80,1 Pipoca  - pacote médio
+61,"Pipoca, com óleo de soja, sem sal",handful,2.0,8501202,99,88,14 Pipoca - punhado
+61,"Pipoca, com óleo de soja, sem sal",coffee_cup,2.0,8501202,99,105,14 Pipoca - xícara de café
+61,"Pipoca, com óleo de soja, sem sal",cup,6.0,8501202,99,106,14 Pipoca - xícara de chá
+62,"Polenta, pré-cozida",serving_spoon,60.0,8500218,99,12,1 Angu - colher de arroz cheia
+62,"Polenta, pré-cozida",tablespoon,35.0,8500218,99,16,1 Angu - colher de sopa cheia
+62,"Polenta, pré-cozida",piece,150.0,8500218,99,81,1 Angu - pedaço médio
+63,"Torrada, pão francês",package,160.0,8001901,99,80,5 Torrada levemente salgada Bauducco  - pacote
+63,"Torrada, pão francês",unit,8.0,8001901,99,103,1 Torrada industrializada tradicional - unidade
+64,"Abóbora, cabotian, cozida",tablespoon,36.0,6703901,2,16,1 Abóbora cozida - colher de sopa cheia
+64,"Abóbora, cabotian, cozida",skimmer,100.0,6703901,2,28,1 Abóbora cozida - escumadeira média cheia
+64,"Abóbora, cabotian, cozida",piece,50.0,6703901,2,81,1 Abóbora cozida - pedaço médio
+68,"Abóbora, moranga, refogada",tablespoon,30.0,6703306,7,16,1 Abóbora refogada - colher de sopa cheia
+70,"Abobrinha, italiana, cozida",serving_spoon,70.0,6703701,2,12,1 Abobrinha cozida - colher de arroz cheia
+70,"Abobrinha, italiana, cozida",tablespoon,30.0,6703701,2,16,1 Abobrinha cozida - colher de sopa cheia
+70,"Abobrinha, italiana, cozida",skimmer,90.0,6703701,2,28,1 Abobrinha cozida - escumadeira média cheia
+70,"Abobrinha, italiana, cozida",slice,61.0,6703701,2,32,14 Abobrinha - fatia
+70,"Abobrinha, italiana, cozida",piece,17.0,6703701,2,81,14 Abobrinha - pedaço
+70,"Abobrinha, italiana, cozida",unit,335.0,6703701,2,103,14 Abobrinha - unidade
+71,"Abobrinha, italiana, crua",serving_spoon,70.0,6703701,1,12,1 Abobrinha cozida - colher de arroz cheia
+71,"Abobrinha, italiana, crua",tablespoon,30.0,6703701,1,16,1 Abobrinha cozida - colher de sopa cheia
+72,"Abobrinha, italiana, refogada",serving_spoon,70.0,6703701,7,12,1 Abobrinha cozida - colher de arroz cheia
+72,"Abobrinha, italiana, refogada",tablespoon,30.0,6703701,7,16,1 Abobrinha cozida - colher de sopa cheia
+72,"Abobrinha, italiana, refogada",skimmer,90.0,6703701,7,28,1 Abobrinha cozida - escumadeira média cheia
+72,"Abobrinha, italiana, refogada",piece,17.0,6703701,7,81,14 Abobrinha - pedaço
+72,"Abobrinha, italiana, refogada",unit,335.0,6703701,7,103,14 Abobrinha - unidade
+74,"Acelga, crua",serving_spoon,10.0,6701501,1,12,1 Acelga - colher de arroz cheia
+74,"Acelga, crua",tablespoon,6.0,6701501,1,16,1 Acelga - colher de sopa cheia picada
+74,"Acelga, crua",leaf,10.0,6701501,1,34,1 Acelga - folha média
+75,"Agrião, cru",serving_spoon,50.0,6701301,1,12,1 Agrião refogado - colher de arroz cheia
+75,"Agrião, cru",tablespoon,7.0,6701301,1,16,1 Agrião - colher de sopa cheia picada
+77,"Alface, americana, crua",tablespoon,8.0,6700101,99,16,1 Alface - colher de sopa cheia picada
+77,"Alface, americana, crua",leaf,10.0,6700101,99,34,1 Alface - folha média
+77,"Alface, americana, crua",unit,200.0,6700101,99,103,1 Alface - unidade média
+78,"Alface, crespa, crua",tablespoon,8.0,6700101,99,16,1 Alface - colher de sopa cheia picada
+78,"Alface, crespa, crua",leaf,10.0,6700101,99,34,1 Alface - folha média
+78,"Alface, crespa, crua",unit,200.0,6700101,99,103,1 Alface - unidade média
+79,"Alface, lisa, crua",tablespoon,8.0,6700101,99,16,1 Alface - colher de sopa cheia picada
+79,"Alface, lisa, crua",leaf,10.0,6700101,99,34,1 Alface - folha média
+79,"Alface, lisa, crua",unit,200.0,6700101,99,103,1 Alface - unidade média
+80,"Alface, roxa, crua",tablespoon,8.0,6700101,99,16,1 Alface - colher de sopa cheia picada
+80,"Alface, roxa, crua",leaf,10.0,6700101,99,34,1 Alface - folha média
+80,"Alface, roxa, crua",unit,200.0,6700101,99,103,1 Alface - unidade média
+82,"Alho, cru",unit,4.4,6706201,99,103,14 Alho - unidade
+84,"Almeirão, cru",tablespoon,25.0,6701601,1,16,9 Almeirão - colher de sopa
+84,"Almeirão, cru",leaf,12.0,6701601,1,34,2 Almeirão - folha
+85,"Almeirão, refogado",tablespoon,25.0,6701601,7,16,9 Almeirão - colher de sopa
+86,"Batata, baroa, cozida",tablespoon,35.0,6400303,2,16,1 Batata-baroa cozida - colher de sopa cheia
+86,"Batata, baroa, cozida",unit,80.0,6400303,2,103,1 Batata-baroa cozida - unidade média
+88,"Batata, doce, cozida",tablespoon,42.0,6400401,2,16,1 Batata-doce cozida - colher de sopa cheia
+88,"Batata, doce, cozida",slice,70.0,6400401,2,32,1 Batata-doce cozida - fatia média
+88,"Batata, doce, cozida",unit,355.0,6400401,2,103,1 Batata-doce cozida - unidade média
+90,"Batata, frita, tipo chips, industrializada",package,84.0,8002227,99,80,1 Biscoito  fandangos queijo - pacote médio
+91,"Batata, inglesa, cozida",serving_spoon,60.0,6400101,2,12,1 Batata-inglesa cozida - colher de arroz cheia
+91,"Batata, inglesa, cozida",tablespoon,30.0,6400101,2,16,1 Batata-inglesa cozida - colher de sopa cheia
+91,"Batata, inglesa, cozida",skimmer,80.0,6400101,2,28,1 Batata-inglesa cozida - escumadeira média cheia
+91,"Batata, inglesa, cozida",piece,16.0,6400101,2,81,7 Batata-inglesa cozida - pedaço pequeno
+91,"Batata, inglesa, cozida",unit,140.0,6400101,2,103,1 Batata-inglesa cozida - unidade média
+93,"Batata, inglesa, frita",serving_spoon,50.0,6400101,5,12,1 Batata-inglesa frita - colher de arroz cheia
+93,"Batata, inglesa, frita",tablespoon,25.0,6400101,5,16,1 Batata-inglesa frita - colher de sopa cheia
+93,"Batata, inglesa, frita",skimmer,65.0,6400101,5,28,1 Batata-inglesa frita - escumadeira média cheia
+95,"Berinjela, cozida",serving_spoon,75.0,6705401,2,12,1 Berinjela ensopada - colher de arroz cheia
+95,"Berinjela, cozida",tablespoon,25.0,6705401,2,16,1 Berinjela ensopada - colher de sopa cheia
+95,"Berinjela, cozida",skimmer,125.0,6705401,2,28,1 Berinjela ensopada - escumadeira média cheia
+95,"Berinjela, cozida",slice,20.0,6705401,2,32,1 Berinjela frita - fatia média
+97,"Beterraba, cozida",serving_spoon,38.0,6401101,2,12,1 Beterraba cozida - colher de arroz cheia
+97,"Beterraba, cozida",skimmer,45.0,6401101,2,28,1 Beterraba cozida - escumadeira média rasa picada
+97,"Beterraba, cozida",slice,12.0,6401101,2,32,1 Beterraba cozida - fatia média
+97,"Beterraba, cozida",unit,125.0,6401101,2,103,1 Beterraba cozida - unidade média
+98,"Beterraba, crua",serving_spoon,38.0,6401101,1,12,1 Beterraba cozida - colher de arroz cheia
+98,"Beterraba, crua",tablespoon,16.0,6401101,1,16,1 Beterraba crua - colher de sopa cheia ralada
+98,"Beterraba, crua",slice,12.0,6401101,1,32,1 Beterraba cozida - fatia média
+98,"Beterraba, crua",unit,140.0,6401101,1,103,1 Beterraba crua - unidade média
+99,"Biscoito, polvilho doce",package,30.0,8002212,99,80,1 Biscoito polvilho - pacote rosca
+99,"Biscoito, polvilho doce",unit,3.0,8002212,99,103,1 Biscoito polvilho - unidade rosca
+100,"Brócolis, cozido",tablespoon,10.0,6701704,2,16,1 Brócolis cozido - colher de sopa cheia picada
+102,"Cará, cozido",serving_spoon,60.0,6400701,2,12,1 Aipim cozido - colher de arroz cheia picada
+102,"Cará, cozido",tablespoon,30.0,6400701,2,16,1 Aipim cozido - colher de sopa cheia picada
+102,"Cará, cozido",piece,100.0,6400701,2,81,1 Aipim cozido - pedaço médio
+107,"Cebola, crua",slice,6.0,6705701,1,32,1 Cebola - fatia média
+107,"Cebola, crua",unit,70.0,6705701,1,103,1 Cebola - unidade média
+108,"Cebolinha, crua",tablespoon,2.3,6701101,99,16,14 Cebolinha - colher de sopa
+109,"Cenoura, cozida",skimmer,48.0,6401201,2,28,1 Cenoura cozida - escumadeira média rasa picada
+109,"Cenoura, cozida",slice,5.0,6401201,2,32,14 Cenoura cozida - fatia
+109,"Cenoura, cozida",unit,100.0,6401201,2,103,1 Cenoura cozida - unidade média
+110,"Cenoura, crua",tablespoon,12.0,6401201,1,16,1 Cenoura crua - colher de sopa cheia ralada
+110,"Cenoura, crua",skimmer,48.0,6401201,1,28,1 Cenoura cozida - escumadeira média rasa picada
+110,"Cenoura, crua",slice,5.0,6401201,1,32,14 Cenoura cozida - fatia
+110,"Cenoura, crua",unit,120.0,6401201,1,103,1 Cenoura crua - unidade média
+111,"Chicória, crua",tablespoon,45.0,6700301,1,16,1 Chicória refogada - colher de sopa cheia
+111,"Chicória, crua",leaf,12.0,6700301,1,34,1 Chicória crua - folha média
+112,"Chuchu, cozido",serving_spoon,45.0,6704101,2,12,1 Chuchu cozido - colher de arroz cheia
+112,"Chuchu, cozido",tablespoon,20.0,6704101,2,16,1 Chuchu cozido - colher de sopa cheia
+112,"Chuchu, cozido",skimmer,110.0,6704101,2,28,1 Chuchu cozido - escumadeira média cheia
+112,"Chuchu, cozido",piece,30.0,6704101,2,81,1 Chuchu cozido - pedaço
+112,"Chuchu, cozido",unit,230.0,6704101,2,103,1 Chuchu cozido - unidade média
+113,"Chuchu, cru",serving_spoon,45.0,6704101,1,12,1 Chuchu cozido - colher de arroz cheia
+113,"Chuchu, cru",tablespoon,20.0,6704101,1,16,1 Chuchu cozido - colher de sopa cheia
+113,"Chuchu, cru",piece,30.0,6704101,1,81,1 Chuchu cozido - pedaço
+113,"Chuchu, cru",unit,230.0,6704101,1,103,1 Chuchu cozido - unidade média
+115,"Couve, manteiga, crua",serving_spoon,42.0,6700501,1,12,2 Couve-manteiga cozida - colher de servir
+115,"Couve, manteiga, crua",tablespoon,20.0,6700501,1,16,1 Couve refogada - colher de sopa cheia picada
+115,"Couve, manteiga, crua",leaf,20.0,6700501,1,34,1 Couve crua - folha média
+116,"Couve, manteiga, refogada",serving_spoon,42.0,6700501,7,12,2 Couve-manteiga cozida - colher de servir
+116,"Couve, manteiga, refogada",tablespoon,20.0,6700501,7,16,1 Couve refogada - colher de sopa cheia picada
+116,"Couve, manteiga, refogada",leaf,25.0,6700501,7,34,1 Couve refogada - folha média
+117,"Couve-flor, crua",tablespoon,25.0,6700601,1,16,1 Couve-flor cozida - colher de sopa cheia
+118,"Couve-flor, cozida",tablespoon,25.0,6700601,2,16,1 Couve-flor cozida - colher de sopa cheia
+119,"Espinafre, Nova Zelândia, cru",tablespoon,25.0,6700701,1,16,1 Espinafre cozido - colher de sopa cheia
+121,"Farinha, de mandioca, crua",serving_spoon,33.0,6501401,99,12,14 Farinha de mandioca - colher de arroz
+121,"Farinha, de mandioca, crua",teaspoon,5.0,6501401,99,14,1 Farinha de mandioca - colher de chá cheia
+121,"Farinha, de mandioca, crua",dessert_spoon,10.0,6501401,99,15,1 Farinha de mandioca - colher de sobremesa cheia
+121,"Farinha, de mandioca, crua",tablespoon,16.0,6501401,99,16,1 Farinha de mandioca - colher de sopa cheia
+121,"Farinha, de mandioca, crua",ladle,110.0,6501401,99,17,14 Farinha de mandioca - concha
+121,"Farinha, de mandioca, crua",large_glass,172.0,6501401,99,21,14 Farinha de mandioca -  copo médio
+121,"Farinha, de mandioca, crua",handful,23.0,6501401,99,88,14 Farinha de mandioca - punhado
+121,"Farinha, de mandioca, crua",cup,148.0,6501401,99,106,14 Farinha de mandioca - xícara de chá
+122,"Farinha, de mandioca, torrada",serving_spoon,33.0,6501401,99,12,14 Farinha de mandioca - colher de arroz
+122,"Farinha, de mandioca, torrada",teaspoon,5.0,6501401,99,14,1 Farinha de mandioca - colher de chá cheia
+122,"Farinha, de mandioca, torrada",dessert_spoon,10.0,6501401,99,15,1 Farinha de mandioca - colher de sobremesa cheia
+122,"Farinha, de mandioca, torrada",tablespoon,16.0,6501401,99,16,1 Farinha de mandioca - colher de sopa cheia
+122,"Farinha, de mandioca, torrada",ladle,110.0,6501401,99,17,14 Farinha de mandioca - concha
+122,"Farinha, de mandioca, torrada",large_glass,172.0,6501401,99,21,14 Farinha de mandioca -  copo médio
+122,"Farinha, de mandioca, torrada",handful,23.0,6501401,99,88,14 Farinha de mandioca - punhado
+122,"Farinha, de mandioca, torrada",cup,148.0,6501401,99,106,14 Farinha de mandioca - xícara de chá
+127,"Jiló, cru",serving_spoon,95.0,6704201,1,12,1 Jiló - colher de arroz cheia
+127,"Jiló, cru",tablespoon,60.0,6704201,1,16,1 Jiló cozido - colher de sopa cheia
+127,"Jiló, cru",unit,26.0,6704201,1,103,1 Jiló cozido - unidade média
+129,"Mandioca, cozida",serving_spoon,60.0,6400601,2,12,1 Aipim cozido - colher de arroz cheia picada
+129,"Mandioca, cozida",tablespoon,30.0,6400601,2,16,1 Aipim cozido - colher de sopa cheia picada
+131,"Mandioca, farofa, temperada",serving_spoon,45.0,8502201,99,12,1 Farofa - colher de arroz cheia
+131,"Mandioca, farofa, temperada",tablespoon,15.0,8502201,99,16,1 Farofa - colher de sopa cheia
+131,"Mandioca, farofa, temperada",skimmer,58.0,8502201,99,28,1 Farofa - escumadeira média cheia
+132,"Mandioca, frita",serving_spoon,60.0,6400601,5,12,1 Aipim frito - colher de arroz cheia
+132,"Mandioca, frita",tablespoon,35.0,6400601,5,16,1 Aipim frito - colher de sopa cheia picada
+132,"Mandioca, frita",piece,80.0,6400601,5,81,1 Aipim frito - pedaço médio
+134,"Maxixe, cru",tablespoon,40.0,6704301,1,16,1 Maxixe cozido - colher de sopa cheia
+135,"Mostarda, folha, crua",tablespoon,45.0,6700801,1,16,1 Mostarda folha cozida - colher de sopa cheia
+135,"Mostarda, folha, crua",leaf,10.0,6700801,1,34,2 Mostarda - folha
+136,"Nhoque, batata, cozido",serving_spoon,70.0,8500905,99,12,1 Nhoque - colher de arroz cheia
+136,"Nhoque, batata, cozido",tablespoon,30.0,8500905,99,16,1 Nhoque - colher de sopa cheia
+136,"Nhoque, batata, cozido",skimmer,100.0,8500905,99,28,1 Nhoque - escumadeira média cheia
+138,"Palmito, juçara, em conserva",tablespoon,15.0,7700501,99,16,1 Palmito em conserva - colher de sopa rasa picado
+138,"Palmito, juçara, em conserva",unit,100.0,7700501,99,103,1 Palmito em conserva - unidade média
+139,"Palmito, pupunha, em conserva",tablespoon,15.0,7700501,99,16,1 Palmito em conserva - colher de sopa rasa picado
+139,"Palmito, pupunha, em conserva",unit,100.0,7700501,99,103,1 Palmito em conserva - unidade média
+140,"Pão, de queijo, assado",unit,20.0,8000801,99,103,1 Pão de queijo - unidade média
+142,"Pepino, cru",tablespoon,18.0,6704001,99,16,1 Pepino - colher de sopa cheia picada
+142,"Pepino, cru",slice,3.0,6704001,99,32,1 Pepino - fatia pequena
+143,"Pimentão, amarelo, cru",tablespoon,13.0,6704501,99,16,1 Pimentão - colher de sopa cheia
+143,"Pimentão, amarelo, cru",slice,6.0,6704501,99,32,1 Pimentão - fatia média
+143,"Pimentão, amarelo, cru",unit,55.0,6704501,99,103,1 Pimentão - unidade média
+144,"Pimentão, verde, cru",tablespoon,13.0,6704501,99,16,1 Pimentão - colher de sopa cheia
+144,"Pimentão, verde, cru",slice,6.0,6704501,99,32,1 Pimentão - fatia média
+144,"Pimentão, verde, cru",unit,55.0,6704501,99,103,1 Pimentão - unidade média
+145,"Pimentão, vermelho, cru",tablespoon,13.0,6704501,99,16,1 Pimentão - colher de sopa cheia
+145,"Pimentão, vermelho, cru",slice,6.0,6704501,99,32,1 Pimentão - fatia média
+145,"Pimentão, vermelho, cru",unit,55.0,6704501,99,103,1 Pimentão - unidade média
+147,"Quiabo, cru",tablespoon,40.0,6705001,1,16,1 Quiabo refogado - colher de sopa cheia
+147,"Quiabo, cru",unit,18.0,6705001,1,103,14 Quiabo - unidade
+148,"Rabanete, cru",tablespoon,11.0,6401001,1,16,7 Rabanete - colher de sopa
+148,"Rabanete, cru",slice,4.0,6401001,1,32,1 Rabanete - fatia média
+148,"Rabanete, cru",unit,25.0,6401001,1,103,1 Rabanete - unidade média
+149,"Repolho, branco, cru",serving_spoon,25.0,6700901,1,12,1 Repolho cru - colher de arroz cheia
+149,"Repolho, branco, cru",tablespoon,10.0,6700901,1,16,1 Repolho cru - colher de sopa cheia
+149,"Repolho, branco, cru",skimmer,25.0,6700901,1,28,1 Repolho cru - escumadeira média cheia
+149,"Repolho, branco, cru",leaf,26.0,6700901,1,34,1 Repolho cru - folha média
+150,"Repolho, roxo, cru",serving_spoon,25.0,6700901,1,12,1 Repolho cru - colher de arroz cheia
+150,"Repolho, roxo, cru",tablespoon,10.0,6700901,1,16,1 Repolho cru - colher de sopa cheia
+150,"Repolho, roxo, cru",skimmer,25.0,6700901,1,28,1 Repolho cru - escumadeira média cheia
+150,"Repolho, roxo, cru",leaf,26.0,6700901,1,34,1 Repolho cru - folha média
+151,"Repolho, roxo, refogado",serving_spoon,45.0,6700901,7,12,1 Repolho refogado - colher de arroz cheia
+151,"Repolho, roxo, refogado",tablespoon,20.0,6700901,7,16,1 Repolho refogado - colher de sopa cheia
+151,"Repolho, roxo, refogado",skimmer,45.0,6700901,7,28,1 Repolho refogado - escumadeira média cheia
+152,"Rúcula, crua",tablespoon,8.0,6702001,99,16,1 Alface - colher de sopa cheia
+157,"Tomate, com semente, cru",tablespoon,30.0,6705101,99,16,1 Tomate - colher de sopa cheia em tiras
+157,"Tomate, com semente, cru",slice,15.0,6705101,99,32,1 Tomate - fatia média
+157,"Tomate, com semente, cru",unit,100.0,6705101,99,103,1 Tomate - unidade média
+158,"Tomate, extrato",serving_spoon,45.0,7004701,99,12,1 Molho de tomate - colher de arroz
+158,"Tomate, extrato",tablespoon,20.0,7004701,99,16,1 Molho de tomate - colher de sopa
+159,"Tomate, molho industrializado",serving_spoon,45.0,7004801,99,12,1 Molho de tomate - colher de arroz
+159,"Tomate, molho industrializado",dessert_spoon,17.0,7004801,99,15,1 Molho de tomate - colher de sobremesa
+159,"Tomate, molho industrializado",tablespoon,20.0,7004801,99,16,1 Molho de tomate - colher de sopa
+162,"Vagem, crua",tablespoon,20.0,6705201,1,16,1 Vagem cozida - colher de sopa cheia
+163,"Abacate, cru",tablespoon,45.0,6802701,99,16,1 Abacate - colher de sopa cheia picado
+163,"Abacate, cru",large_glass,200.0,6802701,99,21,1 Abacate - copo duplo cheio picado
+163,"Abacate, cru",unit,430.0,6802701,99,103,1 Abacate - unidade média
+164,"Abacaxi, cru",slice,75.0,6802601,99,32,1 Abacaxi - fatia média
+164,"Abacaxi, cru",unit,750.0,6802601,99,103,1 Abacaxi - unidade média
+166,"Abiu, cru",unit,50.0,6808001,99,103,9 Abiu - unidade média
+168,"Açaí, polpa, congelada",ladle,101.0,6601706,99,17,14 Açaí - concha
+168,"Açaí, polpa, congelada",large_glass,326.0,6601706,99,21,14 Açaí - copo grande
+169,"Acerola, crua",unit,12.0,6807701,99,103,1 Acerola - unidade
+172,"Ameixa, crua",tablespoon,25.0,6804301,99,16,8 Ameixa em calda - colher de sopa
+172,"Ameixa, crua",unit,42.0,6804301,99,103,1 Ameixa preta fresca - unidade média
+174,"Atemóia, crua",unit,227.0,6805401,99,103,14 Beriba - unidade
+175,"Banana, da terra, crua",piece,16.0,6801101,99,81,14 Banana - pedaço
+177,"Banana, figo, crua",piece,16.0,6801101,99,81,14 Banana - pedaço
+177,"Banana, figo, crua",unit,75.0,6801101,99,103,3 Banana-prata - unidade
+178,"Banana, maçã, crua",piece,16.0,6801101,99,81,14 Banana - pedaço
+178,"Banana, maçã, crua",unit,75.0,6801101,99,103,3 Banana-prata - unidade
+179,"Banana, nanica, crua",piece,16.0,6801101,99,81,14 Banana - pedaço
+179,"Banana, nanica, crua",unit,75.0,6801101,99,103,3 Banana-prata - unidade
+180,"Banana, ouro, crua",piece,16.0,6801101,99,81,14 Banana - pedaço
+180,"Banana, ouro, crua",unit,75.0,6801101,99,103,3 Banana-prata - unidade
+181,"Banana, pacova, crua",piece,16.0,6801101,99,81,14 Banana - pedaço
+181,"Banana, pacova, crua",unit,75.0,6801101,99,103,3 Banana-prata - unidade
+182,"Banana, prata, crua",piece,16.0,6801101,99,81,14 Banana - pedaço
+182,"Banana, prata, crua",unit,75.0,6801101,99,103,3 Banana-prata - unidade
+186,"Caju, cru",unit,90.0,6804401,99,103,1 Caju - unidade média
+189,"Caqui, chocolate, cru",unit,110.0,6802801,99,103,1 Caqui - unidade média
+190,"Carambola, crua",unit,75.0,6804801,99,103,1 Carambola - unidade média
+191,"Ciriguela, crua",unit,10.0,6806901,99,103,9 Seriguela - unidade
+192,"Cupuaçu, cru",tablespoon,20.0,6807301,99,16,9 Cupuaçu - colher de sopa
+194,"Figo, cru",unit,55.0,6802901,99,103,1 Figo - unidade média
+197,"Goiaba, branca, com casca, crua",unit,170.0,6804201,99,103,1 Goiaba - unidade média
+198,"Goiaba, doce em pasta",serving_spoon,70.0,6901211,99,12,14 Goiabada - colher de arroz
+198,"Goiaba, doce em pasta",dessert_spoon,35.0,6901211,99,15,1 Goiabada - colher de sobremesa cheia em pasta
+198,"Goiaba, doce em pasta",tablespoon,50.0,6901211,99,16,1 Goiabada - colher de sopa cheia em pasta
+198,"Goiaba, doce em pasta",cup,257.0,6901211,99,106,14 Goiabada - xícara de chá
+200,"Goiaba, vermelha, com casca, crua",unit,170.0,6804201,99,103,1 Goiaba - unidade média
+203,"Jabuticaba, crua",unit,5.0,6804901,99,103,1 Jabuticaba - unidade
+205,"Jambo, cru",unit,40.0,6805301,99,103,1 Jambo - unidade média
+206,"Jamelão, cru",unit,5.0,6810201,99,103,1 Jabuticaba - unidade
+207,"Kiwi, cru",unit,94.0,6807801,99,103,1 Kiwi - unidade média
+208,"Laranja, baía, crua",unit,180.0,6801801,99,103,1 Laranja - unidade média
+209,"Laranja, baía, suco",glass,150.0,8500407,99,18,15 Copo americano
+209,"Laranja, baía, suco",large_glass,300.0,8500407,99,21,7 Copo grande
+209,"Laranja, baía, suco",can,350.0,8500407,99,72,15 Lata de 350ml
+209,"Laranja, baía, suco",coffee_cup,50.0,8500407,99,105,15 Xícara de café
+209,"Laranja, baía, suco",cup,200.0,8500407,99,106,1 Xícara de chá
+210,"Laranja, da terra, crua",unit,180.0,6801801,99,103,1 Laranja - unidade média
+211,"Laranja, da terra, suco",glass,150.0,8500407,99,18,15 Copo americano
+211,"Laranja, da terra, suco",large_glass,300.0,8500407,99,21,7 Copo grande
+211,"Laranja, da terra, suco",can,350.0,8500407,99,72,15 Lata de 350ml
+211,"Laranja, da terra, suco",coffee_cup,50.0,8500407,99,105,15 Xícara de café
+211,"Laranja, da terra, suco",cup,200.0,8500407,99,106,1 Xícara de chá
+212,"Laranja, lima, crua",unit,180.0,6801801,99,103,1 Laranja - unidade média
+213,"Laranja, lima, suco",glass,150.0,8500407,99,18,15 Copo americano
+213,"Laranja, lima, suco",large_glass,300.0,8500407,99,21,7 Copo grande
+213,"Laranja, lima, suco",can,350.0,8500407,99,72,15 Lata de 350ml
+213,"Laranja, lima, suco",coffee_cup,50.0,8500407,99,105,15 Xícara de café
+213,"Laranja, lima, suco",cup,200.0,8500407,99,106,1 Xícara de chá
+214,"Laranja, pêra, crua",unit,180.0,6801801,99,103,1 Laranja - unidade média
+215,"Laranja, pêra, suco",glass,150.0,8500407,99,18,15 Copo americano
+215,"Laranja, pêra, suco",large_glass,300.0,8500407,99,21,7 Copo grande
+215,"Laranja, pêra, suco",can,350.0,8500407,99,72,15 Lata de 350ml
+215,"Laranja, pêra, suco",coffee_cup,50.0,8500407,99,105,15 Xícara de café
+215,"Laranja, pêra, suco",cup,200.0,8500407,99,106,1 Xícara de chá
+216,"Laranja, valência, crua",unit,180.0,6801801,99,103,1 Laranja - unidade média
+217,"Laranja, valência, suco",glass,150.0,8500407,99,18,15 Copo americano
+217,"Laranja, valência, suco",large_glass,300.0,8500407,99,21,7 Copo grande
+217,"Laranja, valência, suco",can,350.0,8500407,99,72,15 Lata de 350ml
+217,"Laranja, valência, suco",coffee_cup,50.0,8500407,99,105,15 Xícara de café
+217,"Laranja, valência, suco",cup,200.0,8500407,99,106,1 Xícara de chá
+220,"Limão, tahiti, cru",unit,84.0,6802001,99,103,2 Limão - unidade
+221,"Maçã, Argentina, com casca, crua",unit,150.0,6803001,99,103,1 Maçã - unidade média
+222,"Maçã, Fuji, com casca, crua",unit,150.0,6803001,99,103,1 Maçã - unidade média
+225,"Mamão, Formosa, cru",serving_spoon,70.0,6803101,99,12,1 Mamão papaya - colher de arroz cheia
+225,"Mamão, Formosa, cru",tablespoon,40.0,6803101,99,16,1 Mamão papaya - colher de sopa cheia
+225,"Mamão, Formosa, cru",slice,170.0,6803101,99,32,1 Mamão - fatia média
+225,"Mamão, Formosa, cru",piece,120.0,6803101,99,81,7 Mamão papaya - pedaço pequeno
+225,"Mamão, Formosa, cru",unit,310.0,6803101,99,103,1 Mamão papaya - unidade média
+226,"Mamão, Papaia, cru",piece,120.0,6803108,99,81,7 Mamão papaya - pedaço pequeno
+226,"Mamão, Papaia, cru",unit,310.0,6803108,99,103,1 Mamão papaya - unidade média
+228,"Manga, Haden, crua",slice,22.0,6803201,99,32,2 Manga hadden - fatia
+229,"Manga, Palmer, crua",slice,22.0,6803201,99,32,2 Manga hadden - fatia
+231,"Manga, Tommy Atkins, crua",slice,22.0,6803201,99,32,2 Manga hadden - fatia
+232,"Maracujá, cru",unit,45.0,6803301,99,103,1 Maracujá - unidade média
+235,"Melancia, crua",slice,200.0,6803401,99,32,1 Melancia - fatia média
+235,"Melancia, crua",piece,150.0,6803401,99,81,7 Melancia - pedaço médio
+236,"Melão, cru",slice,90.0,6803501,99,32,1 Melão - fatia média
+236,"Melão, cru",unit,660.0,6803501,99,103,1 Melão - unidade média
+237,"Mexerica, Murcote, crua",unit,135.0,6802202,99,103,1 Tangerina - unidade média
+238,"Mexerica, Rio, crua",unit,135.0,6802202,99,103,1 Tangerina - unidade média
+239,"Morango, cru",unit,12.0,6805201,99,103,1 Morango - unidade média
+240,"Nêspera, crua",unit,27.0,6805801,99,103,1 Nêspera - unidade média
+242,"Pêra, Park, crua",unit,130.0,6803601,99,103,1 pera - unidade média
+243,"Pêra, Williams, crua",unit,130.0,6803601,99,103,1 pera - unidade média
+244,"Pêssego, Aurora, cru",unit,60.0,6803701,99,103,1 Pêssego - unidade média
+246,"Pinha, crua",unit,60.0,6803802,99,103,1 Fruta do conde - unidade média
+247,"Pitanga, crua",unit,10.0,6806801,99,103,9 Pitanga - unidade
+249,"Romã, crua",unit,70.0,6807601,99,103,9 Romã - unidade pequena
+250,"Tamarindo, cru",unit,8.06,6806201,99,103,14 Tamarindo - unidade
+251,"Tangerina, Poncã, crua",unit,135.0,6802201,99,103,1 Tangerina - unidade média
+254,"Umbu, cru",unit,33.33,6807101,99,103,9 Umbu - unidade grande
+256,"Uva, Itália, crua",unit,8.0,6803901,99,103,1 Uva - unidade média
+257,"Uva, Rubi, crua",unit,8.0,6803901,99,103,1 Uva - unidade média
+261,"Manteiga, com sal",teaspoon,8.0,7901501,99,14,1 Manteiga - colher de chá cheia
+261,"Manteiga, com sal",dessert_spoon,23.0,7901501,99,15,1 Manteiga - colher de sobremesa cheia
+261,"Manteiga, com sal",tablespoon,32.0,7901501,99,16,1 Manteiga - colher de sopa cheia
+261,"Manteiga, com sal",knife_tip,5.0,7901501,99,86,7 Manteiga - ponta de faca
+262,"Manteiga, sem sal",teaspoon,8.0,7901501,99,14,1 Manteiga - colher de chá cheia
+262,"Manteiga, sem sal",dessert_spoon,23.0,7901501,99,15,1 Manteiga - colher de sobremesa cheia
+262,"Manteiga, sem sal",tablespoon,32.0,7901501,99,16,1 Manteiga - colher de sopa cheia
+262,"Manteiga, sem sal",knife_tip,5.0,7901501,99,86,7 Manteiga - ponta de faca
+263,"Margarina, com óleo hidrogenado, com sal (65% de lipídeos)",teaspoon,8.0,7901602,99,14,1 Margarina - colher de chá cheia
+263,"Margarina, com óleo hidrogenado, com sal (65% de lipídeos)",dessert_spoon,23.0,7901602,99,15,1 Margarina - colher de sobremesa cheia
+263,"Margarina, com óleo hidrogenado, com sal (65% de lipídeos)",tablespoon,32.0,7901602,99,16,1 Margarina - colher de sopa cheia
+263,"Margarina, com óleo hidrogenado, com sal (65% de lipídeos)",cup,155.0,7901602,99,106,4 Manteiga - xícara de chá
+264,"Margarina, com óleo hidrogenado, sem sal (80% de lipídeos)",teaspoon,8.0,7901602,99,14,1 Margarina - colher de chá cheia
+264,"Margarina, com óleo hidrogenado, sem sal (80% de lipídeos)",dessert_spoon,23.0,7901602,99,15,1 Margarina - colher de sobremesa cheia
+264,"Margarina, com óleo hidrogenado, sem sal (80% de lipídeos)",tablespoon,32.0,7901602,99,16,1 Margarina - colher de sopa cheia
+264,"Margarina, com óleo hidrogenado, sem sal (80% de lipídeos)",cup,155.0,7901602,99,106,4 Manteiga - xícara de chá
+265,"Margarina, com óleo interesterificado, com sal (65%de lipídeos)",teaspoon,8.0,7901602,99,14,1 Margarina - colher de chá cheia
+265,"Margarina, com óleo interesterificado, com sal (65%de lipídeos)",dessert_spoon,23.0,7901602,99,15,1 Margarina - colher de sobremesa cheia
+265,"Margarina, com óleo interesterificado, com sal (65%de lipídeos)",tablespoon,32.0,7901602,99,16,1 Margarina - colher de sopa cheia
+265,"Margarina, com óleo interesterificado, com sal (65%de lipídeos)",cup,155.0,7901602,99,106,4 Manteiga - xícara de chá
+266,"Margarina, com óleo interesterificado, sem sal (65% de lipídeos)",teaspoon,8.0,7901602,99,14,1 Margarina - colher de chá cheia
+266,"Margarina, com óleo interesterificado, sem sal (65% de lipídeos)",dessert_spoon,23.0,7901602,99,15,1 Margarina - colher de sobremesa cheia
+266,"Margarina, com óleo interesterificado, sem sal (65% de lipídeos)",tablespoon,32.0,7901602,99,16,1 Margarina - colher de sopa cheia
+266,"Margarina, com óleo interesterificado, sem sal (65% de lipídeos)",cup,155.0,7901602,99,106,4 Manteiga - xícara de chá
+273,"Abadejo, filé, congelado, assado",tablespoon,20.0,7200101,4,16,1 Peixe cozido - colher de sopa cheia picada
+274,"Abadejo, filé, congelado,cozido",fillet,120.0,7200101,2,33,1 Peixe cozido - filé médio
+276,"Abadejo, filé, congelado, grelhado",fillet,120.0,7200101,3,33,1 Peixe cozido - filé médio
+277,"Atum, conserva em óleo",tablespoon,16.0,7703402,99,16,1 Atum sólido em água e sal Coqueiro  - colher de sopa cheia
+280,"Bacalhau, salgado, refogado",tablespoon,20.0,7270401,7,16,1 Bacalhau cozido - colher de sopa cheia
+281,"Cação, posta, com farinha de trigo, frita",fillet,115.0,7200101,6,33,1 Peixe à milanesa - filé médio
+282,"Cação, posta, cozida",fillet,120.0,7200101,2,33,1 Peixe cozido - filé médio
+284,"Camarão, Rio Grande, grande, cozido",serving_spoon,35.0,7260101,2,12,1 Camarão frito - colher de arroz cheia
+284,"Camarão, Rio Grande, grande, cozido",tablespoon,20.0,7260101,2,16,1 Camarão frito - colher de sopa cheia
+284,"Camarão, Rio Grande, grande, cozido",unit,30.0,7260101,2,103,1 Camarão - unidade grande
+286,"Camarão, Sete Barbas, sem cabeça, com casca, frito",serving_spoon,35.0,7260101,5,12,1 Camarão frito - colher de arroz cheia
+286,"Camarão, Sete Barbas, sem cabeça, com casca, frito",tablespoon,20.0,7260101,5,16,1 Camarão frito - colher de sopa cheia
+286,"Camarão, Sete Barbas, sem cabeça, com casca, frito",unit,30.0,7260101,5,103,1 Camarão - unidade grande
+287,"Caranguejo, cozido",unit,20.0,7262101,2,103,14 Caranguejo - unidade
+289,"Corimbatá, assado",fillet,120.0,7400101,4,33,1 Peixe cozido - filé médio
+290,"Corimbatá, cozido",tablespoon,20.0,7400101,2,16,1 Peixe cozido - colher de sopa cheia picada
+290,"Corimbatá, cozido",fillet,120.0,7400101,2,33,1 Peixe cozido - filé médio
+293,"Corvina grande, assada",tablespoon,20.0,7200101,4,16,1 Peixe cozido - colher de sopa cheia picada
+294,"Corvina grande, cozida",fillet,120.0,7200101,2,33,1 Peixe cozido - filé médio
+297,"Lambari, congelado, frito",fillet,120.0,7400101,5,33,1 Peixe frito - filé médio
+299,"Manjuba, com farinha de trigo, frita",fillet,115.0,7200101,6,33,1 Peixe à milanesa - filé médio
+300,"Manjuba, frita",fillet,120.0,7200101,5,33,1 Peixe frito - filé médio
+301,"Merluza, filé, assado",tablespoon,20.0,7200101,4,16,1 Peixe cozido - colher de sopa cheia picada
+303,"Merluza, filé, frito",fillet,120.0,7200101,5,33,1 Peixe frito - filé médio
+305,"Pescada, branca, frita",fillet,120.0,7200101,5,33,1 Peixe frito - filé médio
+306,"Pescada, filé, com farinha de trigo, frito",fillet,115.0,7200101,6,33,1 Peixe à milanesa - filé médio
+308,"Pescada, filé, frito",fillet,120.0,7200101,5,33,1 Peixe frito - filé médio
+311,"Pintado, assado",fillet,120.0,7400101,4,33,1 Peixe cozido - filé médio
+313,"Pintado, grelhado",fillet,120.0,7400101,3,33,1 Peixe cozido - filé médio
+315,"Salmão, filé, com pele, fresco,  grelhado",fillet,120.0,7200101,3,33,1 Peixe cozido - filé médio
+317,"Salmão, sem pele, fresco, grelhado",fillet,120.0,7200101,3,33,1 Peixe cozido - filé médio
+318,"Sardinha, assada",tablespoon,20.0,7200101,4,16,1 Peixe cozido - colher de sopa cheia picada
+319,"Sardinha, conserva em óleo",dessert_spoon,10.0,7703002,99,15,1 Atum sólido em água e sal Coqueiro  - colher de sobremesa cheia
+319,"Sardinha, conserva em óleo",tablespoon,16.0,7703002,99,16,1 Atum sólido em água e sal Coqueiro  - colher de sopa cheia
+319,"Sardinha, conserva em óleo",unit,41.5,7703002,99,103,1 Sardinha em conserva - unidade média
+320,"Sardinha, frita",fillet,120.0,7200101,5,33,1 Peixe frito - filé médio
+323,Apresuntado,slice,15.0,8103601,99,32,1 Apresuntado Sadia  - fatia média
+326,"Carne, bovina, acém, moído, cozido",serving_spoon,60.0,7104301,2,12,1 Carne bovina moída - colher de arroz cheia
+326,"Carne, bovina, acém, moído, cozido",tablespoon,25.0,7104301,2,16,1 Carne bovina moída - colher de sopa cheia
+328,"Carne, bovina, acém, sem gordura, cozido",steak,100.0,7100801,2,5,1 Bife bovino - unidade média
+328,"Carne, bovina, acém, sem gordura, cozido",serving_spoon,70.0,7100801,2,12,1 Carne bovina ensopada com legumes - colher de arroz cheia
+328,"Carne, bovina, acém, sem gordura, cozido",piece,35.0,7100801,2,81,1 Carne bovina ensopada - pedaço médio
+332,"Carne, bovina, bucho, cozido",serving_spoon,70.0,7102402,2,12,1 Dobradinha - colher de arroz cheia
+332,"Carne, bovina, bucho, cozido",tablespoon,35.0,7102402,2,16,1 Dobradinha - colher de sopa cheia
+332,"Carne, bovina, bucho, cozido",ladle,150.0,7102402,2,17,8 Dobradinha - concha
+335,"Carne, bovina, capa de contra-filé, com gordura, grelhada",steak,100.0,7100201,3,5,1 Bife bovino - unidade média
+335,"Carne, bovina, capa de contra-filé, com gordura, grelhada",piece,35.0,7100201,3,81,1 Carne bovina ensopada - pedaço médio
+337,"Carne, bovina, capa de contra-filé, sem gordura, grelhada",steak,100.0,7100201,3,5,1 Bife bovino - unidade média
+337,"Carne, bovina, capa de contra-filé, sem gordura, grelhada",piece,35.0,7100201,3,81,1 Carne bovina ensopada - pedaço médio
+338,"Carne, bovina, charque, cozido",serving_spoon,28.0,8100102,2,12,1 Carne seca - colher de arroz cheia
+338,"Carne, bovina, charque, cozido",tablespoon,18.0,8100102,2,16,1 Carne seca - colher de sopa cheia
+338,"Carne, bovina, charque, cozido",piece,65.0,8100102,2,81,1 Carne seca - pedaço médio
+340,"Carne, bovina, contra-filé, à milanesa",steak,80.0,7100201,6,5,1 Bife bovino à milanesa - unidade média
+342,"Carne, bovina, contra-filé de costela, grelhado",steak,100.0,7100201,3,5,1 Bife bovino - unidade média
+342,"Carne, bovina, contra-filé de costela, grelhado",piece,35.0,7100201,3,81,1 Carne bovina ensopada - pedaço médio
+344,"Carne, bovina, contra-filé, com gordura, grelhado",steak,100.0,7100201,3,5,1 Bife bovino - unidade média
+344,"Carne, bovina, contra-filé, com gordura, grelhado",piece,35.0,7100201,3,81,1 Carne bovina ensopada - pedaço médio
+346,"Carne, bovina, contra-filé, sem gordura, grelhado",steak,100.0,7100201,3,5,1 Bife bovino - unidade média
+346,"Carne, bovina, contra-filé, sem gordura, grelhado",piece,35.0,7100201,3,81,1 Carne bovina ensopada - pedaço médio
+347,"Carne, bovina, costela, assada",piece,40.0,7101301,4,81,1 Costela de boi assada - pedaço médio
+349,"Carne, bovina, coxão duro, sem gordura, cozido",steak,100.0,7109101,2,5,1 Bife bovino - unidade média
+349,"Carne, bovina, coxão duro, sem gordura, cozido",serving_spoon,70.0,7109101,2,12,1 Carne bovina ensopada com legumes - colher de arroz cheia
+349,"Carne, bovina, coxão duro, sem gordura, cozido",tablespoon,30.0,7109101,2,16,1 Carne bovina ensopada - colher de sopa cheia
+349,"Carne, bovina, coxão duro, sem gordura, cozido",slice,90.0,7109101,2,32,1 Carne bovina assada - fatia média
+349,"Carne, bovina, coxão duro, sem gordura, cozido",piece,35.0,7109101,2,81,1 Carne bovina ensopada - pedaço médio
+351,"Carne, bovina, coxão mole, sem gordura, cozido",steak,100.0,7109101,2,5,1 Bife bovino - unidade média
+351,"Carne, bovina, coxão mole, sem gordura, cozido",serving_spoon,70.0,7109101,2,12,1 Carne bovina ensopada com legumes - colher de arroz cheia
+351,"Carne, bovina, coxão mole, sem gordura, cozido",tablespoon,30.0,7109101,2,16,1 Carne bovina ensopada - colher de sopa cheia
+351,"Carne, bovina, coxão mole, sem gordura, cozido",slice,90.0,7109101,2,32,1 Carne bovina assada - fatia média
+351,"Carne, bovina, coxão mole, sem gordura, cozido",piece,35.0,7109101,2,81,1 Carne bovina ensopada - pedaço médio
+353,"Carne, bovina, cupim, assado",steak,100.0,7102601,4,5,1 Bife bovino - unidade média
+353,"Carne, bovina, cupim, assado",slice,90.0,7102601,4,32,1 Carne bovina assada - fatia média
+356,"Carne, bovina, fígado, grelhado",steak,100.0,7102501,3,5,1 Bife de fígado bovino - unidade média
+356,"Carne, bovina, fígado, grelhado",piece,35.0,7102501,3,81,1 Carne bovina ensopada - pedaço médio
+358,"Carne, bovina, filé mingnon, sem gordura, grelhado",steak,100.0,7100101,3,5,1 Bife bovino - unidade média
+358,"Carne, bovina, filé mingnon, sem gordura, grelhado",piece,35.0,7100101,3,81,1 Carne bovina ensopada - pedaço médio
+359,"Carne, bovina, flanco, sem gordura, cozido",piece,35.0,7101011,2,81,1 Carne bovina ensopada - pedaço médio
+361,"Carne, bovina, fraldinha, com gordura, cozida",serving_spoon,70.0,7101202,2,12,1 Carne bovina ensopada com legumes - colher de arroz cheia
+361,"Carne, bovina, fraldinha, com gordura, cozida",piece,35.0,7101202,2,81,1 Carne bovina ensopada - pedaço médio
+363,"Carne, bovina, lagarto, cozido",piece,35.0,7106401,2,81,1 Carne bovina ensopada - pedaço médio
+365,"Carne, bovina, língua, cozida",steak,100.0,7102701,2,5,1 Bife bovino - unidade média
+365,"Carne, bovina, língua, cozida",slice,90.0,7102701,2,32,1 Carne bovina assada - fatia média
+368,"Carne, bovina, maminha, grelhada",steak,100.0,7100303,3,5,1 Bife bovino - unidade média
+368,"Carne, bovina, maminha, grelhada",piece,35.0,7100303,3,81,1 Carne bovina ensopada - pedaço médio
+370,"Carne, bovina, miolo de alcatra, sem gordura, grelhado",steak,100.0,7100301,3,5,1 Bife bovino - unidade média
+370,"Carne, bovina, miolo de alcatra, sem gordura, grelhado",piece,35.0,7100301,3,81,1 Carne bovina ensopada - pedaço médio
+371,"Carne, bovina, músculo, sem gordura, cozido",steak,100.0,7101001,2,5,1 Bife bovino - unidade média
+371,"Carne, bovina, músculo, sem gordura, cozido",tablespoon,30.0,7101001,2,16,1 Carne bovina ensopada - colher de sopa cheia
+371,"Carne, bovina, músculo, sem gordura, cozido",piece,35.0,7101001,2,81,1 Carne bovina ensopada - pedaço médio
+374,"Carne, bovina, paleta, sem gordura, cozida",serving_spoon,70.0,7100905,2,12,1 Carne bovina ensopada com legumes - colher de arroz cheia
+374,"Carne, bovina, paleta, sem gordura, cozida",piece,35.0,7100905,2,81,1 Carne bovina ensopada - pedaço médio
+377,"Carne, bovina, patinho, sem gordura, grelhado",steak,100.0,7100501,3,5,1 Bife bovino - unidade média
+377,"Carne, bovina, patinho, sem gordura, grelhado",piece,35.0,7100501,3,81,1 Carne bovina ensopada - pedaço médio
+378,"Carne, bovina, peito, sem gordura, cozido",serving_spoon,70.0,7101101,2,12,1 Carne bovina ensopada com legumes - colher de arroz cheia
+378,"Carne, bovina, peito, sem gordura, cozido",piece,35.0,7101101,2,81,1 Carne bovina ensopada - pedaço médio
+381,"Carne, bovina, picanha, com gordura, grelhada",steak,100.0,7100304,3,5,1 Bife bovino - unidade média
+381,"Carne, bovina, picanha, com gordura, grelhada",slice,90.0,7100304,3,32,1 Carne bovina assada - fatia média
+381,"Carne, bovina, picanha, com gordura, grelhada",piece,35.0,7100304,3,81,1 Carne bovina ensopada - pedaço médio
+383,"Carne, bovina, picanha, sem gordura, grelhada",steak,100.0,7100304,3,5,1 Bife bovino - unidade média
+383,"Carne, bovina, picanha, sem gordura, grelhada",slice,90.0,7100304,3,32,1 Carne bovina assada - fatia média
+383,"Carne, bovina, picanha, sem gordura, grelhada",piece,35.0,7100304,3,81,1 Carne bovina ensopada - pedaço médio
+384,"Carne, bovina, seca, cozida",serving_spoon,28.0,8100101,2,12,1 Carne seca - colher de arroz cheia
+384,"Carne, bovina, seca, cozida",tablespoon,18.0,8100101,2,16,1 Carne seca - colher de sopa cheia
+384,"Carne, bovina, seca, cozida",piece,65.0,8100101,2,81,1 Carne seca - pedaço médio
+388,"Croquete, de carne, frito",unit,55.0,8500203,99,103,1 Croquete de carne - unidade grande
+389,"Empada de frango, pré-cozida, assada",slice,110.0,8500206,99,32,1 Empadão de frango - fatia média
+389,"Empada de frango, pré-cozida, assada",unit,55.0,8500206,99,103,1 Empada de frango - unidade
+396,"Frango, coxa, com pele, assada",unit,55.0,7800302,4,25,1 Frango assado - coxa grande
+398,"Frango, coxa, sem pele, cozida",unit,55.0,7800302,2,25,1 Frango assado - coxa grande
+401,"Frango, filé, à milanesa",fillet,140.0,7800402,6,33,1 Frango à milanesa - filé médio
+406,"Frango, peito, com pele, assado",fillet,100.0,7800401,4,33,1 Frango frito - filé médio
+408,"Frango, peito, sem pele, cozido",tablespoon,20.0,7800401,2,16,1 Frango assado - colher de sopa cheia desfiado
+408,"Frango, peito, sem pele, cozido",fillet,100.0,7800401,2,33,1 Frango frito - filé médio
+410,"Frango, peito, sem pele, grelhado",fillet,100.0,7800401,3,33,1 Frango frito - filé médio
+411,"Frango, sobrecoxa, com pele, assada",unit,65.0,7800302,4,99,1 Frango assado - sobrecoxa média
+413,"Frango, sobrecoxa, sem pele, assada",unit,65.0,7800302,4,99,1 Frango assado - sobrecoxa média
+416,"Hambúrguer, bovino, frito",unit,56.0,8100502,5,103,1 Hambúrguer - unidade média
+417,"Hambúrguer, bovino, grelhado",unit,56.0,8100502,3,103,1 Hambúrguer - unidade média
+419,"Lingüiça, frango, frita",slice,10.0,8102207,5,32,1 Linguiça - gomo/fatia média
+422,"Lingüiça, porco, frita",serving_spoon,36.0,8102204,5,12,1 Linguiça - colher de arroz cheia picada
+422,"Lingüiça, porco, frita",tablespoon,22.0,8102204,5,16,1 Linguiça - colher de sopa cheia picada
+422,"Lingüiça, porco, frita",slice,10.0,8102204,5,32,1 Linguiça - gomo/fatia média
+424,Mortadela,slice,15.0,8102601,99,32,1 Mortadela - fatia média
+425,"Peru, congelado, assado",slice,32.0,7801702,4,32,1 Peru - fatia média
+428,"Porco, bisteca, frita",piece,70.0,7103305,5,81,8 Bisteca de porco assada - pedaço pequeno
+429,"Porco, bisteca, grelhada",piece,70.0,7103305,3,81,8 Bisteca de porco assada - pedaço pequeno
+430,"Porco, costela, assada",unit,25.0,7103501,4,103,1 Costela de porco cozida - unidade média
+432,"Porco, lombo, assado",slice,190.0,7103701,4,32,2 Porco lombo assado - 1 fatia
+435,"Porco, pernil, assado",slice,90.0,7103401,4,32,1 Carne bovina assada - fatia média
+438,"Presunto, com capa de gordura",slice,15.0,8102901,99,32,1 Presunto Sadia  - fatia média
+439,"Presunto, sem capa de gordura",slice,15.0,8102901,99,32,1 Presunto Sadia  - fatia média
+440,"Quibe, assado",unit,50.0,8500211,99,103,1 Quibe frito - unidade média
+442,"Quibe, frito",unit,50.0,8500211,99,103,1 Quibe frito - unidade média
+443,Salame,slice,20.0,8102701,99,32,1 Salame - fatia média
+446,"Bebida láctea, pêssego",glass,150.0,7901303,99,18,15 Copo americano
+446,"Bebida láctea, pêssego",large_glass,300.0,7901303,99,21,7 Copo grande
+447,Creme de Leite,teaspoon,5.0,7901001,99,14,1 Creme chantilly  caseiro - colher de chá cheia
+447,Creme de Leite,dessert_spoon,20.0,7901001,99,15,1 Creme chantilly  caseiro - colher de sobremesa cheia
+447,Creme de Leite,tablespoon,15.0,7901001,99,16,1 Creme de leite - colher de sopa rasa
+448,"Iogurte, natural",tablespoon,15.0,7901204,99,16,1 Creme de leite - colher de sopa rasa
+448,"Iogurte, natural",glass,150.0,7901204,99,18,15 Copo americano
+448,"Iogurte, natural",large_glass,300.0,7901204,99,21,7 Copo grande
+449,"Iogurte, natural, desnatado",tablespoon,15.0,7901204,99,16,1 Creme de leite - colher de sopa rasa
+449,"Iogurte, natural, desnatado",glass,150.0,7901204,99,18,15 Copo americano
+449,"Iogurte, natural, desnatado",large_glass,300.0,7901204,99,21,7 Copo grande
+451,"Iogurte, sabor morango",tablespoon,15.0,7901201,99,16,1 Creme de leite - colher de sopa rasa
+451,"Iogurte, sabor morango",glass,150.0,7901201,99,18,15 Copo americano
+451,"Iogurte, sabor morango",large_glass,300.0,7901201,99,21,7 Copo grande
+451,"Iogurte, sabor morango",coffee_cup,50.0,7901201,99,105,15 Xícara de café
+451,"Iogurte, sabor morango",cup,200.0,7901201,99,106,1 Xícara de chá
+452,"Iogurte, sabor pêssego",tablespoon,15.0,7901201,99,16,1 Creme de leite - colher de sopa rasa
+452,"Iogurte, sabor pêssego",glass,150.0,7901201,99,18,15 Copo americano
+452,"Iogurte, sabor pêssego",large_glass,300.0,7901201,99,21,7 Copo grande
+452,"Iogurte, sabor pêssego",coffee_cup,50.0,7901201,99,105,15 Xícara de café
+452,"Iogurte, sabor pêssego",cup,200.0,7901201,99,106,1 Xícara de chá
+453,"Leite, condensado",dessert_spoon,10.0,7900901,99,15,1 Leite condensado - colher de sobremesa
+453,"Leite, condensado",tablespoon,15.0,7900901,99,16,1 Leite condensado - colher de sopa
+454,"Leite, de cabra",glass,150.0,7900301,99,18,15 Copo americano
+454,"Leite, de cabra",coffee_cup,50.0,7900301,99,105,15 Xícara de café
+454,"Leite, de cabra",cup,200.0,7900301,99,106,1 Xícara de chá
+455,"Leite, de vaca, achocolatado",glass,150.0,7903102,99,18,15 Copo americano
+455,"Leite, de vaca, achocolatado",large_glass,300.0,7903102,99,21,7 Copo grande
+455,"Leite, de vaca, achocolatado",coffee_cup,50.0,7903102,99,105,15 Xícara de café
+455,"Leite, de vaca, achocolatado",cup,200.0,7903102,99,106,1 Xícara de chá
+456,"Leite, de vaca, desnatado, pó",tablespoon,10.0,7900710,99,16,1 Leite de vaca desnatado pó - colher de sopa cheia
+459,"Leite, de vaca, integral, pó",dessert_spoon,9.0,7900601,99,15,1 Leite de vaca integral pó - colher de sobremesa cheia
+459,"Leite, de vaca, integral, pó",tablespoon,16.0,7900601,99,16,1 Leite de vaca integral pó - colher de sopa cheia
+460,"Leite, fermentado",large_glass,300.0,7901304,99,21,7 Copo grande
+460,"Leite, fermentado",unit,80.0,7901304,99,103,1 Leite fermentado Yakult  - unidade
+461,"Queijo, minas, frescal",slice,45.0,7902001,99,32,1 Queijo minas padrão - fatia média
+462,"Queijo, minas, meia cura",slice,45.0,7902001,99,32,1 Queijo minas padrão - fatia média
+463,"Queijo, mozarela",slice,20.0,7901801,99,32,1 Queijo muçarela - fatia média
+464,"Queijo, parmesão",teaspoon,4.0,7902403,99,14,1 Queijo parmesão - colher de chá cheia ralado
+464,"Queijo, parmesão",dessert_spoon,8.0,7902403,99,15,1 Queijo parmesão - colher de sobremesa cheia ralado
+464,"Queijo, parmesão",tablespoon,15.0,7902403,99,16,1 Queijo parmesão - colher de sopa cheia ralado
+464,"Queijo, parmesão",package,50.0,7902403,99,80,5 Queijo parmesão ralado Vigor  - pacote
+467,"Queijo, prato",slice,15.0,7901701,99,32,1 Queijo prato - fatia média
+468,"Queijo, requeijão, cremoso",tablespoon,30.0,7902901,99,16,1 Requeijão - colher de sopa cheia
+468,"Queijo, requeijão, cremoso",knife_tip,6.0,7902901,99,86,7 Requeijão - ponta de faca
+469,"Queijo, ricota",tablespoon,44.0,7902201,99,16,1 Queijo cottage  - colher de sopa cheia
+469,"Queijo, ricota",slice,35.0,7902201,99,32,1 Ricota Marília  - fatia média
+469,"Queijo, ricota",knife_tip,6.0,7902201,99,86,7 Requeijão - ponta de faca
+471,"Café, infusão 10%",glass,150.0,8501302,99,18,15 Copo americano
+471,"Café, infusão 10%",large_glass,300.0,8501302,99,21,7 Copo grande
+471,"Café, infusão 10%",coffee_cup,50.0,8501302,99,105,15 Xícara de café
+471,"Café, infusão 10%",cup,200.0,8501302,99,106,1 Xícara de chá
+473,"Cana, caldo de",large_glass,300.0,8202001,99,21,7 Copo grande
+474,"Cerveja, pilsen 2",glass,150.0,8300101,99,18,15 Copo americano
+474,"Cerveja, pilsen 2",large_glass,300.0,8300101,99,21,7 Copo grande
+474,"Cerveja, pilsen 2",can,350.0,8300101,99,72,15 Lata de 350ml
+475,"Chá, erva-doce, infusão 5%",glass,150.0,8206301,99,18,15 Copo americano
+475,"Chá, erva-doce, infusão 5%",large_glass,300.0,8206301,99,21,7 Copo grande
+475,"Chá, erva-doce, infusão 5%",can,350.0,8206301,99,72,15 Lata de 350ml
+475,"Chá, erva-doce, infusão 5%",coffee_cup,50.0,8206301,99,105,15 Xícara de café
+475,"Chá, erva-doce, infusão 5%",cup,200.0,8206301,99,106,1 Xícara de chá
+476,"Chá, mate, infusão 5%",glass,150.0,8206301,99,18,15 Copo americano
+476,"Chá, mate, infusão 5%",large_glass,300.0,8206301,99,21,7 Copo grande
+476,"Chá, mate, infusão 5%",can,350.0,8206301,99,72,15 Lata de 350ml
+476,"Chá, mate, infusão 5%",coffee_cup,50.0,8206301,99,105,15 Xícara de café
+476,"Chá, mate, infusão 5%",cup,200.0,8206301,99,106,1 Xícara de chá
+477,"Chá, preto, infusão 5%",glass,150.0,8206301,99,18,15 Copo americano
+477,"Chá, preto, infusão 5%",large_glass,300.0,8206301,99,21,7 Copo grande
+477,"Chá, preto, infusão 5%",can,350.0,8206301,99,72,15 Lata de 350ml
+477,"Chá, preto, infusão 5%",coffee_cup,50.0,8206301,99,105,15 Xícara de café
+477,"Chá, preto, infusão 5%",cup,200.0,8206301,99,106,1 Xícara de chá
+478,"Coco, água de",glass,150.0,8202101,99,18,15 Copo americano
+478,"Coco, água de",large_glass,300.0,8202101,99,21,7 Copo grande
+478,"Coco, água de",can,350.0,8202101,99,72,15 Lata de 350ml
+478,"Coco, água de",unit,340.0,8202101,99,103,1 Água de coco - unidade
+478,"Coco, água de",cup,200.0,8202101,99,106,1 Xícara de chá
+479,"Refrigerante, tipo água tônica",glass,150.0,8204902,99,18,15 Copo americano
+479,"Refrigerante, tipo água tônica",large_glass,300.0,8204902,99,21,7 Copo grande
+479,"Refrigerante, tipo água tônica",can,350.0,8204902,99,72,15 Lata de 350ml
+480,"Refrigerante, tipo cola",glass,150.0,8200101,99,18,15 Copo americano
+480,"Refrigerante, tipo cola",large_glass,300.0,8200101,99,21,7 Copo grande
+480,"Refrigerante, tipo cola",can,350.0,8200101,99,72,15 Lata de 350ml
+480,"Refrigerante, tipo cola",cup,200.0,8200101,99,106,1 Xícara de chá
+481,"Refrigerante, tipo guaraná",glass,150.0,8200301,99,18,15 Copo americano
+481,"Refrigerante, tipo guaraná",large_glass,300.0,8200301,99,21,7 Copo grande
+481,"Refrigerante, tipo guaraná",can,350.0,8200301,99,72,15 Lata de 350ml
+481,"Refrigerante, tipo guaraná",coffee_cup,50.0,8200301,99,105,15 Xícara de café
+482,"Refrigerante, tipo laranja",glass,150.0,8200202,99,18,15 Copo americano
+482,"Refrigerante, tipo laranja",large_glass,300.0,8200202,99,21,7 Copo grande
+482,"Refrigerante, tipo laranja",can,350.0,8200202,99,72,15 Lata de 350ml
+483,"Refrigerante, tipo limão",glass,150.0,8203501,99,18,15 Copo americano
+483,"Refrigerante, tipo limão",large_glass,300.0,8203501,99,21,7 Copo grande
+483,"Refrigerante, tipo limão",can,350.0,8203501,99,72,15 Lata de 350ml
+483,"Refrigerante, tipo limão",cup,200.0,8203501,99,106,1 Xícara de chá
+484,"Omelete, de queijo",serving_spoon,45.0,8506501,99,12,1 Ovo de galinha mexido - colher de arroz cheia
+484,"Omelete, de queijo",tablespoon,15.0,8506501,99,16,1 Ovo de galinha mexido - colher de sopa cheia
+484,"Omelete, de queijo",unit,65.0,8506501,99,103,1 Omelete - unidade pequena com 1 ovo
+488,"Ovo, de galinha, inteiro, cozido/10minutos",serving_spoon,45.0,7803301,2,12,1 Ovo de galinha mexido - colher de arroz cheia
+488,"Ovo, de galinha, inteiro, cozido/10minutos",unit,45.0,7803301,2,103,1 Ovo de galinha cozido - unidade média
+489,"Ovo, de galinha, inteiro, cru",unit,45.0,7803301,1,103,1 Ovo de galinha cozido - unidade média
+490,"Ovo, de galinha, inteiro, frito",serving_spoon,45.0,7803301,5,12,1 Ovo de galinha mexido - colher de arroz cheia
+490,"Ovo, de galinha, inteiro, frito",tablespoon,15.0,7803301,5,16,1 Ovo de galinha mexido - colher de sopa cheia
+490,"Ovo, de galinha, inteiro, frito",unit,50.0,7803301,5,103,1 Ovo de galinha frito - unidade média
+491,"Achocolatado, pó",teaspoon,4.0,6900821,99,14,1 Achocolatado em pó - colher de chá cheia
+491,"Achocolatado, pó",dessert_spoon,11.0,6900821,99,15,1 Achocolatado em pó - colher de sobremesa cheia
+491,"Achocolatado, pó",tablespoon,16.0,6900821,99,16,1 Achocolatado em pó - colher de sopa cheia
+492,"Açúcar, cristal",teaspoon,5.0,6906602,99,14,1 Açúcar refinado - colher de chá cheia
+492,"Açúcar, cristal",dessert_spoon,16.0,6906602,99,15,1 Açúcar refinado - colher de sobremesa cheia
+492,"Açúcar, cristal",tablespoon,24.0,6906602,99,16,1 Açúcar refinado - colher de sopa cheia
+493,"Açúcar, mascavo",tablespoon,19.0,6900304,99,16,1 Açúcar mascavo - colher de sopa cheia
+494,"Açúcar, refinado",teaspoon,5.0,6906602,99,14,1 Açúcar refinado - colher de chá cheia
+494,"Açúcar, refinado",dessert_spoon,16.0,6906602,99,15,1 Açúcar refinado - colher de sobremesa cheia
+494,"Açúcar, refinado",tablespoon,24.0,6906602,99,16,1 Açúcar refinado - colher de sopa cheia
+499,Cocada branca,dessert_spoon,30.0,6903101,99,15,1 Doce de coco - colher de sobremesa cheia
+499,Cocada branca,tablespoon,50.0,6903101,99,16,1 Doce de coco - colher de sopa cheia
+499,Cocada branca,unit,70.0,6903101,99,103,1 Cocada - unidade média
+501,"Doce, de leite, cremoso",teaspoon,12.0,6904201,99,14,1 Doce de leite cremoso - colher de chá cheia
+501,"Doce, de leite, cremoso",dessert_spoon,25.0,6904201,99,15,1 Doce de leite cremoso - colher de sobremesa cheia
+501,"Doce, de leite, cremoso",tablespoon,40.0,6904201,99,16,1 Doce de leite cremoso - colher de sopa cheia
+501,"Doce, de leite, cremoso",large_glass,270.0,6904201,99,21,1 Doce de leite cremoso - copo duplo
+506,Marmelada,slice,60.0,6901206,99,32,1 Marmelada Cica - fatia média
+507,"Mel, de abelha",teaspoon,3.0,6901602,99,14,1 Mel de abelha - colher de chá
+507,"Mel, de abelha",tablespoon,15.0,6901602,99,16,1 Mel de abelha - colher de sopa
+508,Melado,teaspoon,3.0,6901501,99,14,1 Mel de abelha - colher de chá
+508,Melado,dessert_spoon,9.0,6901501,99,15,1 Mel de abelha - colher de sobremesa
+508,Melado,tablespoon,15.0,6901501,99,16,1 Mel de abelha - colher de sopa
+509,Quindim,unit,35.0,6904105,99,103,1 Quindim - unidade média
+510,Rapadura,piece,55.0,6900401,99,81,1 Rapadura - pedaço médio
+518,Shoyu,tablespoon,6.0,7003604,99,16,1 Molho shoyo  - colher de sopa
+520,"Azeitona, preta, conserva",dessert_spoon,14.0,7700101,99,15,14 Azeitona - colher de sobremesa
+520,"Azeitona, preta, conserva",tablespoon,25.0,7700101,99,16,14 Azeitona - colher de sopa
+520,"Azeitona, preta, conserva",handful,45.0,7700101,99,88,14 Azeitona - punhado
+520,"Azeitona, preta, conserva",unit,4.0,7700101,99,103,1 Azeitona - unidade média verde
+521,"Azeitona, verde, conserva",dessert_spoon,14.0,7700101,99,15,14 Azeitona - colher de sobremesa
+521,"Azeitona, verde, conserva",tablespoon,25.0,7700101,99,16,14 Azeitona - colher de sopa
+521,"Azeitona, verde, conserva",handful,45.0,7700101,99,88,14 Azeitona - punhado
+521,"Azeitona, verde, conserva",unit,4.0,7700101,99,103,1 Azeitona - unidade média verde
+522,"Chantilly, spray, com gordura vegetal",tablespoon,25.0,7901101,99,16,1 Creme chantilly  caseiro - colher de sopa cheia
+523,"Leite, de coco",tablespoon,20.0,7003801,99,16,8 Leite de coco Ducoco  - colher de sopa
+524,"Maionese, tradicional com ovos",serving_spoon,50.0,7004301,99,12,1 Maionese - colher de arroz cheia
+524,"Maionese, tradicional com ovos",teaspoon,6.0,7004301,99,14,1 Maionese - colher de chá cheia
+524,"Maionese, tradicional com ovos",dessert_spoon,17.0,7004301,99,15,1 Maionese - colher de sobremesa cheia
+524,"Maionese, tradicional com ovos",tablespoon,27.0,7004301,99,16,1 Maionese - colher de sopa cheia
+524,"Maionese, tradicional com ovos",knife_tip,4.0,7004301,99,86,7 Maionese - ponta de faca
+525,Acarajé,unit,100.0,8500209,99,103,1 Acarajé - unidade média
+526,Arroz carreteiro,serving_spoon,60.0,8579002,99,12,6 Arroz com linguiça - colher de arroz cheia
+527,"Baião de dois, arroz e feijão-de-corda",serving_spoon,55.0,8503501,99,12,14 Baião de dois - colher de arroz
+527,"Baião de dois, arroz e feijão-de-corda",tablespoon,21.0,8503501,99,16,14 Baião de dois - colher de sopa
+527,"Baião de dois, arroz e feijão-de-corda",ladle,95.0,8503501,99,17,14 Baião de dois - concha
+527,"Baião de dois, arroz e feijão-de-corda",skimmer,111.0,8503501,99,28,14 Baião de dois - escumadeira médias
+532,"Charuto, de repolho",unit,30.0,8505201,99,103,14 Repolho recheado - unidade
+533,"Cuscuz, de milho, cozido com sal",piece,135.0,6902901,99,81,1 Cuscuz de milho - pedaço médio
+536,Dobradinha,serving_spoon,70.0,7102402,13,12,1 Dobradinha - colher de arroz cheia
+536,Dobradinha,tablespoon,35.0,7102402,13,16,1 Dobradinha - colher de sopa cheia
+536,Dobradinha,ladle,150.0,7102402,13,17,8 Dobradinha - concha
+537,Estrogonofe de carne,tablespoon,25.0,7705401,99,16,1 Strogonoff  de carne - colher de sopa cheia
+537,Estrogonofe de carne,ladle,170.0,7705401,99,17,1 Strogonoff  de carne - concha média cheia
+538,Estrogonofe de frango,tablespoon,25.0,7705401,99,16,1 Strogonoff  de carne - colher de sopa cheia
+538,Estrogonofe de frango,ladle,170.0,7705401,99,17,1 Strogonoff  de carne - concha média cheia
+539,Feijão tropeiro mineiro,serving_spoon,35.0,8506101,99,12,1 Feijão branco cozido - colher de arroz cheia
+539,Feijão tropeiro mineiro,tablespoon,17.0,8506101,99,16,1 Feijão branco cozido - colher de sopa cheia
+542,"Macarrão, molho bolognesa",serving_spoon,50.0,6503401,8,12,1 Macarrão à bolonhesa - colher de arroz cheia
+542,"Macarrão, molho bolognesa",tablespoon,25.0,6503401,8,16,1 Macarrão à bolonhesa - colher de sopa cheia
+542,"Macarrão, molho bolognesa",skimmer,110.0,6503401,8,28,1 Macarrão à bolonhesa - escumadeira média cheia
+543,Maniçoba,ladle,225.0,8507201,99,17,1 Feijoada - concha média cheia
+544,Quibebe,dessert_spoon,24.0,8506701,99,15,1 Quibebe - colher de sobremesa cheia
+544,Quibebe,tablespoon,35.0,8506701,99,16,1 Quibebe - colher de sopa cheia
+544,Quibebe,skimmer,100.0,8506701,99,28,1 Quibebe - escumadeira média cheia
+545,"Salada, de legumes, com maionese",serving_spoon,70.0,8500802,99,12,1 Salada de legumes com maionese - colher de arroz cheia
+545,"Salada, de legumes, com maionese",tablespoon,38.0,8500802,99,16,1 Salada de legumes com maionese - colher de sopa cheia
+545,"Salada, de legumes, com maionese",skimmer,90.0,8500802,99,28,1 Salada de legumes com maionese - escumadeira média cheia
+546,"Salada, de legumes, cozida no vapor",tablespoon,20.0,8500801,99,16,1 Couve-manteiga cozida - colher de sopa cheia
+547,"Salpicão, de frango",serving_spoon,40.0,8504801,99,12,1 Salpicão de frango - colher de arroz cheia
+547,"Salpicão, de frango",tablespoon,25.0,8504801,99,16,1 Salpicão de frango - colher de sopa cheia
+547,"Salpicão, de frango",skimmer,50.0,8504801,99,28,1 Salpicão de frango - escumadeira média cheia
+551,"Tapioca, com manteiga",unit,50.0,6501516,99,103,8 Tapioca com coco - unidade
+554,Vatapá,serving_spoon,77.0,8502801,99,12,14 Vatapá - colher de arroz
+554,Vatapá,tablespoon,25.0,8502801,99,16,14 Vatapá - colher de sopa
+554,Vatapá,ladle,150.0,8502801,99,17,8 Vatapá - concha
+560,"Ervilha, enlatada, drenada",serving_spoon,38.0,7700201,99,12,1 Ervilha enlatada - colher de arroz cheia
+560,"Ervilha, enlatada, drenada",tablespoon,27.0,7700201,99,16,1 Ervilha enlatada - colher de sopa cheia
+561,"Feijão, carioca, cozido",serving_spoon,35.0,6303102,99,12,1 Feijão branco cozido - colher de arroz cheia
+561,"Feijão, carioca, cozido",tablespoon,17.0,6303102,99,16,1 Feijão branco cozido - colher de sopa cheia
+561,"Feijão, carioca, cozido",ladle,140.0,6303102,99,17,1 Feijão branco cozido - concha média cheia
+563,"Feijão, fradinho, cozido",serving_spoon,35.0,6301603,99,12,1 Feijão branco cozido - colher de arroz cheia
+563,"Feijão, fradinho, cozido",tablespoon,17.0,6301603,99,16,1 Feijão branco cozido - colher de sopa cheia
+563,"Feijão, fradinho, cozido",ladle,140.0,6301603,99,17,1 Feijão branco cozido - concha média cheia
+565,"Feijão, jalo, cozido",serving_spoon,35.0,6303102,99,12,1 Feijão branco cozido - colher de arroz cheia
+565,"Feijão, jalo, cozido",tablespoon,17.0,6303102,99,16,1 Feijão branco cozido - colher de sopa cheia
+565,"Feijão, jalo, cozido",ladle,140.0,6303102,99,17,1 Feijão branco cozido - concha média cheia
+567,"Feijão, preto, cozido",serving_spoon,35.0,6303102,99,12,1 Feijão branco cozido - colher de arroz cheia
+567,"Feijão, preto, cozido",tablespoon,17.0,6303102,99,16,1 Feijão branco cozido - colher de sopa cheia
+567,"Feijão, preto, cozido",ladle,140.0,6303102,99,17,1 Feijão branco cozido - concha média cheia
+569,"Feijão, rajado, cozido",serving_spoon,35.0,6303102,99,12,1 Feijão branco cozido - colher de arroz cheia
+569,"Feijão, rajado, cozido",tablespoon,17.0,6303102,99,16,1 Feijão branco cozido - colher de sopa cheia
+569,"Feijão, rajado, cozido",ladle,140.0,6303102,99,17,1 Feijão branco cozido - concha média cheia
+571,"Feijão, rosinha, cozido",serving_spoon,35.0,6303102,99,12,1 Feijão branco cozido - colher de arroz cheia
+571,"Feijão, rosinha, cozido",tablespoon,17.0,6303102,99,16,1 Feijão branco cozido - colher de sopa cheia
+571,"Feijão, rosinha, cozido",ladle,140.0,6303102,99,17,1 Feijão branco cozido - concha média cheia
+573,"Feijão, roxo, cozido",serving_spoon,35.0,6303102,99,12,1 Feijão branco cozido - colher de arroz cheia
+573,"Feijão, roxo, cozido",tablespoon,17.0,6303102,99,16,1 Feijão branco cozido - colher de sopa cheia
+573,"Feijão, roxo, cozido",ladle,140.0,6303102,99,17,1 Feijão branco cozido - concha média cheia
+577,"Lentilha, cozida",serving_spoon,32.0,6302901,99,12,1 Lentilha cozida - colher de arroz
+577,"Lentilha, cozida",tablespoon,18.0,6302901,99,16,1 Lentilha cozida - colher de sopa
+577,"Lentilha, cozida",ladle,160.0,6302901,99,17,1 Lentilha cozida - concha média cheia
+579,"Paçoca, amendoim",tablespoon,50.0,6903203,99,16,1 Doce de nozes - colher de sopa cheia
+579,"Paçoca, amendoim",unit,30.0,6903203,99,103,1 Paçoca - unidade
+580,"Pé-de-moleque, amendoim",unit,17.0,6903202,99,103,1 Pé de moloque Santa Helena  - unidade
+587,"Amêndoa, torrada, salgada",unit,1.0,6600501,99,103,1 Amêndoa - unidade
+588,"Castanha-de-caju, torrada, salgada",handful,40.0,6600801,99,88,1 Castanha de caju torrada - punhado
+588,"Castanha-de-caju, torrada, salgada",unit,2.5,6600801,99,103,1 Castanha de caju torrada - unidade média
+589,"Castanha-do-Brasil, crua",handful,40.0,6600701,99,88,1 Castanha de caju torrada - punhado
+589,"Castanha-do-Brasil, crua",unit,4.0,6600701,99,103,1 Castanha-do-pará - unidade
+590,"Coco, cru",piece,40.0,6600101,99,81,1 Coco-da-baía - pedaço médio
+594,"Linhaça, semente",dessert_spoon,3.0,6302001,99,15,14 Semente de linhaça - colher de sobremesa
+594,"Linhaça, semente",tablespoon,13.0,6302001,99,16,14 Semente de linhaça - colher de sopa
+595,"Pinhão, cozido",unit,4.0,6600401,99,103,14 Pinhão - unidade
+596,"Pupunha, cozida",unit,22.5,6601805,99,103,9 Pupunha - unidade média
+597,"Noz, crua",handful,40.0,6601501,99,88,1 Castanha de caju torrada - punhado
+597,"Noz, crua",unit,5.0,6601501,99,103,1 Noz - unidade

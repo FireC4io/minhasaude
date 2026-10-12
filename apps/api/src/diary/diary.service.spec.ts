@@ -99,6 +99,34 @@ describe('DiaryService', () => {
       ).rejects.toThrow(BadRequestException);
     });
 
+    it('rejeita medida criada por outra pessoa', async () => {
+      portions.findOne.mockResolvedValue({ id: 'portion-1', foodId: 'food-1', userId: 'user-2', grams: '50.00' });
+      await expect(
+        service.create('user-1', {
+          foodId: 'food-1',
+          date: '2026-09-18',
+          mealType: MealType.SNACK,
+          quantity: 1,
+          unit: DiaryQuantityUnit.PORTION,
+          portionId: 'portion-1',
+        }),
+      ).rejects.toThrow(BadRequestException);
+    });
+
+    it('aceita a medida da própria pessoa e devolve a medida junto da anotação', async () => {
+      const mine = { id: 'portion-1', foodId: 'food-1', userId: 'user-1', label: 'Caneca', grams: '200.00' };
+      portions.findOne.mockResolvedValue(mine);
+      const result = await service.create('user-1', {
+        foodId: 'food-1',
+        date: '2026-09-18',
+        mealType: MealType.SNACK,
+        quantity: 1,
+        unit: DiaryQuantityUnit.PORTION,
+        portionId: 'portion-1',
+      });
+      expect(result.portion).toBe(mine);
+    });
+
     it('propaga o 404 do FoodsService quando o alimento não é visível pro usuário', async () => {
       foodsService.findById.mockRejectedValue(new NotFoundException());
       await expect(

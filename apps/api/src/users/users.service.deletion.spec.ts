@@ -34,6 +34,7 @@ function setup(options: { status?: UserStatus; purgeFails?: boolean } = {}) {
     {} as never,
     purge as never,
     notifier as never,
+    {} as never,
   );
   return { service, user, users, refreshTokens, deletionRequests, purge, notifier };
 }
