@@ -11,6 +11,7 @@ import { GoalsService } from '../goals/goals.service';
 import type { CreateDiaryEntryDto } from './dto/create-diary-entry.dto';
 import type { UpdateDiaryEntryDto } from './dto/update-diary-entry.dto';
 import type { CopyDiaryDto } from './dto/copy-diary.dto';
+import { createOnce } from '../common/idempotency/create-once';
 
 interface MacroTotals {
   kcal: number;
@@ -87,6 +88,15 @@ export class DiaryService {
   }
 
   async create(userId: string, dto: CreateDiaryEntryDto): Promise<DiaryEntry> {
+    return createOnce(
+      this.entries,
+      { userId, clientId: dto.clientId },
+      () => this.insert(userId, dto),
+      { food: true, portion: true },
+    );
+  }
+
+  private async insert(userId: string, dto: CreateDiaryEntryDto): Promise<DiaryEntry> {
     const portionId = dto.unit === DiaryQuantityUnit.GRAMS ? null : (dto.portionId ?? null);
     const snap = await this.computeSnapshot(userId, dto.foodId, dto.quantity, dto.unit, portionId);
 
@@ -103,6 +113,7 @@ export class DiaryService {
       fatGSnapshot: snap.fatG.toString(),
       carbGSnapshot: snap.carbG.toString(),
       microsSnapshot: snap.micros,
+      clientId: dto.clientId ?? null,
     });
     entry.food = snap.food;
     entry.portion = snap.portion;

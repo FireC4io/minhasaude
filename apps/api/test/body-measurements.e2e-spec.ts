@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { randomUUID } from 'node:crypto';
 import request from 'supertest';
 import { AppModule } from '../src/app.module';
 
@@ -83,12 +84,35 @@ describe('Body measurements (e2e)', () => {
     expect(new Date(filtered.body.data[0].measuredAt).getMonth()).toBe(8);
   });
 
+  it('reenvio com o mesmo clientId (fila sem internet) não duplica o peso', async () => {
+    const clientId = randomUUID();
+    const body = { measuredAt: '2026-07-01T12:00:00.000Z', source: 'manual', weightKg: 83, clientId };
+    const first = await request(app.getHttpServer())
+      .post('/v1/body-measurements')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send(body)
+      .expect(201);
+    const again = await request(app.getHttpServer())
+      .post('/v1/body-measurements')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send(body)
+      .expect(201);
+    expect(again.body.id).toBe(first.body.id);
+
+    const july = await request(app.getHttpServer())
+      .get('/v1/body-measurements')
+      .query({ from: '2026-07-01T00:00:00.000Z', to: '2026-07-31T00:00:00.000Z' })
+      .set('Authorization', `Bearer ${accessToken}`)
+      .expect(200);
+    expect(july.body.meta.total).toBe(1);
+  });
+
   it('GET /v1/me/export inclui o histórico de medidas corporais', async () => {
     const response = await request(app.getHttpServer())
       .get('/v1/me/export')
       .set('Authorization', `Bearer ${accessToken}`)
       .expect(200);
-    expect(response.body.bodyMeasurements.length).toBe(2);
+    expect(response.body.bodyMeasurements.length).toBe(3);
   });
 
   it('não vaza medidas de um usuário para outro', async () => {

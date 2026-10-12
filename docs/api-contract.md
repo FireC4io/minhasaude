@@ -36,7 +36,7 @@ Convenções: prefixo `/v1`, respostas no envelope padrão (`success`, `data`, `
 
 ## diary
 - `GET /v1/diary?date=YYYY-MM-DD` — entradas do dia agrupadas por refeição + resumo (kcal/macros vs meta)
-- `POST /v1/diary` — adiciona entrada (food_id, quantity, unit, meal_type, date)
+- `POST /v1/diary` — adiciona entrada (food_id, quantity, unit, meal_type, date; `clientId` opcional: reenviar o mesmo devolve a entrada já criada)
 - `PATCH /v1/diary/:id`
 - `DELETE /v1/diary/:id`
 - `POST /v1/diary/copy` — copia todas as entradas de `from_date` para `to_date`
@@ -56,7 +56,7 @@ Convenções: prefixo `/v1`, respostas no envelope padrão (`success`, `data`, `
 
 ## body-measurements
 - `GET /v1/body-measurements?source=&from=&to=`
-- `POST /v1/body-measurements` — registro manual (peso) ou importado de bioimpedância
+- `POST /v1/body-measurements` — registro manual (peso) ou importado de bioimpedância; `clientId` opcional, como no diário
 
 ## consents
 - `GET /v1/consents` — status atual de cada tipo de consentimento

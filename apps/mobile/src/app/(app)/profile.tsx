@@ -9,12 +9,14 @@ import { AppText } from '@/components/ui/app-text';
 import { ListRow } from '@/components/ui/list-row';
 import { TextButton } from '@/components/ui/text-button';
 import { useAuth } from '@/features/auth/auth-context';
+import { usePendingState } from '@/features/offline-queue/offline-queue';
 
 export default function ProfileScreen() {
   const { t } = useTranslation();
   const router = useRouter();
   const { logout } = useAuth();
   const meQuery = useUsersControllerGetMe();
+  const pendingCount = usePendingState().items.length;
 
   const go = (href: Href) => () => router.push(href);
 
@@ -80,6 +82,9 @@ export default function ProfileScreen() {
           />
         </Section>
 
+        {pendingCount > 0 ? (
+          <AppText className="text-grafite">{t('offline.logoutWarning', { count: pendingCount })}</AppText>
+        ) : null}
         <TextButton
           label={t('account.signOut')}
           hint={t('account.signOutHint')}

@@ -28,7 +28,7 @@ export const queryClient = new QueryClient({
  * ver `offline-copy-preference`), e cópia e chave são apagadas ao sair da
  * conta, ao expirar a sessão e ao excluir a conta (`clearPersistedCache`).
  */
-const encryptedStorage = createEncryptedStorage(AsyncStorage, cacheKeyStore);
+export const encryptedStorage = createEncryptedStorage(AsyncStorage, cacheKeyStore);
 
 export const queryPersister = createAsyncStoragePersister({
   storage: encryptedStorage,

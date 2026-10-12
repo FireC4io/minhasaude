@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsDateString, IsIn, IsNumber, IsOptional, Max, Min } from 'class-validator';
+import { IsDateString, IsIn, IsNumber, IsOptional, IsUUID, Max, Min } from 'class-validator';
 import { BodyMeasurementSource } from '../../database/entities/body-measurement.entity';
 
 export class CreateBodyMeasurementDto {
@@ -40,4 +40,11 @@ export class CreateBodyMeasurementDto {
   @Min(0)
   @Max(400)
   leanMassKg?: number;
+
+  @ApiPropertyOptional({
+    description: 'Gerado no aparelho; reenviar o mesmo valor devolve o registro já criado em vez de duplicar',
+  })
+  @IsOptional()
+  @IsUUID()
+  clientId?: string;
 }

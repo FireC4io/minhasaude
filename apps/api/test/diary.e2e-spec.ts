@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { randomUUID } from 'node:crypto';
 import request from 'supertest';
 import { AppModule } from '../src/app.module';
 
@@ -134,6 +135,74 @@ describe('Diary (e2e)', () => {
       .set('Authorization', `Bearer ${accessToken}`)
       .expect(200);
     expect(day.body.meals.snack).toHaveLength(0);
+  });
+
+  it('reenvio com o mesmo clientId (fila sem internet) devolve a mesma entrada, sem duplicar', async () => {
+    const clientId = randomUUID();
+    const body = { foodId, date: '2026-09-21', mealType: 'dinner', quantity: 120, unit: 'grams', clientId };
+    const first = await request(app.getHttpServer())
+      .post('/v1/diary')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send(body)
+      .expect(201);
+    // Dois reenvios ao mesmo tempo: o índice único segura a corrida.
+    const again = await Promise.all(
+      [1, 2].map(() =>
+        request(app.getHttpServer()).post('/v1/diary').set('Authorization', `Bearer ${accessToken}`).send(body),
+      ),
+    );
+    for (const response of again) {
+      expect(response.status).toBe(201);
+      expect(response.body.id).toBe(first.body.id);
+      expect(response.body.food.name).toBe(first.body.food.name);
+      expect(response.body.clientId).toBe(clientId);
+    }
+
+    const day = await request(app.getHttpServer())
+      .get('/v1/diary')
+      .query({ date: '2026-09-21' })
+      .set('Authorization', `Bearer ${accessToken}`)
+      .expect(200);
+    expect(day.body.meals.dinner).toHaveLength(1);
+  });
+
+  it('clientId de outra pessoa não devolve a entrada dela', async () => {
+    const clientId = randomUUID();
+    const mine = await request(app.getHttpServer())
+      .post('/v1/diary')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send({ foodId, date: '2026-09-22', mealType: 'lunch', quantity: 80, unit: 'grams', clientId })
+      .expect(201);
+
+    const otherEmail = `diary-client-${Date.now()}@minhasaude.app`;
+    await request(app.getHttpServer()).post('/v1/auth/register').send({ email: otherEmail, password });
+    const otherLogin = await request(app.getHttpServer()).post('/v1/auth/login').send({ email: otherEmail, password });
+    const otherToken = otherLogin.body.accessToken;
+    await request(app.getHttpServer())
+      .post('/v1/consents')
+      .set('Authorization', `Bearer ${otherToken}`)
+      .send({ consentType: 'privacy_policy', policyVersion: '2026-01' })
+      .expect(201);
+    const otherFood = await request(app.getHttpServer())
+      .post('/v1/foods')
+      .set('Authorization', `Bearer ${otherToken}`)
+      .send({ name: 'Arroz', kcalPer100g: 128, proteinGPer100g: 2.5, fatGPer100g: 0.2, carbGPer100g: 28 });
+
+    const theirs = await request(app.getHttpServer())
+      .post('/v1/diary')
+      .set('Authorization', `Bearer ${otherToken}`)
+      .send({ foodId: otherFood.body.id, date: '2026-09-22', mealType: 'lunch', quantity: 80, unit: 'grams', clientId })
+      .expect(201);
+    expect(theirs.body.id).not.toBe(mine.body.id);
+    expect(theirs.body.food.name).toBe('Arroz');
+  });
+
+  it('clientId que não é UUID é recusado (400)', async () => {
+    await request(app.getHttpServer())
+      .post('/v1/diary')
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send({ foodId, date: '2026-09-21', mealType: 'dinner', quantity: 120, unit: 'grams', clientId: 'abc' })
+      .expect(400);
   });
 
   it('GET /v1/me/export inclui o histórico do diário', async () => {

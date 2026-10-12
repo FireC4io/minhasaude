@@ -14,4 +14,6 @@ export interface CreateBodyMeasurementDto {
   bodyFatPercent?: number;
   muscleMassKg?: number;
   leanMassKg?: number;
+  /** Gerado no aparelho; reenviar o mesmo valor devolve o registro já criado em vez de duplicar */
+  clientId?: string;
 }

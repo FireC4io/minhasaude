@@ -1,12 +1,10 @@
 import { weightEntrySchema } from '@minhasaude/shared';
 import { useQueryClient } from '@tanstack/react-query';
+import { randomUUID } from 'expo-crypto';
 import { useState } from 'react';
 import { View } from 'react-native';
 
-import {
-  getBodyMeasurementsControllerListQueryKey,
-  useBodyMeasurementsControllerCreate,
-} from '@/api/generated/endpoints/body-measurements/body-measurements';
+import { getBodyMeasurementsControllerListQueryKey } from '@/api/generated/endpoints/body-measurements/body-measurements';
 import { useTranslation } from 'react-i18next';
 import { AppText } from '@/components/ui/app-text';
 import { FormError } from '@/components/ui/form-error';
@@ -14,6 +12,7 @@ import { useAnnounce } from '@/features/accessibility/use-announce';
 import { AuthTextField } from '@/features/auth/auth-text-field';
 import { PrimaryButton } from '@/features/auth/primary-button';
 import { parseDecimal } from '@/features/forms/parse-decimal';
+import { savePendingItem } from '@/features/offline-queue/offline-queue';
 
 import { formatKg } from './format-weight';
 
@@ -25,7 +24,7 @@ interface WeightEntryFormProps {
 export function WeightEntryForm({ onSaved }: WeightEntryFormProps) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
-  const createMeasurement = useBodyMeasurementsControllerCreate();
+  const [isSaving, setIsSaving] = useState(false);
   const [weightKg, setWeightKg] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState<string | null>(null);
@@ -41,21 +40,29 @@ export function WeightEntryForm({ onSaved }: WeightEntryFormProps) {
       return;
     }
 
+    setIsSaving(true);
     try {
-      await createMeasurement.mutateAsync({
-        data: {
-          measuredAt: new Date().toISOString(),
-          source: 'manual',
-          weightKg: parsed.data.weightKg,
-        },
+      const clientId = randomUUID();
+      const now = new Date().toISOString();
+      // Sem internet o peso fica guardado no aparelho e vai sozinho depois.
+      const result = await savePendingItem({
+        kind: 'weight',
+        clientId,
+        createdAt: now,
+        data: { measuredAt: now, source: 'manual', weightKg: parsed.data.weightKg, clientId },
       });
+      const weight = formatKg(parsed.data.weightKg);
       setWeightKg('');
-      setSaved(t('weight.saved', { weight: formatKg(parsed.data.weightKg) }));
-      // Sem parâmetros a chave é o prefixo de todas as listas (Progresso, card de último peso).
-      await queryClient.invalidateQueries({ queryKey: getBodyMeasurementsControllerListQueryKey() });
+      setSaved(result === 'sent' ? t('weight.saved', { weight }) : t('offline.weightQueued', { weight }));
+      if (result === 'sent') {
+        // Sem parâmetros a chave é o prefixo de todas as listas (Progresso, card de último peso).
+        await queryClient.invalidateQueries({ queryKey: getBodyMeasurementsControllerListQueryKey() });
+      }
       onSaved?.();
     } catch {
       setError(t('weight.saveError'));
+    } finally {
+      setIsSaving(false);
     }
   }
 
@@ -80,7 +87,7 @@ export function WeightEntryForm({ onSaved }: WeightEntryFormProps) {
       <PrimaryButton
         label={t('weight.log')}
         onPress={() => void handleSubmit()}
-        isLoading={createMeasurement.isPending}
+        isLoading={isSaving}
       />
     </View>
   );

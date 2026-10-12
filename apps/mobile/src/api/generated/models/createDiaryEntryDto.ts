@@ -17,4 +17,6 @@ export interface CreateDiaryEntryDto {
   unit: CreateDiaryEntryDtoUnit;
   /** Obrigatório quando unit=portion */
   portionId?: string;
+  /** Gerado no aparelho; reenviar o mesmo valor devolve o registro já criado em vez de duplicar */
+  clientId?: string;
 }

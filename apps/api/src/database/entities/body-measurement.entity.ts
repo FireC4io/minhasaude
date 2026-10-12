@@ -15,6 +15,7 @@ export enum BodyMeasurementSource {
 // (ver CLAUDE.md). No MVP só POST com source=manual é aceito; os demais
 // valores ficam reservados para a Fase 5 (importação de bioimpedância).
 @Entity('body_measurements')
+@Index('UQ_body_measurements_user_client', ['userId', 'clientId'], { unique: true, where: '"client_id" IS NOT NULL' })
 export class BodyMeasurement extends BaseEntity {
   @Index()
   @Column({ type: 'uuid', name: 'user_id' })
@@ -44,4 +45,9 @@ export class BodyMeasurement extends BaseEntity {
 
   @Column({ type: 'jsonb', name: 'raw_payload', nullable: true })
   rawPayload!: Record<string, unknown> | null;
+
+  // Identificador gerado no aparelho: a mesma anotação reenviada (fila sem
+  // internet) não vira duas. Único por pessoa; null em registro antigo.
+  @Column({ type: 'uuid', name: 'client_id', nullable: true })
+  clientId!: string | null;
 }

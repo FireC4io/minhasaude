@@ -21,6 +21,7 @@ export enum DiaryQuantityUnit {
 // se o alimento for editado depois, o histórico do diário não muda
 // retroativamente (ver CLAUDE.md).
 @Entity('diary_entries')
+@Index('UQ_diary_entries_user_client', ['userId', 'clientId'], { unique: true, where: '"client_id" IS NOT NULL' })
 export class DiaryEntry extends BaseEntity {
   @Index()
   @Column({ type: 'uuid', name: 'user_id' })
@@ -76,4 +77,9 @@ export class DiaryEntry extends BaseEntity {
   // null = entrada anterior aos micronutrientes sem backfill possível.
   @Column({ type: 'jsonb', name: 'micros_snapshot', nullable: true })
   microsSnapshot!: Micros | null;
+
+  // Identificador gerado no aparelho: a mesma anotação reenviada (fila sem
+  // internet) não vira duas. Único por pessoa; null em registro antigo.
+  @Column({ type: 'uuid', name: 'client_id', nullable: true })
+  clientId!: string | null;
 }

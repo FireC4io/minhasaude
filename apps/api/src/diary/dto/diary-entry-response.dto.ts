@@ -41,6 +41,11 @@ export class DiaryEntryResponseDto {
   @Expose()
   portionId!: string | null;
 
+  // O app reconhece a anotação que guardou sem internet e já chegou ao servidor.
+  @ApiProperty({ type: String, nullable: true })
+  @Expose()
+  clientId!: string | null;
+
   // A medida usada, para a tela mostrar "2 colheres de sopa (50 g)".
   @ApiProperty({ type: PortionResponseDto, nullable: true })
   @Expose()

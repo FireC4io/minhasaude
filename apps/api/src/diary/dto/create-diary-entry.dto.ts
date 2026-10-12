@@ -29,4 +29,11 @@ export class CreateDiaryEntryDto {
   @IsOptional()
   @IsUUID()
   portionId?: string;
+
+  @ApiPropertyOptional({
+    description: 'Gerado no aparelho; reenviar o mesmo valor devolve o registro já criado em vez de duplicar',
+  })
+  @IsOptional()
+  @IsUUID()
+  clientId?: string;
 }

@@ -22,6 +22,8 @@ export interface DiaryEntryResponseDto {
   /** @nullable */
   portionId: string | null;
   /** @nullable */
+  clientId: string | null;
+  /** @nullable */
   portion: PortionResponseDto | null;
   kcalSnapshot: string;
   proteinGSnapshot: string;

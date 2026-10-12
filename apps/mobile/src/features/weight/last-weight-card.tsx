@@ -5,6 +5,9 @@ import { useBodyMeasurementsControllerList } from '@/api/generated/endpoints/bod
 import { AppText } from '@/components/ui/app-text';
 import { TextButton } from '@/components/ui/text-button';
 
+import { isPendingWeight } from '@/features/offline-queue/pending-item';
+import { usePendingState } from '@/features/offline-queue/offline-queue';
+
 import { formatKg } from './format-weight';
 import { appLocale } from '@/i18n/format';
 
@@ -19,7 +22,11 @@ const LIST_PARAMS = { source: 'manual', limit: 1 } as const;
 export function LastWeightCard({ onRegister }: LastWeightCardProps) {
   const { t } = useTranslation();
   const query = useBodyMeasurementsControllerList(LIST_PARAMS);
-  const last = query.data?.data[0];
+  // O peso anotado sem internet é o mais novo: aparece já, com o aviso de que ainda vai.
+  const pending = usePendingState().items.filter(isPendingWeight).at(-1);
+  const last = pending
+    ? { weightKg: String(pending.data.weightKg), measuredAt: pending.data.measuredAt }
+    : query.data?.data[0];
 
   const when = last
     ? new Date(last.measuredAt).toLocaleDateString(appLocale(), { day: 'numeric', month: 'long' })
@@ -45,6 +52,11 @@ export function LastWeightCard({ onRegister }: LastWeightCardProps) {
       <AppText variant="caption" className="text-grafite">
         {last ? t('weight.loggedOn', { date: when }) : `${t('weight.noneYet')}.`}
       </AppText>
+      {pending ? (
+        <AppText variant="caption" className="text-grafite-suave">
+          {t('offline.entryWaiting')}
+        </AppText>
+      ) : null}
       <TextButton
         label={t('weight.log')}
         onPress={onRegister}

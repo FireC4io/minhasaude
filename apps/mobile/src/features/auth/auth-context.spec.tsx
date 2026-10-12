@@ -6,11 +6,13 @@ import { Pressable, Text } from 'react-native';
 import * as generatedAuth from '@/api/generated/endpoints/auth/auth';
 import * as queryClientModule from '@/api/query-client';
 import * as tokenStorage from '@/api/token-storage';
+import { pendingStore } from '@/features/offline-queue/offline-queue';
 import { AuthProvider, useAuth } from './auth-context';
 
 jest.mock('@/api/token-storage');
 jest.mock('@/api/generated/endpoints/auth/auth');
 jest.mock('@/api/query-client', () => ({ clearPersistedCache: jest.fn() }));
+jest.mock('@/features/offline-queue/offline-queue', () => ({ pendingStore: { clear: jest.fn() } }));
 
 function AuthProbe() {
   const { isAuthenticated, isLoading, login, register, logout } = useAuth();
@@ -166,5 +168,7 @@ describe('AuthProvider', () => {
     expect(tokenStorage.clearStoredTokens).toHaveBeenCalled();
     // A cópia do cache gravada no aparelho tem diário e peso: não pode sobrar.
     expect(queryClientModule.clearPersistedCache).toHaveBeenCalled();
+    // Nem o que esperava a internet para ser enviado.
+    expect(pendingStore.clear).toHaveBeenCalled();
   });
 });

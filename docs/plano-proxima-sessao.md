@@ -33,8 +33,9 @@ Roteiro com o dono:
 ## Bloco 4 — Maiores (próximo trabalho de código)
 
 Na ordem sugerida:
-1. **Anotar sem internet**: fila no aparelho que envia sozinha quando a conexão volta (diário e peso). Hoje o app
-   mostra a cópia sem internet, mas anotar falha. É o que mais pesa para o público com internet ruim.
+1. ~~**Anotar sem internet**~~ — feito em 2026-10-12 (regra no CLAUDE.md, código em
+   `apps/mobile/src/features/offline-queue/`). Testado na web com o modo sem internet do Playwright; **falta ver no
+   celular** (modo avião → anotar → religar). Editar e apagar sem internet ficaram de fora (ainda exigem conexão).
 2. **Auditoria no banco**: quem fez o quê nas ações sensíveis (apagar conta, exportar, revogar consentimento).
    Tabela nova entra na lista de RLS.
 3. **Quebrar as telas complexas**: `diary-entry.tsx` (~300 linhas), Hoje e Envio de exame.

@@ -8,6 +8,7 @@ import {
 } from '@/api/generated/endpoints/auth/auth';
 import { setSessionExpiredHandler } from '@/api/http-client';
 import { clearPersistedCache } from '@/api/query-client';
+import { pendingStore } from '@/features/offline-queue/offline-queue';
 import { clearReminders } from '@/features/reminders/reminder-store';
 import { clearStoredTokens, getStoredTokens, setStoredTokens } from '@/api/token-storage';
 
@@ -50,6 +51,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Inclui a cópia gravada no aparelho: dado de saúde não fica para trás.
       void clearPersistedCache();
       void clearReminders();
+      void pendingStore.clear();
     });
     return () => setSessionExpiredHandler(null);
   }, []);
@@ -83,6 +85,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await clearStoredTokens();
     await clearPersistedCache();
     await clearReminders();
+    await pendingStore.clear();
     setIsAuthenticated(false);
   }
 

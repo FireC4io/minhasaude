@@ -34,6 +34,9 @@ import { WeekStrip } from '@/features/today/week-strip';
 import { WaterCard } from '@/features/water/water-card';
 import { LastWeightCard } from '@/features/weight/last-weight-card';
 import { queryView } from '@/features/network/query-view';
+import { pendingClientId } from '@/features/offline-queue/merge-pending';
+import { pendingStore, useDayWithPending } from '@/features/offline-queue/offline-queue';
+import { PendingCard } from '@/features/offline-queue/pending-card';
 
 /** Tela Hoje (F4-30): data, semana, calorias, nutrientes, refeições, água, peso e notas. */
 export default function TodayScreen() {
@@ -44,7 +47,8 @@ export default function TodayScreen() {
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [removed, setRemoved] = useState<DiaryEntryResponseDto | null>(null);
 
-  const dayQuery = useDiaryControllerGetByDate({ date: currentDate });
+  // O dia do servidor mais o que foi anotado sem internet e ainda vai ser enviado.
+  const { query: dayQuery, data: summary } = useDayWithPending(currentDate);
   const previousDayQuery = useDiaryControllerGetByDate({
     date: addDaysToIsoDate(currentDate, -1),
   });
@@ -73,6 +77,8 @@ export default function TodayScreen() {
   }
 
   function editEntry(entry: DiaryEntryResponseDto) {
+    // A anotação guardada sem internet ainda não existe no servidor para ser editada.
+    if (pendingClientId(entry)) return;
     router.push({
       pathname: '/diary-entry',
       params: { id: entry.id, date: currentDate, foodName: entry.food.name, quantity: entry.quantity },
@@ -80,6 +86,13 @@ export default function TodayScreen() {
   }
 
   async function deleteEntry(entry: DiaryEntryResponseDto) {
+    const clientId = pendingClientId(entry);
+    if (clientId) {
+      // Ainda não foi enviada: basta tirar da fila.
+      await pendingStore.remove(clientId);
+      AccessibilityInfo.announceForAccessibility(t('diary.removedAnnounce', { food: entry.food.name }));
+      return;
+    }
     await removeEntry.mutateAsync({ id: entry.id });
     setRemoved(entry);
     await invalidateDay();
@@ -113,7 +126,6 @@ export default function TodayScreen() {
 
   const dateLabel = formatIsoDateLabel(currentDate);
   const isToday = currentDate === todayIsoDate();
-  const summary = dayQuery.data;
   const hasEntries = dayHasEntries(summary);
   // Achado #10: o atalho aparecia até para conta criada hoje, sem dia anterior.
   const canCopyPrevious = !hasEntries && dayHasEntries(previousDayQuery.data);
@@ -146,9 +158,11 @@ export default function TodayScreen() {
           onSelect={showDate}
         />
 
-        {queryView(dayQuery) === 'loading' ? (
+        <PendingCard />
+
+        {queryView({ isPending: dayQuery.isPending, data: summary }) === 'loading' ? (
           <LoadingIndicator label={t('today.loadingDay')} className="mt-8" />
-        ) : queryView(dayQuery) === 'error' || !summary ? (
+        ) : !summary ? (
           <View className="gap-2">
             <FormError message={t('today.loadDayError')} />
             <TextButton

@@ -5,6 +5,7 @@ import { BodyMeasurement } from '../database/entities/body-measurement.entity';
 import type { CreateBodyMeasurementDto } from './dto/create-body-measurement.dto';
 import type { ListBodyMeasurementsQueryDto } from './dto/list-body-measurements-query.dto';
 import type { PaginatedResult } from '../common/types/paginated-result.interface';
+import { createOnce } from '../common/idempotency/create-once';
 
 @Injectable()
 export class BodyMeasurementsService {
@@ -13,6 +14,10 @@ export class BodyMeasurementsService {
   ) {}
 
   async create(userId: string, dto: CreateBodyMeasurementDto): Promise<BodyMeasurement> {
+    return createOnce(this.measurements, { userId, clientId: dto.clientId }, () => this.insert(userId, dto));
+  }
+
+  private async insert(userId: string, dto: CreateBodyMeasurementDto): Promise<BodyMeasurement> {
     const measurement = this.measurements.create({
       userId,
       measuredAt: new Date(dto.measuredAt),
@@ -22,6 +27,7 @@ export class BodyMeasurementsService {
       muscleMassKg: dto.muscleMassKg !== undefined ? dto.muscleMassKg.toString() : null,
       leanMassKg: dto.leanMassKg !== undefined ? dto.leanMassKg.toString() : null,
       rawPayload: null,
+      clientId: dto.clientId ?? null,
     });
     return this.measurements.save(measurement);
   }

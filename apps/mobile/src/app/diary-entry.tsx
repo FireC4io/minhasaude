@@ -1,4 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
+import { randomUUID } from 'expo-crypto';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { AccessibilityInfo, FlatList, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
@@ -6,7 +7,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import {
   getDiaryControllerGetByDateQueryKey,
-  useDiaryControllerCreate,
   useDiaryControllerGetByDate,
   useDiaryControllerRemove,
   useDiaryControllerUpdate,
@@ -42,6 +42,7 @@ import { QuantityPicker } from '@/features/diary/quantity-picker';
 import { useFoodMeasures } from '@/features/diary/use-food-measures';
 import { useRecentFoods } from '@/features/diary/use-recent-foods';
 import { parseDecimal } from '@/features/forms/parse-decimal';
+import { savePendingItem } from '@/features/offline-queue/offline-queue';
 
 export default function DiaryEntryScreen() {
   const { t } = useTranslation();
@@ -90,7 +91,7 @@ export default function DiaryEntryScreen() {
   const foodId = selectedFood?.id ?? editingEntry?.foodId;
   const { measures } = useFoodMeasures(foodId);
 
-  const createEntry = useDiaryControllerCreate();
+  const [isCreating, setIsCreating] = useState(false);
   const updateEntry = useDiaryControllerUpdate();
   const removeEntry = useDiaryControllerRemove();
 
@@ -128,13 +129,29 @@ export default function DiaryEntryScreen() {
           setError(t('diary.chooseFood'));
           return;
         }
-        await createEntry.mutateAsync({
-          data: { foodId: selectedFood.id, date, mealType, ...amountData },
-        });
+        const clientId = randomUUID();
+        setIsCreating(true);
+        // Sem internet a anotação fica guardada no aparelho e vai sozinha depois.
+        const result = await savePendingItem({
+          kind: 'diary',
+          clientId,
+          createdAt: new Date().toISOString(),
+          data: { foodId: selectedFood.id, date, mealType, ...amountData, clientId },
+          food: selectedFood,
+          portion: measure.type === 'portion' ? measure.portion : null,
+        }).finally(() => setIsCreating(false));
         // Anúncio antes de fechar: a confirmação do registro chega mesmo com a tela sumindo.
+        const meal = MEAL_TYPE_LABELS[mealType].toLowerCase();
         AccessibilityInfo.announceForAccessibility(
-          t('diary.added', { food: selectedFood.name, meal: MEAL_TYPE_LABELS[mealType].toLowerCase() }),
+          result === 'sent'
+            ? t('diary.added', { food: selectedFood.name, meal })
+            : t('offline.diaryQueued', { food: selectedFood.name }),
         );
+        if (result === 'queued') {
+          // Buscar o dia de novo agora só faria esperar o servidor que não respondeu.
+          router.back();
+          return;
+        }
       }
       await invalidateDay();
       router.back();
@@ -155,7 +172,7 @@ export default function DiaryEntryScreen() {
     }
   }
 
-  const isSaving = createEntry.isPending || updateEntry.isPending;
+  const isSaving = isCreating || updateEntry.isPending;
   const results = searchQuery.data?.data ?? [];
   const searchStatus = describeSearchStatus(searchTerm, searchQuery.isFetching, results.length);
   useAnnounce(searchStatus);

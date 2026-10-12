@@ -25,6 +25,7 @@
 - id, user_id, measured_at, source (manual | inbody | tanita | omron | other)
 - weight_kg, body_fat_percent (nullable), muscle_mass_kg (nullable), lean_mass_kg (nullable)
 - raw_payload (jsonb, nullable — dump bruto se vier de exame importado)
+- client_id (uuid, nullable) *(uuid gerado no aparelho; único por pessoa quando presente — o reenvio da fila sem internet devolve a mesma linha em vez de duplicar)*
 - ⚠️ `source` é obrigatório e nunca "normalizado" entre aparelhos — comparação de evolução na UI deve filtrar por mesma fonte, ou avisar explicitamente ao comparar fontes diferentes.
 
 **goal_targets** (snapshot calculado + ajustes manuais; N por usuário ao longo do tempo, sempre criar novo em vez de sobrescrever)
@@ -51,6 +52,7 @@
 - id, user_id, food_id → foods, entry_date, meal_type (breakfast | lunch | dinner | snack)
 - quantity, unit (grams | portion), portion_id (nullable → food_portions)
 - kcal_snapshot, protein_g_snapshot, fat_g_snapshot, carb_g_snapshot *(grava o valor nutricional no momento do registro — se o alimento for editado depois, o histórico não muda)*
+- client_id (uuid, nullable) *(uuid gerado no aparelho; único por pessoa quando presente — o reenvio da fila sem internet devolve a mesma linha em vez de duplicar)*
 
 ## Exames e métricas de saúde (Fase 5, modelar desde já)
 
