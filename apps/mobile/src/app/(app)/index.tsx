@@ -1,19 +1,11 @@
-import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { AccessibilityInfo, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
-import {
-  getDiaryControllerGetByDateQueryKey,
-  useDiaryControllerCopy,
-  useDiaryControllerCreate,
-  useDiaryControllerGetByDate,
-  useDiaryControllerRemove,
-} from '@/api/generated/endpoints/diary/diary';
 import { useTranslation } from 'react-i18next';
-import type { DiaryEntryResponseDto, MealType } from '@/api/generated/models';
-import { AppText } from '@/components/ui/app-text';
+
+import { useDiaryControllerGetByDate } from '@/api/generated/endpoints/diary/diary';
+import type { DiaryEntryResponseDto } from '@/api/generated/models';
 import { FloatingAddButton } from '@/components/ui/floating-add-button';
 import { FormError } from '@/components/ui/form-error';
 import { LoadingIndicator } from '@/components/ui/loading-indicator';
@@ -21,59 +13,42 @@ import { TextButton } from '@/components/ui/text-button';
 import { UndoBar } from '@/components/ui/undo-bar';
 import { PREVIEW_FEATURES } from '@/config/features';
 import { addDaysToIsoDate, formatIsoDateLabel, todayIsoDate } from '@/features/diary/date-utils';
-import { MealSection } from '@/features/diary/meal-section';
-import { MEAL_TYPE_ORDER } from '@/features/diary/meal-type-labels';
-import { CalendarModal } from '@/features/today/calendar-modal';
-import { CaloriesCard } from '@/features/today/calories-card';
-import { MacrosCard } from '@/features/today/macros-card';
+import { queryView } from '@/features/network/query-view';
 import { MicrosPanel } from '@/features/nutrition/micros-panel';
 import { rowsForDay } from '@/features/nutrition/micros-rows';
+import { pendingClientId } from '@/features/offline-queue/merge-pending';
+import { useDayWithPending } from '@/features/offline-queue/offline-queue';
+import { PendingCard } from '@/features/offline-queue/pending-card';
+import { CalendarModal } from '@/features/today/calendar-modal';
+import { CaloriesCard } from '@/features/today/calories-card';
+import { DayHeader } from '@/features/today/day-header';
+import { MacrosCard } from '@/features/today/macros-card';
+import { MealsList } from '@/features/today/meals-list';
 import { NotesCard } from '@/features/today/notes-card';
+import { useDayEntryActions } from '@/features/today/use-day-entry-actions';
 import { dayHasEntries, useWeekEntries } from '@/features/today/use-week-entries';
 import { WeekStrip } from '@/features/today/week-strip';
 import { WaterCard } from '@/features/water/water-card';
 import { LastWeightCard } from '@/features/weight/last-weight-card';
-import { queryView } from '@/features/network/query-view';
-import { pendingClientId } from '@/features/offline-queue/merge-pending';
-import { pendingStore, useDayWithPending } from '@/features/offline-queue/offline-queue';
-import { PendingCard } from '@/features/offline-queue/pending-card';
 
 /** Tela Hoje (F4-30): data, semana, calorias, nutrientes, refeições, água, peso e notas. */
 export default function TodayScreen() {
   const { t } = useTranslation();
   const router = useRouter();
-  const queryClient = useQueryClient();
   const [currentDate, setCurrentDate] = useState(todayIsoDate());
   const [calendarOpen, setCalendarOpen] = useState(false);
-  const [removed, setRemoved] = useState<DiaryEntryResponseDto | null>(null);
 
   // O dia do servidor mais o que foi anotado sem internet e ainda vai ser enviado.
   const { query: dayQuery, data: summary } = useDayWithPending(currentDate);
-  const previousDayQuery = useDiaryControllerGetByDate({
-    date: addDaysToIsoDate(currentDate, -1),
-  });
+  const previousDayQuery = useDiaryControllerGetByDate({ date: addDaysToIsoDate(currentDate, -1) });
   const daysWithEntries = useWeekEntries(currentDate);
-  const copyDay = useDiaryControllerCopy();
-  const removeEntry = useDiaryControllerRemove();
-  const createEntry = useDiaryControllerCreate();
-
-  const invalidateDay = useCallback(
-    () =>
-      queryClient.invalidateQueries({
-        queryKey: getDiaryControllerGetByDateQueryKey({ date: currentDate }),
-      }),
-    [queryClient, currentDate],
-  );
+  const actions = useDayEntryActions(currentDate);
 
   // Quem troca de dia continua com o foco no controle: sem o anúncio, o
   // leitor não diz para qual dia foi. Aqui não há liveRegion, então não duplica.
   function showDate(date: string) {
     setCurrentDate(date);
     AccessibilityInfo.announceForAccessibility(formatIsoDateLabel(date));
-  }
-
-  function goToEntry(mealType: MealType) {
-    router.push({ pathname: '/diary-entry', params: { date: currentDate, mealType } });
   }
 
   function editEntry(entry: DiaryEntryResponseDto) {
@@ -85,82 +60,22 @@ export default function TodayScreen() {
     });
   }
 
-  async function deleteEntry(entry: DiaryEntryResponseDto) {
-    const clientId = pendingClientId(entry);
-    if (clientId) {
-      // Ainda não foi enviada: basta tirar da fila.
-      await pendingStore.remove(clientId);
-      AccessibilityInfo.announceForAccessibility(t('diary.removedAnnounce', { food: entry.food.name }));
-      return;
-    }
-    await removeEntry.mutateAsync({ id: entry.id });
-    setRemoved(entry);
-    await invalidateDay();
-  }
-
-  async function undoRemove() {
-    const entry = removed;
-    setRemoved(null);
-    if (!entry) return;
-    await createEntry.mutateAsync({
-      data: {
-        foodId: entry.foodId,
-        date: entry.entryDate,
-        mealType: entry.mealType,
-        quantity: Number(entry.quantity),
-        unit: entry.unit,
-        ...(entry.portionId ? { portionId: entry.portionId } : {}),
-      },
-    });
-    await invalidateDay();
-  }
-
-  async function copyPreviousDay() {
-    await copyDay.mutateAsync({
-      data: { fromDate: addDaysToIsoDate(currentDate, -1), toDate: currentDate },
-    });
-    await invalidateDay();
-  }
-
-  const dismissUndo = useCallback(() => setRemoved(null), []);
-
-  const dateLabel = formatIsoDateLabel(currentDate);
-  const isToday = currentDate === todayIsoDate();
   const hasEntries = dayHasEntries(summary);
-  // Achado #10: o atalho aparecia até para conta criada hoje, sem dia anterior.
-  const canCopyPrevious = !hasEntries && dayHasEntries(previousDayQuery.data);
+  const view = queryView({ isPending: dayQuery.isPending, data: summary });
 
   return (
     <SafeAreaView className="flex-1 bg-areia">
       <ScrollView contentContainerClassName="gap-5 px-6 pb-28 pt-2">
-        <View className="flex-row flex-wrap items-center justify-between gap-2">
-          <TextButton
-            label={`${dateLabel} ▾`}
-            accessibilityLabel={t('today.shownDay', { date: dateLabel })}
-            hint={t('today.openCalendar')}
-            onPress={() => setCalendarOpen(true)}
-            textVariant="title"
-            textClassName="capitalize text-grafite"
-          />
-          {!isToday ? (
-            <TextButton
-              label={t('today.backToToday')}
-              onPress={() => showDate(todayIsoDate())}
-              textVariant="bodyStrong"
-              textClassName="text-mamao-forte"
-            />
-          ) : null}
-        </View>
-
-        <WeekStrip
-          selectedDate={currentDate}
-          daysWithEntries={daysWithEntries}
-          onSelect={showDate}
+        <DayHeader
+          date={currentDate}
+          onOpenCalendar={() => setCalendarOpen(true)}
+          onBackToToday={() => showDate(todayIsoDate())}
         />
+        <WeekStrip selectedDate={currentDate} daysWithEntries={daysWithEntries} onSelect={showDate} />
 
         <PendingCard />
 
-        {queryView({ isPending: dayQuery.isPending, data: summary }) === 'loading' ? (
+        {view === 'loading' ? (
           <LoadingIndicator label={t('today.loadingDay')} className="mt-8" />
         ) : !summary ? (
           <View className="gap-2">
@@ -183,37 +98,16 @@ export default function TodayScreen() {
             {hasEntries ? (
               <MicrosPanel title={t('today.otherNutrients')} rows={rowsForDay(summary.summary.micros)} />
             ) : null}
-
-            <View className="gap-4">
-              <AppText variant="subtitle" accessibilityRole="header" className="text-grafite">
-                {t('today.meals')}
-              </AppText>
-              {!hasEntries ? (
-                <AppText className="text-grafite-suave">
-                  {t('today.empty')}
-                </AppText>
-              ) : null}
-              {canCopyPrevious ? (
-                <TextButton
-                  label={copyDay.isPending ? t('today.copying') : t('today.copyPrevious')}
-                  onPress={() => void copyPreviousDay()}
-                  busy={copyDay.isPending}
-                  textVariant="bodyStrong"
-                  textClassName="text-mamao-forte"
-                  className="self-start"
-                />
-              ) : null}
-              {MEAL_TYPE_ORDER.map((mealType) => (
-                <MealSection
-                  key={mealType}
-                  mealType={mealType}
-                  entries={summary.meals[mealType]}
-                  onEntryPress={editEntry}
-                  onEntryDelete={(entry) => void deleteEntry(entry)}
-                  onAddPress={() => goToEntry(mealType)}
-                />
-              ))}
-            </View>
+            <MealsList
+              day={summary}
+              // Achado #10: o atalho aparecia até para conta criada hoje, sem dia anterior.
+              canCopyPrevious={!hasEntries && dayHasEntries(previousDayQuery.data)}
+              isCopying={actions.isCopying}
+              onCopyPrevious={() => void actions.copyPreviousDay()}
+              onAdd={(mealType) => router.push({ pathname: '/diary-entry', params: { date: currentDate, mealType } })}
+              onEdit={editEntry}
+              onRemove={(entry) => void actions.remove(entry)}
+            />
           </>
         )}
 
@@ -227,17 +121,15 @@ export default function TodayScreen() {
         {PREVIEW_FEATURES ? <NotesCard date={currentDate} /> : null}
       </ScrollView>
 
-      {removed ? (
+      {actions.removed ? (
         <UndoBar
-          message={t('today.removed', { name: removed.food.name })}
-          onUndo={() => void undoRemove()}
-          onDismiss={dismissUndo}
+          message={t('today.removed', { name: actions.removed.food.name })}
+          onUndo={() => void actions.undoRemove()}
+          onDismiss={actions.dismissUndo}
         />
       ) : null}
 
-      <FloatingAddButton
-        onPress={() => router.push({ pathname: '/quick-add', params: { date: currentDate } })}
-      />
+      <FloatingAddButton onPress={() => router.push({ pathname: '/quick-add', params: { date: currentDate } })} />
 
       <CalendarModal
         key={`${calendarOpen}-${currentDate}`}

@@ -37,10 +37,10 @@ Na ordem sugerida:
    `apps/mobile/src/features/offline-queue/`). Testado na web com o modo sem internet do Playwright; **falta ver no
    celular** (modo avião → anotar → religar). Editar e apagar sem internet ficaram de fora (ainda exigem conexão).
 2. ~~**Auditoria no banco**~~ — feito em 2026-10-12: `audit_events` (só acréscimo, com RLS), registra exportar,
-   revogar consentimento, pedir exclusão e exclusão concluída; entra no export. **Decisão do dono:** a política de
-   privacidade ganhou a linha "Histórico dos seus pedidos" — subir a versão (pede novo aceite) ou tratar como
-   esclarecimento da 2026-10?
-3. **Quebrar as telas complexas**: `diary-entry.tsx` (~300 linhas), Hoje e Envio de exame.
+   revogar consentimento, pedir exclusão e exclusão concluída; entra no export. A linha "Histórico dos seus pedidos" da política foi tratada como esclarecimento da
+   versão 2026-10 (decisão do dono, 2026-10-12): sem novo aceite.
+3. ~~**Quebrar as telas complexas**~~ — feito em 2026-10-12: `diary-entry.tsx` 315→155, Hoje 251→143, Envio de
+   exame 192→90 linhas; as três ganharam teste de tela antes da quebra.
 4. **Juntar telas repetidas**: Relatório com Exportação, Cadastro com Nova senha.
 5. **Consultas em paralelo** onde der (21 trechos com `await` em laço; consentimentos fazem 3 seguidas).
 6. **Limpeza de estilo do Sonar** (propriedades só leitura, condições encadeadas).
