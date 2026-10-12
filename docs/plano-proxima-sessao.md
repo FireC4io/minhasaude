@@ -26,7 +26,10 @@ Roteiro com o dono:
 - Guardar a chave privada do age (`D:\gotavital-backup-chave\age-chave-privada.txt`) fora do computador.
 - Apagar os secrets duplicados `BACKUP_AGE_RECIPIENT` e `BACKUP_BUCKET` no GitHub.
 - Loja: conta de revisão, segundo cliente OAuth (Play App Signing) e AAB no teste interno **feitos em 2026-10-12**.
-  Falta: preencher a Play Console (Acesso ao app com a conta de revisão, demais formulários) e o roteiro do APK no celular.
+  As 10 declarações de Conteúdo do app foram enviadas em 2026-10-12 (respostas em `docs/loja/play-console.md`).
+  Falta: ficha da loja (textos e imagens), roteiro do APK no celular, lista de testadores e promover ao teste fechado.
+- Melhoria anotada: bloquear no `app.json` permissões que entram pelas bibliotecas e o app não usa (`c2dm` de push
+  remoto, contadores de ícone dos fabricantes, biometria, install referrer). Não bloqueia a publicação.
 - Listar 12–15 testadores (de preferência dos perfis da Fase 4; incluir quem use leitor de tela e quem fale inglês ou
   espanhol).
 

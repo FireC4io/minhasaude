@@ -63,6 +63,10 @@ Inglês e espanhol: traduzir esta ficha só quando a revisão por falante nativo
 
 ## 2. Conteúdo do app (Política do app)
 
+Enviado em 2026-10-12 (10 declarações). Na Play de 2026, "Acesso ao app" se chama **Detalhes do login** e a página
+"Conteúdo do app" abre pelo endereço `…/app/NÚMERO/app-content/overview`. Também pede **ID de publicidade**: Não
+(o manifesto não tem `com.google.android.gms.permission.AD_ID`).
+
 | Seção | Resposta |
 |---|---|
 | Política de privacidade | Link acima |
