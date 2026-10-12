@@ -30,7 +30,7 @@ Roteiro com o dono:
 - Listar 12–15 testadores (de preferência dos perfis da Fase 4; incluir quem use leitor de tela e quem fale inglês ou
   espanhol).
 
-## Bloco 4 — Maiores (próximo trabalho de código)
+## Bloco 4 — Maiores (concluído em 2026-10-12)
 
 Na ordem sugerida:
 1. ~~**Anotar sem internet**~~ — feito em 2026-10-12 (regra no CLAUDE.md, código em
@@ -60,6 +60,15 @@ Na ordem sugerida:
 - Play Integrity (Fase 7).
 - Fase 6 (durante os 14 dias do teste): decidir a IA de leitura de exames; ela e o R2 nascem com **porta e adaptador**
   (decisão de 2026-10-11: o resto continua em camadas simples); tirar exames/voz/água/notas da prévia.
+
+## O que foi feito em 2026-10-12 (bloco 4 concluído)
+
+- Os seis itens do bloco 4 (acima, riscados). Commits `3e31328` a `d2f05e9`, todos em produção.
+- Visto no emulador (Expo Go): anotar sem internet, fila sobrevivendo ao app fechado, envio sozinho ao voltar.
+- Correções achadas no caminho: tela Hoje quebrava na web (lembretes); app não abria no Expo Go (expo-notifications
+  agora só carrega no app instalado); a cópia no aparelho perdia o dia depois de falhar sem internet.
+- **O APK `preview` de 2026-10-11 ficou para trás**: gerar outro antes do roteiro no celular (inclui agora: modo
+  avião → anotar → religar).
 
 ## O que foi feito em 2026-10-11 (bloco 3 concluído)
 
