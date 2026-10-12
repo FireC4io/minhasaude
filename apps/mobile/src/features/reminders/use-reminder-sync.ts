@@ -3,8 +3,8 @@ import { useRouter } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import { AppState } from 'react-native';
 
-import { useDiaryControllerGetByDate } from '@/api/generated/endpoints/diary/diary';
 import { todayIsoDate } from '@/features/diary/date-utils';
+import { useDayWithPending } from '@/features/offline-queue/offline-queue';
 
 import { REMINDER_MEALS, type ReminderMeal } from './reminder-settings';
 import {
@@ -28,6 +28,11 @@ if (REMINDERS_SUPPORTED) {
   });
 }
 
+// Na web o expo-notifications não tem a última resposta e lança erro: a tela Hoje quebrava.
+const useLastNotificationResponse = REMINDERS_SUPPORTED
+  ? Notifications.useLastNotificationResponse
+  : () => null;
+
 /**
  * Mantém a agenda de lembretes em dia: ao abrir o app, ao voltar para ele, ao
  * mudar as escolhas e ao anotar uma refeição (o lembrete dela some hoje).
@@ -37,7 +42,8 @@ export function useReminderSync(): void {
   const router = useRouter();
   const settings = useReminderSettings();
   const [today, setToday] = useState(() => todayIsoDate());
-  const day = useDiaryControllerGetByDate({ date: today }, { query: { enabled: REMINDERS_SUPPORTED && settings.enabled } });
+  // Anotação guardada sem internet também conta como anotada.
+  const day = useDayWithPending(today, { enabled: REMINDERS_SUPPORTED && settings.enabled });
 
   const loggedKey = REMINDER_MEALS.filter((meal) => (day.data?.meals[meal]?.length ?? 0) > 0).join(',');
   const loggedToday = useMemo(() => new Set(loggedKey.split(',').filter(Boolean) as ReminderMeal[]), [loggedKey]);
@@ -56,7 +62,7 @@ export function useReminderSync(): void {
     syncReminders(settings, loggedToday).catch(() => undefined);
   }, [settings, loggedToday, today]);
 
-  const lastResponse = Notifications.useLastNotificationResponse();
+  const lastResponse = useLastNotificationResponse();
   useEffect(() => {
     if (!lastResponse) return;
     const data = lastResponse.notification.request.content.data as unknown as ReminderData | undefined;
