@@ -125,7 +125,21 @@ teste visível, sem texto que prometa resultado.
 
 ## 6. Antes de enviar para o teste fechado
 
-- [ ] Conta de revisão criada na produção, com dados de exemplo
-- [ ] Segundo cliente OAuth Android com a SHA-1 da **Play App Signing** (senão o login com Google falha no app da loja)
-- [ ] Build `production` do EAS em AAB (`eas build -p android --profile production`)
+- [x] Conta de revisão criada na produção, com dados de exemplo (2026-10-12; e-mail e senha com o dono, vão em
+      Conteúdo do app → Acesso ao app)
+- [x] Segundo cliente OAuth Android com a SHA-1 da **Play App Signing** (2026-10-12, cliente "Gota Vital — Play" no
+      projeto `gotavital`; login com Google testado no app instalado pela Play)
+- [x] Build `production` do EAS em AAB (build 2, versão 1.0.0, na trilha de teste interno)
+
+**Chaves de assinatura** (impressões digitais são públicas):
+
+| Chave | SHA-1 | Cliente OAuth Android |
+|---|---|---|
+| Upload (EAS; assina o APK `preview`) | `33:48:C4:BA:76:96:E7:64:7E:9E:B6:F8:3A:F4:19:22:95:6A:4B:CA` | o primeiro (`637195029476-j8to…`) |
+| Assinatura do app (Google; assina o que sai da Play) | `14:45:87:08:AA:0F:BE:50:64:90:2B:37:4A:02:15:FA:61:1F:65:C5` | "Gota Vital — Play" |
+
+Na Play Console de 2026 a página "Integridade do app" virou **Protegido com o Google Play → Proteção da Play Store →
+Proteger chave de assinatura do app**, e ela pode mostrar só a chave de upload. Caminho que sempre funciona: **Explorador
+de pacotes de apps → versão → Downloads → APK universal assinado** e ler a assinatura com
+`apksigner verify --print-certs` (Android SDK, `build-tools`).
 - [ ] Lista de 12–15 testadores (e-mails de contas Google)

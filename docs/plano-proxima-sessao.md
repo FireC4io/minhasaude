@@ -25,8 +25,8 @@ Roteiro com o dono:
 - Supabase → ligar **Enforce SSL** (a API já conecta com TLS).
 - Guardar a chave privada do age (`D:\gotavital-backup-chave\age-chave-privada.txt`) fora do computador.
 - Apagar os secrets duplicados `BACKUP_AGE_RECIPIENT` e `BACKUP_BUCKET` no GitHub.
-- Loja (checklist na seção 6 de `docs/loja/play-console.md`): conta de revisão na produção, segundo cliente OAuth
-  Android com a SHA-1 da Play App Signing, build `production` (AAB), preencher a Play Console.
+- Loja: conta de revisão, segundo cliente OAuth (Play App Signing) e AAB no teste interno **feitos em 2026-10-12**.
+  Falta: preencher a Play Console (Acesso ao app com a conta de revisão, demais formulários) e o roteiro do APK no celular.
 - Listar 12–15 testadores (de preferência dos perfis da Fase 4; incluir quem use leitor de tela e quem fale inglês ou
   espanhol).
 
