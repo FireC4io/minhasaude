@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister';
 import { QueryClient, type Query } from '@tanstack/react-query';
+import type { PersistedClient, Persister } from '@tanstack/react-query-persist-client';
 
 import { MAX_OFFLINE_COPY_MS } from '@/features/preferences/offline-copy-preference';
 
@@ -30,18 +31,43 @@ export const queryClient = new QueryClient({
  */
 export const encryptedStorage = createEncryptedStorage(AsyncStorage, cacheKeyStore);
 
-export const queryPersister = createAsyncStoragePersister({
+const storagePersister = createAsyncStoragePersister({
   storage: encryptedStorage,
   key: 'gota-vital:query-cache',
   throttleTime: 2000,
 });
 
-/** Só respostas de sucesso, e nunca nada de autenticação. */
+/**
+ * Sem internet, a atualização falha e a consulta fica com status de erro mesmo
+ * tendo o dado: é justamente a cópia que importa. Grava como sucesso e sem o
+ * erro (o do axios leva a configuração do pedido, com o token de acesso).
+ */
+export function withoutErrors(client: PersistedClient): PersistedClient {
+  return {
+    ...client,
+    clientState: {
+      ...client.clientState,
+      queries: client.clientState.queries.map((query) =>
+        query.state.status === 'error'
+          ? {
+              ...query,
+              state: { ...query.state, status: 'success', error: null, fetchFailureReason: null, fetchStatus: 'idle' },
+            }
+          : query,
+      ),
+    },
+  };
+}
+
+export const queryPersister: Persister = {
+  ...storagePersister,
+  persistClient: (client) => storagePersister.persistClient(withoutErrors(client)),
+};
+
+/** Só o que tem dado, e nunca nada de autenticação. */
 export function shouldPersistQuery(query: Pick<Query, 'queryKey' | 'state'>): boolean {
   const [first] = query.queryKey;
-  return (
-    query.state.status === 'success' && !(typeof first === 'string' && first.includes('/auth'))
-  );
+  return query.state.data !== undefined && !(typeof first === 'string' && first.includes('/auth'));
 }
 
 export async function clearPersistedCache(): Promise<void> {
