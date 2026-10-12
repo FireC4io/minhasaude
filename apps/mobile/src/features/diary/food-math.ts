@@ -1,4 +1,4 @@
-import type { FoodResponseDto, MacroTotalsDto } from '@/api/generated/models';
+import type { DiaryQuantityUnit, FoodResponseDto, MacroTotalsDto } from '@/api/generated/models';
 
 import { MEAL_TYPE_ORDER } from './meal-type-labels';
 
@@ -19,19 +19,29 @@ export function nutrientsFor(food: FoodLike, grams: number): MacroTotalsDto {
   };
 }
 
-interface EntryLike<TFood> {
+/** Quantidade como foi anotada: gramas ou N de uma medida caseira. */
+export interface EntryAmount<TPortion = unknown> {
+  quantity: string;
+  unit: DiaryQuantityUnit;
+  portion: TPortion | null;
+}
+
+interface EntryLike<TFood, TPortion> {
   foodId: string;
   food: TFood;
   quantity: string;
+  unit?: DiaryQuantityUnit;
+  portion?: TPortion | null;
 }
 
-interface DayLike<TFood> {
-  meals: Record<(typeof MEAL_TYPE_ORDER)[number], EntryLike<TFood>[]>;
+interface DayLike<TFood, TPortion> {
+  meals: Record<(typeof MEAL_TYPE_ORDER)[number], EntryLike<TFood, TPortion>[]>;
 }
 
-export interface RecentFood<TFood> {
+export interface RecentFood<TFood, TPortion = unknown> {
   food: TFood;
-  lastQuantity: number;
+  /** A última anotação desse alimento, para repetir com um toque na mesma medida. */
+  last: EntryAmount<TPortion>;
 }
 
 /**
@@ -39,17 +49,20 @@ export interface RecentFood<TFood> {
  * antigo, um por alimento, com a última quantidade usada — é o que mais
  * acelera o registro do dia a dia, porque a gente come quase sempre o mesmo.
  */
-export function recentFoodsFrom<TFood>(
-  daysNewestFirst: readonly (DayLike<TFood> | undefined)[],
+export function recentFoodsFrom<TFood, TPortion = unknown>(
+  daysNewestFirst: readonly (DayLike<TFood, TPortion> | undefined)[],
   limit: number,
-): RecentFood<TFood>[] {
-  const seen = new Map<string, RecentFood<TFood>>();
+): RecentFood<TFood, TPortion>[] {
+  const seen = new Map<string, RecentFood<TFood, TPortion>>();
   for (const day of daysNewestFirst) {
     if (!day) continue;
     for (const meal of MEAL_TYPE_ORDER) {
       for (const entry of day.meals[meal]) {
         if (!seen.has(entry.foodId)) {
-          seen.set(entry.foodId, { food: entry.food, lastQuantity: Number(entry.quantity) });
+          seen.set(entry.foodId, {
+            food: entry.food,
+            last: { quantity: entry.quantity, unit: entry.unit ?? 'grams', portion: entry.portion ?? null },
+          });
         }
       }
     }

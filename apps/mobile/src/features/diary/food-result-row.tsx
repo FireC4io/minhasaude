@@ -3,24 +3,24 @@ import { useTranslation } from 'react-i18next';
 
 import type { FoodResponseDto } from '@/api/generated/models';
 import { AppText } from '@/components/ui/app-text';
-import { spokenGrams, spokenKcal } from '@/features/accessibility/spoken-format';
+import { spokenKcal } from '@/features/accessibility/spoken-format';
 import { MIN_TOUCH_TARGET } from '@/constants/accessibility';
 
 interface FoodResultRowProps {
   food: FoodResponseDto;
-  /** Nos recentes: a quantidade usada da última vez. */
-  lastQuantity?: number;
+  /** Nos recentes: a quantidade usada da última vez ("2 colheres de sopa (50 g)"). */
+  lastAmount?: { text: string; spoken: string };
   onPress: () => void;
 }
 
 /** Alimento numa lista de busca ou de recentes, com kcal por 100 g para comparar (F4-16). */
-export function FoodResultRow({ food, lastQuantity, onPress }: FoodResultRowProps) {
+export function FoodResultRow({ food, lastAmount, onPress }: FoodResultRowProps) {
   const { t } = useTranslation();
   const kcal = Math.round(Number(food.kcalPer100g));
   const details = [
     food.brand,
     t('diary.perHundred', { kcal }),
-    lastQuantity ? t('diary.lastTime', { grams: lastQuantity }) : null,
+    lastAmount ? t('diary.lastTime', { amount: lastAmount.text }) : null,
   ]
     .filter(Boolean)
     .join(' · ');
@@ -32,7 +32,7 @@ export function FoodResultRow({ food, lastQuantity, onPress }: FoodResultRowProp
       accessibilityLabel={`${food.brand ? `${food.name}, ${food.brand}` : food.name}. ${t(
         'diary.resultSpoken',
         { kcal: spokenKcal(kcal) },
-      )}${lastQuantity ? t('diary.resultSpokenLast', { grams: spokenGrams(lastQuantity) }) : ''}`}
+      )}${lastAmount ? t('diary.resultSpokenLast', { amount: lastAmount.spoken }) : ''}`}
       accessibilityHint={t('diary.chooseHint')}
       style={{ minHeight: MIN_TOUCH_TARGET }}
       className="justify-center border-b border-linha py-3 active:opacity-70">

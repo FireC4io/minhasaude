@@ -1,7 +1,7 @@
 import { useQueries } from '@tanstack/react-query';
 
 import { getDiaryControllerGetByDateQueryOptions } from '@/api/generated/endpoints/diary/diary';
-import type { FoodResponseDto } from '@/api/generated/models';
+import type { FoodResponseDto, PortionResponseDto } from '@/api/generated/models';
 
 import { addDaysToIsoDate } from './date-utils';
 import { recentFoodsFrom, type RecentFood } from './food-math';
@@ -15,7 +15,7 @@ const LIMIT = 12;
  * custa requisição nova.
  */
 export function useRecentFoods(date: string): {
-  recents: RecentFood<FoodResponseDto>[];
+  recents: RecentFood<FoodResponseDto, PortionResponseDto>[];
   isLoading: boolean;
 } {
   const days = Array.from({ length: DAYS_BACK + 1 }, (_, index) => addDaysToIsoDate(date, -index));

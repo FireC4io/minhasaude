@@ -1,5 +1,6 @@
 export * from './auth/auth';
 export * from './body-measurements/body-measurements';
+export * from './client-errors/client-errors';
 export * from './consents/consents';
 export * from './diary/diary';
 export * from './foods/foods';

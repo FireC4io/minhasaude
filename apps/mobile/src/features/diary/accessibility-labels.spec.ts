@@ -7,7 +7,7 @@ import {
 describe('describeDiaryEntry', () => {
   it('junta a linha inteira numa frase só, em vez de célula por célula', () => {
     expect(
-      describeDiaryEntry({ foodName: 'Banana, prata, crua', quantity: '130', kcal: '127.6' }),
+      describeDiaryEntry({ foodName: 'Banana, prata, crua', amountSpoken: '130 gramas', kcal: '127.6' }),
     ).toBe('Banana, prata, crua, 130 gramas, 128 quilocalorias');
   });
 });

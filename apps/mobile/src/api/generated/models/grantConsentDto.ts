@@ -9,5 +9,6 @@ import type { GrantConsentDtoConsentType } from './grantConsentDtoConsentType';
 
 export interface GrantConsentDto {
   consentType: GrantConsentDtoConsentType;
+  /** @pattern ^\d{4}-\d{2}$ */
   policyVersion: string;
 }

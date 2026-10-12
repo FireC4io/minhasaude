@@ -26,9 +26,11 @@ import type {
 
 import type {
   CreateFoodDto,
+  CreatePortionDto,
   FoodResponseDto,
   FoodsControllerSearchParams,
   PaginatedFoodResponseDto,
+  PortionResponseDto,
   UpdateFoodDto
 } from '../../models';
 
@@ -436,4 +438,229 @@ export const useFoodsControllerRemove = <TError = unknown,
         TContext
       > => {
       return useMutation(getFoodsControllerRemoveMutationOptions(options), queryClient);
+    }
+    /**
+ * @summary Medidas caseiras do alimento: as do sistema (IBGE) e as criadas pela pessoa
+ */
+export const portionsControllerList = (
+    id: string,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<PortionResponseDto[]>(
+      {url: `/v1/foods/${id}/portions`, method: 'GET', signal
+    },
+      );
+    }
+
+
+
+
+export const getPortionsControllerListQueryKey = (id: string,) => {
+    return [
+    `/v1/foods/${id}/portions`
+    ] as const;
+    }
+
+
+export const getPortionsControllerListQueryOptions = <TData = Awaited<ReturnType<typeof portionsControllerList>>, TError = unknown>(id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof portionsControllerList>>, TError, TData>>, }
+) => {
+
+const {query: queryOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getPortionsControllerListQueryKey(id);
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof portionsControllerList>>> = ({ signal }) => portionsControllerList(id, signal);
+
+
+
+
+
+   return  { queryKey, queryFn, enabled: id !== null && id !== undefined, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof portionsControllerList>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type PortionsControllerListQueryResult = NonNullable<Awaited<ReturnType<typeof portionsControllerList>>>
+export type PortionsControllerListQueryError = unknown
+
+
+export function usePortionsControllerList<TData = Awaited<ReturnType<typeof portionsControllerList>>, TError = unknown>(
+ id: string, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof portionsControllerList>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof portionsControllerList>>,
+          TError,
+          Awaited<ReturnType<typeof portionsControllerList>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function usePortionsControllerList<TData = Awaited<ReturnType<typeof portionsControllerList>>, TError = unknown>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof portionsControllerList>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof portionsControllerList>>,
+          TError,
+          Awaited<ReturnType<typeof portionsControllerList>>
+        > , 'initialData'
+      >, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function usePortionsControllerList<TData = Awaited<ReturnType<typeof portionsControllerList>>, TError = unknown>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof portionsControllerList>>, TError, TData>>, }
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Medidas caseiras do alimento: as do sistema (IBGE) e as criadas pela pessoa
+ */
+
+export function usePortionsControllerList<TData = Awaited<ReturnType<typeof portionsControllerList>>, TError = unknown>(
+ id: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof portionsControllerList>>, TError, TData>>, }
+ , queryClient?: QueryClient
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getPortionsControllerListQueryOptions(id,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return withQueryKey(query, queryOptions.queryKey);
+}
+
+
+
+
+
+
+/**
+ * @summary Cria uma medida própria ("minha caneca = 180 g"), visível só pra quem criou
+ */
+export const portionsControllerCreate = (
+    id: string,
+    createPortionDto: CreatePortionDto,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<PortionResponseDto>(
+      {url: `/v1/foods/${id}/portions`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: createPortionDto, signal
+    },
+      );
+    }
+
+
+
+
+export const getPortionsControllerCreateMutationKey = () => ['portionsControllerCreate'] as const;
+
+export const getPortionsControllerCreateMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof portionsControllerCreate>>, TError,PortionsControllerCreateMutationVariables, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof portionsControllerCreate>>, TError,PortionsControllerCreateMutationVariables, TContext> => {
+
+const mutationKey = getPortionsControllerCreateMutationKey();
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof portionsControllerCreate>>, PortionsControllerCreateMutationVariables> = (props) => {
+          const {id,data} = props ?? {};
+
+          return  portionsControllerCreate(id,data,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PortionsControllerCreateMutationResult = NonNullable<Awaited<ReturnType<typeof portionsControllerCreate>>>
+    export type PortionsControllerCreateMutationBody = CreatePortionDto
+    export type PortionsControllerCreateMutationError = unknown
+    export type PortionsControllerCreateMutationVariables = {id: string;data: CreatePortionDto}
+
+    /**
+ * @summary Cria uma medida própria ("minha caneca = 180 g"), visível só pra quem criou
+ */
+export const usePortionsControllerCreate = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof portionsControllerCreate>>, TError,PortionsControllerCreateMutationVariables, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof portionsControllerCreate>>,
+        TError,
+        PortionsControllerCreateMutationVariables,
+        TContext
+      > => {
+      return useMutation(getPortionsControllerCreateMutationOptions(options), queryClient);
+    }
+    /**
+ * @summary Apaga uma medida própria; anotações que a usavam passam para gramas
+ */
+export const portionsControllerRemove = (
+    id: string,
+ signal?: AbortSignal
+) => {
+
+
+      return customInstance<void>(
+      {url: `/v1/portions/${id}`, method: 'DELETE', signal
+    },
+      );
+    }
+
+
+
+
+export const getPortionsControllerRemoveMutationKey = () => ['portionsControllerRemove'] as const;
+
+export const getPortionsControllerRemoveMutationOptions = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof portionsControllerRemove>>, TError,PortionsControllerRemoveMutationVariables, TContext>, }
+): UseMutationOptions<Awaited<ReturnType<typeof portionsControllerRemove>>, TError,PortionsControllerRemoveMutationVariables, TContext> => {
+
+const mutationKey = getPortionsControllerRemoveMutationKey();
+const {mutation: mutationOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof portionsControllerRemove>>, PortionsControllerRemoveMutationVariables> = (props) => {
+          const {id} = props ?? {};
+
+          return  portionsControllerRemove(id,)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type PortionsControllerRemoveMutationResult = NonNullable<Awaited<ReturnType<typeof portionsControllerRemove>>>
+
+    export type PortionsControllerRemoveMutationError = unknown
+    export type PortionsControllerRemoveMutationVariables = {id: string}
+
+    /**
+ * @summary Apaga uma medida própria; anotações que a usavam passam para gramas
+ */
+export const usePortionsControllerRemove = <TError = unknown,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof portionsControllerRemove>>, TError,PortionsControllerRemoveMutationVariables, TContext>, }
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof portionsControllerRemove>>,
+        TError,
+        PortionsControllerRemoveMutationVariables,
+        TContext
+      > => {
+      return useMutation(getPortionsControllerRemoveMutationOptions(options), queryClient);
     }

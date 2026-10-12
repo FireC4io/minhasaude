@@ -1,15 +1,16 @@
 import { t } from 'i18next';
-import { spokenGrams, spokenKcal } from '@/features/accessibility/spoken-format';
+import { spokenKcal } from '@/features/accessibility/spoken-format';
 
 interface DiaryEntryLike {
   foodName: string;
+  /** Quantidade já falada: "130 gramas" ou "2 colheres de sopa, 50 gramas". */
+  amountSpoken: string;
   /** Vem como string porque a coluna é `numeric` no Postgres. */
-  quantity: string;
   kcal: string;
 }
 
-export function describeDiaryEntry({ foodName, quantity, kcal }: DiaryEntryLike): string {
-  return `${foodName}, ${spokenGrams(Number(quantity))}, ${spokenKcal(Number(kcal))}`;
+export function describeDiaryEntry({ foodName, amountSpoken, kcal }: DiaryEntryLike): string {
+  return `${foodName}, ${amountSpoken}, ${spokenKcal(Number(kcal))}`;
 }
 
 export function describeMealHeader(mealLabel: string, entryCount: number, kcalTotal: number): string {

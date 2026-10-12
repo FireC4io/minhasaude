@@ -7,6 +7,8 @@ interface SelectChipsProps<TValue extends string> {
   label: string;
   options: readonly TValue[];
   optionLabels: Record<TValue, string>;
+  /** Como o leitor de tela fala cada opção, quando o texto tem número com unidade. */
+  optionSpokenLabels?: Partial<Record<TValue, string>>;
   value: TValue | null;
   onChange: (value: TValue) => void;
   error?: string;
@@ -16,6 +18,7 @@ export function SelectChips<TValue extends string>({
   label,
   options,
   optionLabels,
+  optionSpokenLabels,
   value,
   onChange,
   error,
@@ -38,7 +41,7 @@ export function SelectChips<TValue extends string>({
               key={option}
               onPress={() => onChange(option)}
               accessibilityRole="radio"
-              accessibilityLabel={optionLabels[option]}
+              accessibilityLabel={optionSpokenLabels?.[option] ?? optionLabels[option]}
               // `selected` é o que o iOS lê; `checked` é o que o Android lê.
               accessibilityState={{ selected, checked: selected }}
               style={{ minHeight: MIN_TOUCH_TARGET, justifyContent: 'center' }}

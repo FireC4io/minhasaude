@@ -49,7 +49,7 @@ describe('recentFoodsFrom', () => {
 
     expect(recents.map((r) => r.food.name)).toEqual(['Arroz', 'Feijão', 'Banana']);
     // A quantidade que vale é a da vez mais recente.
-    expect(recents[0]?.lastQuantity).toBe(150);
+    expect(recents[0]?.last).toEqual({ quantity: '150', unit: 'grams', portion: null });
   });
 
   it('respeita o limite', () => {

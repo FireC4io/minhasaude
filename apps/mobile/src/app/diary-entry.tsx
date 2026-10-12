@@ -1,7 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useState } from 'react';
-import { AccessibilityInfo, FlatList, KeyboardAvoidingView, Platform, View } from 'react-native';
+import { useEffect, useRef, useState } from 'react';
+import { AccessibilityInfo, FlatList, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import {
@@ -14,7 +14,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { INPUT_LIMITS } from '@minhasaude/shared';
 import { useFoodsControllerSearch } from '@/api/generated/endpoints/foods/foods';
-import { DiaryQuantityUnit, type FoodResponseDto, type MealType } from '@/api/generated/models';
+import type { FoodResponseDto, MealType } from '@/api/generated/models';
 import { AppText } from '@/components/ui/app-text';
 import { FormError } from '@/components/ui/form-error';
 import { LoadingIndicator } from '@/components/ui/loading-indicator';
@@ -24,9 +24,22 @@ import { useAnnounce } from '@/features/accessibility/use-announce';
 import { AuthTextField } from '@/features/auth/auth-text-field';
 import { PrimaryButton } from '@/features/auth/primary-button';
 import { describeSearchStatus } from '@/features/diary/accessibility-labels';
+import { CustomMeasureSection } from '@/features/diary/custom-measure-section';
+import type { EntryAmount } from '@/features/diary/food-math';
 import { FoodResultRow } from '@/features/diary/food-result-row';
 import { MEAL_TYPE_LABELS, MEAL_TYPE_ORDER } from '@/features/diary/meal-type-labels';
+import {
+  GRAMS,
+  defaultAmount,
+  describeAmount,
+  entryQuantity,
+  gramsOf,
+  measureFromEntry,
+  type Measure,
+  type PortionLike,
+} from '@/features/diary/measures';
 import { QuantityPicker } from '@/features/diary/quantity-picker';
+import { useFoodMeasures } from '@/features/diary/use-food-measures';
 import { useRecentFoods } from '@/features/diary/use-recent-foods';
 import { parseDecimal } from '@/features/forms/parse-decimal';
 
@@ -48,6 +61,7 @@ export default function DiaryEntryScreen() {
   const [selectedFood, setSelectedFood] = useState<FoodResponseDto | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [quantity, setQuantity] = useState(params.quantity ? String(Number(params.quantity)) : '100');
+  const [measure, setMeasure] = useState<Measure>(GRAMS);
   const [error, setError] = useState<string | null>(null);
 
   const searchQuery = useFoodsControllerSearch(
@@ -63,6 +77,19 @@ export default function DiaryEntryScreen() {
       )
     : undefined;
 
+  // Na edição, abre na medida em que foi anotado (uma vez, quando o dia chega do cache).
+  const editingLoaded = useRef(false);
+  useEffect(() => {
+    if (!editingEntry || editingLoaded.current) return;
+    editingLoaded.current = true;
+    const saved = measureFromEntry(editingEntry);
+    setMeasure(saved.measure);
+    setQuantity(String(saved.amount));
+  }, [editingEntry]);
+
+  const foodId = selectedFood?.id ?? editingEntry?.foodId;
+  const { measures } = useFoodMeasures(foodId);
+
   const createEntry = useDiaryControllerCreate();
   const updateEntry = useDiaryControllerUpdate();
   const removeEntry = useDiaryControllerRemove();
@@ -71,22 +98,30 @@ export default function DiaryEntryScreen() {
     return queryClient.invalidateQueries({ queryKey: getDiaryControllerGetByDateQueryKey({ date }) });
   }
 
-  function chooseFood(food: FoodResponseDto, lastQuantity?: number) {
+  function chooseFood(food: FoodResponseDto, last?: EntryAmount<PortionLike>) {
     setSelectedFood(food);
-    if (lastQuantity) setQuantity(String(lastQuantity));
+    const start = last ? measureFromEntry(last) : { measure: GRAMS, amount: defaultAmount(GRAMS) };
+    setMeasure(start.measure);
+    setQuantity(String(start.amount));
+  }
+
+  function changeMeasure(next: Measure) {
+    setMeasure(next);
+    setQuantity(String(defaultAmount(next)));
   }
 
   async function handleSave() {
     setError(null);
-    const grams = parseDecimal(quantity);
-    if (!Number.isFinite(grams) || grams <= 0) {
-      setError(t('diary.quantityError'));
+    const amount = parseDecimal(quantity);
+    if (!Number.isFinite(amount) || amount <= 0) {
+      setError(measure.type === 'portion' ? t('portions.amountError') : t('diary.quantityError'));
       return;
     }
+    const amountData = entryQuantity(measure, amount);
 
     try {
       if (isEditing && params.id) {
-        await updateEntry.mutateAsync({ id: params.id, data: { quantity: grams } });
+        await updateEntry.mutateAsync({ id: params.id, data: amountData });
         AccessibilityInfo.announceForAccessibility(t('diary.quantityUpdated'));
       } else {
         if (!selectedFood || !mealType) {
@@ -94,7 +129,7 @@ export default function DiaryEntryScreen() {
           return;
         }
         await createEntry.mutateAsync({
-          data: { foodId: selectedFood.id, date, mealType, quantity: grams, unit: DiaryQuantityUnit.grams },
+          data: { foodId: selectedFood.id, date, mealType, ...amountData },
         });
         // Anúncio antes de fechar: a confirmação do registro chega mesmo com a tela sumindo.
         AccessibilityInfo.announceForAccessibility(
@@ -185,15 +220,17 @@ export default function DiaryEntryScreen() {
                 renderItem={({ item }) => (
                   <FoodResultRow
                     food={item.food}
-                    lastQuantity={item.lastQuantity}
-                    onPress={() => chooseFood(item.food, item.lastQuantity)}
+                    lastAmount={describeAmount(item.last)}
+                    onPress={() => chooseFood(item.food, item.last)}
                   />
                 )}
               />
             )}
           </View>
         ) : (
-          <View className="gap-4">
+          <ScrollView
+            keyboardShouldPersistTaps="handled"
+            contentContainerClassName="gap-4 pb-8">
             {!isEditing && selectedFood ? (
               <View className="gap-1">
                 <AppText
@@ -214,10 +251,29 @@ export default function DiaryEntryScreen() {
 
             <QuantityPicker
               food={selectedFood ?? editingEntry?.food ?? null}
+              measures={measures}
+              measure={measure}
+              onMeasureChange={changeMeasure}
               value={quantity}
               onChange={setQuantity}
               onSubmit={() => void handleSave()}
             />
+
+            {foodId ? (
+              <CustomMeasureSection
+                foodId={foodId}
+                measure={measure}
+                onCreated={(portion) => {
+                  setMeasure({ type: 'portion', portion });
+                  setQuantity('1');
+                }}
+                onDeleted={() => {
+                  const grams = gramsOf(measure, parseDecimal(quantity));
+                  setMeasure(GRAMS);
+                  setQuantity(String(grams > 0 ? grams : defaultAmount(GRAMS)));
+                }}
+              />
+            ) : null}
 
             <FormError message={error} />
 
@@ -234,7 +290,7 @@ export default function DiaryEntryScreen() {
                 textClassName="text-center text-jabuticaba"
               />
             ) : null}
-          </View>
+          </ScrollView>
         )}
       </KeyboardAvoidingView>
     </SafeAreaView>

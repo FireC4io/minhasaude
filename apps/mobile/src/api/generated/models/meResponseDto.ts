@@ -10,5 +10,6 @@ import type { ProfileResponseDto } from './profileResponseDto';
 
 export interface MeResponseDto {
   user: AccountResponseDto;
+  /** @nullable */
   profile?: ProfileResponseDto | null;
 }

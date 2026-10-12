@@ -4,6 +4,7 @@ import type { DiaryEntryResponseDto } from '@/api/generated/models';
 import { TextButton } from '@/components/ui/text-button';
 import { MIN_TOUCH_TARGET } from '@/constants/accessibility';
 import { describeDiaryEntry } from './accessibility-labels';
+import { describeAmount } from './measures';
 import { AppText } from '@/components/ui/app-text';
 
 interface DiaryEntryRowProps {
@@ -14,6 +15,7 @@ interface DiaryEntryRowProps {
 
 export function DiaryEntryRow({ entry, onPress, onDelete }: DiaryEntryRowProps) {
   const { t } = useTranslation();
+  const amount = describeAmount(entry);
   // Editar e remover são irmãos, não um botão dentro do outro: um Pressable
   // acessível engole os filhos, e o "Remover" sumiria para o leitor de tela.
   return (
@@ -23,7 +25,7 @@ export function DiaryEntryRow({ entry, onPress, onDelete }: DiaryEntryRowProps) 
         accessibilityRole="button"
         accessibilityLabel={describeDiaryEntry({
           foodName: entry.food.name,
-          quantity: entry.quantity,
+          amountSpoken: amount.spoken,
           kcal: entry.kcalSnapshot,
         })}
         accessibilityHint={t('diary.editHint')}
@@ -34,7 +36,7 @@ export function DiaryEntryRow({ entry, onPress, onDelete }: DiaryEntryRowProps) 
           {entry.food.name}
         </AppText>
         <AppText variant="caption" className="text-grafite">
-          {Number(entry.quantity)} g · {Math.round(Number(entry.kcalSnapshot))} kcal
+          {amount.text} · {Math.round(Number(entry.kcalSnapshot))} kcal
         </AppText>
       </Pressable>
       <TextButton

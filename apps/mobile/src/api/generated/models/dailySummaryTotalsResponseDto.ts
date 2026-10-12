@@ -10,7 +10,9 @@ import type { MicroTotalsDto } from './microTotalsDto';
 
 export interface DailySummaryTotalsResponseDto {
   consumed: MacroTotalsDto;
+  /** @nullable */
   target: MacroTotalsDto | null;
+  /** @nullable */
   remaining: MacroTotalsDto | null;
   micros: MicroTotalsDto;
 }

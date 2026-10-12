@@ -9,6 +9,7 @@
 export interface UpdateFoodDto {
   name?: string;
   brand?: string;
+  /** @pattern ^\d{8,14}$ */
   barcode?: string;
   kcalPer100g?: number;
   proteinGPer100g?: number;
