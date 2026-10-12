@@ -32,7 +32,7 @@ Página com as 32 melhorias, as decisões do dono e o progresso: https://claude.
    tinha rodado sem token de fato: ver a seção "ZAP autenticado" em `docs/security/avaliacao-2026-10.md`.
 3. **App** — feitos (11/10): exportação com `customFoods` (leituras em paralelo), tela Hoje mais enxuta, `queryView`
    nas 4 telas (dado vence erro), Zod na resposta do Open Food Facts; ZAP achou XSS em JSON por nome de alimento →
-   sem `<`/`>`. **Faltam:** medidas caseiras, básicos que faltam na TACO, lembretes. Lista original: ajustes da tela Hoje, exportação com os alimentos da pessoa, testes das telas em erro, medidas caseiras
+   sem `<`/`>`. Medidas caseiras (11/10): 730 medidas do IBGE (POF 2008-2009) em 335 alimentos, medida criada pela pessoa, onça em inglês — `docs/dados/medidas-caseiras.md`. **Faltam:** básicos que faltam na TACO (leite de vaca líquido e todos os óleos nem entram no banco: a TACO não mediu um macro e o seed os pula; quando entrarem, dar medidas a eles em `scripts/medidas-ibge/mapping.py`), lembretes. Lista original: ajustes da tela Hoje, exportação com os alimentos da pessoa, testes das telas em erro, medidas caseiras
    (inclusive medida criada pela pessoa e unidades de outros países), básicos que faltam na TACO (ver licença da TBCA
    ou USDA), lembretes, Zod no que vem de fora.
 4. **Maiores:** anotar sem internet, auditoria no banco, quebrar as telas complexas, juntar telas repetidas, consultas
