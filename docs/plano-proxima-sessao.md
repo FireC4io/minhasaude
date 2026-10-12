@@ -4,20 +4,28 @@ Objetivo da fase: começar o **teste fechado na Google Play** (12+ pessoas por 1
 https://claude.ai/artifact/M3cugePLkCpbjSkbVJq3BB · Melhorias e decisões: https://claude.ai/artifact/6ECBjX1NJwiLJpn2Lo8HA4
 (coleções `decisoes` e `progresso` no `ArtifactData`) · Mapa do projeto: https://claude.ai/artifact/Vv6w88xd6oJn3Rwu2RqdBe
 
-## Primeiro: conferir o build no celular
+## Primeiro: roteiro no celular (antes de abrir o teste fechado)
 
-Build EAS `preview` (APK) gerado no fim de 2026-10-11, já com tudo o que está em `main` (`98f7d7d`):
-https://expo.dev/accounts/caio_cesar_dev/projects/gota-vital/builds/ac6d3787-2413-4ebd-ac6c-789cae8e1abb
+O app já está no **teste interno da Play** (versão 1.0.0, build 2, de `d2f05e9`); o dono instala pela Play. APK
+`preview` do mesmo código: https://expo.dev/accounts/caio_cesar_dev/projects/gota-vital/builds/490b44e4-b7cc-44ef-8547-7e9856541940
+(o APK e o app da Play têm o mesmo pacote: desinstalar um antes do outro). Guias visuais desta etapa:
+https://claude.ai/artifact/81RT5ZwwszWFUUCgCr2dGS (conta de revisão e SHA-1) · https://claude.ai/artifact/X2CUVRdpEdsSNdsoZH56ei
+(formulários da Play).
 
-Roteiro com o dono:
+Roteiro:
 1. Busca: "leite" traz leite de vaca integral primeiro; "macarrão" traz macarrão cozido; "azeite" traz o azeite.
    Itens do USDA mostram "dados do USDA (EUA)"; tela Sobre tem os créditos de USDA e IBGE.
 2. Medidas caseiras: anotar "2 colheres de sopa" de arroz (deve dar 50 g, 64 kcal); criar "minha caneca"; apagar e
    ver a anotação virar gramas.
-3. Lembretes (Perfil → Lembretes): ligar (pede permissão), "Testar lembrete", tocar na notificação, botões
+3. Sem internet: modo avião → anotar um alimento e um peso (aparecem com "Esperando a internet para enviar" e somam nas
+   calorias) → fechar e abrir o app (o dia continua) → tirar o modo avião (envia sozinho em até 30 s). Visto no
+   emulador; falta o celular.
+4. Lembretes (Perfil → Lembretes): ligar (pede permissão), "Testar lembrete", tocar na notificação, botões
    "Anotar agora" e "Lembrar em 30 min", "só se eu ainda não anotei" (anotar o almoço e ver o lembrete sumir),
    som/vibrar/silêncio, mensagem discreta, logout apaga tudo. **Nunca foi visto num celular**: é o maior risco.
-4. Corrigir o que aparecer antes de seguir.
+5. Corrigir o que aparecer (build novo: `eas build -p android --profile production`, enviar ao teste interno).
+6. Passou: lista de 12–15 testadores e promover a versão ao **teste fechado** (revisão do Google; depois, 14 dias com
+   12 testadores ativos antes da produção).
 
 ## Pendências do dono
 
