@@ -53,6 +53,7 @@ turbo run lint test build             # pipeline completo (usado no CI)
 - Plano visual: https://claude.ai/artifact/M3cugePLkCpbjSkbVJq3BB · Relatório de telas: https://claude.ai/artifact/7GPKyqDzTUBprpubZx5zXq — **ler a coleção `adicoes` do db desse artifact (`ArtifactData list`) antes de replanejar telas**: é onde o dono deixa ideias.
 - Histórico (sessões, incidentes, decisões antigas, por que as coisas são como são): `docs/historico/` — consultar sob demanda, não carregar inteiro.
 - Segurança: `docs/security/avaliacao-2026-10.md` (achados), `docs/security/backup.md` (backup cifrado; chave privada age só com o dono em `D:\gotavital-backup-chave`). Política de privacidade: `docs/legal/politica-de-privacidade.md`.
+- Visão geral para o dono (sistema, caminho de uma anotação, camadas, onde usar portas e adaptadores): https://claude.ai/artifact/Vv6w88xd6oJn3Rwu2RqdBe
 - Mapa de dependências entre módulos: `docs/arquitetura/dependencias.md` (gerado por `pnpm deps:graph`). Versão visual para o dono: https://claude.ai/artifact/VPAifv2Ax3yJVF4JrfBnrN (gerador em `docs/arquitetura/mapa/`; refazer quando surgir pasta/módulo novo).
 - Ferramentas de contexto: busca direta no código, **Serena** (MCP; símbolos, referências, renomear) e **Melchizedek** (`m9k_search`/`m9k_errors`/`m9k_file_history`: sessões passadas — usar antes de reinvestigar problema já visto). O grafo do graphify e o vault do Obsidian foram aposentados em 2026-10-11: não regenerar.
 
