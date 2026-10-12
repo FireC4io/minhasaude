@@ -28,6 +28,7 @@ antes de apagar qualquer coisa.
 | Perfil (data de nascimento, sexo, altura, atividade, objetivo) | Apagado |
 | Medidas de peso, diário alimentar, metas e alimentos cadastrados por você | Apagados |
 | Registro de consentimento | Mantido **sem nada que identifique você** (sem e-mail, IP ou aparelho), como prova exigida pela LGPD |
+| Histórico dos seus pedidos (quando você baixou os dados, retirou uma autorização ou pediu para apagar a conta) | Mantido **sem nada que identifique você**, só o tipo e a data, como prova de que o pedido foi atendido |
 | Cópias de segurança | Cifradas; o dado apagado some delas automaticamente em até **60 dias**, sem uso nenhum até lá |
 | Registros técnicos (sem dados de saúde) | Apagados automaticamente em até **30 dias** |
 
