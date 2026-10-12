@@ -23,6 +23,7 @@ Contato para qualquer assunto de privacidade, inclusive como encarregado (art. 4
 | Metas | Metas calculadas, a fórmula e a versão do cálculo | Manter o histórico sem mudar o passado se a fórmula for corrigida |
 | Alimentos cadastrados por você | Nome, marca e valores nutricionais | Você reutilizar nos próximos registros. Só você vê |
 | Consentimentos | Qual autorização, versão desta política, data, endereço IP e aparelho usado | Provar que você autorizou, como a LGPD exige |
+| Histórico dos seus pedidos | Quando você baixou seus dados, retirou uma autorização ou pediu para apagar a conta. Só a data e o tipo do pedido | Provar que atendemos seus pedidos, como a LGPD exige |
 | Registros técnicos | Data, endereço IP, tela acessada e resultado de cada requisição. Se o app der erro, a mensagem técnica do erro, a tela em que ele aconteceu e a versão do app. **Nunca** senha, tokens de acesso ou o conteúdo dos seus dados de saúde | Segurança, prevenção de abuso e correção de erros |
 
 **Exames de sangue e bioimpedância:** quando esse recurso estiver disponível, ele terá uma autorização própria,
@@ -76,6 +77,7 @@ Também podemos ter de entregar dados por ordem judicial ou exigência legal.
 | Ao apagar a conta | **Apagados na hora** do banco de dados |
 | Cópias de segurança | Cifradas, apagadas automaticamente em até **60 dias**. Um dado apagado pode continuar numa cópia até ela expirar, sem uso nenhum |
 | Registro de consentimento | Mantido **sem dados que identifiquem você** (sem IP nem aparelho) depois que a conta é apagada, como prova exigida pela LGPD |
+| Histórico dos seus pedidos | Mantido **sem dados que identifiquem você** depois que a conta é apagada, como prova de que o pedido foi atendido |
 | Registros técnicos | No máximo 30 dias |
 | Cópia no seu celular | O prazo que você escolher (1, 7 ou 30 dias sem abrir o app). Apagada ao sair da conta ou apagar a conta |
 

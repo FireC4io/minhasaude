@@ -22,6 +22,7 @@ function setup(options: { status?: UserStatus; purgeFails?: boolean } = {}) {
     }),
   };
   const notifier = { notify: jest.fn() };
+  const audit = { record: jest.fn(async () => undefined) };
   const service = new UsersService(
     users as never,
     {} as never,
@@ -35,8 +36,9 @@ function setup(options: { status?: UserStatus; purgeFails?: boolean } = {}) {
     purge as never,
     notifier as never,
     {} as never,
+    audit as never,
   );
-  return { service, user, users, refreshTokens, deletionRequests, purge, notifier };
+  return { service, user, users, refreshTokens, deletionRequests, purge, notifier, audit };
 }
 
 describe('UsersService.requestDeletion', () => {
@@ -81,6 +83,14 @@ describe('UsersService.requestDeletion', () => {
     await service.requestDeletion('user-1');
 
     expect(notifier.notify).toHaveBeenCalledWith('maria@exemplo.com', 'account_deleted', 'user-1');
+  });
+
+  it('registra o pedido de exclusão na auditoria', async () => {
+    const { service, audit } = setup();
+
+    await service.requestDeletion('user-1');
+
+    expect(audit.record).toHaveBeenCalledWith('user-1', 'account_deletion_requested', { requestId: 'req-1' });
   });
 
   it('recusa um segundo pedido para conta já em exclusão', async () => {

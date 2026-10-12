@@ -4,6 +4,8 @@ import { IsNull, LessThanOrEqual, Repository } from 'typeorm';
 import { User } from '../database/entities/user.entity';
 import { Consent } from '../database/entities/consent.entity';
 import { AccountDeletionRequest } from '../database/entities/account-deletion-request.entity';
+import { AuditAction } from '../database/entities/audit-event.entity';
+import { AuditService } from '../audit/audit.service';
 
 export interface PurgeResult {
   purged: number;
@@ -30,6 +32,7 @@ export class AccountPurgeService {
     private readonly requests: Repository<AccountDeletionRequest>,
     @InjectRepository(User) private readonly users: Repository<User>,
     @InjectRepository(Consent) private readonly consents: Repository<Consent>,
+    private readonly audit: AuditService,
   ) {}
 
   async purgeDueAccounts(now: Date = new Date()): Promise<PurgeResult> {
@@ -74,5 +77,7 @@ export class AccountPurgeService {
 
     pedido.completedAt = now;
     await this.requests.save(pedido);
+    // Fica depois da conta apagada: prova de que o pedido foi atendido.
+    await this.audit.record(pedido.userId, AuditAction.ACCOUNT_DELETED, { requestId: pedido.id });
   }
 }

@@ -12,6 +12,7 @@ import {
   FoodPortion,
   DiaryEntry,
   PasswordResetCode,
+  AuditEvent,
 } from './entities';
 import { databaseSsl } from './database-ssl';
 
@@ -37,6 +38,7 @@ const AppDataSource = new DataSource({
     FoodPortion,
     DiaryEntry,
     PasswordResetCode,
+    AuditEvent,
   ],
   migrations: ['src/database/migrations/*.ts'],
   // Uma transação por migration: valor novo de enum (ALTER TYPE ... ADD VALUE)

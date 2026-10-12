@@ -36,8 +36,10 @@ Na ordem sugerida:
 1. ~~**Anotar sem internet**~~ — feito em 2026-10-12 (regra no CLAUDE.md, código em
    `apps/mobile/src/features/offline-queue/`). Testado na web com o modo sem internet do Playwright; **falta ver no
    celular** (modo avião → anotar → religar). Editar e apagar sem internet ficaram de fora (ainda exigem conexão).
-2. **Auditoria no banco**: quem fez o quê nas ações sensíveis (apagar conta, exportar, revogar consentimento).
-   Tabela nova entra na lista de RLS.
+2. ~~**Auditoria no banco**~~ — feito em 2026-10-12: `audit_events` (só acréscimo, com RLS), registra exportar,
+   revogar consentimento, pedir exclusão e exclusão concluída; entra no export. **Decisão do dono:** a política de
+   privacidade ganhou a linha "Histórico dos seus pedidos" — subir a versão (pede novo aceite) ou tratar como
+   esclarecimento da 2026-10?
 3. **Quebrar as telas complexas**: `diary-entry.tsx` (~300 linhas), Hoje e Envio de exame.
 4. **Juntar telas repetidas**: Relatório com Exportação, Cadastro com Nova senha.
 5. **Consultas em paralelo** onde der (21 trechos com `await` em laço; consentimentos fazem 3 seguidas).

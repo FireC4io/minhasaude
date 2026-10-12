@@ -10,3 +10,4 @@ export * from './food.entity';
 export * from './food-portion.entity';
 export * from './diary-entry.entity';
 export * from './password-reset-code.entity';
+export * from './audit-event.entity';

@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Consent, ConsentType } from '../database/entities/consent.entity';
 import type { GrantConsentDto } from './dto/grant-consent.dto';
+import { AuditService } from '../audit/audit.service';
+import { AuditAction } from '../database/entities/audit-event.entity';
 
 export interface ConsentStatus {
   consentType: ConsentType;
@@ -14,7 +16,10 @@ export interface ConsentStatus {
 
 @Injectable()
 export class ConsentsService {
-  constructor(@InjectRepository(Consent) private readonly consents: Repository<Consent>) {}
+  constructor(
+    @InjectRepository(Consent) private readonly consents: Repository<Consent>,
+    private readonly audit: AuditService,
+  ) {}
 
   async grant(
     userId: string,
@@ -44,6 +49,7 @@ export class ConsentsService {
     }
     latest.revokedAt = new Date();
     await this.consents.save(latest);
+    await this.audit.record(userId, AuditAction.CONSENT_REVOKED, { consentType });
   }
 
   async listStatus(userId: string): Promise<ConsentStatus[]> {

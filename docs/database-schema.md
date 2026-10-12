@@ -87,6 +87,9 @@
 **account_deletion_requests**
 - id, user_id, requested_at, scheduled_purge_at, completed_at (nullable)
 
+**audit_events** *(só acréscimo: gatilho recusa UPDATE/DELETE; `user_id` sem FK, sobrevive à exclusão da conta como prova de atendimento — LGPD art. 37)*
+- id, user_id, action (data_exported | consent_revoked | account_deletion_requested | account_deleted), details (jsonb, nullable — só o tipo de consentimento ou o id do pedido; nunca IP, e-mail ou dado de saúde), occurred_at
+
 ## Catálogo de calculadoras — organização extensível
 
 Não vive só no banco. Estrutura recomendada em `packages/shared/src/calculators/`:

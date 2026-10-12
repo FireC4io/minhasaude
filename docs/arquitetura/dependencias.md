@@ -13,9 +13,11 @@ subgraph apps["apps"]
   subgraph apps_api["api"]
     subgraph apps_api_src["src"]
       apps_api_src_app_module_ts["app.module.ts"]
+      apps_api_src_audit["audit"]
       apps_api_src_auth["auth"]
       apps_api_src_body_measurements["body-measurements"]
       apps_api_src_bootstrap["bootstrap"]
+      apps_api_src_client_errors["client-errors"]
       apps_api_src_common["common"]
       apps_api_src_config["config"]
       apps_api_src_consents["consents"]
@@ -32,6 +34,7 @@ subgraph apps["apps"]
 end
 apps_api_src_app_module_ts-->apps_api_src_auth
 apps_api_src_app_module_ts-->apps_api_src_body_measurements
+apps_api_src_app_module_ts-->apps_api_src_client_errors
 apps_api_src_app_module_ts-->apps_api_src_config
 apps_api_src_app_module_ts-->apps_api_src_consents
 apps_api_src_app_module_ts-->apps_api_src_database
@@ -40,16 +43,22 @@ apps_api_src_app_module_ts-->apps_api_src_foods
 apps_api_src_app_module_ts-->apps_api_src_goals
 apps_api_src_app_module_ts-->apps_api_src_health
 apps_api_src_app_module_ts-->apps_api_src_users
+apps_api_src_audit-->apps_api_src_database
 apps_api_src_auth-->apps_api_src_config
 apps_api_src_auth-->apps_api_src_database
 apps_api_src_auth-->apps_api_src_mail
+apps_api_src_auth-->apps_api_src_common
 apps_api_src_body_measurements-->apps_api_src_consents
 apps_api_src_body_measurements-->apps_api_src_database
 apps_api_src_body_measurements-->apps_api_src_auth
 apps_api_src_body_measurements-->apps_api_src_common
+apps_api_src_bootstrap-->apps_api_src_common
 apps_api_src_bootstrap-->apps_api_src_config
+apps_api_src_client_errors-->apps_api_src_auth
+apps_api_src_consents-->apps_api_src_audit
 apps_api_src_consents-->apps_api_src_database
 apps_api_src_consents-->apps_api_src_auth
+apps_api_src_consents-->apps_api_src_common
 apps_api_src_database-->apps_api_src_config
 apps_api_src_diary-->apps_api_src_consents
 apps_api_src_diary-->apps_api_src_database
@@ -70,11 +79,13 @@ apps_api_src_mail-->apps_api_src_config
 apps_api_src_main_ts-->apps_api_src_app_module_ts
 apps_api_src_main_ts-->apps_api_src_bootstrap
 apps_api_src_main_ts-->apps_api_src_config
+apps_api_src_users-->apps_api_src_audit
 apps_api_src_users-->apps_api_src_body_measurements
 apps_api_src_users-->apps_api_src_consents
 apps_api_src_users-->apps_api_src_database
 apps_api_src_users-->apps_api_src_diary
 apps_api_src_users-->apps_api_src_goals
+apps_api_src_users-->apps_api_src_mail
 apps_api_src_users-->apps_api_src_auth
 apps_api_src_users-->apps_api_src_common
 ```
@@ -97,6 +108,7 @@ subgraph apps["apps"]
         apps_mobile_src_app_dev_catalog_tsx["dev-catalog.tsx"]
         apps_mobile_src_app_diary_entry_tsx["diary-entry.tsx"]
         apps_mobile_src_app_exam["exam"]
+        apps_mobile_src_app_policy_update_tsx["policy-update.tsx"]
         apps_mobile_src_app_quick_add_tsx["quick-add.tsx"]
         apps_mobile_src_app_voice_entry_tsx["voice-entry.tsx"]
         apps_mobile_src_app_water_tsx["water.tsx"]
@@ -115,16 +127,19 @@ subgraph apps["apps"]
         apps_mobile_src_features_auth["auth"]
         apps_mobile_src_features_dev_catalog["dev-catalog"]
         apps_mobile_src_features_diary["diary"]
+        apps_mobile_src_features_errors["errors"]
         apps_mobile_src_features_exams["exams"]
         apps_mobile_src_features_forms["forms"]
         apps_mobile_src_features_navigation["navigation"]
         apps_mobile_src_features_network["network"]
         apps_mobile_src_features_nutrition["nutrition"]
+        apps_mobile_src_features_offline_queue["offline-queue"]
         apps_mobile_src_features_onboarding["onboarding"]
         apps_mobile_src_features_preferences["preferences"]
         apps_mobile_src_features_preview["preview"]
         apps_mobile_src_features_profile["profile"]
         apps_mobile_src_features_progress["progress"]
+        apps_mobile_src_features_reminders["reminders"]
         apps_mobile_src_features_report["report"]
         apps_mobile_src_features_today["today"]
         apps_mobile_src_features_voice["voice"]
@@ -138,12 +153,15 @@ subgraph apps["apps"]
 end
 apps_mobile_src_api-->apps_mobile_src_features_preferences
 apps_mobile_src_app__app_-->apps_mobile_src_components_app_tabs_tsx
+apps_mobile_src_app__app_-->apps_mobile_src_features_offline_queue
+apps_mobile_src_app__app_-->apps_mobile_src_features_reminders
 apps_mobile_src_app__app_-->apps_mobile_src_components_ui
 apps_mobile_src_app__app_-->apps_mobile_src_config
 apps_mobile_src_app__app_-->apps_mobile_src_features_auth
 apps_mobile_src_app__app_-->apps_mobile_src_features_exams
 apps_mobile_src_app__app_-->apps_mobile_src_api
 apps_mobile_src_app__app_-->apps_mobile_src_features_diary
+apps_mobile_src_app__app_-->apps_mobile_src_features_network
 apps_mobile_src_app__app_-->apps_mobile_src_features_nutrition
 apps_mobile_src_app__app_-->apps_mobile_src_features_today
 apps_mobile_src_app__app_-->apps_mobile_src_features_water
@@ -154,16 +172,18 @@ apps_mobile_src_app__auth_-->apps_mobile_src_api
 apps_mobile_src_app__auth_-->apps_mobile_src_components_ui
 apps_mobile_src_app__auth_-->apps_mobile_src_features_auth
 apps_mobile_src_app__auth_-->apps_mobile_src_i18n
+apps_mobile_src_app__auth_-->apps_mobile_src_config
 apps_mobile_src_app__onboarding_-->apps_mobile_src_api
 apps_mobile_src_app__onboarding_-->apps_mobile_src_components_ui
 apps_mobile_src_app__onboarding_-->apps_mobile_src_features_auth
+apps_mobile_src_app__onboarding_-->apps_mobile_src_features_onboarding
 apps_mobile_src_app__onboarding_-->apps_mobile_src_features_profile
 apps_mobile_src_app__onboarding_-->apps_mobile_src_features_accessibility
-apps_mobile_src_app__onboarding_-->apps_mobile_src_features_onboarding
 apps_mobile_src_app__onboarding_-->apps_mobile_src_features_forms
 apps_mobile_src_app__layout_tsx-->apps_mobile_src_api
 apps_mobile_src_app__layout_tsx-->apps_mobile_src_constants
 apps_mobile_src_app__layout_tsx-->apps_mobile_src_features_auth
+apps_mobile_src_app__layout_tsx-->apps_mobile_src_features_errors
 apps_mobile_src_app__layout_tsx-->apps_mobile_src_features_network
 apps_mobile_src_app__layout_tsx-->apps_mobile_src_features_onboarding
 apps_mobile_src_app__layout_tsx-->apps_mobile_src_features_preferences
@@ -171,14 +191,17 @@ apps_mobile_src_app__layout_tsx-->apps_mobile_src_global_css
 apps_mobile_src_app__layout_tsx-->apps_mobile_src_i18n
 apps_mobile_src_app_account-->apps_mobile_src_features_navigation
 apps_mobile_src_app_account-->apps_mobile_src_components_ui
+apps_mobile_src_app_account-->apps_mobile_src_features_account
 apps_mobile_src_app_account-->apps_mobile_src_api
 apps_mobile_src_app_account-->apps_mobile_src_features_accessibility
 apps_mobile_src_app_account-->apps_mobile_src_features_auth
+apps_mobile_src_app_account-->apps_mobile_src_features_network
 apps_mobile_src_app_account-->apps_mobile_src_features_profile
-apps_mobile_src_app_account-->apps_mobile_src_features_account
 apps_mobile_src_app_account-->apps_mobile_src_features_onboarding
 apps_mobile_src_app_account-->apps_mobile_src_features_preferences
 apps_mobile_src_app_account-->apps_mobile_src_i18n
+apps_mobile_src_app_account-->apps_mobile_src_features_diary
+apps_mobile_src_app_account-->apps_mobile_src_features_reminders
 apps_mobile_src_app_account-->apps_mobile_src_features_report
 apps_mobile_src_app_dev_catalog_tsx-->apps_mobile_src_features_dev_catalog
 apps_mobile_src_app_diary_entry_tsx-->apps_mobile_src_api
@@ -187,6 +210,7 @@ apps_mobile_src_app_diary_entry_tsx-->apps_mobile_src_features_accessibility
 apps_mobile_src_app_diary_entry_tsx-->apps_mobile_src_features_auth
 apps_mobile_src_app_diary_entry_tsx-->apps_mobile_src_features_diary
 apps_mobile_src_app_diary_entry_tsx-->apps_mobile_src_features_forms
+apps_mobile_src_app_diary_entry_tsx-->apps_mobile_src_features_offline_queue
 apps_mobile_src_app_exam-->apps_mobile_src_components_ui
 apps_mobile_src_app_exam-->apps_mobile_src_features_accessibility
 apps_mobile_src_app_exam-->apps_mobile_src_features_auth
@@ -196,6 +220,10 @@ apps_mobile_src_app_exam-->apps_mobile_src_features_onboarding
 apps_mobile_src_app_exam-->apps_mobile_src_api
 apps_mobile_src_app_exam-->apps_mobile_src_i18n
 apps_mobile_src_app_exam-->apps_mobile_src_features_forms
+apps_mobile_src_app_policy_update_tsx-->apps_mobile_src_api
+apps_mobile_src_app_policy_update_tsx-->apps_mobile_src_components_ui
+apps_mobile_src_app_policy_update_tsx-->apps_mobile_src_features_auth
+apps_mobile_src_app_policy_update_tsx-->apps_mobile_src_features_onboarding
 apps_mobile_src_app_quick_add_tsx-->apps_mobile_src_api
 apps_mobile_src_app_quick_add_tsx-->apps_mobile_src_components_ui
 apps_mobile_src_app_quick_add_tsx-->apps_mobile_src_config
@@ -224,23 +252,32 @@ apps_mobile_src_components_ui-->apps_mobile_src_constants
 apps_mobile_src_components_ui-->apps_mobile_src_features_accessibility
 apps_mobile_src_features_accessibility-->apps_mobile_src_i18n
 apps_mobile_src_features_account-->apps_mobile_src_features_diary
+apps_mobile_src_features_account-->apps_mobile_src_api
 apps_mobile_src_features_account-->apps_mobile_src_i18n
 apps_mobile_src_features_auth-->apps_mobile_src_components_ui
 apps_mobile_src_features_auth-->apps_mobile_src_constants
 apps_mobile_src_features_auth-->apps_mobile_src_api
+apps_mobile_src_features_auth-->apps_mobile_src_features_offline_queue
+apps_mobile_src_features_auth-->apps_mobile_src_features_reminders
 apps_mobile_src_features_auth-->apps_mobile_src_features_accessibility
 apps_mobile_src_features_dev_catalog-->apps_mobile_src_components_ui
 apps_mobile_src_features_dev_catalog-->apps_mobile_src_constants
 apps_mobile_src_features_dev_catalog-->apps_mobile_src_features_auth
 apps_mobile_src_features_dev_catalog-->apps_mobile_src_features_onboarding
-apps_mobile_src_features_diary-->apps_mobile_src_i18n
 apps_mobile_src_features_diary-->apps_mobile_src_api
+apps_mobile_src_features_diary-->apps_mobile_src_i18n
 apps_mobile_src_features_diary-->apps_mobile_src_components_ui
 apps_mobile_src_features_diary-->apps_mobile_src_features_accessibility
 apps_mobile_src_features_diary-->apps_mobile_src_constants
+apps_mobile_src_features_diary-->apps_mobile_src_features_offline_queue
 apps_mobile_src_features_diary-->apps_mobile_src_features_auth
 apps_mobile_src_features_diary-->apps_mobile_src_features_forms
 apps_mobile_src_features_diary-->apps_mobile_src_features_nutrition
+apps_mobile_src_features_diary-->apps_mobile_src_features_onboarding
+apps_mobile_src_features_errors-->apps_mobile_src_api
+apps_mobile_src_features_errors-->apps_mobile_src_features_account
+apps_mobile_src_features_errors-->apps_mobile_src_components_ui
+apps_mobile_src_features_errors-->apps_mobile_src_features_auth
 apps_mobile_src_features_exams-->apps_mobile_src_i18n
 apps_mobile_src_features_exams-->apps_mobile_src_features_preview
 apps_mobile_src_features_exams-->apps_mobile_src_components_ui
@@ -251,6 +288,10 @@ apps_mobile_src_features_navigation-->apps_mobile_src_features_accessibility
 apps_mobile_src_features_network-->apps_mobile_src_components_ui
 apps_mobile_src_features_nutrition-->apps_mobile_src_components_ui
 apps_mobile_src_features_nutrition-->apps_mobile_src_i18n
+apps_mobile_src_features_offline_queue-->apps_mobile_src_api
+apps_mobile_src_features_offline_queue-->apps_mobile_src_features_diary
+apps_mobile_src_features_offline_queue-->apps_mobile_src_features_weight
+apps_mobile_src_features_offline_queue-->apps_mobile_src_components_ui
 apps_mobile_src_features_onboarding-->apps_mobile_src_components_ui
 apps_mobile_src_features_onboarding-->apps_mobile_src_constants
 apps_mobile_src_features_onboarding-->apps_mobile_src_i18n
@@ -271,6 +312,10 @@ apps_mobile_src_features_progress-->apps_mobile_src_components_ui
 apps_mobile_src_features_progress-->apps_mobile_src_features_accessibility
 apps_mobile_src_features_progress-->apps_mobile_src_features_diary
 apps_mobile_src_features_progress-->apps_mobile_src_features_today
+apps_mobile_src_features_reminders-->apps_mobile_src_features_diary
+apps_mobile_src_features_reminders-->apps_mobile_src_features_offline_queue
+apps_mobile_src_features_reminders-->apps_mobile_src_components_ui
+apps_mobile_src_features_reminders-->apps_mobile_src_constants
 apps_mobile_src_features_report-->apps_mobile_src_api
 apps_mobile_src_features_report-->apps_mobile_src_features_diary
 apps_mobile_src_features_report-->apps_mobile_src_features_accessibility
@@ -293,9 +338,10 @@ apps_mobile_src_features_water-->apps_mobile_src_components_ui
 apps_mobile_src_features_water-->apps_mobile_src_features_accessibility
 apps_mobile_src_features_water-->apps_mobile_src_features_preview
 apps_mobile_src_features_water-->apps_mobile_src_i18n
+apps_mobile_src_features_weight-->apps_mobile_src_i18n
 apps_mobile_src_features_weight-->apps_mobile_src_api
 apps_mobile_src_features_weight-->apps_mobile_src_components_ui
-apps_mobile_src_features_weight-->apps_mobile_src_i18n
+apps_mobile_src_features_weight-->apps_mobile_src_features_offline_queue
 apps_mobile_src_features_weight-->apps_mobile_src_constants
 apps_mobile_src_features_weight-->apps_mobile_src_features_accessibility
 apps_mobile_src_features_weight-->apps_mobile_src_features_auth

@@ -10,6 +10,7 @@ import { BodyMeasurementsModule } from '../body-measurements/body-measurements.m
 import { GoalsModule } from '../goals/goals.module';
 import { DiaryModule } from '../diary/diary.module';
 import { MailModule } from '../mail/mail.module';
+import { AuditModule } from '../audit/audit.module';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { AccountPurgeService } from './account-purge.service';
@@ -28,6 +29,7 @@ import { FoodPortion } from '../database/entities/food-portion.entity';
     GoalsModule,
     DiaryModule,
     MailModule,
+    AuditModule,
   ],
   controllers: [UsersController],
   providers: [UsersService, AccountPurgeService, AccountPurgeScheduler],

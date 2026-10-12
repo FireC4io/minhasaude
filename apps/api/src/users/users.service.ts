@@ -15,6 +15,8 @@ import { DiaryService } from '../diary/diary.service';
 import { BodyMeasurementSource } from '../database/entities/body-measurement.entity';
 import type { UpdateProfileDto } from './dto/update-profile.dto';
 import { AccountPurgeService } from './account-purge.service';
+import { AuditService } from '../audit/audit.service';
+import { AuditAction } from '../database/entities/audit-event.entity';
 
 export type DeletionStatus = 'deleted' | 'pending_retry';
 
@@ -36,6 +38,7 @@ export class UsersService {
     private readonly accountPurgeService: AccountPurgeService,
     private readonly securityNotifier: SecurityNotifier,
     @InjectRepository(FoodPortion) private readonly portions: Repository<FoodPortion>,
+    private readonly audit: AuditService,
   ) {}
 
   private async getUserOrThrow(userId: string): Promise<User> {
@@ -75,7 +78,7 @@ export class UsersService {
   async exportData(userId: string) {
     const user = await this.getUserOrThrow(userId);
     // Leituras independentes: em paralelo.
-    const [profile, consents, bodyMeasurements, goals, diaryEntries, customFoods, customPortions] = await Promise.all([
+    const [profile, consents, bodyMeasurements, goals, diaryEntries, customFoods, customPortions, auditEvents] = await Promise.all([
       this.profiles.findOne({ where: { userId } }),
       this.consentsService.listHistory(userId),
       this.bodyMeasurementsService.listAll(userId),
@@ -85,7 +88,10 @@ export class UsersService {
       this.foods.find({ where: { ownerUserId: userId }, order: { name: 'ASC' } }),
       // Medidas que a pessoa criou ("minha caneca = 180 g").
       this.portions.find({ where: { userId }, order: { createdAt: 'ASC' } }),
+      // Quando a pessoa exportou, revogou ou pediu exclusão: também é dado dela.
+      this.audit.listForUser(userId),
     ]);
+    await this.audit.record(userId, AuditAction.DATA_EXPORTED);
     const { passwordHash: _passwordHash, ...safeUser } = user;
 
     return {
@@ -98,6 +104,7 @@ export class UsersService {
       diaryEntries,
       customFoods,
       customPortions,
+      auditEvents,
     };
   }
 
@@ -154,6 +161,8 @@ export class UsersService {
         completedAt: null,
       }),
     );
+
+    await this.audit.record(userId, AuditAction.ACCOUNT_DELETION_REQUESTED, { requestId: request.id });
 
     // O e-mail vem da conta lida antes do apagamento; depois dele não existe mais.
     this.securityNotifier.notify(user.email, 'account_deleted', userId);

@@ -35,12 +35,14 @@ describe('AccountPurgeService', () => {
   let users: MockRepo;
   let consents: MockRepo;
   let service: AccountPurgeService;
+  let audit: { record: jest.Mock };
 
   beforeEach(() => {
     requests = mockRepo();
     users = mockRepo();
     consents = mockRepo();
-    service = new AccountPurgeService(requests as never, users as never, consents as never);
+    audit = { record: jest.fn(async () => undefined) };
+    service = new AccountPurgeService(requests as never, users as never, consents as never, audit as never);
   });
 
   it('não apaga nada quando não há pedido vencido', async () => {
@@ -111,6 +113,15 @@ describe('AccountPurgeService', () => {
     expect(requests.save).toHaveBeenCalledWith(
       expect.objectContaining({ id: 'req-1', completedAt: AGORA }),
     );
+  });
+
+  it('registra na auditoria que a conta foi apagada, com o pedido', async () => {
+    const req = pedido();
+    requests.find.mockResolvedValueOnce([req]);
+
+    await service.purgeDueAccounts(AGORA);
+
+    expect(audit.record).toHaveBeenCalledWith(req.userId, 'account_deleted', { requestId: 'req-1' });
   });
 
   it('conclui o pedido mesmo se o usuário já não existir', async () => {
