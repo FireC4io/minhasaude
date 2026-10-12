@@ -12,5 +12,6 @@ export type FoodSource = typeof FoodSource[keyof typeof FoodSource];
 export const FoodSource = {
   taco: 'taco',
   off: 'off',
+  usda: 'usda',
   custom: 'custom',
 } as const;

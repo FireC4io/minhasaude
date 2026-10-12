@@ -41,6 +41,9 @@ export default function AboutScreen() {
           {t('account.about.taco')}
         </AppText>
         <AppText className="text-grafite">
+          {t('account.about.usda')}
+        </AppText>
+        <AppText className="text-grafite">
           {t('account.about.ibge')}
         </AppText>
         <AppText className="text-grafite">

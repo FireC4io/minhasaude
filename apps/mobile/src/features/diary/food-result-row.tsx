@@ -19,6 +19,8 @@ export function FoodResultRow({ food, lastAmount, onPress }: FoodResultRowProps)
   const kcal = Math.round(Number(food.kcalPer100g));
   const details = [
     food.brand,
+    // Crédito da fonte quando não é a tabela brasileira: o número é de alimento americano.
+    food.source === 'usda' ? t('diary.sourceUsda') : null,
     t('diary.perHundred', { kcal }),
     lastAmount ? t('diary.lastTime', { amount: lastAmount.text }) : null,
   ]
