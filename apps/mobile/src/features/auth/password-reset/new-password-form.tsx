@@ -8,13 +8,12 @@ import { FormError } from '@/components/ui/form-error';
 import { TextButton } from '@/components/ui/text-button';
 import { useAnnounce } from '@/features/accessibility/use-announce';
 import { AuthTextField } from '@/features/auth/auth-text-field';
-import { PasswordField } from '@/features/auth/password-field';
+import { MIN_PASSWORD_LENGTH, NewPasswordField, isPasswordLongEnough } from '@/features/auth/new-password-field';
 import { PrimaryButton } from '@/features/auth/primary-button';
 
 import { resetErrorKey } from './reset-errors';
 
 const CODE_LENGTH = INPUT_LIMITS.passwordResetCode;
-const MIN_PASSWORD_LENGTH = INPUT_LIMITS.passwordMin;
 
 interface NewPasswordFormProps {
   email: string;
@@ -39,7 +38,7 @@ export function NewPasswordForm({ email, onSubmit, onResend, onChangeEmail }: Ne
       setError(t('auth.forgot.codeInvalid'));
       return;
     }
-    if (password.length < MIN_PASSWORD_LENGTH) {
+    if (!isPasswordLongEnough(password)) {
       setError(t('auth.register.passwordMin', { min: MIN_PASSWORD_LENGTH }));
       return;
     }
@@ -94,24 +93,13 @@ export function NewPasswordForm({ email, onSubmit, onResend, onChangeEmail }: Ne
         submitBehavior="submit"
         onSubmitEditing={() => passwordRef.current?.focus()}
       />
-      <PasswordField
+      <NewPasswordField
         ref={passwordRef}
         label={t('auth.forgot.newPassword')}
         value={password}
         onChangeText={setPassword}
-        autoComplete="password-new"
-        textContentType="newPassword"
-        maxLength={INPUT_LIMITS.passwordNew}
-        returnKeyType="go"
-        accessibilityHint={t('auth.register.passwordHint', { min: MIN_PASSWORD_LENGTH })}
         onSubmitEditing={() => void handleSubmit()}
       />
-      <AppText variant="caption" className="text-grafite-suave">
-        {t('auth.register.passwordRule', { min: MIN_PASSWORD_LENGTH })}
-        {password.length > 0 && password.length < MIN_PASSWORD_LENGTH
-          ? t('auth.register.passwordMissing', { count: MIN_PASSWORD_LENGTH - password.length })
-          : ''}
-      </AppText>
       <FormError message={error} />
       <PrimaryButton
         label={t('auth.forgot.save')}

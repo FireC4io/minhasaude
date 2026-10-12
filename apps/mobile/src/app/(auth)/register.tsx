@@ -3,7 +3,6 @@ import { useRouter } from 'expo-router';
 import { useRef, useState } from 'react';
 import { View, type TextInput } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { INPUT_LIMITS } from '@minhasaude/shared';
 
 import { AppText } from '@/components/ui/app-text';
 import { FormError } from '@/components/ui/form-error';
@@ -12,10 +11,8 @@ import { TextButton } from '@/components/ui/text-button';
 import { useAuth } from '@/features/auth/auth-context';
 import { GoogleSignInSection } from '@/features/auth/google/google-sign-in-section';
 import { AuthTextField } from '@/features/auth/auth-text-field';
-import { PasswordField } from '@/features/auth/password-field';
+import { MIN_PASSWORD_LENGTH, NewPasswordField, isPasswordLongEnough } from '@/features/auth/new-password-field';
 import { PrimaryButton } from '@/features/auth/primary-button';
-
-const MIN_PASSWORD_LENGTH = INPUT_LIMITS.passwordMin;
 
 export default function RegisterScreen() {
   const { t } = useTranslation();
@@ -34,7 +31,7 @@ export default function RegisterScreen() {
       return;
     }
     // A regra fica visível embaixo do campo; o botão nunca fica travado sem dizer por quê.
-    if (password.length < MIN_PASSWORD_LENGTH) {
+    if (!isPasswordLongEnough(password)) {
       setError(t('auth.register.passwordMin', { min: MIN_PASSWORD_LENGTH }));
       return;
     }
@@ -76,24 +73,13 @@ export default function RegisterScreen() {
           submitBehavior="submit"
           onSubmitEditing={() => passwordRef.current?.focus()}
         />
-        <PasswordField
+        <NewPasswordField
           ref={passwordRef}
           label={t('auth.password')}
           value={password}
           onChangeText={setPassword}
-          autoComplete="password-new"
-          textContentType="newPassword"
-          maxLength={INPUT_LIMITS.passwordNew}
-          returnKeyType="go"
-          accessibilityHint={t('auth.register.passwordHint', { min: MIN_PASSWORD_LENGTH })}
           onSubmitEditing={() => void handleSubmit()}
         />
-        <AppText variant="caption" className="text-grafite-suave">
-          {t('auth.register.passwordRule', { min: MIN_PASSWORD_LENGTH })}
-          {password.length > 0 && password.length < MIN_PASSWORD_LENGTH
-            ? t('auth.register.passwordMissing', { count: MIN_PASSWORD_LENGTH - password.length })
-            : ''}
-        </AppText>
         <FormError message={error} />
         <PrimaryButton
           label={t('auth.createAccount')}
