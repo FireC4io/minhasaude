@@ -27,7 +27,9 @@ Roteiro com o dono:
 - Apagar os secrets duplicados `BACKUP_AGE_RECIPIENT` e `BACKUP_BUCKET` no GitHub.
 - Loja: conta de revisão, segundo cliente OAuth (Play App Signing) e AAB no teste interno **feitos em 2026-10-12**.
   As 10 declarações de Conteúdo do app foram enviadas em 2026-10-12 (respostas em `docs/loja/play-console.md`).
-  Falta: ficha da loja (textos e imagens), roteiro do APK no celular, lista de testadores e promover ao teste fechado.
+  Ficha da loja também preenchida em 2026-10-12 (tags: Saúde e fitness, Dieta, Perda de peso, Comida e bebida; recursos
+  sem rótulo de IA: capturas são telas reais). Falta: roteiro do app no celular, lista de testadores e promover ao
+  teste fechado (vai para a revisão do Google).
 - Melhoria anotada: bloquear no `app.json` permissões que entram pelas bibliotecas e o app não usa (`c2dm` de push
   remoto, contadores de ícone dos fabricantes, biometria, install referrer). Não bloqueia a publicação.
 - Listar 12–15 testadores (de preferência dos perfis da Fase 4; incluir quem use leitor de tela e quem fale inglês ou
