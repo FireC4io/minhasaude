@@ -131,12 +131,8 @@ export class FoodsService {
 
   private async fetchAndCacheFromOpenFoodFacts(query: string): Promise<Food[]> {
     const products = await this.openFoodFacts.searchByTerm(query);
-    const cached: Food[] = [];
-    for (const product of products) {
-      const food = await this.cacheOffProduct(product);
-      if (food) cached.push(food);
-    }
-    return cached;
+    const cached = await Promise.all(products.map((product) => this.cacheOffProduct(product)));
+    return cached.filter((food): food is Food => food !== null);
   }
 
   // Nunca fabrica um valor pra macro que o OFF não tem medido - mesma

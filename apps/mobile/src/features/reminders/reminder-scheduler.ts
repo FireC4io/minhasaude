@@ -126,17 +126,19 @@ export async function syncReminders(
   await ensureCategory();
 
   const channelId = CHANNEL_IDS[settings.alert];
-  for (const reminder of plan) {
-    await Notifications.scheduleNotificationAsync({
-      identifier: reminder.id,
-      content: content(
-        reminderMessage(reminder, settings.tone, settings.discreet),
-        { kind: reminder.kind, meal: reminder.meal, date: reminder.date },
-        settings,
-      ),
-      trigger: { type: Notifications.SchedulableTriggerInputTypes.DATE, date: reminder.at, channelId },
-    });
-  }
+  await Promise.all(
+    plan.map((reminder) =>
+      Notifications.scheduleNotificationAsync({
+        identifier: reminder.id,
+        content: content(
+          reminderMessage(reminder, settings.tone, settings.discreet),
+          { kind: reminder.kind, meal: reminder.meal, date: reminder.date },
+          settings,
+        ),
+        trigger: { type: Notifications.SchedulableTriggerInputTypes.DATE, date: reminder.at, channelId },
+      }),
+    ),
+  );
   return plan[0] ?? null;
 }
 

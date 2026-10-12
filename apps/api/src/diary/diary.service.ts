@@ -234,15 +234,16 @@ export class DiaryService {
   async copy(userId: string, dto: CopyDiaryDto): Promise<DiaryEntry[]> {
     const sourceEntries = await this.entries.find({ where: { userId, entryDate: dto.fromDate } });
 
+    // Os cálculos (leituras) em paralelo; a gravação segue uma a uma para as
+    // entradas copiadas ficarem na mesma ordem do dia de origem.
+    const copies = await Promise.all(
+      sourceEntries.map(async (source) => ({
+        source,
+        snap: await this.computeSnapshot(userId, source.foodId, Number(source.quantity), source.unit, source.portionId),
+      })),
+    );
     const created: DiaryEntry[] = [];
-    for (const source of sourceEntries) {
-      const snap = await this.computeSnapshot(
-        userId,
-        source.foodId,
-        Number(source.quantity),
-        source.unit,
-        source.portionId,
-      );
+    for (const { source, snap } of copies) {
       const entry = this.entries.create({
         userId,
         foodId: source.foodId,

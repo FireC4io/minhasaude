@@ -123,9 +123,11 @@ export class UsersService {
    * Só o peso da balança comum entra — o relatório nunca mistura aparelhos.
    */
   async getProgressReport(userId: string) {
-    const measurements = await this.bodyMeasurementsService.listAll(userId);
-    const goals = await this.goalsService.listAll(userId);
-    const diaryEntries = await this.diaryService.listAllWithFood(userId);
+    const [measurements, goals, diaryEntries] = await Promise.all([
+      this.bodyMeasurementsService.listAll(userId),
+      this.goalsService.listAll(userId),
+      this.diaryService.listAllWithFood(userId),
+    ]);
 
     return {
       generatedAt: new Date(),

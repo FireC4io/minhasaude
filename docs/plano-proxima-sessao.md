@@ -44,7 +44,9 @@ Na ordem sugerida:
 4. ~~**Juntar telas repetidas**~~ — feito em 2026-10-12: `FileActionScreen` (Exportação e Relatório) e
    `NewPasswordField` (Cadastro e Nova senha). A lista do que vai na exportação passou a citar alimentos próprios e
    histórico de pedidos.
-5. **Consultas em paralelo** onde der (21 trechos com `await` em laço; consentimentos fazem 3 seguidas).
+5. ~~**Consultas em paralelo**~~ — feito em 2026-10-12: consentimentos numa consulta só, cópia do dia, cache do
+   Open Food Facts, relatório, agenda de lembretes e voz em paralelo. Ficam em sequência de propósito: fila sem
+   internet (ordem), exclusão de contas (uma falha não para as outras), gravação da cópia do dia (ordem).
 6. **Limpeza de estilo do Sonar** (propriedades só leitura, condições encadeadas).
 
 ## Depois

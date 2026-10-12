@@ -95,16 +95,20 @@ export default function VoiceEntryScreen() {
     }
     setSaving(true);
     try {
-      for (const draft of chosen) {
-        // Sem troca explícita, vale a mesma primeira sugestão que o card mostra.
-        const food =
-          draft.food ?? (await foodsControllerSearch({ q: draft.spoken, limit: 5 })).data[0];
-        if (!food) {
-          setError(
-            t('voice.notFound', { item: draft.spoken }),
-          );
-          return;
-        }
+      // Todos os alimentos antes de gravar: se um não for encontrado, nada é
+      // anotado pela metade. Sem troca explícita, vale a primeira sugestão do card.
+      const foods = await Promise.all(
+        chosen.map(async (draft) => draft.food ?? (await foodsControllerSearch({ q: draft.spoken, limit: 5 })).data[0]),
+      );
+      const missingIndex = foods.findIndex((food) => !food);
+      if (missingIndex >= 0) {
+        setError(t('voice.notFound', { item: chosen[missingIndex]?.spoken }));
+        return;
+      }
+      for (const [index, draft] of chosen.entries()) {
+        const food = foods[index];
+        if (!food) return;
+        // Uma a uma: as anotações ficam na ordem em que foram faladas.
         await createEntry.mutateAsync({
           data: {
             foodId: food.id,

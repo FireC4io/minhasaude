@@ -53,22 +53,19 @@ export class ConsentsService {
   }
 
   async listStatus(userId: string): Promise<ConsentStatus[]> {
-    const types = Object.values(ConsentType);
-    const statuses: ConsentStatus[] = [];
-    for (const consentType of types) {
-      const latest = await this.consents.findOne({
-        where: { userId, consentType },
-        order: { grantedAt: 'DESC' },
-      });
-      statuses.push({
+    // Uma consulta só: o histórico vem do mais novo para o mais antigo, e o
+    // primeiro de cada tipo é o que vale.
+    const history = await this.listHistory(userId);
+    return Object.values(ConsentType).map((consentType) => {
+      const latest = history.find((consent) => consent.consentType === consentType);
+      return {
         consentType,
         granted: !!latest && !latest.revokedAt,
         policyVersion: latest?.policyVersion ?? null,
         grantedAt: latest?.grantedAt ?? null,
         revokedAt: latest?.revokedAt ?? null,
-      });
-    }
-    return statuses;
+      };
+    });
   }
 
   // Usado por GET /v1/me/export - histórico completo, não só o status atual.
