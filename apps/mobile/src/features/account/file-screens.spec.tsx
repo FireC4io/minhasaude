@@ -23,6 +23,9 @@ describe('baixar meus dados', () => {
     await render(<ExportDataScreen />);
 
     expect(screen.getByText('• Todo o seu diário de alimentação')).toBeOnTheScreen();
+    // A lista acompanha o que a exportação leva de verdade (alimentos próprios, histórico de pedidos).
+    expect(screen.getByText('• Os alimentos e as medidas que você cadastrou')).toBeOnTheScreen();
+    expect(screen.getByText(/O histórico dos seus pedidos/)).toBeOnTheScreen();
     await userEvent.press(screen.getByRole('button', { name: 'Gerar meu arquivo' }));
 
     expect(saveExportFile).toHaveBeenCalledWith(

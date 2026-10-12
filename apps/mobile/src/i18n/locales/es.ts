@@ -267,6 +267,8 @@ export const es: Translations = {
         goals: 'Tus metas, incluso las antiguas',
         weights: 'Todos los pesos anotados',
         diary: 'Todo tu diario de alimentación',
+        customFoods: 'Los alimentos y las medidas que registraste',
+        requests: 'El historial de tus pedidos (descargar tus datos, retirar una autorización, borrar la cuenta)',
       },
       format: 'El archivo es de tipo JSON, que otras apps y servicios pueden leer. Tiene datos de salud: guárdalo en un lugar seguro y compártelo solo con quien confíes.',
       generate: 'Generar mi archivo',

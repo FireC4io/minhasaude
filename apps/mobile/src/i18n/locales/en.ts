@@ -267,6 +267,8 @@ export const en: Translations = {
         goals: 'Your goals, including old ones',
         weights: 'All logged weights',
         diary: 'Your whole food diary',
+        customFoods: 'Foods and measures you added',
+        requests: 'The history of your requests (downloading your data, withdrawing a permission, deleting your account)',
       },
       format: 'The file is JSON, which other apps and services can read. It has health data: keep it somewhere safe and only share it with people you trust.',
       generate: 'Create my file',

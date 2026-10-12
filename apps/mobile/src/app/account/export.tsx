@@ -5,7 +5,7 @@ import { exportFileName } from '@/features/account/export-file-name';
 import { FileActionScreen } from '@/features/account/file-action-screen';
 import { saveExportFile } from '@/features/account/save-export-file';
 
-const INCLUDED = ['account', 'profile', 'consents', 'goals', 'weights', 'diary'] as const;
+const INCLUDED = ['account', 'profile', 'consents', 'goals', 'weights', 'diary', 'customFoods', 'requests'] as const;
 
 /** Direito de portabilidade (LGPD, art. 18). Gratuito e sem limite. */
 export default function ExportDataScreen() {

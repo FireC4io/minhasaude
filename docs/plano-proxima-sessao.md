@@ -41,7 +41,9 @@ Na ordem sugerida:
    versão 2026-10 (decisão do dono, 2026-10-12): sem novo aceite.
 3. ~~**Quebrar as telas complexas**~~ — feito em 2026-10-12: `diary-entry.tsx` 315→155, Hoje 251→143, Envio de
    exame 192→90 linhas; as três ganharam teste de tela antes da quebra.
-4. **Juntar telas repetidas**: Relatório com Exportação, Cadastro com Nova senha.
+4. ~~**Juntar telas repetidas**~~ — feito em 2026-10-12: `FileActionScreen` (Exportação e Relatório) e
+   `NewPasswordField` (Cadastro e Nova senha). A lista do que vai na exportação passou a citar alimentos próprios e
+   histórico de pedidos.
 5. **Consultas em paralelo** onde der (21 trechos com `await` em laço; consentimentos fazem 3 seguidas).
 6. **Limpeza de estilo do Sonar** (propriedades só leitura, condições encadeadas).
 

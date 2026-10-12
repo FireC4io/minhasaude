@@ -273,6 +273,8 @@ export const ptBR = {
         goals: 'Suas metas, inclusive as antigas',
         weights: 'Todos os pesos anotados',
         diary: 'Todo o seu diário de alimentação',
+        customFoods: 'Os alimentos e as medidas que você cadastrou',
+        requests: 'O histórico dos seus pedidos (baixar os dados, retirar uma autorização, apagar a conta)',
       },
       format: 'O arquivo é do tipo JSON, que outros apps e serviços conseguem ler. Ele tem dados de saúde: guarde num lugar seguro e só compartilhe com quem você confia.',
       generate: 'Gerar meu arquivo',
