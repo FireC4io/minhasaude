@@ -7,8 +7,11 @@ import { MIN_TOUCH_TARGET } from '@/constants/accessibility';
 import { formatExamValue } from './exam-labels';
 import { markerInfo } from './marker-catalog';
 import { RangeBar } from './range-bar';
-import { describePosition, parseReferenceRange, positionInRange } from './reference-range';
+import { describePosition, parseReferenceRange, positionInRange, type RangePosition } from './reference-range';
 import type { ExamResult } from './types';
+
+/** Símbolo ao lado do valor: dentro da faixa do laudo, fora dela, ou sem faixa para comparar. */
+const POSITION_MARKERS: Record<RangePosition, string> = { within: '●', below: '◆', above: '◆', unknown: '' };
 
 interface ResultRowProps {
   result: ExamResult;
@@ -19,7 +22,7 @@ interface ResultRowProps {
  * Um marcador revisado: valor, faixa do laudo e onde o valor fica nela.
  * O texto é informativo — "acima da faixa do laudo", nunca "alterado" ou "risco".
  */
-export function ResultRow({ result, onPress }: ResultRowProps) {
+export function ResultRow({ result, onPress }: Readonly<ResultRowProps>) {
   const { t } = useTranslation();
   const info = markerInfo(result.markerCode);
   const value = result.confirmedValue ?? Number(result.rawValue.replace(',', '.'));
@@ -27,7 +30,7 @@ export function ResultRow({ result, onPress }: ResultRowProps) {
   const range = parseReferenceRange(result.rawReferenceRange);
   const position = positionInRange(value, range);
   const positionText = describePosition(position);
-  const marker = position === 'within' ? '●' : position === 'unknown' ? '' : '◆';
+  const marker = POSITION_MARKERS[position];
 
   return (
     <Pressable

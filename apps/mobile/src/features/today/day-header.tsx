@@ -11,7 +11,7 @@ interface DayHeaderProps {
 }
 
 /** O dia mostrado (abre o calendário) e, fora de hoje, o atalho para voltar. */
-export function DayHeader({ date, onOpenCalendar, onBackToToday }: DayHeaderProps) {
+export function DayHeader({ date, onOpenCalendar, onBackToToday }: Readonly<DayHeaderProps>) {
   const { t } = useTranslation();
   const dateLabel = formatIsoDateLabel(date);
   return (

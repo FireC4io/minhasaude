@@ -28,7 +28,7 @@ interface FoodSearchPanelProps {
 }
 
 /** Busca de alimento, com os anotados recentemente enquanto nada foi digitado. */
-export function FoodSearchPanel({ date, searchTerm, onSearchChange, onChoose }: FoodSearchPanelProps) {
+export function FoodSearchPanel({ date, searchTerm, onSearchChange, onChoose }: Readonly<FoodSearchPanelProps>) {
   const { t } = useTranslation();
   const isTyping = searchTerm.trim().length >= MIN_SEARCH_LENGTH;
   const searchQuery = useFoodsControllerSearch({ q: searchTerm, limit: 20 }, { query: { enabled: isTyping } });

@@ -15,7 +15,7 @@ interface PasswordFieldProps extends Omit<TextInputProps, 'secureTextEntry'> {
  * Senha com "Mostrar": quem digita com dificuldade ou enxerga pouco erra a
  * senha sem ver o que digitou, e não sabe onde errou.
  */
-export function PasswordField({ label, ref, ...inputProps }: PasswordFieldProps) {
+export function PasswordField({ label, ref, ...inputProps }: Readonly<PasswordFieldProps>) {
   const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
 

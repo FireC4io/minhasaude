@@ -14,7 +14,7 @@ interface FoodResultRowProps {
 }
 
 /** Alimento numa lista de busca ou de recentes, com kcal por 100 g para comparar (F4-16). */
-export function FoodResultRow({ food, lastAmount, onPress }: FoodResultRowProps) {
+export function FoodResultRow({ food, lastAmount, onPress }: Readonly<FoodResultRowProps>) {
   const { t } = useTranslation();
   const kcal = Math.round(Number(food.kcalPer100g));
   const details = [

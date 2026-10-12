@@ -24,7 +24,7 @@ interface ErrorScreenProps {
  * No lugar da tela branca quando uma tela quebra ao desenhar. Tem o próprio
  * SafeAreaProvider porque pode aparecer fora dos provedores do app.
  */
-export function ErrorScreen({ error, retry, reporter }: ErrorScreenProps) {
+export function ErrorScreen({ error, retry, reporter }: Readonly<ErrorScreenProps>) {
   const { t } = useTranslation();
 
   useEffect(() => {

@@ -14,7 +14,7 @@ interface WeeklyPacePickerProps {
 }
 
 /** Só aparece para perder ou ganhar peso. */
-export function WeeklyPacePicker({ goal, value, onChange }: WeeklyPacePickerProps) {
+export function WeeklyPacePicker({ goal, value, onChange }: Readonly<WeeklyPacePickerProps>) {
   const { t } = useTranslation();
   if (!goal || goal === 'maintain') return null;
   return (

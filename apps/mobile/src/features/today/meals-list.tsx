@@ -21,7 +21,7 @@ interface MealsListProps {
 }
 
 /** As quatro refeições do dia, com o aviso de dia vazio e o atalho de copiar o anterior. */
-export function MealsList({ day, canCopyPrevious, isCopying, onCopyPrevious, onAdd, onEdit, onRemove }: MealsListProps) {
+export function MealsList({ day, canCopyPrevious, isCopying, onCopyPrevious, onAdd, onEdit, onRemove }: Readonly<MealsListProps>) {
   const { t } = useTranslation();
   return (
     <View className="gap-4">

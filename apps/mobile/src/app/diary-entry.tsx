@@ -95,7 +95,8 @@ export default function DiaryEntryScreen() {
     }
   }
 
-  const title = id ? foodName : mealType ? MEAL_TYPE_LABELS[mealType] : t('diary.food');
+  const mealTitle = mealType ? MEAL_TYPE_LABELS[mealType] : t('diary.food');
+  const title = id ? foodName : mealTitle;
 
   return (
     <SafeAreaView className="flex-1 bg-areia">

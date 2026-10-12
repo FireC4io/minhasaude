@@ -47,7 +47,10 @@ Na ordem sugerida:
 5. ~~**Consultas em paralelo**~~ — feito em 2026-10-12: consentimentos numa consulta só, cópia do dia, cache do
    Open Food Facts, relatório, agenda de lembretes e voz em paralelo. Ficam em sequência de propósito: fila sem
    internet (ordem), exclusão de contas (uma falha não para as outras), gravação da cópia do dia (ordem).
-6. **Limpeza de estilo do Sonar** (propriedades só leitura, condições encadeadas).
+6. ~~**Limpeza de estilo do Sonar**~~ — feito em 2026-10-12: 64 props `Readonly` (S6759) e 17 ternários
+   encadeados (S3358, com `QueryStateView` para carregando/erro/dado). Ficam abertos de propósito: `await` em laço
+   em migrations/seeds/fila (S9382) e 4 avisos de caminho em `scripts/medidas-ibge/*.py` (scripts locais, sem
+   entrada de terceiros) — marcar como "não se aplica" no SonarCloud (precisa do login do dono).
 
 ## Depois
 

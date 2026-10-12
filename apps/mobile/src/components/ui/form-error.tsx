@@ -12,7 +12,7 @@ interface FormErrorProps {
  * erro só existia como texto vermelho: quem não enxerga tocava em "Entrar" e
  * não sabia que nada tinha acontecido.
  */
-export function FormError({ message }: FormErrorProps) {
+export function FormError({ message }: Readonly<FormErrorProps>) {
   useAnnounce(message);
 
   if (!message) {

@@ -21,7 +21,7 @@ interface WeightEntryFormProps {
 }
 
 /** Registro de peso manual — usado no Progresso e no "+" da tela Hoje. */
-export function WeightEntryForm({ onSaved }: WeightEntryFormProps) {
+export function WeightEntryForm({ onSaved }: Readonly<WeightEntryFormProps>) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [isSaving, setIsSaving] = useState(false);

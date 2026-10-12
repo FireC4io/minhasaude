@@ -57,7 +57,7 @@ export function ProfileForm({
   isSubmitting,
   submitError,
   onSubmit,
-}: ProfileFormProps) {
+}: Readonly<ProfileFormProps>) {
   const { t } = useTranslation();
   const [birthDate, setBirthDate] = useState(isoToBrDate(initial?.birthDate));
   const [sex, setSex] = useState<Sex | null>(initial?.sex ?? null);

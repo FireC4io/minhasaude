@@ -15,11 +15,10 @@ import {
 import { useTranslation } from 'react-i18next';
 import type { UpdateProfileDto } from '@/api/generated/models';
 import { AppText } from '@/components/ui/app-text';
-import { FormError } from '@/components/ui/form-error';
-import { LoadingIndicator } from '@/components/ui/loading-indicator';
 import { useAnnounce } from '@/features/accessibility/use-announce';
 import { GoalCard } from '@/features/profile/goal-card';
 import { ProfileForm } from '@/features/profile/profile-form';
+import { QueryStateView } from '@/features/network/query-state-view';
 import { queryView } from '@/features/network/query-view';
 
 export default function EditProfileScreen() {
@@ -67,26 +66,27 @@ export default function EditProfileScreen() {
           </View>
         ) : null}
 
-        {queryView(meQuery) === 'loading' ? (
-          <LoadingIndicator label={t('account.edit.loading')} />
-        ) : queryView(meQuery) === 'error' ? (
-          <FormError message={t('account.edit.loadError')} />
-        ) : (
-          <ProfileForm
-            initial={{
-              birthDate: profile?.birthDate,
-              sex: profile?.sex,
-              heightCm: profile?.heightCm,
-              activityLevel: profile?.activityLevel,
-              goal: profile?.goal,
-              weeklyPaceKg: profile?.weeklyPaceKg,
-            }}
-            submitLabel={t('account.edit.submit')}
-            isSubmitting={updateProfile.isPending || recalculate.isPending}
-            submitError={submitError}
-            onSubmit={(data) => void handleSubmit(data)}
-          />
-        )}
+        <QueryStateView
+          view={queryView(meQuery)}
+          loadingLabel={t('account.edit.loading')}
+          errorMessage={t('account.edit.loadError')}>
+          {() => (
+            <ProfileForm
+              initial={{
+                birthDate: profile?.birthDate,
+                sex: profile?.sex,
+                heightCm: profile?.heightCm,
+                activityLevel: profile?.activityLevel,
+                goal: profile?.goal,
+                weeklyPaceKg: profile?.weeklyPaceKg,
+              }}
+              submitLabel={t('account.edit.submit')}
+              isSubmitting={updateProfile.isPending || recalculate.isPending}
+              submitError={submitError}
+              onSubmit={(data) => void handleSubmit(data)}
+            />
+          )}
+        </QueryStateView>
       </ScrollView>
     </KeyboardAvoidingView>
   );

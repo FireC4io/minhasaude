@@ -12,7 +12,7 @@ interface FormScreenProps {
  * Tela com formulário: o teclado nunca esconde o botão (F4-14, achado #3).
  * O conteúdo rola, e tocar fora de um campo não descarta o toque num botão.
  */
-export function FormScreen({ children, centered = false }: FormScreenProps) {
+export function FormScreen({ children, centered = false }: Readonly<FormScreenProps>) {
   return (
     <SafeAreaView className="flex-1 bg-areia">
       <KeyboardAvoidingView

@@ -43,7 +43,7 @@ void SplashScreen.preventAutoHideAsync().catch(() => undefined);
 installGlobalErrorHandler();
 
 /** O expo-router mostra isto no lugar da tela branca quando uma tela quebra ao desenhar. */
-export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
+export function ErrorBoundary({ error, retry }: Readonly<ErrorBoundaryProps>) {
   return <ErrorScreen error={error} retry={retry} reporter={appErrorReporter} />;
 }
 

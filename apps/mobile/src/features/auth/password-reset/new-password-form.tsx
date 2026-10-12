@@ -23,7 +23,7 @@ interface NewPasswordFormProps {
 }
 
 /** Segundo passo: o código que chegou por e-mail e a senha nova, na mesma tela. */
-export function NewPasswordForm({ email, onSubmit, onResend, onChangeEmail }: NewPasswordFormProps) {
+export function NewPasswordForm({ email, onSubmit, onResend, onChangeEmail }: Readonly<NewPasswordFormProps>) {
   const { t } = useTranslation();
   const passwordRef = useRef<TextInput>(null);
   const [code, setCode] = useState('');

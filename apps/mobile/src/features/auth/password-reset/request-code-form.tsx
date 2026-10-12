@@ -13,7 +13,7 @@ interface RequestCodeFormProps {
 }
 
 /** Primeiro passo: o e-mail da conta. A resposta é a mesma exista a conta ou não. */
-export function RequestCodeForm({ onSubmit }: RequestCodeFormProps) {
+export function RequestCodeForm({ onSubmit }: Readonly<RequestCodeFormProps>) {
   const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [error, setError] = useState<string | null>(null);

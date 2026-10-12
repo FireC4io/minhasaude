@@ -5,8 +5,6 @@ import { useTranslation } from 'react-i18next';
 
 import { useBodyMeasurementsControllerList } from '@/api/generated/endpoints/body-measurements/body-measurements';
 import { AppText } from '@/components/ui/app-text';
-import { FormError } from '@/components/ui/form-error';
-import { LoadingIndicator } from '@/components/ui/loading-indicator';
 import { PREVIEW_FEATURES } from '@/config/features';
 import { SelectChips } from '@/features/onboarding/select-chips';
 import { PERIODS, PERIOD_LABELS, filterByPeriod, type Period } from '@/features/progress/period';
@@ -14,6 +12,7 @@ import { WeeklyAverageCard } from '@/features/progress/weekly-average-card';
 import { WeightChart } from '@/features/weight/weight-chart';
 import { WeightEntryForm } from '@/features/weight/weight-entry-form';
 import { WeightHistoryList } from '@/features/weight/weight-history-list';
+import { QueryStateView } from '@/features/network/query-state-view';
 import { queryView } from '@/features/network/query-view';
 
 // Só medidas registradas na mão: o app nunca mistura fontes no mesmo gráfico,
@@ -45,23 +44,24 @@ export default function ProgressScreen() {
             </AppText>
             <WeightEntryForm />
 
-            {queryView(historyQuery) === 'loading' ? (
-              <LoadingIndicator label={t('progress.loadingWeight')} />
-            ) : queryView(historyQuery) === 'error' ? (
-              <FormError message={t('progress.weightError')} />
-            ) : (
-              <>
-                <SelectChips
-                  label={t('progress.period')}
-                  options={PERIODS}
-                  optionLabels={PERIOD_LABELS}
-                  value={period}
-                  onChange={setPeriod}
-                />
-                <WeightChart measurements={inPeriod} />
-                <WeightHistoryList measurements={inPeriod} />
-              </>
-            )}
+            <QueryStateView
+              view={queryView(historyQuery)}
+              loadingLabel={t('progress.loadingWeight')}
+              errorMessage={t('progress.weightError')}>
+              {() => (
+                <>
+                  <SelectChips
+                    label={t('progress.period')}
+                    options={PERIODS}
+                    optionLabels={PERIOD_LABELS}
+                    value={period}
+                    onChange={setPeriod}
+                  />
+                  <WeightChart measurements={inPeriod} />
+                  <WeightHistoryList measurements={inPeriod} />
+                </>
+              )}
+            </QueryStateView>
           </View>
 
           <WeeklyAverageCard />

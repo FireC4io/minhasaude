@@ -19,7 +19,7 @@ function formatMeasuredAt(measuredAt: string): string {
   });
 }
 
-export function WeightHistoryList({ measurements }: WeightHistoryListProps) {
+export function WeightHistoryList({ measurements }: Readonly<WeightHistoryListProps>) {
   const { t } = useTranslation();
   if (measurements.length === 0) {
     return null;

@@ -25,7 +25,7 @@ interface MicrosPanelProps {
  * Lista de micronutrientes recolhível. Só quantidades, sem comparar com metas
  * ou limites (informativo, RDC 657/2022). "sem dado" nunca vira zero.
  */
-export function MicrosPanel({ title, rows, initiallyOpen = false }: MicrosPanelProps) {
+export function MicrosPanel({ title, rows, initiallyOpen = false }: Readonly<MicrosPanelProps>) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(initiallyOpen);
 

@@ -13,7 +13,7 @@ interface AuthTextFieldProps extends TextInputProps {
   ref?: Ref<TextInput>;
 }
 
-export function AuthTextField({ label, error, ref, ...inputProps }: AuthTextFieldProps) {
+export function AuthTextField({ label, error, ref, ...inputProps }: Readonly<AuthTextFieldProps>) {
   // `placeholderTextColor` é prop, não estilo: o `className` não alcança.
   const scheme = useColorScheme() === 'dark' ? 'dark' : 'light';
 

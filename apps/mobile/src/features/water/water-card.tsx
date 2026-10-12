@@ -23,7 +23,7 @@ interface WaterCardProps {
 }
 
 /** Copo desenhado com Views: cheio, ou só o contorno. */
-function Glass({ full }: { full: boolean }) {
+function Glass({ full }: Readonly<{ full: boolean }>) {
   return (
     <View className="h-9 w-6 justify-end overflow-hidden rounded-b-lg rounded-t-sm border-2 border-maracuja-forte">
       {full ? <View className="h-full w-full bg-maracuja" /> : null}
@@ -32,7 +32,7 @@ function Glass({ full }: { full: boolean }) {
 }
 
 /** Água do dia (prévia — sem API ainda, valores só na memória). */
-export function WaterCard({ date, onOpenDetails }: WaterCardProps) {
+export function WaterCard({ date, onOpenDetails }: Readonly<WaterCardProps>) {
   const { t } = useTranslation();
   const [totalMl, setTotalMl] = usePreviewValue(`water:${date}`, 0);
   const [goalMl] = usePreviewValue('water:goal', DEFAULT_WATER_GOAL_ML);

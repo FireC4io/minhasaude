@@ -9,7 +9,7 @@ interface LoadingIndicatorProps {
 }
 
 /** Spinner que diz o que está carregando, em vez de um giro mudo. */
-export function LoadingIndicator({ label, className }: LoadingIndicatorProps) {
+export function LoadingIndicator({ label, className }: Readonly<LoadingIndicatorProps>) {
   useAnnounce(label);
 
   return (

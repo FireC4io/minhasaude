@@ -898,6 +898,7 @@ export const es: Translations = {
     save: 'Guardar en el diario',
     again: 'Volver y hablar de nuevo',
     youSaid: 'Dijiste: “{{text}}”',
+    searchingFood: 'Buscando en la base de alimentos…',
     itemNotFound: 'No encontramos este alimento. Desmárcalo y agrégalo con la búsqueda después.',
     swap: 'Cambiar por {{name}}',
     quantity: 'Cantidad (g)',

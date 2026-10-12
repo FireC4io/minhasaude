@@ -28,7 +28,7 @@ export function RadioList<TValue extends string>({
   value,
   onChange,
   error,
-}: RadioListProps<TValue>) {
+}: Readonly<RadioListProps<TValue>>) {
   return (
     <View className="gap-2">
       <AppText variant="label" className="text-grafite">

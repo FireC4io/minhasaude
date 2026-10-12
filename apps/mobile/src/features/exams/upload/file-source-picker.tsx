@@ -11,7 +11,7 @@ interface FileSourcePickerProps {
 }
 
 /** Câmera, galeria ou PDF, com as dicas para a foto sair legível. */
-export function FileSourcePicker({ onChoose }: FileSourcePickerProps) {
+export function FileSourcePicker({ onChoose }: Readonly<FileSourcePickerProps>) {
   const { t } = useTranslation();
   return (
     <View className="gap-2">

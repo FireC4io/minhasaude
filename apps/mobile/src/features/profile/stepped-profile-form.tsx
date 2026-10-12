@@ -48,7 +48,7 @@ export function SteppedProfileForm({
   isSubmitting,
   submitError,
   onSubmit,
-}: SteppedProfileFormProps) {
+}: Readonly<SteppedProfileFormProps>) {
   const { t } = useTranslation();
   const [step, setStep] = useState(0);
   const [birthDate, setBirthDate] = useState('');

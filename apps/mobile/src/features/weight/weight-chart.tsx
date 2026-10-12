@@ -36,7 +36,7 @@ const shortDate = (iso: string): string =>
  * Só recebe medidas de uma fonte (`manual`): bioimpedância de aparelhos
  * diferentes não é comparável (CLAUDE.md).
  */
-export function WeightChart({ measurements }: WeightChartProps) {
+export function WeightChart({ measurements }: Readonly<WeightChartProps>) {
   const { t } = useTranslation();
   const colors = GotaVitalColors[useColorScheme() === 'dark' ? 'dark' : 'light'];
   const { width: windowWidth } = useWindowDimensions();

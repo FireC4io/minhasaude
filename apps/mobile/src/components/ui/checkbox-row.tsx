@@ -10,7 +10,7 @@ interface CheckboxRowProps {
 }
 
 /** Caixa de seleção com o texto inteiro tocável — alvo grande, nome completo. */
-export function CheckboxRow({ label, checked, onChange }: CheckboxRowProps) {
+export function CheckboxRow({ label, checked, onChange }: Readonly<CheckboxRowProps>) {
   return (
     <Pressable
       onPress={() => onChange(!checked)}

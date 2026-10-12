@@ -12,7 +12,7 @@ interface ChosenFileCardProps {
 }
 
 /** O arquivo escolhido (prévia da foto ou nome do PDF), com o atalho para trocar. */
-export function ChosenFileCard({ file, onChange }: ChosenFileCardProps) {
+export function ChosenFileCard({ file, onChange }: Readonly<ChosenFileCardProps>) {
   const { t } = useTranslation();
   return (
     <View className="gap-3 rounded-2xl bg-superficie p-4">

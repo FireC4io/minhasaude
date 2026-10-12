@@ -14,7 +14,7 @@ interface DiaryEntryRowProps {
   onDelete: () => void;
 }
 
-export function DiaryEntryRow({ entry, onPress, onDelete }: DiaryEntryRowProps) {
+export function DiaryEntryRow({ entry, onPress, onDelete }: Readonly<DiaryEntryRowProps>) {
   const { t } = useTranslation();
   const amount = describeAmount(entry);
   // Guardada sem internet: aparece, soma nas calorias, mas só dá para editar depois de enviada.

@@ -26,7 +26,7 @@ import {
 } from '@/features/reminders/reminder-settings';
 import { updateReminderSettings, useReminderSettings } from '@/features/reminders/reminder-store';
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Section({ title, children }: Readonly<{ title: string; children: React.ReactNode }>) {
   return (
     <View className="gap-3 rounded-2xl bg-superficie p-4">
       <AppText variant="label" accessibilityRole="header" className="text-grafite-suave">

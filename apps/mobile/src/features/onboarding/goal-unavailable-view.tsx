@@ -14,7 +14,7 @@ interface GoalUnavailableViewProps {
  * Mostrada quando a busca da meta atual falha por algo que não seja 404.
  * Sem isso, qualquer erro de rede jogaria o usuário de volta no onboarding.
  */
-export function GoalUnavailableView({ onRetry, isRetrying }: GoalUnavailableViewProps) {
+export function GoalUnavailableView({ onRetry, isRetrying }: Readonly<GoalUnavailableViewProps>) {
   const { t } = useTranslation();
   return (
     <SafeAreaView className="flex-1 bg-areia">

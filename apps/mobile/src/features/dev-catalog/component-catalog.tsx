@@ -139,7 +139,7 @@ function ThemeSamples() {
   );
 }
 
-function Section({ title, children }: { title: string; children: ReactNode }) {
+function Section({ title, children }: Readonly<{ title: string; children: ReactNode }>) {
   return (
     <View className="gap-3 rounded-2xl bg-superficie p-4">
       <AppText variant="number" className="text-grafite">{title}</AppText>

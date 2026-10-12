@@ -60,16 +60,17 @@ export default function IndicesScreen() {
   );
 }
 
-function IndexCard({ index }: { index: ComputedIndex }) {
+function IndexCard({ index }: Readonly<{ index: ComputedIndex }>) {
   const { t } = useTranslation();
   const { calculator, value, inputs, missing } = index;
+  const unitSuffix = calculator.unit ? ` ${calculator.unit}` : '';
   const formatted =
     value === null
       ? null
       : `${value.toLocaleString(appLocale(), {
           minimumFractionDigits: calculator.decimals,
           maximumFractionDigits: calculator.decimals,
-        })}${calculator.unit ? ` ${calculator.unit}` : ''}`;
+        })}${unitSuffix}`;
   const usedValues = Object.entries(inputs)
     .map(([code, input]) => `${markerInfo(code).displayName} ${formatExamValue(input)}`)
     .join(' · ');

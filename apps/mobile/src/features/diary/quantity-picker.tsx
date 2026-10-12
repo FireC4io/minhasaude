@@ -40,7 +40,7 @@ export function QuantityPicker({
   value,
   onChange,
   onSubmit,
-}: QuantityPickerProps) {
+}: Readonly<QuantityPickerProps>) {
   const { t } = useTranslation();
   const grams = gramsOf(measure, parseDecimal(value));
   const preview = food ? nutrientsFor(food, grams) : null;

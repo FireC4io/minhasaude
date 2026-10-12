@@ -28,7 +28,7 @@ interface VoiceItemCardProps {
  * Um item da frase, casado com um alimento da base (TACO / Open Food Facts).
  * A sugestão é só a primeira da busca — a pessoa confirma ou troca.
  */
-export function VoiceItemCard({ draft, onChange }: VoiceItemCardProps) {
+export function VoiceItemCard({ draft, onChange }: Readonly<VoiceItemCardProps>) {
   const { t } = useTranslation();
   const search = useFoodsControllerSearch(
     { q: draft.spoken, limit: 5 },
@@ -36,6 +36,7 @@ export function VoiceItemCard({ draft, onChange }: VoiceItemCardProps) {
   );
   const options = search.data?.data ?? [];
   const chosen = draft.food ?? options[0] ?? null;
+  const searching = search.isPending && !draft.food;
   const kcal = chosen ? nutrientsFor(chosen, parseDecimal(draft.grams)).kcal : 0;
 
   return (
@@ -46,17 +47,13 @@ export function VoiceItemCard({ draft, onChange }: VoiceItemCardProps) {
         })}
       </AppText>
 
-      {search.isPending && !draft.food ? (
-        <AppText className="text-grafite-suave">Procurando na base de alimentos…</AppText>
-      ) : chosen ? (
+      {searching ? <AppText className="text-grafite-suave">{t('voice.searchingFood')}</AppText> : null}
+      {!searching && chosen ? (
         <AppText variant="bodyStrong" className="text-grafite">
           {chosen.name}
         </AppText>
-      ) : (
-        <AppText className="text-grafite">
-          {t('voice.itemNotFound')}
-        </AppText>
-      )}
+      ) : null}
+      {!searching && !chosen ? <AppText className="text-grafite">{t('voice.itemNotFound')}</AppText> : null}
 
       {options.length > 1 && draft.include ? (
         <View className="flex-row flex-wrap gap-x-4">

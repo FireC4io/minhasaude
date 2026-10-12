@@ -12,7 +12,7 @@ interface PreviewBannerProps {
  * Aviso das telas em prévia (ver `config/features.ts`). Fica no topo e com
  * texto, não só cor: quem vê precisa saber que aquilo não é dado real.
  */
-export function PreviewBanner({ missing }: PreviewBannerProps) {
+export function PreviewBanner({ missing }: Readonly<PreviewBannerProps>) {
   const { t } = useTranslation();
   return (
     <View

@@ -6,6 +6,8 @@ import { MIN_TOUCH_TARGET } from '@/constants/accessibility';
 import { localDateFromIso, todayIsoDate, weekdayNames, weekOf } from '@/features/diary/date-utils';
 import { appLocale } from '@/i18n/format';
 
+import { dayFrame, entryDot } from './day-style';
+
 
 interface WeekStripProps {
   selectedDate: string;
@@ -25,7 +27,7 @@ export const spokenDay = (date: string): string =>
  * borda; dia com registro tem um ponto — e tudo isso também vai para o nome
  * falado, porque ponto e borda não chegam a quem não enxerga.
  */
-export function WeekStrip({ selectedDate, daysWithEntries, onSelect }: WeekStripProps) {
+export function WeekStrip({ selectedDate, daysWithEntries, onSelect }: Readonly<WeekStripProps>) {
   const { t } = useTranslation();
   const today = todayIsoDate();
   const initials = weekdayNames('narrow');
@@ -39,8 +41,8 @@ export function WeekStrip({ selectedDate, daysWithEntries, onSelect }: WeekStrip
         const spoken = `${spokenDay(date)}${isToday ? t('today.todaySuffix') : ''}${
           hasEntries ? t('today.withEntries') : ''
         }`;
-        const frame = selected ? 'bg-mamao-forte' : isToday ? 'border-2 border-mamao-forte' : '';
-        const dot = hasEntries ? (selected ? 'bg-areia' : 'bg-couve') : '';
+        const frame = dayFrame(selected, isToday);
+        const dot = entryDot(hasEntries, selected);
         return (
           <Pressable
             key={date}

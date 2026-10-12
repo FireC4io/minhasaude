@@ -28,7 +28,7 @@ interface MarkerChartProps {
  * (eixo x por tempo decorrido, não por índice). Descrita em texto para o
  * leitor de tela.
  */
-export function MarkerChart({ points, unit, description }: MarkerChartProps) {
+export function MarkerChart({ points, unit, description }: Readonly<MarkerChartProps>) {
   const colors = GotaVitalColors[useColorScheme() === 'dark' ? 'dark' : 'light'];
   const { width: windowWidth } = useWindowDimensions();
   const width = Math.min(MAX_WIDTH, Math.max(windowWidth - 80 - AXIS_WIDTH, 1));

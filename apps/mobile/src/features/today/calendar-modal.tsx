@@ -19,6 +19,8 @@ import { useReduceMotion } from '@/features/accessibility/use-reduce-motion';
 import { spokenDay } from './week-strip';
 import { appLocale } from '@/i18n/format';
 
+import { dayFrame } from './day-style';
+
 interface CalendarModalProps {
   visible: boolean;
   selectedDate: string;
@@ -37,7 +39,7 @@ const shiftMonth = (date: string, months: number): string => {
  * Calendário mensal em tela cheia, para pular para qualquer dia (F4-30).
  * Quem usa passa `key` com o dia exibido: ao reabrir, volta para o mês certo.
  */
-export function CalendarModal({ visible, selectedDate, onSelect, onClose }: CalendarModalProps) {
+export function CalendarModal({ visible, selectedDate, onSelect, onClose }: Readonly<CalendarModalProps>) {
   const { t } = useTranslation();
   const [month, setMonth] = useState(selectedDate);
   const reduceMotion = useReduceMotion();
@@ -104,11 +106,7 @@ export function CalendarModal({ visible, selectedDate, onSelect, onClose }: Cale
               {week.map((date, column) => {
                 if (!date) return <View key={`vazio-${column}`} className="flex-1" />;
                 const selected = date === selectedDate;
-                const frame = selected
-                  ? 'bg-mamao-forte'
-                  : date === today
-                    ? 'border-2 border-mamao-forte'
-                    : '';
+                const frame = dayFrame(selected, date === today);
                 return (
                   <Pressable
                     key={date}

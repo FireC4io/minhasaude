@@ -11,7 +11,7 @@ interface ChosenFoodHeaderProps {
 }
 
 /** O alimento escolhido, com o atalho para voltar à busca. */
-export function ChosenFoodHeader({ food, onChange }: ChosenFoodHeaderProps) {
+export function ChosenFoodHeader({ food, onChange }: Readonly<ChosenFoodHeaderProps>) {
   const { t } = useTranslation();
   return (
     <View className="gap-1">

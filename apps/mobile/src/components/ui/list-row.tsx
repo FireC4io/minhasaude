@@ -13,7 +13,7 @@ interface ListRowProps {
 }
 
 /** Linha tocável de lista (Perfil, exames). Um único alvo, com nome completo. */
-export function ListRow({ title, description, onPress, tone = 'default', hint }: ListRowProps) {
+export function ListRow({ title, description, onPress, tone = 'default', hint }: Readonly<ListRowProps>) {
   return (
     <Pressable
       onPress={onPress}

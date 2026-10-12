@@ -34,7 +34,7 @@ interface MacrosCardProps {
  * Macros em linhas empilhadas (nunca três colunas lado a lado: com fonte em
  * 200% elas se atropelavam — achado #2) e com o modo de exibição escolhido.
  */
-export function MacrosCard({ consumed, target }: MacrosCardProps) {
+export function MacrosCard({ consumed, target }: Readonly<MacrosCardProps>) {
   const { t } = useTranslation();
   const [mode, setMode] = useState<MacroDisplayMode>('remaining');
 

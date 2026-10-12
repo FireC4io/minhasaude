@@ -14,6 +14,13 @@ import { AuthTextField } from '@/features/auth/auth-text-field';
 import { PasswordField } from '@/features/auth/password-field';
 import { PrimaryButton } from '@/features/auth/primary-button';
 
+/** 401: senha errada; 429: tentativas demais (bloqueio temporário); o resto: rede ou servidor. */
+function loginErrorKey(status: number | undefined): 'auth.login.wrong' | 'auth.login.tooMany' | 'auth.login.failed' {
+  if (status === 401) return 'auth.login.wrong';
+  if (status === 429) return 'auth.login.tooMany';
+  return 'auth.login.failed';
+}
+
 export default function LoginScreen() {
   const { t } = useTranslation();
   // `Link` do expo-router ignora o className do NativeWind: o texto saía preto e na fonte do sistema.
@@ -36,13 +43,7 @@ export default function LoginScreen() {
       await login(email.trim(), password);
     } catch (err) {
       const status = isAxiosError(err) ? err.response?.status : undefined;
-      setError(
-        status === 401
-          ? t('auth.login.wrong')
-          : status === 429
-            ? t('auth.login.tooMany')
-            : t('auth.login.failed'),
-      );
+      setError(t(loginErrorKey(status)));
     } finally {
       setIsSubmitting(false);
     }

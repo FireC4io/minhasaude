@@ -9,7 +9,7 @@ import { describeGoalTargetPace } from './weekly-pace';
 const round = (value: string): number => Math.round(Number(value));
 
 /** Meta atual em linguagem simples, sem siglas soltas (F4-12). Informativa (RDC 657/2022). */
-export function GoalCard({ goal }: { goal: GoalTargetResponseDto }) {
+export function GoalCard({ goal }: Readonly<{ goal: GoalTargetResponseDto }>) {
   const { t } = useTranslation();
   return (
     <View className="gap-3 rounded-2xl bg-superficie p-4">

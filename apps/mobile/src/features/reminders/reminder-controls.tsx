@@ -20,7 +20,7 @@ interface TimeStepperProps {
  * Horário com "−" e "+" de 15 em 15 minutos. Mais fácil que um relógio de
  * rolar para quem tem pouca familiaridade com celular ou pouca firmeza na mão.
  */
-export function TimeStepper({ name, value, onChange }: TimeStepperProps) {
+export function TimeStepper({ name, value, onChange }: Readonly<TimeStepperProps>) {
   const { t } = useTranslation();
   const button = (sign: -1 | 1) => (
     <Pressable
@@ -55,7 +55,7 @@ interface WeekdayPickerProps {
 }
 
 /** Os sete dias, cada um liga e desliga. Ordem de segunda a domingo. */
-export function WeekdayPicker({ value, onChange }: WeekdayPickerProps) {
+export function WeekdayPicker({ value, onChange }: Readonly<WeekdayPickerProps>) {
   const short = weekdayNames('short');
   return (
     <View className="flex-row flex-wrap gap-2">

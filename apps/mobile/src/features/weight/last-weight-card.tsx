@@ -19,7 +19,7 @@ interface LastWeightCardProps {
 const LIST_PARAMS = { source: 'manual', limit: 1 } as const;
 
 /** Último peso registrado, com atalho para registrar outro. */
-export function LastWeightCard({ onRegister }: LastWeightCardProps) {
+export function LastWeightCard({ onRegister }: Readonly<LastWeightCardProps>) {
   const { t } = useTranslation();
   const query = useBodyMeasurementsControllerList(LIST_PARAMS);
   // O peso anotado sem internet é o mais novo: aparece já, com o aviso de que ainda vai.

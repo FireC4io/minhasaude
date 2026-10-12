@@ -77,11 +77,11 @@ export function WeeklyAverageCard() {
         />
       </View>
 
-      {isLoading ? (
-        <LoadingIndicator label={t('progress.loadingWeek')} />
-      ) : !summary.average ? (
+      {isLoading ? <LoadingIndicator label={t('progress.loadingWeek')} /> : null}
+      {!isLoading && !summary.average ? (
         <AppText className="text-grafite-suave">{t('progress.noDays')}</AppText>
-      ) : (
+      ) : null}
+      {!isLoading && summary.average ? (
         <View className="gap-2">
           <AppText variant="caption" className="text-grafite-suave">
             {t('progress.basedOn', { count: summary.daysLogged })}
@@ -108,7 +108,7 @@ export function WeeklyAverageCard() {
             );
           })}
         </View>
-      )}
+      ) : null}
     </View>
   );
 }

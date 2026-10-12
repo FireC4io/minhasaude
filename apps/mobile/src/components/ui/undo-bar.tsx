@@ -15,7 +15,7 @@ interface UndoBarProps {
 }
 
 /** Aviso com "Desfazer" depois de uma remoção (F4-16) — nada some sem volta. */
-export function UndoBar({ message, onUndo, onDismiss, durationMs = 10_000 }: UndoBarProps) {
+export function UndoBar({ message, onUndo, onDismiss, durationMs = 10_000 }: Readonly<UndoBarProps>) {
   const { t } = useTranslation();
   useAnnounce(t('misc.undoAnnounce', { message }));
 

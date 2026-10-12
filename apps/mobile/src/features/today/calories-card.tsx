@@ -18,7 +18,7 @@ const RADIUS = (SIZE - STROKE) / 2;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
 /** Calorias do dia com anel de progresso. O anel só reforça; o texto diz tudo. */
-export function CaloriesCard({ consumedKcal, targetKcal }: CaloriesCardProps) {
+export function CaloriesCard({ consumedKcal, targetKcal }: Readonly<CaloriesCardProps>) {
   const { t } = useTranslation();
   const colors = GotaVitalColors[useColorScheme() === 'dark' ? 'dark' : 'light'];
   const fraction = progressFraction(consumedKcal, targetKcal);

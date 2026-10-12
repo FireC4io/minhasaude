@@ -7,7 +7,7 @@ import { GotaVitalColors } from '@/constants/gota-vital-colors';
 import { usePreviewValue } from '@/features/preview/preview-store';
 
 /** Notas do dia (prévia — sem API ainda, o texto fica só na memória). */
-export function NotesCard({ date }: { date: string }) {
+export function NotesCard({ date }: Readonly<{ date: string }>) {
   const { t } = useTranslation();
   const [note, setNote] = usePreviewValue(`notes:${date}`, '');
   const colors = GotaVitalColors[useColorScheme() === 'dark' ? 'dark' : 'light'];

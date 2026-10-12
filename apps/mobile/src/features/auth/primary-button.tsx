@@ -14,6 +14,12 @@ interface PrimaryButtonProps {
   tone?: 'default' | 'danger';
 }
 
+/** Só o desabilitado esmaece; carregando não reage ao toque; normal escurece ao tocar. */
+function pressFeedback(disabled: boolean, isLoading: boolean): string {
+  if (disabled) return 'opacity-50';
+  return isLoading ? '' : 'active:opacity-80';
+}
+
 export function PrimaryButton({
   label,
   onPress,
@@ -21,7 +27,7 @@ export function PrimaryButton({
   disabled,
   hint,
   tone = 'default',
-}: PrimaryButtonProps) {
+}: Readonly<PrimaryButtonProps>) {
   const isDisabled = disabled || isLoading;
 
   return (
@@ -41,7 +47,7 @@ export function PrimaryButton({
       className={`items-center rounded-2xl px-4 py-3 ${
         tone === 'danger' ? 'bg-jabuticaba' : 'bg-mamao-forte'
       } ${
-        disabled ? 'opacity-50' : isLoading ? '' : 'active:opacity-80'
+        pressFeedback(Boolean(disabled), Boolean(isLoading))
       }`}
     >
       {isLoading ? (

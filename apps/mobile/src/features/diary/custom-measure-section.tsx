@@ -24,7 +24,7 @@ interface CustomMeasureSectionProps {
 }
 
 /** "Criar minha medida" e, se a escolhida for da pessoa, "Apagar esta medida". */
-export function CustomMeasureSection({ foodId, measure, onCreated, onDeleted }: CustomMeasureSectionProps) {
+export function CustomMeasureSection({ foodId, measure, onCreated, onDeleted }: Readonly<CustomMeasureSectionProps>) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const removePortion = usePortionsControllerRemove();

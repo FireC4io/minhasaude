@@ -22,7 +22,7 @@ export function SelectChips<TValue extends string>({
   value,
   onChange,
   error,
-}: SelectChipsProps<TValue>) {
+}: Readonly<SelectChipsProps<TValue>>) {
   return (
     <View className="gap-2">
       <AppText variant="label" className="text-grafite">{label}</AppText>

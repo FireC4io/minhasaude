@@ -1,18 +1,16 @@
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { AccessibilityInfo, ScrollView, View } from 'react-native';
+import { AccessibilityInfo, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 
 import { useDiaryControllerGetByDate } from '@/api/generated/endpoints/diary/diary';
 import type { DiaryEntryResponseDto } from '@/api/generated/models';
 import { FloatingAddButton } from '@/components/ui/floating-add-button';
-import { FormError } from '@/components/ui/form-error';
-import { LoadingIndicator } from '@/components/ui/loading-indicator';
-import { TextButton } from '@/components/ui/text-button';
 import { UndoBar } from '@/components/ui/undo-bar';
 import { PREVIEW_FEATURES } from '@/config/features';
 import { addDaysToIsoDate, formatIsoDateLabel, todayIsoDate } from '@/features/diary/date-utils';
+import { QueryStateView } from '@/features/network/query-state-view';
 import { queryView } from '@/features/network/query-view';
 import { MicrosPanel } from '@/features/nutrition/micros-panel';
 import { rowsForDay } from '@/features/nutrition/micros-rows';
@@ -75,41 +73,37 @@ export default function TodayScreen() {
 
         <PendingCard />
 
-        {view === 'loading' ? (
-          <LoadingIndicator label={t('today.loadingDay')} className="mt-8" />
-        ) : !summary ? (
-          <View className="gap-2">
-            <FormError message={t('today.loadDayError')} />
-            <TextButton
-              label={t('common.tryAgain')}
-              onPress={() => void dayQuery.refetch()}
-              textVariant="bodyStrong"
-              textClassName="text-mamao-forte"
-              className="self-start"
-            />
-          </View>
-        ) : (
-          <>
-            <CaloriesCard
-              consumedKcal={summary.summary.consumed.kcal}
-              targetKcal={summary.summary.target?.kcal ?? null}
-            />
-            <MacrosCard consumed={summary.summary.consumed} target={summary.summary.target} />
-            {hasEntries ? (
-              <MicrosPanel title={t('today.otherNutrients')} rows={rowsForDay(summary.summary.micros)} />
-            ) : null}
-            <MealsList
-              day={summary}
-              // Achado #10: o atalho aparecia até para conta criada hoje, sem dia anterior.
-              canCopyPrevious={!hasEntries && dayHasEntries(previousDayQuery.data)}
-              isCopying={actions.isCopying}
-              onCopyPrevious={() => void actions.copyPreviousDay()}
-              onAdd={(mealType) => router.push({ pathname: '/diary-entry', params: { date: currentDate, mealType } })}
-              onEdit={editEntry}
-              onRemove={(entry) => void actions.remove(entry)}
-            />
-          </>
-        )}
+        <QueryStateView
+          view={view}
+          loadingLabel={t('today.loadingDay')}
+          loadingClassName="mt-8"
+          errorMessage={t('today.loadDayError')}
+          onRetry={() => void dayQuery.refetch()}>
+          {() =>
+            summary && (
+              <>
+                <CaloriesCard
+                  consumedKcal={summary.summary.consumed.kcal}
+                  targetKcal={summary.summary.target?.kcal ?? null}
+                />
+                <MacrosCard consumed={summary.summary.consumed} target={summary.summary.target} />
+                {hasEntries ? (
+                  <MicrosPanel title={t('today.otherNutrients')} rows={rowsForDay(summary.summary.micros)} />
+                ) : null}
+                <MealsList
+                  day={summary}
+                  // Achado #10: o atalho aparecia até para conta criada hoje, sem dia anterior.
+                  canCopyPrevious={!hasEntries && dayHasEntries(previousDayQuery.data)}
+                  isCopying={actions.isCopying}
+                  onCopyPrevious={() => void actions.copyPreviousDay()}
+                  onAdd={(mealType) => router.push({ pathname: '/diary-entry', params: { date: currentDate, mealType } })}
+                  onEdit={editEntry}
+                  onRemove={(entry) => void actions.remove(entry)}
+                />
+              </>
+            )
+          }
+        </QueryStateView>
 
         {PREVIEW_FEATURES ? (
           <WaterCard

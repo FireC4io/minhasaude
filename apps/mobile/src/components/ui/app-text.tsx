@@ -27,7 +27,7 @@ interface AppTextProps extends TextProps {
   className?: string;
 }
 
-export function AppText({ variant = 'body', className, ...textProps }: AppTextProps) {
+export function AppText({ variant = 'body', className, ...textProps }: Readonly<AppTextProps>) {
   return (
     <Text
       className={className ? `${TEXT_VARIANTS[variant]} ${className}` : TEXT_VARIANTS[variant]}

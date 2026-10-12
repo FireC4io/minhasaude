@@ -4,7 +4,7 @@ import Svg, { Path, Polyline } from 'react-native-svg';
 import { GotaVitalColors } from '@/constants/gota-vital-colors';
 
 /** Símbolo Gota Vital (gota + traço de batimento), mesma geometria do ícone do app. */
-export function BrandMark({ size = 72 }: { size?: number }) {
+export function BrandMark({ size = 72 }: Readonly<{ size?: number }>) {
   const colors = GotaVitalColors[useColorScheme() === 'dark' ? 'dark' : 'light'];
   return (
     <Svg

@@ -904,6 +904,7 @@ export const ptBR = {
     save: 'Salvar no diário',
     again: 'Voltar e falar de novo',
     youSaid: 'Você disse: “{{text}}”',
+    searchingFood: 'Procurando na base de alimentos…',
     itemNotFound: 'Não achamos este alimento. Desmarque e adicione pela busca depois.',
     swap: 'Trocar por {{name}}',
     quantity: 'Quantidade (g)',

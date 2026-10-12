@@ -22,7 +22,7 @@ interface CustomMeasureFormProps {
 }
 
 /** "Minha caneca = 180 g": a medida de casa que não está na lista. */
-export function CustomMeasureForm({ foodId, onCreated, onCancel }: CustomMeasureFormProps) {
+export function CustomMeasureForm({ foodId, onCreated, onCancel }: Readonly<CustomMeasureFormProps>) {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
   const createPortion = usePortionsControllerCreate();

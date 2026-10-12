@@ -13,7 +13,7 @@ interface ModalHeaderProps {
  * Cabeçalho de tela modal com "Fechar" sempre visível (F4-16): no celular não
  * existe o "voltar" do navegador, e o gesto de arrastar não é óbvio para todos.
  */
-export function ModalHeader({ title }: ModalHeaderProps) {
+export function ModalHeader({ title }: Readonly<ModalHeaderProps>) {
   const { t } = useTranslation();
   const router = useRouter();
   return (

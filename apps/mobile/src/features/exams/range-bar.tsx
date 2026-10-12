@@ -12,7 +12,7 @@ interface RangeBarProps {
  * Faixa do laudo desenhada: trecho da referência em destaque e um marcador do
  * valor. Só reforça o texto ao lado — é escondida do leitor de tela.
  */
-export function RangeBar({ value, range, position }: RangeBarProps) {
+export function RangeBar({ value, range, position }: Readonly<RangeBarProps>) {
   // Faixa aberta ("Superior a 40") não tem teto: o trecho de referência vai até a borda da barra.
   const anchorLow = range.low ?? 0;
   const anchorHigh = range.high ?? (range.low ?? value) * 1.5;

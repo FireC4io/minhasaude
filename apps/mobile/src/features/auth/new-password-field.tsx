@@ -26,7 +26,7 @@ interface NewPasswordFieldProps {
  * Senha nova com a regra visível embaixo e quantas letras faltam: o botão
  * nunca fica travado sem dizer por quê. Usado no cadastro e na troca de senha.
  */
-export function NewPasswordField({ label, value, onChangeText, onSubmitEditing, ref }: NewPasswordFieldProps) {
+export function NewPasswordField({ label, value, onChangeText, onSubmitEditing, ref }: Readonly<NewPasswordFieldProps>) {
   const { t } = useTranslation();
   const missing = MIN_PASSWORD_LENGTH - value.length;
   return (

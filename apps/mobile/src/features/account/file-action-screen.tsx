@@ -30,7 +30,7 @@ interface FileActionScreenProps {
  * confirma (com anúncio para o leitor de tela) ou explica a falha. Usada na
  * exportação dos dados e no relatório de progresso.
  */
-export function FileActionScreen({ texts, run }: FileActionScreenProps) {
+export function FileActionScreen({ texts, run }: Readonly<FileActionScreenProps>) {
   const [isRunning, setIsRunning] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState<string | null>(null);

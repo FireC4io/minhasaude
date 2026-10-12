@@ -98,7 +98,7 @@ export default function ProfileScreen() {
   );
 }
 
-function Section({ title, children }: { title: string; children: ReactNode }) {
+function Section({ title, children }: Readonly<{ title: string; children: ReactNode }>) {
   return (
     <View className="gap-1">
       <AppText variant="label" accessibilityRole="header" className="text-grafite-suave">

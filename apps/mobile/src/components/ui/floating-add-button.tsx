@@ -7,7 +7,7 @@ interface FloatingAddButtonProps {
 }
 
 /** Botão "+" de registro rápido, sempre ao alcance do polegar (F4-20). */
-export function FloatingAddButton({ onPress }: FloatingAddButtonProps) {
+export function FloatingAddButton({ onPress }: Readonly<FloatingAddButtonProps>) {
   const { t } = useTranslation();
   return (
     <Pressable

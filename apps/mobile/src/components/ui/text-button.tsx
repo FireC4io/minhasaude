@@ -37,7 +37,7 @@ export function TextButton({
   className,
   textVariant = 'label',
   textClassName = 'text-mamao-forte',
-}: TextButtonProps) {
+}: Readonly<TextButtonProps>) {
   const isDisabled = Boolean(disabled || busy);
 
   return (

@@ -74,13 +74,8 @@ export default function UploadExamScreen() {
         </View>
       ) : null}
 
-      {examType && !blocked ? (
-        file ? (
-          <ChosenFileCard file={file} onChange={clearFile} />
-        ) : (
-          <FileSourcePicker onChoose={(picker) => void choose(picker)} />
-        )
-      ) : null}
+      {examType && !blocked && file ? <ChosenFileCard file={file} onChange={clearFile} /> : null}
+      {examType && !blocked && !file ? <FileSourcePicker onChoose={(picker) => void choose(picker)} /> : null}
 
       <FormError message={error} />
 

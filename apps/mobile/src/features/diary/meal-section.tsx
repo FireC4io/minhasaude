@@ -19,7 +19,7 @@ function round(value: number): number {
   return Math.round(value);
 }
 
-export function MealSection({ mealType, entries, onEntryPress, onEntryDelete, onAddPress }: MealSectionProps) {
+export function MealSection({ mealType, entries, onEntryPress, onEntryDelete, onAddPress }: Readonly<MealSectionProps>) {
   const { t } = useTranslation();
   const label = MEAL_TYPE_LABELS[mealType];
   const kcalTotal = entries.reduce((sum, entry) => sum + Number(entry.kcalSnapshot), 0);

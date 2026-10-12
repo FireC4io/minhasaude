@@ -898,6 +898,7 @@ export const en: Translations = {
     save: 'Save to diary',
     again: 'Go back and speak again',
     youSaid: 'You said: “{{text}}”',
+    searchingFood: 'Searching the food database…',
     itemNotFound: "We couldn't find this food. Uncheck it and add it through search later.",
     swap: 'Change to {{name}}',
     quantity: 'Amount (g)',
