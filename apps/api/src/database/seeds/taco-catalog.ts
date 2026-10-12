@@ -54,6 +54,9 @@ function parseNutrient(value: string | undefined): number | null {
   return Number.isFinite(n) ? Math.round(n * 100) / 100 : null;
 }
 
+/** A partir disto (g de gordura em 100 g) o alimento é gordura pura. */
+const PURE_FAT_G = 99.5;
+
 function isFoodRow(row: string[]): boolean {
   return /^\d+$/.test((row[COL.id] ?? '').trim());
 }
@@ -87,9 +90,13 @@ export function readTacoRows(csvPath: string): { rows: TacoRow[]; skipped: strin
     if (!name) continue;
 
     const kcalPer100g = parseNutrient(record[COL.kcal]);
-    const proteinGPer100g = parseNutrient(record[COL.protein]);
     const fatGPer100g = parseNutrient(record[COL.fat]);
-    const carbGPer100g = parseNutrient(record[COL.carb]);
+    // Óleos e azeites: a TACO mede 100 g de gordura e deixa proteína e
+    // carboidrato em branco. Gordura pura não tem espaço para os dois, então
+    // valem zero — conta física, não valor inventado. O resto segue a regra geral.
+    const pureFat = fatGPer100g !== null && fatGPer100g >= PURE_FAT_G;
+    const proteinGPer100g = parseNutrient(record[COL.protein]) ?? (pureFat ? 0 : null);
+    const carbGPer100g = parseNutrient(record[COL.carb]) ?? (pureFat ? 0 : null);
     const fiberGPer100g = parseNutrient(record[COL.fiber]);
 
     if (kcalPer100g === null || proteinGPer100g === null || fatGPer100g === null || carbGPer100g === null) {

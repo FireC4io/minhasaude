@@ -39,6 +39,9 @@ const AppDataSource = new DataSource({
     PasswordResetCode,
   ],
   migrations: ['src/database/migrations/*.ts'],
+  // Uma transação por migration: valor novo de enum (ALTER TYPE ... ADD VALUE)
+  // só pode ser usado depois do commit, e a migration seguinte precisa dele.
+  migrationsTransactionMode: 'each',
   synchronize: false,
   logging: process.env.NODE_ENV !== 'production',
 });

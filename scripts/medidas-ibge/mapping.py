@@ -62,6 +62,6 @@ m(595, 6600401); m(596, 6601805); m(597, 6601501)
 # Fonte é preparação diferente (angu, creme pronto): ficam sem medida.
 for _i in (28, 29, 43, 534):
     M.pop(_i, None)
-# Fora do banco: a TACO não mediu um dos macros e o seed os pula (taco-catalog.ts).
-for _i in (259, 260, 268, 269, 270, 272, 450, 457, 458):
+# Fora do banco: a TACO deixou em revisão e o seed os pula (taco-catalog.ts). Leite vem do USDA.
+for _i in (450, 457, 458):
     M.pop(_i, None)

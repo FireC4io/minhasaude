@@ -42,10 +42,11 @@ A migration `SeedIbgePortions` carrega o CSV no deploy (idempotente). Alimento n
 - Copo e lata genéricos (só o volume em ml) apenas em bebidas — fruta crua não ganha "copo" vindo do suco.
 - Uma lista curta de adaptações que não servem ao alimento da TACO é recusada à mão (`DROP` em `build.py`),
   por exemplo "unidade" de frango inteiro, que na fonte é uma coxa.
-- Leite de vaca líquido e os óleos não entram: a TACO não mediu um dos macros e o seed os pula. Ficam para
-  o item "básicos que faltam na TACO".
+- Leite de vaca líquido não entra: a TACO deixou em revisão e o seed o pula. Ele vem do USDA, com as medidas
+  do próprio USDA (`docs/dados/alimentos-usda.md`). Os óleos e azeites entraram depois, com zero de proteína e
+  carboidrato (são 100% gordura).
 
-Resultado em 2026-10-11: 730 medidas para 335 alimentos.
+Resultado em 2026-10-11: 742 medidas para 341 alimentos (com os óleos e azeites).
 
 ## No app
 

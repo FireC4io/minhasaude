@@ -48,6 +48,9 @@ import { databaseSsl } from './database-ssl';
         // 2026-10-07). Compilado lê os .js de dist; em teste (ts-jest), os .ts.
         migrations: [join(__dirname, 'migrations', `*.${__filename.endsWith('.ts') ? 'ts' : 'js'}`)],
         migrationsRun: true,
+        // Uma transação por migration: valor novo de enum (ALTER TYPE ... ADD VALUE)
+        // só pode ser usado depois do commit, e a migration seguinte precisa dele.
+        migrationsTransactionMode: 'each',
         // Nunca synchronize em ambiente algum, ver CLAUDE.md.
         synchronize: false,
         logging: config.get('NODE_ENV', { infer: true }) !== 'production',

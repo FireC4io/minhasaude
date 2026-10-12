@@ -34,8 +34,9 @@ describe('buildSearchTerms', () => {
 
 describe('PREFERRED_FOODS', () => {
   // Nome errado aqui não quebra nada, só some em silêncio da ordenação.
-  it('todo nome padrão existe na TACO', () => {
-    const taco = readFileSync(join(__dirname, '../../database/seeds/data/taco.csv'), 'utf8');
+  it('todo nome padrão existe na TACO ou nos básicos do USDA', () => {
+    const data = join(__dirname, '../../database/seeds/data');
+    const taco = readFileSync(join(data, 'taco.csv'), 'utf8') + readFileSync(join(data, 'usda-foods.csv'), 'utf8');
     const missing = Object.values(PREFERRED_FOODS)
       .flat()
       .filter((name) => !taco.includes(name));

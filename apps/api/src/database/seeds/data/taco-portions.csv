@@ -351,6 +351,10 @@ taco_id,taco_name,kind,grams,ibge_food,ibge_prep,ibge_measure,ibge_source
 254,"Umbu, cru",unit,33.33,6807101,99,103,9 Umbu - unidade grande
 256,"Uva, Itália, crua",unit,8.0,6803901,99,103,1 Uva - unidade média
 257,"Uva, Rubi, crua",unit,8.0,6803901,99,103,1 Uva - unidade média
+259,"Azeite, de dendê",tablespoon,8.0,8403501,99,16,1 Óleo vegetal - colher de sopa
+260,"Azeite, de oliva, extra virgem",teaspoon,2.0,8400101,99,14,1 Óleo vegetal - colher de chá
+260,"Azeite, de oliva, extra virgem",dessert_spoon,5.0,8400101,99,15,1 Óleo vegetal - colher de sobremesa
+260,"Azeite, de oliva, extra virgem",tablespoon,8.0,8400101,99,16,1 Óleo vegetal - colher de sopa
 261,"Manteiga, com sal",teaspoon,8.0,7901501,99,14,1 Manteiga - colher de chá cheia
 261,"Manteiga, com sal",dessert_spoon,23.0,7901501,99,15,1 Manteiga - colher de sobremesa cheia
 261,"Manteiga, com sal",tablespoon,32.0,7901501,99,16,1 Manteiga - colher de sopa cheia
@@ -375,6 +379,14 @@ taco_id,taco_name,kind,grams,ibge_food,ibge_prep,ibge_measure,ibge_source
 266,"Margarina, com óleo interesterificado, sem sal (65% de lipídeos)",dessert_spoon,23.0,7901602,99,15,1 Margarina - colher de sobremesa cheia
 266,"Margarina, com óleo interesterificado, sem sal (65% de lipídeos)",tablespoon,32.0,7901602,99,16,1 Margarina - colher de sopa cheia
 266,"Margarina, com óleo interesterificado, sem sal (65% de lipídeos)",cup,155.0,7901602,99,106,4 Manteiga - xícara de chá
+268,"Óleo, de canola",dessert_spoon,5.0,8403201,99,15,1 Óleo vegetal - colher de sobremesa
+268,"Óleo, de canola",tablespoon,8.0,8403201,99,16,1 Óleo vegetal - colher de sopa
+269,"Óleo, de girassol",dessert_spoon,5.0,8403201,99,15,1 Óleo vegetal - colher de sobremesa
+269,"Óleo, de girassol",tablespoon,8.0,8403201,99,16,1 Óleo vegetal - colher de sopa
+270,"Óleo, de milho",dessert_spoon,5.0,8403201,99,15,1 Óleo vegetal - colher de sobremesa
+270,"Óleo, de milho",tablespoon,8.0,8403201,99,16,1 Óleo vegetal - colher de sopa
+272,"Óleo, de soja",teaspoon,2.0,8400301,99,14,1 Óleo vegetal - colher de chá
+272,"Óleo, de soja",tablespoon,8.0,8400301,99,16,1 Óleo vegetal - colher de sopa
 273,"Abadejo, filé, congelado, assado",tablespoon,20.0,7200101,4,16,1 Peixe cozido - colher de sopa cheia picada
 274,"Abadejo, filé, congelado,cozido",fillet,120.0,7200101,2,33,1 Peixe cozido - filé médio
 276,"Abadejo, filé, congelado, grelhado",fillet,120.0,7200101,3,33,1 Peixe cozido - filé médio

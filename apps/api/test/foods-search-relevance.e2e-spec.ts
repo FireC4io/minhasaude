@@ -81,6 +81,17 @@ describe('Foods search - relevância (e2e)', () => {
     expect((await names('banana'))[0]).toBe('Banana, prata, crua');
   });
 
+  it('"leite": leite de vaca (USDA) primeiro, antes de leite de coco e de cabra', async () => {
+    const list = await names('leite');
+    expect(list[0]).toBe('Leite de vaca, integral');
+    expect(before(list, 'Leite de vaca, desnatado', 'Leite, de coco')).toBe(true);
+  });
+
+  it('"macarrão" e "azeite": a forma do dia a dia primeiro', async () => {
+    expect((await names('macarrão'))[0]).toBe('Macarrão, cozido');
+    expect((await names('azeite'))[0]).toBe('Azeite, de oliva, extra virgem');
+  });
+
   it('termo sem forma padrão: o alimento vem antes de quem só o cita', async () => {
     expect(before(await names('leite'), 'Leite, de cabra', 'Chocolate, ao leite')).toBe(true);
   });

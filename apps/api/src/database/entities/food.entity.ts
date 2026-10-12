@@ -5,6 +5,8 @@ import { User } from './user.entity';
 export enum FoodSource {
   TACO = 'taco',
   OFF = 'off',
+  /** Básicos do dia a dia que a TACO não tem, do USDA FoodData Central (ver docs/dados/alimentos-usda.md). */
+  USDA = 'usda',
   CUSTOM = 'custom',
 }
 

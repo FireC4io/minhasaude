@@ -31,7 +31,13 @@ const SYNONYMS: Record<string, string> = {
 export const PREFERRED_FOODS: Record<string, string[]> = {
   arroz: ['Arroz, tipo 1, cozido', 'Arroz, integral, cozido'],
   feijao: ['Feijão, carioca, cozido', 'Feijão, preto, cozido'],
-  pao: ['Pão, trigo, francês', 'Pão, trigo, forma, integral'],
+  pao: ['Pão, trigo, francês', 'Pão de forma, branco', 'Pão, trigo, forma, integral'],
+  'pao de forma': ['Pão de forma, branco', 'Pão, trigo, forma, integral'],
+  // Leite de vaca vem do USDA: a TACO deixou o dela em revisão e "leite" trazia leite de coco.
+  leite: ['Leite de vaca, integral', 'Leite de vaca, desnatado', 'Leite de vaca, semidesnatado'],
+  macarrao: ['Macarrão, cozido', 'Macarrão integral, cozido'],
+  azeite: ['Azeite, de oliva, extra virgem'],
+  oleo: ['Óleo, de soja', 'Óleo, de canola'],
   'pao frances': ['Pão, trigo, francês'],
   banana: ['Banana, prata, crua', 'Banana, nanica, crua'],
   ovo: ['Ovo, de galinha, inteiro, cozido/10minutos', 'Ovo, de galinha, inteiro, frito'],
