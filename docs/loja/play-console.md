@@ -25,7 +25,9 @@ O Gota Vital ajuda você a anotar o que come e a acompanhar seu peso, de um jeit
 ANOTE SUAS REFEIÇÕES
 • Busque alimentos na Tabela Brasileira de Composição de Alimentos (TACO), com nomes que a gente usa no dia a dia, como aipim, macaxeira e pão de sal.
 • Não achou? A busca também procura no Open Food Facts, ou você cadastra o seu alimento.
+• Anote em gramas ou em medidas de casa: colher, concha, xícara, e até a sua caneca.
 • Veja calorias, proteínas, carboidratos, gorduras, fibras e outros nutrientes de cada refeição e do dia.
+• Receba lembretes para anotar, nos horários que você escolher.
 
 SAIBA QUANTO FALTA PARA A SUA META
 • O app estima uma meta diária de calorias e nutrientes a partir do seu perfil, com fórmulas usadas em nutrição.
@@ -37,7 +39,7 @@ ACOMPANHE SEU PESO
 
 FEITO PARA TODO MUNDO
 • Letras grandes, modo escuro e compatível com leitor de tela.
-• Funciona em celulares simples e mostra o que você já viu mesmo sem internet.
+• Funciona em celulares simples e sem internet: o que você anotar é enviado quando a conexão voltar.
 • Em português, inglês e espanhol.
 
 SEUS DADOS SÃO SEUS
@@ -47,7 +49,7 @@ SEUS DADOS SÃO SEUS
 
 O Gota Vital é informativo: as metas são estimativas e não substituem a orientação de um profissional de saúde. O app não faz diagnóstico nem indica tratamento. Para pessoas a partir de 18 anos.
 
-Dados de alimentos: Tabela Brasileira de Composição de Alimentos (TACO, NEPA/Unicamp) e Open Food Facts (licença ODbL).
+Dados de alimentos: Tabela Brasileira de Composição de Alimentos (TACO, NEPA/Unicamp), Open Food Facts (licença ODbL) e USDA FoodData Central (domínio público). Medidas caseiras: IBGE, Pesquisa de Orçamentos Familiares 2008-2009.
 ```
 
 Revisar antes de colar: nada aqui promete resultado de peso nem fala de exames (proibido pela Play em app de saúde
@@ -100,6 +102,7 @@ só o termo buscado, sem nada que identifique a pessoa.
 | Saúde e fitness → Informações de saúde | Peso, altura, diário alimentar, metas calculadas, alimentos cadastrados | Obrigatório | Funcionalidade do app |
 | Saúde e fitness → Informações de condicionamento físico | Nível de atividade física e objetivo | Obrigatório | Funcionalidade do app |
 | Informações e desempenho do app → Outros dados de desempenho | Registros técnicos de cada requisição (rota, resultado, IP), sem dado de saúde | Obrigatório | Prevenção contra fraudes, segurança e conformidade |
+| Atividade no app → Outras ações | Histórico dos pedidos da pessoa: quando baixou os dados, retirou uma autorização ou pediu para apagar a conta (`audit_events`, só tipo e data) | Obrigatório | Prevenção contra fraudes, segurança e conformidade |
 | Informações e desempenho do app → Registros de falhas | Quando o app dá erro: mensagem técnica, tela e versão do app (`POST /v1/client-errors`, só no log, sem dado de saúde) | Obrigatório | Análise |
 
 **Não coletados:** localização, contatos, fotos e vídeos, áudio, arquivos, agenda, mensagens, navegação na web,
