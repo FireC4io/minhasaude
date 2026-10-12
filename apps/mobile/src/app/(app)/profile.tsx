@@ -64,6 +64,11 @@ export default function ProfileScreen() {
 
         <Section title={t('account.app')}>
           <ListRow
+            title={t('account.remindersTitle')}
+            description={t('account.remindersHint')}
+            onPress={go('/account/reminders')}
+          />
+          <ListRow
             title={t('account.preferencesTitle')}
             description={t('account.preferencesHint')}
             onPress={go('/account/preferences')}

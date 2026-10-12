@@ -90,6 +90,7 @@ turbo run lint test build             # pipeline completo (usado no CI)
 - `Link` do expo-router ignora `className` (usar `TextButton` + `router.push`); rota dinâmica tipada: `{ pathname: '/exam/[id]', params }`. Data do diário com `date-utils`, nunca `toISOString()` (UTC).
 - Guard raiz: `resolveRootRoute()` — só 404 da meta leva ao onboarding; outro erro cai em `GoalUnavailableView`.
 - Gráficos: `react-native-svg` + componente próprio (não gifted-charts); largura inicial de `useWindowDimensions`, `onLayout` só refina.
+- Lembretes (`features/reminders/`): notificação local, sem servidor. A agenda é refeita a cada abertura do app, para os próximos 10 dias e no máximo 60 notificações (limite de 64 do iPhone), o que permite pular a refeição já anotada. Não pedir alarme exato (`SCHEDULE_EXACT_ALARM` está bloqueado no `app.json`). As escolhas e a agenda são apagadas no logout (`clearReminders`). Um canal Android por jeito de avisar (canal não muda depois de criado).
 - Cache do React Query fica no aparelho por 24 h e é apagado no logout (`clearPersistedCache`). `app.json` com `allowBackup:false` e permissões bloqueadas (teste em `src/config/app-config.spec.ts`).
 - Testes de tela: **`await render(...)`** (RTL 14 é assíncrono) e `await userEvent.press`; `SafeAreaProvider` com `initialMetrics`; `jest.clearAllMocks()` no `beforeEach` (mock de `announceForAccessibility` acumula).
 

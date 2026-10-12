@@ -12,6 +12,7 @@ export default function AccountLayout() {
       <Stack.Screen name="export" options={{ title: t('account.screens.export') }} />
       <Stack.Screen name="privacy" options={{ title: t('account.screens.privacy') }} />
       <Stack.Screen name="delete" options={{ title: t('account.screens.delete') }} />
+      <Stack.Screen name="reminders" options={{ title: t('account.screens.reminders') }} />
       <Stack.Screen name="preferences" options={{ title: t('account.screens.preferences') }} />
       <Stack.Screen name="about" options={{ title: t('account.screens.about') }} />
     </Stack>

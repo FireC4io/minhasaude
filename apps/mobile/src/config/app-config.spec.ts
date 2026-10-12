@@ -56,4 +56,10 @@ describe('app.json', () => {
       ]),
     );
   });
+
+  it('lembrete não pede alarme exato: chegar alguns minutos depois não atrapalha, e a Play restringe essa permissão', () => {
+    expect(expo.android.blockedPermissions).toEqual(
+      expect.arrayContaining(['android.permission.SCHEDULE_EXACT_ALARM', 'android.permission.USE_EXACT_ALARM']),
+    );
+  });
 });
