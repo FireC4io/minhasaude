@@ -79,7 +79,7 @@
     "eslint-config-expo": "~57.0.2",
     "jest": "^30.5.2",
     "jest-expo": "~57.0.5",
-    "orval": "^8.41.0",
+    "orval": "^8.43.0",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "tailwindcss": "^3.4.19",
     "typescript": "~6.0.3"
