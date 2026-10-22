@@ -16,7 +16,7 @@
   },
   "devDependencies": {
     "dependency-cruiser": "18.5.0",
-    "markdown-it": "14.3.2",
+    "markdown-it": "14.3.3",
     "turbo": "^2.11.7"
   }
 }
